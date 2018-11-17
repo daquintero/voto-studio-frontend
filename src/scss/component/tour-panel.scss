@@ -1,0 +1,9 @@
+.tour-panel {
+  position: absolute;
+  right: 0;
+  &__wrapper {
+    background-color: white;
+    width: 300px;
+    height: calc(100vh - 55px);
+  }
+}

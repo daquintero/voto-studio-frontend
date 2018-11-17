@@ -55,6 +55,9 @@ class Studio extends Component {
           handleChangeMapHeight={this.handleChangeMapHeight}
           handleChangeMapViewport={this.handleChangeMapViewport}
         />
+        <TourPanel
+          tours={this.props.tours}
+        />
         <NewTourModal
           toggleModal={this.handleToggleNewModal}
           tourModal={this.props.tours.newTourModal}

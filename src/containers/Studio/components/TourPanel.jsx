@@ -1,13 +1,14 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; // eslint-disable-line
+import { ToursProps } from '../../../shared/prop-types/ReducerProps';
 
 class TourPanel extends PureComponent {
   static propTypes = {
-
+    tours: ToursProps.isRequired,
   };
   render() {
     return (
-      <div />
+      <div className="tour-panel__wrapper">{this.props.tours.newTourModal}</div>
     );
   }
 }

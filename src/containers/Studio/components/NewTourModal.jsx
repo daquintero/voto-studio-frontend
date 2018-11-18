@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -13,12 +13,25 @@ import {
 } from 'reactstrap';
 import { ToursProps } from '../../../shared/prop-types/ReducerProps';
 
-class NewTourModal extends PureComponent {
+class NewTourModal extends Component {
   static propTypes = {
     className: PropTypes.string.isRequired,
     toggleModal: PropTypes.func.isRequired,
     tours: ToursProps.isRequired,
+    createNewTour: PropTypes.func.isRequired,
   };
+
+  constructor() {
+    super();
+    this.state = {
+      name: '',
+    };
+  }
+
+  onChange(e) {
+    e.persist();
+    this.setState({ [e.target.name]: e.target.value });
+  }
 
   render() {
     return (
@@ -31,12 +44,12 @@ class NewTourModal extends PureComponent {
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>Tour name</InputGroupText>
                 </InputGroupAddon>
-                <Input />
+                <Input name="name" value={this.state.name} onChange={e => this.onChange(e)} />
               </InputGroup>
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.props.toggleModal}>Do Something</Button>{' '}
+            <Button color="primary" onClick={() => this.props.createNewTour(this.state)}>Create Tour</Button>{' '}
             <Button color="secondary" onClick={this.props.toggleModal}>Cancel</Button>
           </ModalFooter>
         </Modal>

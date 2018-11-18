@@ -21,3 +21,12 @@ export const ToursProps = shape({
   tours: PropTypes.array,
   newTourModal: PropTypes.bool,
 });
+
+export const TourProps = shape({
+  id: PropTypes.number,
+  latitude: PropTypes.number,
+  longitude: PropTypes.number,
+  zoom: PropTypes.number,
+  transitionDuration: PropTypes.number,
+  transitionEasing: PropTypes.func,
+});

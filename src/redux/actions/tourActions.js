@@ -1,5 +1,7 @@
 export const TOGGLE_NEW_TOUR_MODAL = 'TOGGLE_NEW_TOUR_MODAL';
 export const CREATE_TOUR = 'CREATE_TOUR';
+export const CREATE_TOUR_STEP = 'CREATE_TOUR_STEP';
+export const PUSH_NEW_TOUR = 'PUSH_NEW_TOUR';
 
 export function toggleNewTourModal() {
   return {
@@ -7,9 +9,22 @@ export function toggleNewTourModal() {
   };
 }
 
-export function createTour(data) {
+export function createTour(newTour) {
   return {
     type: CREATE_TOUR,
-    data,
+    newTour,
+  };
+}
+
+export function createTourStep(step) {
+  return {
+    type: CREATE_TOUR_STEP,
+    step,
+  };
+}
+
+export function pushNewTour() {
+  return {
+    type: PUSH_NEW_TOUR,
   };
 }

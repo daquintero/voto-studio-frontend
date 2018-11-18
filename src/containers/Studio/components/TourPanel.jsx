@@ -11,6 +11,14 @@ class TourPanel extends PureComponent {
     changeToStepViewport: PropTypes.func.isRequired,
   };
 
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    this.toursEnd.scrollIntoView({ behavior: 'smooth' });
+  }
+
   render() {
     const tourSteps = () => (
       // eslint-disable-next-line
@@ -18,7 +26,7 @@ class TourPanel extends PureComponent {
     );
 
     return (
-      <div className="tour-panel__wrapper">
+      <div className="tour-panel__wrapper" id="tour-panel__wrapper">
         <div className="tour-panel__content">
           <div>
             {this.props.tours.newTour.name}
@@ -26,6 +34,10 @@ class TourPanel extends PureComponent {
           {tourSteps()}
           <NewTourStep createTourStep={this.props.createTourStep} />
         </div>
+        <div
+          style={{ float: 'left', clear: 'both' }}
+          ref={(el) => { this.toursEnd = el; }}
+        />
       </div>
     );
   }

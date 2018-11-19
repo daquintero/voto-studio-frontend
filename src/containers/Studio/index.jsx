@@ -13,6 +13,8 @@ import {
   toggleNewTourModal,
   createTour,
   createTourStep,
+  deleteTourStep,
+  updateTourStep,
 } from '../../redux/actions/tourActions';
 import { SidebarProps, MapProps, ToursProps } from '../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
@@ -27,43 +29,33 @@ class Studio extends Component {
     tours: ToursProps.isRequired,
   };
 
-  constructor() {
-    super();
-    this.handleChangeMapWidth = this.handleChangeMapWidth.bind(this);
-    this.handleChangeMapHeight = this.handleChangeMapHeight.bind(this);
-    this.handleChangeMapViewport = this.handleChangeMapViewport.bind(this);
-    this.handleToggleNewModal = this.handleToggleNewModal.bind(this);
-    this.handleCreateNewTour = this.handleCreateNewTour.bind(this);
-    this.handleCreateTourStep = this.handleCreateTourStep.bind(this);
-    this.handleChangeToStepViewport = this.handleChangeToStepViewport.bind(this);
-  }
-
-  handleChangeMapHeight(newMapHeight) {
+  handleChangeMapHeight = (newMapHeight) => {
     this.props.dispatch(changeMapHeight(newMapHeight));
-  }
+  };
 
-  handleChangeMapWidth(newMapWidth) {
+  handleChangeMapWidth = (newMapWidth) => {
     this.props.dispatch(changeMapWidth(newMapWidth));
-  }
+  };
 
-  handleChangeMapViewport(newMapViewport) {
+  handleChangeMapViewport = (newMapViewport) => {
     this.props.dispatch(changeMapViewport(newMapViewport));
-  }
+  };
 
-  handleToggleNewModal() {
+  handleToggleNewModal = () => {
     this.props.dispatch(toggleNewTourModal());
-  }
+  };
 
-  handleCreateNewTour(tour) {
+  handleCreateNewTour = (tour) => {
     this.props.dispatch(createTour(tour));
-  }
+    this.handleToggleNewModal();
+  };
 
-  handleCreateTourStep(data) {
+  handleCreateTourStep = (data) => {
     const getNewId = () => {
       if (this.props.tours.newTour.steps.length) {
         return this.props.tours.newTour.steps.slice(-1)[0].id + 1; // Slice returns an array!!
       }
-      return 1;
+      return 0;
     };
     // Consider width and height values here, could be an issue. They MUST be overridden in the
     // client app.
@@ -92,14 +84,40 @@ class Studio extends Component {
         step.viewport.transitionInterpolatorName = 'None';
     }
     this.props.dispatch(createTourStep(step));
-  }
+  };
 
-  handleChangeToStepViewport(e) {
-    e.persist();
+  handleDeleteTourStep = (id) => {
+    this.props.dispatch(deleteTourStep(id));
+  };
+
+  handleUpdateTourStep = (updates, prevStep) => {
+    const step = {
+      id: prevStep.id,
+      name: updates.name,
+      text: updates.text,
+      viewport: {
+        ...this.props.map.viewport,
+        transitionDuration: updates.transitionDuration,
+        transitionEasing: d3.easeCubic,
+        transitionEasingName: 'd3.easeCubic',
+      },
+    };
+    this.props.dispatch(updateTourStep(step));
+  };
+
+  handleChangeToStepViewport = (id) => {
+    // Update the viewport
     const step = this.props.tours.newTour.steps.filter(elem =>
-      elem.id === parseInt(e.currentTarget.getAttribute('id'), 10))[0];
+      elem.id === parseInt(id, 10))[0];
     this.handleChangeMapViewport(step.viewport);
-  }
+
+    // Add the active class to the step being previewed
+    const elements = document.getElementsByClassName('tour-step__wrapper');
+    for (let i = 0; i < elements.length; i += 1) {
+      elements[i].classList.remove('tour-step__active');
+    }
+    document.getElementById(`tour-step__wrapper-${id}`).classList.add('tour-step__active');
+  };
 
   render() {
     return (
@@ -114,7 +132,9 @@ class Studio extends Component {
         <TourPanel
           tours={this.props.tours}
           createTourStep={this.handleCreateTourStep}
+          deleteTourStep={this.handleDeleteTourStep}
           changeToStepViewport={this.handleChangeToStepViewport}
+          updateTourStep={this.handleUpdateTourStep}
         />
         <NewTourModal
           toggleModal={this.handleToggleNewModal}

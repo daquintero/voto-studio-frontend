@@ -3,6 +3,8 @@ import {
   CREATE_TOUR,
   TOGGLE_NEW_TOUR_MODAL,
   CREATE_TOUR_STEP,
+  UPDATE_TOUR_STEP,
+  DELETE_TOUR_STEP,
 } from '../actions/tourActions';
 
 
@@ -41,12 +43,34 @@ export default function (state = initialState, action) {
           ],
         },
       };
+    case DELETE_TOUR_STEP:
+      return {
+        ...state,
+        newTour: {
+          ...state.newTour,
+          steps: [
+            ...state.newTour.steps.filter(step => step.id !== action.id),
+          ],
+        },
+      };
+    case UPDATE_TOUR_STEP:
+      return {
+        ...state,
+        newTour: {
+          ...state.newTour,
+          steps: [
+            ...state.newTour.steps.slice(0, action.updatedTourStep.id),
+            action.updatedTourStep,
+            ...state.newTour.steps.slice(action.updatedTourStep.id + 1),
+          ],
+        },
+      };
     case PUSH_NEW_TOUR:
       return {
         ...state,
         tours: [
           ...state.tours,
-          ...state.newTour,
+          state.newTour,
         ],
       };
     default:

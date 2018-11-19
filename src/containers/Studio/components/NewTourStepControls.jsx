@@ -9,34 +9,29 @@ class NewTourStepControls extends Component {
       name: '',
       text: '',
       transitionInterpolator: 'FlyToInterpolator',
-      transitionDuration: '',
+      transitionDuration: '2000',
       transitionEasing: 'd3.cubicEasing',
     };
-    this.onChange = this.onChange.bind(this);
-    this.testOnClick = this.testOnClick.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
-  onChange(e) {
+  onChange = (e) => {
+    // Should this be implemented differently?
+    // Refer to Medium article on binding to multiple comps
     e.persist();
     this.setState({ [e.target.name]: e.target.value });
-  }
-  onSubmit() {
+  };
+  onSubmit = () => {
     this.props.createTourStep(this.state);
     this.setState({
       name: '',
       text: '',
       transitionInterpolator: 'FlyToInterpolator',
-      transitionDuration: '',
+      transitionDuration: '2000',
       transitionEasing: 'd3.cubicEasing',
     });
-  }
-  testOnClick() {
-    console.log('This works', this.state.name);
-  }
-  handleKeyPress() {
+  };
+  handleKeyPress = () => {
     console.log('keypress', this.state.name);
-  }
+  };
   render() {
     return (
       // Add a help link to the interpolation and easing fields
@@ -63,7 +58,7 @@ class NewTourStepControls extends Component {
             />
           </FormGroup>
           <FormGroup>
-            <Label for="transitionDuration">Transition Duration</Label>
+            <Label for="transitionDuration">Transition Duration (ms)</Label>
             <Input
               type="number"
               name="transitionDuration"

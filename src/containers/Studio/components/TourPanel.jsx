@@ -9,6 +9,8 @@ class TourPanel extends PureComponent {
     tours: ToursProps.isRequired,
     createTourStep: PropTypes.func.isRequired,
     changeToStepViewport: PropTypes.func.isRequired,
+    deleteTourStep: PropTypes.func.isRequired,
+    updateTourStep: PropTypes.func.isRequired,
   };
 
   componentDidUpdate() {
@@ -21,15 +23,25 @@ class TourPanel extends PureComponent {
 
   render() {
     const tourSteps = () => (
-      // eslint-disable-next-line
-      this.props.tours.newTour.steps.map(tourStep => <TourStep key={tourStep.id} tourStep={tourStep} changeToStepViewport={this.props.changeToStepViewport} />)
+      this.props.tours.newTour.steps.map((tourStep, index) =>
+        (<TourStep
+          key={tourStep.id}
+          index={index}
+          tourStep={tourStep}
+          changeToStepViewport={this.props.changeToStepViewport}
+          deleteTourStep={this.props.deleteTourStep}
+          updateTourStep={this.props.updateTourStep}
+        />))
     );
 
     return (
-      <div className="tour-panel__wrapper" id="tour-panel__wrapper">
+      <div className="tour-panel__wrapper" id="tour-panel__wrapper" data-simplebar>
         <div className="tour-panel__content">
-          <div>
-            {this.props.tours.newTour.name}
+          <div className="tour-panel__name__wrapper">
+            <h3>
+              {this.props.tours.newTour.name}{' - '}
+              {this.props.tours.newTour.steps.length} step{this.props.tours.newTour.steps.length === 1 ? '' : 's'}
+            </h3>
           </div>
           {tourSteps()}
           <NewTourStep createTourStep={this.props.createTourStep} />

@@ -26,6 +26,7 @@ class NewTourModal extends Component {
     this.state = {
       name: '',
     };
+    this.handleOnOpened = this.handleOnOpened.bind(this);
   }
 
   onChange(e) {
@@ -33,10 +34,19 @@ class NewTourModal extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  handleOnOpened() {
+    this.setState({ name: '' });
+  }
+
   render() {
     return (
       <div>
-        <Modal isOpen={this.props.tours.newTourModal} toggle={this.props.toggleModal} className={this.props.className}>
+        <Modal
+          isOpen={this.props.tours.newTourModal}
+          onOpened={this.handleOnOpened}
+          toggle={this.props.toggleModal}
+          className={this.props.className}
+        >
           <ModalHeader toggle={this.props.toggleModal}>Modal title</ModalHeader>
           <ModalBody>
             <div>

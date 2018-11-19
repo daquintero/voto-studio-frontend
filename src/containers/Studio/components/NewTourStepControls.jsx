@@ -30,7 +30,6 @@ class NewTourStepControls extends Component {
     });
   };
   handleKeyPress = () => {
-    console.log('keypress', this.state.name);
   };
   render() {
     return (

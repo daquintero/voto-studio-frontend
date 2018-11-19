@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types'; // eslint-disable-line
 import { ToursProps } from '../../../shared/prop-types/ReducerProps';
 import TourStep from './TourStep';
 import NewTourStep from './NewTourStep';
 
-class TourPanel extends PureComponent {
+class TourPanel extends Component {
   static propTypes = {
     tours: ToursProps.isRequired,
     createTourStep: PropTypes.func.isRequired,
@@ -13,13 +13,24 @@ class TourPanel extends PureComponent {
     updateTourStep: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      updatingTourStep: false,
+    };
+  }
+
   componentDidUpdate() {
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }
 
   scrollToBottom() {
     this.toursEnd.scrollIntoView({ behavior: 'smooth' });
   }
+
+  handleToggleUpdatingTourStep = () => {
+    this.setState(prevState => ({ updatingTourStep: !prevState.updatingTourStep }));
+  };
 
   render() {
     const tourSteps = () => (
@@ -30,6 +41,8 @@ class TourPanel extends PureComponent {
           tourStep={tourStep}
           changeToStepViewport={this.props.changeToStepViewport}
           deleteTourStep={this.props.deleteTourStep}
+          updatingTourStep={this.state.updatingTourStep}
+          toggleUpdatingTourStep={this.handleToggleUpdatingTourStep}
           updateTourStep={this.props.updateTourStep}
         />))
     );

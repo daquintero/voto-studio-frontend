@@ -12,16 +12,21 @@ const TourStepControls = props => (
           <span><i className="fal fa-angle-down mr-2" />More</span>
         )}
       </NavLink>
-      <NavLink
-        className="tour-step__control"
-        onClick={props.toggleUpdateTourStep}
-      >
-        {props.updatingTourStep ? (
+      {props.updatingTourStep ? (
+        <NavLink
+          className="tour-step__control"
+          onClick={() => props.toggleUpdateTourStep(true)}
+        >
           <span><i className="fal fa-check mr-2" />Save</span>
-        ) : (
+        </NavLink>
+      ) : (
+        <NavLink
+          className="tour-step__control"
+          onClick={() => props.toggleUpdateTourStep(false)}
+        >
           <span><i className="fal fa-pen mr-2" />Edit</span>
-        )}
-      </NavLink>
+        </NavLink>
+      )}
       <NavLink
         className="tour-step__control"
         onClick={() => props.deleteTourStep(props.deleteTourStepId)}

@@ -10,6 +10,8 @@ class TourStep extends Component {
     tourStep: TourProps.isRequired,
     changeToStepViewport: PropTypes.func.isRequired,
     deleteTourStep: PropTypes.func.isRequired,
+    toggleUpdatingTourStep: PropTypes.func.isRequired,
+    updatingTourStep: PropTypes.bool.isRequired,
     updateTourStep: PropTypes.func.isRequired,
   };
   constructor(props) {
@@ -35,18 +37,19 @@ class TourStep extends Component {
   toggleCollapse = () => {
     this.setState(prevState => ({ collapse: !prevState.collapse }));
   };
-  handleEditClick = (e) => {
-    this.props.changeToStepViewport(e);
-  };
-  handleToggleUpdateTourStep = () => {
-    if (this.state.updatingTourStep) {
-      if (this.state.name && this.state.text && this.state.transitionDuration) {
-        this.props.updateTourStep(this.state, this.props.tourStep);
+  handleToggleUpdateTourStep = (savingTourStep) => {
+    if (!this.props.updatingTourStep || savingTourStep) {
+      if (this.state.updatingTourStep) {
+        if (this.state.name && this.state.text && this.state.transitionDuration) {
+          this.props.updateTourStep(this.state, this.props.tourStep, this.props.index);
+          this.setState(prevState => ({ updatingTourStep: !prevState.updatingTourStep }));
+          this.props.toggleUpdatingTourStep();
+        }
+      } else {
         this.setState(prevState => ({ updatingTourStep: !prevState.updatingTourStep }));
+        this.props.toggleUpdatingTourStep();
+        this.props.changeToStepViewport(this.props.tourStep.id, this.props.index);
       }
-    } else {
-      this.setState(prevState => ({ updatingTourStep: !prevState.updatingTourStep }));
-      this.props.changeToStepViewport(this.props.tourStep.id);
     }
   };
   render() {
@@ -59,7 +62,7 @@ class TourStep extends Component {
           id={`preview-${this.props.tourStep.id}`}
           data-id={this.props.tourStep.id}
           className="fal fa-eye tour-step__preview"
-          onClick={() => this.props.changeToStepViewport(this.props.tourStep.id)}
+          onClick={() => this.props.changeToStepViewport(this.props.tourStep.id, this.props.index)}
           role="presentation"
         />
         <Tooltip

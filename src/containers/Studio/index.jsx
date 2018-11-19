@@ -20,6 +20,7 @@ import { SidebarProps, MapProps, ToursProps } from '../../shared/prop-types/Redu
 import FullscreenMap from './components/FullscreenMap';
 import NewTourModal from './components/NewTourModal';
 import TourPanel from './components/TourPanel';
+import MapPopover from './components/MapPopover';
 
 class Studio extends Component {
   static propTypes = {
@@ -28,6 +29,13 @@ class Studio extends Component {
     map: MapProps.isRequired,
     tours: ToursProps.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTourStep: -1,
+    };
+  }
 
   handleChangeMapHeight = (newMapHeight) => {
     this.props.dispatch(changeMapHeight(newMapHeight));
@@ -90,7 +98,7 @@ class Studio extends Component {
     this.props.dispatch(deleteTourStep(id));
   };
 
-  handleUpdateTourStep = (updates, prevStep) => {
+  handleUpdateTourStep = (updates, prevStep, index) => {
     const step = {
       id: prevStep.id,
       name: updates.name,
@@ -102,10 +110,10 @@ class Studio extends Component {
         transitionEasingName: 'd3.easeCubic',
       },
     };
-    this.props.dispatch(updateTourStep(step));
+    this.props.dispatch(updateTourStep(step, index));
   };
 
-  handleChangeToStepViewport = (id) => {
+  handleChangeToStepViewport = (id, index) => {
     // Update the viewport
     const step = this.props.tours.newTour.steps.filter(elem =>
       elem.id === parseInt(id, 10))[0];
@@ -117,11 +125,14 @@ class Studio extends Component {
       elements[i].classList.remove('tour-step__active');
     }
     document.getElementById(`tour-step__wrapper-${id}`).classList.add('tour-step__active');
+
+    // Set the active step in state
+    this.setState({ activeTourStep: index });
   };
 
   render() {
     return (
-      <div>
+      <>
         <FullscreenMap
           sidebar={this.props.sidebar}
           map={this.props.map}
@@ -143,7 +154,11 @@ class Studio extends Component {
           createNewTour={this.handleCreateNewTour}
           className="modal-classname-temp"
         />
-      </div>
+        <MapPopover
+          activeStep={this.state.activeTourStep}
+          newTour={this.props.tours.newTour}
+        />
+      </>
     );
   }
 }

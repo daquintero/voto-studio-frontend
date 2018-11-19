@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ToursProps } from '../../../shared/prop-types/ReducerProps';
 
 const MapPopover = props => (
-  <div className="map-popover__wrapper">
-    <h1>{props.tours.newTour.tourStep.name}</h1>
-    <p>{props.tous.newTour.tourStep.text}</p>
-  </div>
+  <>
+    {props.activeStep !== -1 &&
+      <div className="map-popover__wrapper">
+        Step {props.activeStep + 1} out of {props.newTour.steps.length}
+      </div>
+    }
+  </>
 );
 
-MapPopover.propTypes({
-
-});
+MapPopover.propTypes = {
+  activeStep: PropTypes.isRequired,
+  newTour: ToursProps.isRequired,
+};
 
 export default MapPopover;

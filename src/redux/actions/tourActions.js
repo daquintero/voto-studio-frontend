@@ -32,10 +32,11 @@ export function deleteTourStep(id) {
   };
 }
 
-export function updateTourStep(updatedTourStep) {
+export function updateTourStep(updatedTourStep, index) {
   return {
     type: UPDATE_TOUR_STEP,
     updatedTourStep,
+    index,
   };
 }
 

@@ -13,6 +13,7 @@ const initialState = {
   newTour: {
     name: '',
     steps: [],
+    activeStep: -1,
   },
   newTourModal: false,
 };
@@ -59,9 +60,9 @@ export default function (state = initialState, action) {
         newTour: {
           ...state.newTour,
           steps: [
-            ...state.newTour.steps.slice(0, action.updatedTourStep.id),
+            ...state.newTour.steps.slice(0, action.index),
             action.updatedTourStep,
-            ...state.newTour.steps.slice(action.updatedTourStep.id + 1),
+            ...state.newTour.steps.slice(action.index + 1),
           ],
         },
       };

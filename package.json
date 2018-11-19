@@ -1,8 +1,8 @@
 {
-  "name": "Easydev-seed",
+  "name": "voto-map-studio",
   "version": "1.4.0",
   "private": true,
-  "homepage": "http://previews.aspirity.com/easydev",
+  "homepage": "http://voto-map-studio.surge.sh",
   "dependencies": {
     "bfj": "6.1.1",
     "bootstrap": "^4.1.3",

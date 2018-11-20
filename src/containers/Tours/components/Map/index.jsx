@@ -9,18 +9,16 @@ import {
   changeMapWidth,
   changeMapHeight,
   changeMapViewport,
-} from '../../redux/actions/mapActions';
+} from '../../../../redux/actions/mapActions';
 import {
-  toggleNewTourModal,
   createTour,
   createTourStep,
   deleteTourStep,
   updateTourStep,
   reorderTourSteps,
-} from '../../redux/actions/tourActions';
-import { SidebarProps, MapProps, ToursProps } from '../../shared/prop-types/ReducerProps';
+} from '../../../../redux/actions/tourActions';
+import { SidebarProps, MapProps, ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
-import NewTourModal from './components/NewTourModal';
 import TourPanel from './components/TourPanel';
 import MapPopover from './components/MapPopover';
 
@@ -49,10 +47,6 @@ class Map extends Component {
 
   handleChangeMapViewport = (newMapViewport) => {
     this.props.dispatch(changeMapViewport(newMapViewport));
-  };
-
-  handleToggleNewModal = () => {
-    this.props.dispatch(toggleNewTourModal());
   };
 
   handleCreateNewTour = (tour) => {
@@ -102,6 +96,7 @@ class Map extends Component {
     step = this.addInterpolator(data, step);
 
     this.props.dispatch(createTourStep(step));
+    this.setState({ activeTourStepId: step.id });
     // Send POST request to server with new step
   };
 
@@ -132,13 +127,6 @@ class Map extends Component {
     const step = this.props.tours.newTour.steps.filter(elem =>
       elem.id === parseInt(id, 10))[0];
     this.handleChangeMapViewport(step.viewport);
-
-    // Add the active class to the step being previewed
-    const elements = document.getElementsByClassName('tour-step__wrapper');
-    for (let i = 0; i < elements.length; i += 1) {
-      elements[i].classList.remove('tour-step__active');
-    }
-    document.getElementById(`tour-step__wrapper-${id}`).classList.add('tour-step__active');
 
     // Set the active step in state
     this.setState({ activeTourStepId: id });
@@ -177,6 +165,7 @@ class Map extends Component {
                 deleteTourStep={this.handleDeleteTourStep}
                 changeToStepViewport={this.handleChangeToStepViewport}
                 updateTourStep={this.handleUpdateTourStep}
+                activeTourStepId={this.state.activeTourStepId}
                 innerRef={provided.innerRef}
                 {...provided.droppableProps}
               >
@@ -185,13 +174,6 @@ class Map extends Component {
             )}
           </Droppable>
         </DragDropContext>
-        <NewTourModal
-          toggleModal={this.handleToggleNewModal}
-          tourModal={this.props.tours.newTourModal}
-          tours={this.props.tours}
-          createNewTour={this.handleCreateNewTour}
-          className="modal-classname-temp"
-        />
         <MapPopover
           activeTourStepId={this.state.activeTourStepId}
           newTour={this.props.tours.newTour}

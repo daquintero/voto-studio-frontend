@@ -5,8 +5,6 @@ import SidebarCategory from './SidebarCategory';
 
 class SidebarContent extends Component {
   static propTypes = {
-    changeToDark: PropTypes.func.isRequired,
-    changeToLight: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
     toggleNewTourModal: PropTypes.func.isRequired,
   };
@@ -24,15 +22,9 @@ class SidebarContent extends Component {
     return (
       <div className="sidebar__content">
         <ul className="sidebar__block">
-          <SidebarLink title="Studio" icon="map" route="/studio" onClick={this.hideSidebar} />
-          <SidebarLink title="New Tour" icon="plus-box" onClick={this.toggleNewTourModal} />
-          <SidebarCategory title="Layout" icon="layers">
-            <button className="sidebar__link" onClick={this.props.changeToLight}>
-              <p className="sidebar__link-title">Light Theme</p>
-            </button>
-            <button className="sidebar__link" onClick={this.props.changeToDark}>
-              <p className="sidebar__link-title">Dark Theme</p>
-            </button>
+          <SidebarCategory title="Studio" icon="map">
+            <SidebarLink title="Tours" route="/studio/tours" onClick={this.hideSidebar} />
+            <SidebarLink title="Candidates" route="/studio/candidates" onClick={this.hideSidebar} />
           </SidebarCategory>
         </ul>
       </div>

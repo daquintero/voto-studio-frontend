@@ -2,8 +2,67 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36c149f4-aa1e-409b-b400-8eafabd6ff36" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/public/all.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Candidates/index.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/MapPopover.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/MapPopoverControls.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourModal.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStepControls.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStepControls.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/mapData.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/components/ToursList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/index.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/Tours/index.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/component/tours-panel.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/App/Router.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/App/Router.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/App/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/App/store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/containers/Layout/topbar/Topbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Layout/topbar/Topbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Map/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/FullscreenMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/FullscreenMap.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/MapPopover.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/MapPopoverControls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/MapPopoverControls.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/NewTourModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/NewTourModal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/NewTourStep.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/NewTourStep.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/NewTourStepControls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/NewTourStepControls.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/TourPanel.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/TourPanel.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/TourStep.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/TourStepControls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/TourStepControls.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/mapData.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/mapData.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Studio/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Studio/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/actions/tourActions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/actions/tourActions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scss/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scss/component/tour-panel.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/component/tour-panel.scss" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -75,163 +134,149 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="css" value="1" />
           <entry key="development" value="1" />
-          <entry key="html" value="3" />
-          <entry key="js" value="33" />
-          <entry key="json" value="2" />
-          <entry key="jsx" value="56" />
+          <entry key="html" value="4" />
+          <entry key="js" value="39" />
+          <entry key="json" value="3" />
+          <entry key="jsx" value="101" />
           <entry key="png" value="1" />
           <entry key="production" value="1" />
-          <entry key="scss" value="16" />
+          <entry key="scss" value="20" />
           <entry key="svg" value="2" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="3" />
+          <entry key="CSS" value="1" />
+          <entry key="HTML" value="4" />
           <entry key="Image" value="1" />
-          <entry key="JSON" value="2" />
-          <entry key="JSX Harmony" value="54" />
-          <entry key="JavaScript" value="33" />
+          <entry key="JSON" value="3" />
+          <entry key="JSX Harmony" value="99" />
+          <entry key="JavaScript" value="39" />
           <entry key="PLAIN_TEXT" value="4" />
-          <entry key="SCSS" value="16" />
+          <entry key="SCSS" value="20" />
           <entry key="SVG" value="2" />
           <entry key="YAML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="html" value="21" />
-          <entry key="js" value="3161" />
+          <entry key="html" value="27" />
+          <entry key="js" value="3570" />
           <entry key="json" value="52" />
-          <entry key="jsx" value="20389" />
-          <entry key="scss" value="1635" />
+          <entry key="jsx" value="24570" />
+          <entry key="scss" value="1814" />
           <entry key="yml" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="21" />
+          <entry key="HTML" value="27" />
           <entry key="JSON" value="52" />
-          <entry key="JSX Harmony" value="20336" />
-          <entry key="JavaScript" value="3161" />
+          <entry key="JSX Harmony" value="24517" />
+          <entry key="JavaScript" value="3570" />
           <entry key="PLAIN_TEXT" value="53" />
-          <entry key="SCSS" value="1635" />
+          <entry key="SCSS" value="1814" />
           <entry key="YAML" value="10" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.53621346">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-68">
-                  <caret line="17" column="4" lean-forward="true" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
-                  <folding>
-                    <element signature="e#0#26#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/public/index.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="357">
-                  <caret line="21" column="75" lean-forward="true" selection-start-line="21" selection-start-column="75" selection-end-line="21" selection-end-column="75" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/containers/Layout/topbar/Topbar.jsx">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="425">
-                  <caret line="29" column="18" lean-forward="true" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="18" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/scss/component/topbar.scss">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="629">
-                  <caret line="61" column="40" selection-start-line="61" selection-start-column="40" selection-end-line="61" selection-end-column="40" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/scss/base/scaffolding.scss">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-134" />
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/scss/base/typography.scss">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-2038" />
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/scss/settings/variable.scss">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="102">
-                  <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/shared/img/logo/logo_dark.svg">
-              <provider selected="true" editor-type-id="images" />
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/shared/img/logo/logo_light.svg">
-              <provider selected="true" editor-type-id="images" />
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/public/img/ava.png">
-              <provider selected="true" editor-type-id="images" />
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="784">
-                  <caret line="67" column="43" selection-start-line="67" selection-start-column="43" selection-end-line="67" selection-end-column="43" />
-                  <folding>
-                    <element signature="e#0#41#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1207">
-                  <caret line="71" column="21" selection-start-line="71" selection-start-column="21" selection-end-line="71" selection-end-column="21" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/redux/actions/tourActions.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="229">
+              <caret line="57" column="25" lean-forward="true" selection-start-line="57" selection-start-column="25" selection-end-line="57" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/redux/reducers/tourReducer.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1632">
+              <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
+              <folding>
+                <element signature="e#0#193#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/index.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="76">
+              <caret line="31" column="49" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="55" column="5" lean-forward="true" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/containers/Tours/index.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" column="35" lean-forward="true" selection-start-line="3" selection-start-column="35" selection-end-line="3" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="26" column="3" lean-forward="true" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="122" column="4" lean-forward="true" selection-start-line="122" selection-start-column="4" selection-end-line="122" selection-end-column="4" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -257,34 +302,46 @@
         <option value="$PROJECT_DIR$/src/redux/reducers/transitionReducer.js" />
         <option value="$PROJECT_DIR$/src/redux/actions/transitionActions.js" />
         <option value="$PROJECT_DIR$/src/redux/reducers/index.js" />
-        <option value="$PROJECT_DIR$/src/containers/App/store.js" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/CreateTourModal.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Layout/index.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Layout/sidebar/Sidebar.jsx" />
-        <option value="$PROJECT_DIR$/src/containers/Map/index.jsx" />
-        <option value="$PROJECT_DIR$/src/containers/App/Router.jsx" />
-        <option value="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/FullscreenMap.jsx" />
         <option value="$PROJECT_DIR$/src/shared/prop-types/ReducerProps.js" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/NewTourStep.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/MapPopoverControls.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/NewTourModal.jsx" />
-        <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/TourStepControls.jsx" />
-        <option value="$PROJECT_DIR$/src/scss/app.scss" />
         <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/NewTourStepControls.jsx" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/TourPanel.jsx" />
-        <option value="$PROJECT_DIR$/src/scss/component/tour-panel.scss" />
-        <option value="$PROJECT_DIR$/src/redux/actions/tourActions.js" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx" />
         <option value="$PROJECT_DIR$/src/scss/component/map-popover.scss" />
-        <option value="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" />
-        <option value="$PROJECT_DIR$/src/containers/Studio/index.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx" />
         <option value="$PROJECT_DIR$/src/scss/settings/variable.scss" />
         <option value="$PROJECT_DIR$/src/containers/Layout/topbar/Topbar.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Map/index.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Studio/index.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/TourPanel/index.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/index.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/components/BasicTable.jsx" />
+        <option value="$PROJECT_DIR$/public/index.html" />
+        <option value="$PROJECT_DIR$/src/scss/app.scss" />
+        <option value="$PROJECT_DIR$/src/redux/actions/tourActions.js" />
+        <option value="$PROJECT_DIR$/src/scss/component/tours-panel.scss" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/components/ToursList.jsx" />
+        <option value="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/index.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/App/Router.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourModal.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/MapPopover.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/App/store.js" />
+        <option value="$PROJECT_DIR$/src/scss/component/tour-panel.scss" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx" />
       </list>
     </option>
   </component>
@@ -308,10 +365,10 @@
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="46" />
-    <option name="y" value="34" />
-    <option name="width" value="1400" />
-    <option name="height" value="1000" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -376,17 +433,6 @@
             <path>
               <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
               <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-              <item name="img" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -407,37 +453,50 @@
               <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="containers" type="462c0819:PsiDirectoryNode" />
-              <item name="Example" type="462c0819:PsiDirectoryNode" />
+              <item name="Map" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
               <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="containers" type="462c0819:PsiDirectoryNode" />
-              <item name="Layout" type="462c0819:PsiDirectoryNode" />
+              <item name="Tours" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
               <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="containers" type="462c0819:PsiDirectoryNode" />
-              <item name="Layout" type="462c0819:PsiDirectoryNode" />
-              <item name="topbar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="containers" type="462c0819:PsiDirectoryNode" />
-              <item name="Studio" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="containers" type="462c0819:PsiDirectoryNode" />
-              <item name="Studio" type="462c0819:PsiDirectoryNode" />
+              <item name="Tours" type="462c0819:PsiDirectoryNode" />
               <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="containers" type="462c0819:PsiDirectoryNode" />
+              <item name="Tours" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Map" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="containers" type="462c0819:PsiDirectoryNode" />
+              <item name="Tours" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="Map" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="containers" type="462c0819:PsiDirectoryNode" />
+              <item name="Tours" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="ToursPanel" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
@@ -470,28 +529,7 @@
               <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="scss" type="462c0819:PsiDirectoryNode" />
-              <item name="base" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="scss" type="462c0819:PsiDirectoryNode" />
               <item name="component" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="scss" type="462c0819:PsiDirectoryNode" />
-              <item name="containers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="scss" type="462c0819:PsiDirectoryNode" />
-              <item name="settings" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
@@ -530,7 +568,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/easydev tf" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -545,15 +583,18 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mail\voto-map-studio\src\containers\Tours\components\ToursPanel\components" />
       <recent name="C:\Users\mail\voto-map-studio\src\containers\Studio\components" />
+      <recent name="C:\Users\mail\voto-map-studio\src\containers\Tours" />
+      <recent name="C:\Users\mail\voto-map-studio\src\containers" />
       <recent name="C:\Users\mail\voto-map-studio\src\containers\Studio" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\mail\voto-map-studio\src\shared\img\logo" />
+      <recent name="C:\Users\mail\voto-map-studio\public" />
+      <recent name="C:\Users\mail\voto-map-studio\src\containers\Tours\components" />
       <recent name="C:\Users\mail\voto-map-studio" />
+      <recent name="C:\Users\mail\voto-map-studio\src\shared\img\logo" />
       <recent name="C:\Users\mail\voto-map-studio\src\containers\Studio\components" />
-      <recent name="C:\Users\mail\voto-map-studio\src\redux\reducers" />
-      <recent name="C:\Users\mail\voto-map-studio\src\redux\actions" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -589,13 +630,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75823000" />
+    <option name="totallyTimeSpent" value="89768000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.170706" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14225501" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -609,7 +650,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.28199565" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.22017354" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -622,162 +663,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/containers/Layout/topbar/TopbarMenuLink.jsx">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Layout/topbar/TopbarProfile.jsx">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Layout/topbar/TopbarSidebarButton.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/LogIn/index.jsx">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.jsx">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env.development">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/redux/reducers/sidebarReducer.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Layout/sidebar/Sidebar.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="51" selection-start-line="25" selection-start-column="51" selection-end-line="25" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/App/Router.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="22" lean-forward="true" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="18" column="23" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Map/index.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="36" column="3" lean-forward="true" selection-start-line="36" selection-start-column="3" selection-end-line="36" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/scss/component/load.scss">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/scss/component/sidebar.scss">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/scss/component/form.scss">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/redux/actions/mapActions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/App/App.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Layout/index.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-372">
-          <caret line="11" column="12" selection-start-line="11" selection-end-line="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/redux/reducers/mapReducer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/App/store.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="13" lean-forward="true" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/redux/reducers/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="14" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/scss/app.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="32" selection-start-line="17" selection-start-column="32" selection-end-line="17" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/shared/prop-types/ReducerProps.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.travis.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="34" lean-forward="true" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/TourStepControls.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" selection-start-column="7" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/NewTourStepControls.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-304">
-          <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/NewTourStep.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/NewTourModal.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/mapData.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -823,20 +708,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/redux/actions/tourActions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="40" column="4" selection-start-line="40" selection-start-column="4" selection-end-line="40" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1207">
-          <caret line="71" column="21" selection-start-line="71" selection-start-column="21" selection-end-line="71" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/MapPopoverControls.jsx">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -844,27 +715,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/redux/reducers/tourReducer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-714">
-          <caret line="53" selection-start-line="53" selection-end-line="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/TourPanel.jsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="46" column="32" selection-start-line="46" selection-start-column="32" selection-end-line="46" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Studio/index.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="201" column="3" lean-forward="true" selection-start-line="201" selection-start-column="3" selection-end-line="201" selection-end-column="3" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -907,13 +761,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="75" lean-forward="true" selection-start-line="21" selection-start-column="75" selection-end-line="21" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="784">
@@ -933,8 +780,257 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Layout/topbar/Topbar.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="29" column="18" lean-forward="true" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="18" />
+        <state relative-caret-position="357">
+          <caret line="25" column="31" lean-forward="true" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Map/index.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="36" column="3" lean-forward="true" selection-start-line="36" selection-start-column="3" selection-end-line="36" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarLink.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Candidates/index.jsx">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/components/ToursList.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/all.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/scss/app.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="29" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/shared/prop-types/ReducerProps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="512">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-17">
+          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/scss/component/tours-panel.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="16" lean-forward="true" selection-start-line="7" selection-start-column="16" selection-end-line="7" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/components/ToursList.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-833">
+          <caret line="17" column="6" lean-forward="true" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/App/App.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-136">
+          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Studio/index.jsx">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Map/index.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2210">
+          <caret line="38" column="6" lean-forward="true" selection-start-line="38" selection-start-column="6" selection-end-line="38" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/App/Router.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="8" lean-forward="true" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStepControls.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStepControls.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourModal.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/MapPopoverControls.jsx">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/MapPopover.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/mapData.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="55" lean-forward="true" selection-start-line="14" selection-start-column="55" selection-end-line="14" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#147#194#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/App/store.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/redux/reducers/tourReducer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1632">
+          <caret column="7" lean-forward="true" selection-start-column="7" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#193#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/redux/actions/tourActions.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="57" column="25" lean-forward="true" selection-start-line="57" selection-start-column="25" selection-end-line="57" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="55" column="5" lean-forward="true" selection-start-line="55" selection-start-column="5" selection-end-line="55" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/index.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="31" column="49" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="26" column="3" lean-forward="true" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/index.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="35" lean-forward="true" selection-start-line="3" selection-start-column="35" selection-end-line="3" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="122" column="4" lean-forward="true" selection-start-line="122" selection-start-column="4" selection-end-line="122" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

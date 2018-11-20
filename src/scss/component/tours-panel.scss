@@ -1,0 +1,19 @@
+.tours-panel {
+  &__wrapper {
+  }
+  &__new {
+    transition: 0.15s all ease-in-out;
+    border-bottom: 1px solid transparent;
+  }
+  &__new:hover {
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+  &__edit {
+    transition: 0.15s all ease-in-out;
+  }
+  &__edit:hover {
+    cursor: pointer;
+    transform: translateY(-5px) scale(1.2);
+  }
+}

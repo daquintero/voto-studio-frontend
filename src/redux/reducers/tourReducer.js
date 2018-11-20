@@ -1,6 +1,7 @@
 import {
   PUSH_NEW_TOUR,
   CREATE_TOUR,
+  OPEN_TOUR,
   TOGGLE_NEW_TOUR_MODAL,
   CREATE_TOUR_STEP,
   UPDATE_TOUR_STEP,
@@ -10,7 +11,51 @@ import {
 
 
 const initialState = {
-  tours: [],
+  tours: [
+    {
+      id: 0,
+      name: 'Testing',
+      description: 'This is tour that is loaded by default for testing purposes.',
+      steps: [
+        {
+          id: 0,
+          name: 'Step One',
+          text: 'Testing with some dummy steps.',
+          viewport: {
+            width: 1680,
+            height: 909,
+            latitude: 8,
+            longitude: -80.1,
+            zoom: 6,
+            maxZoom: 16,
+            pitch: 30,
+            bearing: 0,
+            transitionDuration: '2000',
+            transitionEasingName: 'd3.easeCubic',
+            transitionInterpolatorName: 'FlyToInterpolator',
+          },
+        },
+        {
+          id: 1,
+          name: 'Step Two',
+          text: 'Testing with some more dummy steps.',
+          viewport: {
+            width: 1680,
+            height: 909,
+            latitude: 8,
+            longitude: -80.1,
+            zoom: 6,
+            maxZoom: 16,
+            pitch: 30,
+            bearing: 0,
+            transitionDuration: '3000',
+            transitionEasingName: 'd3.easeCubic',
+            transitionInterpolatorName: 'FlyToInterpolator',
+          },
+        },
+      ],
+    },
+  ],
   newTour: {
     name: 'Testing',
     steps: [
@@ -69,6 +114,11 @@ export default function (state = initialState, action) {
           steps: [],
           ...action.newTour,
         },
+      };
+    case OPEN_TOUR:
+      return {
+        ...state,
+        newTour: action.tour,
       };
     case CREATE_TOUR_STEP:
       return {

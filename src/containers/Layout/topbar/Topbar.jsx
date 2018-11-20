@@ -25,6 +25,9 @@ class Topbar extends PureComponent {
           </div>
           <div className="topbar__right">
             <TopbarProfile />
+            <div>
+              This is my feature
+            </div>
           </div>
         </div>
       </div>

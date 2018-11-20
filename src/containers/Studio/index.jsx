@@ -84,7 +84,7 @@ class Studio extends Component {
   handleCreateTourStep = (data) => {
     const getNewId = () => {
       if (this.props.tours.newTour.steps.length) {
-        return this.props.tours.newTour.steps.slice(-1)[0].id + 1; // Slice returns an array!!
+        return Math.max(...this.props.tours.newTour.steps.map(step => step.id), 0) + 1;
       }
       return 0;
     };

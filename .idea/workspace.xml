@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36c149f4-aa1e-409b-b400-8eafabd6ff36" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/TourPanel.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Studio/components/TourPanel.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/containers/Studio/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Studio/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/actions/tourActions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/actions/tourActions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scss/component/map-popover.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/component/map-popover.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scss/component/tour-panel.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/component/tour-panel.scss" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -110,7 +100,7 @@
           <entry key="html" value="21" />
           <entry key="js" value="3161" />
           <entry key="json" value="52" />
-          <entry key="jsx" value="19563" />
+          <entry key="jsx" value="19634" />
           <entry key="scss" value="1606" />
           <entry key="yml" value="10" />
         </counts>
@@ -119,7 +109,7 @@
         <counts>
           <entry key="HTML" value="21" />
           <entry key="JSON" value="52" />
-          <entry key="JSX Harmony" value="19510" />
+          <entry key="JSX Harmony" value="19581" />
           <entry key="JavaScript" value="3161" />
           <entry key="PLAIN_TEXT" value="53" />
           <entry key="SCSS" value="1606" />
@@ -129,7 +119,7 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.54892">
+    <splitter split-orientation="horizontal" split-proportion="0.45108005">
       <split-first>
         <leaf>
           <file pinned="false" current-in-tab="false">
@@ -156,11 +146,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="362">
-                  <caret line="27" selection-start-line="27" selection-end-line="27" />
+                <state relative-caret-position="119">
+                  <caret line="7" column="10" lean-forward="true" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
                   </folding>
@@ -168,11 +158,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/containers/Studio/index.jsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-476">
-                  <caret line="128" column="51" selection-start-line="128" selection-start-column="51" selection-end-line="128" selection-end-column="51" />
+                <state relative-caret-position="340">
+                  <caret line="86" column="87" selection-start-line="86" selection-start-column="87" selection-end-line="86" selection-end-column="87" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
@@ -205,7 +195,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="314">
+                <state relative-caret-position="782">
                   <caret line="67" column="43" lean-forward="true" selection-start-line="67" selection-start-column="43" selection-end-line="67" selection-end-column="43" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
@@ -275,9 +265,9 @@
         <option value="$PROJECT_DIR$/src/redux/actions/tourActions.js" />
         <option value="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx" />
-        <option value="$PROJECT_DIR$/src/containers/Studio/index.jsx" />
         <option value="$PROJECT_DIR$/src/scss/component/map-popover.scss" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Studio/index.jsx" />
       </list>
     </option>
   </component>
@@ -526,12 +516,12 @@
       <workItem from="1542470867435" duration="4098000" />
       <workItem from="1542482823482" duration="17844000" />
       <workItem from="1542552248487" duration="21355000" />
-      <workItem from="1542646621229" duration="21938000" />
+      <workItem from="1542646621229" duration="22394000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69637000" />
+    <option name="totallyTimeSpent" value="70093000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -838,7 +828,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
+        <state relative-caret-position="782">
           <caret line="67" column="43" lean-forward="true" selection-start-line="67" selection-start-column="43" selection-end-line="67" selection-end-column="43" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
@@ -856,6 +846,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/scss/component/map-popover.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="10" lean-forward="true" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/TourPanel.jsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -866,29 +873,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/scss/component/map-popover.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Studio/index.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-476">
-          <caret line="128" column="51" selection-start-line="128" selection-start-column="51" selection-end-line="128" selection-end-column="51" />
+        <state relative-caret-position="340">
+          <caret line="86" column="87" selection-start-line="86" selection-start-column="87" selection-end-line="86" selection-end-column="87" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>

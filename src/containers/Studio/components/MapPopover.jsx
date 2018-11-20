@@ -4,10 +4,21 @@ import { Col, Row, Pagination, PaginationItem, PaginationLink } from 'reactstrap
 import { ToursProps } from '../../../shared/prop-types/ReducerProps';
 
 const MapPopover = (props) => {
-  const activeTourStep = props.newTour.steps.filter(step => step.id === props.activeTourStepIndex)[0];
+  const activeTourStep = props.newTour.steps.filter(step => step.id === props.activeTourStepId)[0];
+  const getAdjacentStep = (dir) => {
+    const [...steps] = props.newTour.steps;
+    const currentIndex = steps.indexOf(steps.filter(step => step.id === props.activeTourStepId)[0]);
+    if (currentIndex >= steps.length - 1 && dir === 1) {
+      return steps[0];
+    }
+    if (currentIndex === 0 && dir === -1) {
+      return steps[steps.length - 1];
+    }
+    return steps[currentIndex + dir];
+  };
   return (
     <>
-      {props.activeTourStepIndex !== -1 &&
+      {props.activeTourStepId !== -1 &&
       <div className="map-popover__wrapper">
         <Row>
           <Col>
@@ -19,7 +30,10 @@ const MapPopover = (props) => {
         <Row>
           <Pagination className="map-popover__control" size="lg" aria-label="Page navigation example">
             <PaginationItem>
-              <PaginationLink previous href="#" />
+              <PaginationLink
+                previous
+                onClick={() => props.changeToStepViewport(getAdjacentStep(-1).id)}
+              />
             </PaginationItem>
             {props.newTour.steps.map((tourStep, index) => (
               <PaginationItem
@@ -35,7 +49,10 @@ const MapPopover = (props) => {
               </PaginationItem>
             ))}
             <PaginationItem>
-              <PaginationLink next href="#" />
+              <PaginationLink
+                next
+                onClick={() => props.changeToStepViewport(getAdjacentStep(1).id)}
+              />
             </PaginationItem>
           </Pagination>
         </Row>
@@ -46,7 +63,7 @@ const MapPopover = (props) => {
 };
 
 MapPopover.propTypes = {
-  activeTourStepIndex: PropTypes.number.isRequired,
+  activeTourStepId: PropTypes.number.isRequired,
   newTour: ToursProps.isRequired,
   changeToStepViewport: PropTypes.func.isRequired,
 };

@@ -51,7 +51,6 @@ const initialState = {
         },
       },
     ],
-    activeStep: -1,
   },
   newTourModal: false,
 };

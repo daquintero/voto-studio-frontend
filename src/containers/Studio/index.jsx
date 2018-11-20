@@ -35,7 +35,7 @@ class Studio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTourStepIndex: -1,
+      activeTourStepId: -1,
     };
   }
 
@@ -61,7 +61,7 @@ class Studio extends Component {
     // Send POST request to server with new tour
   };
 
-  addInterpolator(data, step) {
+  addInterpolator(data, step) {  // eslint-disable-line
     const newStep = step;
     switch (data.transitionInterpolator) {
       case 'FlyToInterpolator':
@@ -76,8 +76,6 @@ class Studio extends Component {
         newStep.viewport.transitionInterpolator = null;
         newStep.viewport.transitionInterpolatorName = 'None';
     }
-    let hi = 4;
-    if (this && hi === 4) hi = 4;
     return newStep;
   }
 
@@ -143,7 +141,7 @@ class Studio extends Component {
     document.getElementById(`tour-step__wrapper-${id}`).classList.add('tour-step__active');
 
     // Set the active step in state
-    this.setState({ activeTourStepIndex: id });
+    this.setState({ activeTourStepId: id });
   };
 
   handleOnDragEnd = (result) => {
@@ -195,7 +193,7 @@ class Studio extends Component {
           className="modal-classname-temp"
         />
         <MapPopover
-          activeTourStepIndex={this.state.activeTourStepIndex}
+          activeTourStepId={this.state.activeTourStepId}
           newTour={this.props.tours.newTour}
           changeToStepViewport={this.handleChangeToStepViewport}
         />

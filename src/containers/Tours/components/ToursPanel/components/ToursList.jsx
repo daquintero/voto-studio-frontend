@@ -33,7 +33,7 @@ class ToursList extends Component {
             <Table responsive hover>
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>ID</th>
                   <th>Name</th>
                   <th>No. Steps</th>
                   <th>Username</th>
@@ -42,9 +42,9 @@ class ToursList extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.tours.tours.map((tour, index) => (
+                {this.props.tours.tours.map(tour => (
                   <tr key={tour.id}>
-                    <td>{index + 1}</td>
+                    <td>T{tour.id}</td>
                     <td>{tour.name}</td>
                     <td>{tour.steps.length}</td>
                     <td>@dragon</td>

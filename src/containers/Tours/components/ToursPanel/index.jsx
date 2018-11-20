@@ -30,6 +30,9 @@ class ToursPanel extends Component {
     this.props.dispatch(createTour(tour));
     // Open the tour editor
     this.props.history.push('/studio/tours/map');
+    // Close the createTourForm
+    this.handleToggleCreateTourForm();
+    // Send POST request to create new tour instance
   };
 
   render() {

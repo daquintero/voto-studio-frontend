@@ -63,6 +63,7 @@ class TourPanel extends Component {
               {this.props.tours.newTour.name}{' - '}
               {this.props.tours.newTour.steps.length} step{this.props.tours.newTour.steps.length === 1 ? '' : 's'}
             </h3>
+            <p>{this.props.tours.newTour.description}</p>
           </div>
           {tourSteps()}
           {this.props.tours.newTour.name && (

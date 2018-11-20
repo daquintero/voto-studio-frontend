@@ -1,69 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="36c149f4-aa1e-409b-b400-8eafabd6ff36" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/all.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-brands-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-light-300.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-regular-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/webfonts/fa-solid-900.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Candidates/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/MapPopover.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/MapPopoverControls.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourModal.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStepControls.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStepControls.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/mapData.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/components/ToursList.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Tours/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scss/component/tours-panel.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/App/Router.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/App/Router.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/App/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/App/store.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Layout/topbar/Topbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Layout/topbar/Topbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Map/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/FullscreenMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/FullscreenMap.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/MapPopover.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/MapPopover.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/MapPopoverControls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/MapPopoverControls.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/NewTourModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/NewTourModal.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/NewTourStep.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/NewTourStep.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/NewTourStepControls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/NewTourStepControls.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/TourPanel.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/TourPanel.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/TourStep.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/TourStep.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/TourStepControls.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/TourStepControls.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/components/mapData.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Map/components/mapData.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Studio/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Studio/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/actions/tourActions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/actions/tourActions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scss/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/app.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scss/component/tour-panel.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/component/tour-panel.scss" afterDir="false" />
-    </list>
+    <list default="true" id="36c149f4-aa1e-409b-b400-8eafabd6ff36" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -137,7 +75,7 @@
           <entry key="css" value="1" />
           <entry key="development" value="1" />
           <entry key="html" value="4" />
-          <entry key="js" value="39" />
+          <entry key="js" value="40" />
           <entry key="json" value="3" />
           <entry key="jsx" value="101" />
           <entry key="png" value="1" />
@@ -154,7 +92,7 @@
           <entry key="Image" value="1" />
           <entry key="JSON" value="3" />
           <entry key="JSX Harmony" value="99" />
-          <entry key="JavaScript" value="39" />
+          <entry key="JavaScript" value="40" />
           <entry key="PLAIN_TEXT" value="4" />
           <entry key="SCSS" value="20" />
           <entry key="SVG" value="2" />
@@ -264,13 +202,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
               <caret line="122" column="4" lean-forward="true" selection-start-line="122" selection-start-column="4" selection-end-line="122" selection-end-column="4" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/containers/App/store.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -630,7 +580,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89768000" />
+    <option name="totallyTimeSpent" value="90417000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -941,16 +891,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/App/store.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1030,6 +970,16 @@
           <caret line="122" column="4" lean-forward="true" selection-start-line="122" selection-start-column="4" selection-end-line="122" selection-end-column="4" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/App/store.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>

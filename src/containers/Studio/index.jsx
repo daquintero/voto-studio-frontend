@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FlyToInterpolator, LinearInterpolator } from 'deck.gl';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import * as d3 from 'd3';
 import {
   changeMapWidth,
@@ -15,6 +16,7 @@ import {
   createTourStep,
   deleteTourStep,
   updateTourStep,
+  reorderTourSteps,
 } from '../../redux/actions/tourActions';
 import { SidebarProps, MapProps, ToursProps } from '../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
@@ -33,7 +35,7 @@ class Studio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTourStep: -1,
+      activeTourStepIndex: -1,
     };
   }
 
@@ -56,7 +58,28 @@ class Studio extends Component {
   handleCreateNewTour = (tour) => {
     this.props.dispatch(createTour(tour));
     this.handleToggleNewModal();
+    // Send POST request to server with new tour
   };
+
+  addInterpolator(data, step) {
+    const newStep = step;
+    switch (data.transitionInterpolator) {
+      case 'FlyToInterpolator':
+        newStep.viewport.transitionInterpolator = new FlyToInterpolator();
+        newStep.viewport.transitionInterpolatorName = 'FlyToInterpolator';
+        break;
+      case 'LinearInterpolator':
+        newStep.viewport.transitionInterpolator = new LinearInterpolator();
+        newStep.viewport.transitionInterpolatorName = 'LinearInterpolator';
+        break;
+      default:
+        newStep.viewport.transitionInterpolator = null;
+        newStep.viewport.transitionInterpolatorName = 'None';
+    }
+    let hi = 4;
+    if (this && hi === 4) hi = 4;
+    return newStep;
+  }
 
   handleCreateTourStep = (data) => {
     const getNewId = () => {
@@ -67,7 +90,7 @@ class Studio extends Component {
     };
     // Consider width and height values here, could be an issue. They MUST be overridden in the
     // client app.
-    const step = {
+    let step = {
       id: getNewId(),
       name: data.name,
       text: data.text,
@@ -78,28 +101,19 @@ class Studio extends Component {
         transitionEasingName: 'd3.easeCubic',
       },
     };
-    switch (data.transitionInterpolator) {
-      case 'FlyToInterpolator':
-        step.viewport.transitionInterpolator = new FlyToInterpolator();
-        step.viewport.transitionInterpolatorName = 'FlyToInterpolator';
-        break;
-      case 'LinearInterpolator':
-        step.viewport.transitionInterpolator = new LinearInterpolator();
-        step.viewport.transitionInterpolatorName = 'LinearInterpolator';
-        break;
-      default:
-        step.viewport.transitionInterpolator = null;
-        step.viewport.transitionInterpolatorName = 'None';
-    }
+    step = this.addInterpolator(data, step);
+
     this.props.dispatch(createTourStep(step));
+    // Send POST request to server with new step
   };
 
   handleDeleteTourStep = (id) => {
     this.props.dispatch(deleteTourStep(id));
+    // Send DELETE request to server
   };
 
   handleUpdateTourStep = (updates, prevStep, index) => {
-    const step = {
+    let step = {
       id: prevStep.id,
       name: updates.name,
       text: updates.text,
@@ -110,10 +124,12 @@ class Studio extends Component {
         transitionEasingName: 'd3.easeCubic',
       },
     };
+    step = this.addInterpolator(updates, step);
     this.props.dispatch(updateTourStep(step, index));
+    // Send PUT request to server with updated step
   };
 
-  handleChangeToStepViewport = (id, index) => {
+  handleChangeToStepViewport = (id) => {
     // Update the viewport
     const step = this.props.tours.newTour.steps.filter(elem =>
       elem.id === parseInt(id, 10))[0];
@@ -127,7 +143,21 @@ class Studio extends Component {
     document.getElementById(`tour-step__wrapper-${id}`).classList.add('tour-step__active');
 
     // Set the active step in state
-    this.setState({ activeTourStep: index });
+    this.setState({ activeTourStepIndex: id });
+  };
+
+  handleOnDragEnd = (result) => {
+    // Update state
+    const { destination, source, draggableId } = result;
+    const step = this.props.tours.newTour.steps.filter(elem => elem.id === parseInt(draggableId, 10))[0];
+    if (!destination) {
+      return;
+    }
+    if (destination.index === source.index) {
+      return;
+    }
+    this.props.dispatch(reorderTourSteps(step, result));
+    // Send PUT request to server to update order
   };
 
   render() {
@@ -140,13 +170,23 @@ class Studio extends Component {
           handleChangeMapHeight={this.handleChangeMapHeight}
           handleChangeMapViewport={this.handleChangeMapViewport}
         />
-        <TourPanel
-          tours={this.props.tours}
-          createTourStep={this.handleCreateTourStep}
-          deleteTourStep={this.handleDeleteTourStep}
-          changeToStepViewport={this.handleChangeToStepViewport}
-          updateTourStep={this.handleUpdateTourStep}
-        />
+        <DragDropContext onDragEnd={this.handleOnDragEnd}>
+          <Droppable droppableId="tour-panel">
+            {provided => (
+              <TourPanel
+                tours={this.props.tours}
+                createTourStep={this.handleCreateTourStep}
+                deleteTourStep={this.handleDeleteTourStep}
+                changeToStepViewport={this.handleChangeToStepViewport}
+                updateTourStep={this.handleUpdateTourStep}
+                innerRef={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {provided.placeholder}
+              </TourPanel>
+            )}
+          </Droppable>
+        </DragDropContext>
         <NewTourModal
           toggleModal={this.handleToggleNewModal}
           tourModal={this.props.tours.newTourModal}
@@ -155,8 +195,9 @@ class Studio extends Component {
           className="modal-classname-temp"
         />
         <MapPopover
-          activeStep={this.state.activeTourStep}
+          activeTourStepIndex={this.state.activeTourStepIndex}
           newTour={this.props.tours.newTour}
+          changeToStepViewport={this.handleChangeToStepViewport}
         />
       </>
     );

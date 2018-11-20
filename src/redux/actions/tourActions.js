@@ -3,6 +3,7 @@ export const CREATE_TOUR = 'CREATE_TOUR';
 export const CREATE_TOUR_STEP = 'CREATE_TOUR_STEP';
 export const DELETE_TOUR_STEP = 'DELETE_TOUR_STEP';
 export const UPDATE_TOUR_STEP = 'UPDATE_TOUR_STEP';
+export const REORDER_TOUR_STEPS = 'REORDER_TOUR_STEPS';
 export const PUSH_NEW_TOUR = 'PUSH_NEW_TOUR';
 
 export function toggleNewTourModal() {
@@ -37,6 +38,14 @@ export function updateTourStep(updatedTourStep, index) {
     type: UPDATE_TOUR_STEP,
     updatedTourStep,
     index,
+  };
+}
+
+export function reorderTourSteps(step, result) {
+  return {
+    type: REORDER_TOUR_STEPS,
+    step,
+    result,
   };
 }
 

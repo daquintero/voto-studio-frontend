@@ -61,11 +61,18 @@
   &__wrapper:hover {
     border-left: 2px solid rgba(0, 0, 0, 0.4);
   }
-  &__preview {
+  &__drag {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 1.5em;
+    font-size: 1.2em;
+    transition: all 0.15s ease-in-out;
+  }
+  &__preview {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    font-size: 1.2em;
     transition: all 0.15s ease-in-out;
   }
   &__preview:hover {

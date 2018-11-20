@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'; // eslint-disable-line
+import PropTypes from 'prop-types';
 import { ToursProps } from '../../../shared/prop-types/ReducerProps';
 import TourStep from './TourStep';
 import NewTourStep from './NewTourStep';
@@ -11,6 +11,7 @@ class TourPanel extends Component {
     changeToStepViewport: PropTypes.func.isRequired,
     deleteTourStep: PropTypes.func.isRequired,
     updateTourStep: PropTypes.func.isRequired,
+    innerRef: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -35,20 +36,25 @@ class TourPanel extends Component {
   render() {
     const tourSteps = () => (
       this.props.tours.newTour.steps.map((tourStep, index) =>
-        (<TourStep
-          key={tourStep.id}
-          index={index}
-          tourStep={tourStep}
-          changeToStepViewport={this.props.changeToStepViewport}
-          deleteTourStep={this.props.deleteTourStep}
-          updatingTourStep={this.state.updatingTourStep}
-          toggleUpdatingTourStep={this.handleToggleUpdatingTourStep}
-          updateTourStep={this.props.updateTourStep}
-        />))
-    );
+        (
+          <TourStep
+            key={tourStep.id}
+            index={index}
+            tourStep={tourStep}
+            changeToStepViewport={this.props.changeToStepViewport}
+            deleteTourStep={this.props.deleteTourStep}
+            updatingTourStep={this.state.updatingTourStep}
+            toggleUpdatingTourStep={this.handleToggleUpdatingTourStep}
+            updateTourStep={this.props.updateTourStep}
+          />
+        )));
 
     return (
-      <div className="tour-panel__wrapper" id="tour-panel__wrapper" data-simplebar>
+      <div
+        className="tour-panel__wrapper"
+        id="tour-panel__wrapper"
+        ref={this.props.innerRef}
+      >
         <div className="tour-panel__content">
           <div className="tour-panel__name__wrapper">
             <h3>
@@ -57,7 +63,9 @@ class TourPanel extends Component {
             </h3>
           </div>
           {tourSteps()}
-          <NewTourStep createTourStep={this.props.createTourStep} />
+          {this.props.tours.newTour.name && (
+            <NewTourStep createTourStep={this.props.createTourStep} />
+          )}
         </div>
         <div
           style={{ float: 'left', clear: 'both' }}

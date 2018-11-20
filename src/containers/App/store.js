@@ -1,5 +1,6 @@
 import thunk from 'redux-thunk';
-import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
+import { combineReducers, createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { reducer as reduxFormReducer } from 'redux-form';
 import {
   sidebarReducer,
@@ -18,10 +19,7 @@ const reducer = combineReducers({
 
 const store = createStore(
   reducer,
-  compose(
-    applyMiddleware(thunk),
-    window.devToolsExtension && window.devToolsExtension(),
-  ),
+  composeWithDevTools(applyMiddleware(thunk)),
 );
 
 export default store;

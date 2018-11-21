@@ -36,6 +36,15 @@ const initialState = {
             transitionEasingName: 'd3.easeCubic',
             transitionInterpolatorName: 'FlyToInterpolator',
           },
+          markers: [
+            {
+              id: 0,
+              name: 'Marker One',
+              text: 'This is where this thing happened',
+              latitude: 8,
+              longitude: -80.1,
+            },
+          ],
         },
         {
           id: 1,
@@ -54,6 +63,7 @@ const initialState = {
             transitionEasingName: 'd3.easeCubic',
             transitionInterpolatorName: 'FlyToInterpolator',
           },
+          markers: [],
         },
       ],
     },
@@ -79,6 +89,7 @@ const initialState = {
             transitionEasingName: 'd3.easeCubic',
             transitionInterpolatorName: 'FlyToInterpolator',
           },
+          markers: [],
         },
         {
           id: 1,
@@ -97,6 +108,7 @@ const initialState = {
             transitionEasingName: 'd3.easeCubic',
             transitionInterpolatorName: 'FlyToInterpolator',
           },
+          markers: [],
         },
         {
           id: 2,
@@ -115,6 +127,7 @@ const initialState = {
             transitionEasingName: 'd3.easeCubic',
             transitionInterpolatorName: 'FlyToInterpolator',
           },
+          markers: [],
         },
       ],
     },

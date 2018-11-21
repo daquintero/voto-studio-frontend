@@ -94,6 +94,7 @@ class Map extends Component {
         transitionEasing: d3.easeCubic,
         transitionEasingName: 'd3.easeCubic',
       },
+      markers: [],
     };
     step = this.addInterpolator(data, step);
 

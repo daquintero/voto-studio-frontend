@@ -13,6 +13,7 @@ class TourPanel extends Component {
     updateTourStep: PropTypes.func.isRequired,
     innerRef: PropTypes.func.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
+    createMarker: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -48,6 +49,7 @@ class TourPanel extends Component {
             toggleUpdatingTourStep={this.handleToggleUpdatingTourStep}
             updateTourStep={this.props.updateTourStep}
             activeTourStepId={this.props.activeTourStepId}
+            createMarker={this.props.createMarker}
           />
         )));
 

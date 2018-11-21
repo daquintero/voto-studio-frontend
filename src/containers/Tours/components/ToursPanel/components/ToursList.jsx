@@ -67,7 +67,7 @@ class ToursList extends Component {
                 onClick={this.props.toggleCreateTourForm}
               >
                 <i className="fal fa-plus mr-2" />
-              Add new tour
+                Add new tour
               </span>
             ) : (
               <Form>

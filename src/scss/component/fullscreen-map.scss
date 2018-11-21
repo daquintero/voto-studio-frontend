@@ -2,8 +2,39 @@
   &__marker {
     background-color: white;
     padding: 10px;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out 0.2s;
     box-shadow: 0 1px 30px 1px rgba(0, 0, 0, 0.11);
     border-radius: 0.2em;
+    position: relative;
+  }
+  &__marker:hover {
+    transition: all 0.15s ease-in-out 0s;
+    box-shadow: 0 1px 30px 1px rgba(0, 0, 0, 0.3);
+    cursor: move;
+    border-radius: 0.2em 0 0.2em 0.2em;
+  }
+  &__marker__controls {
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 30px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    z-index: -1;
+    transition: z-index 0s ease-in-out 0s, transform 0.3s ease-in-out 0.2s;
+    border-radius: 0 0.2em 0.2em 0;
+  }
+  &__marker__controls:hover {
+    transform: translateX(30px);
+    z-index: 1000;
+  }
+  &__marker__control:hover {
+    cursor: pointer!important;
+    transform: scale(1.1);
+  }
+  &__marker:hover > &__marker__controls {
+    transform: translateX(30px);
+    z-index: 1000;
+    transition: z-index 0.15s ease-in-out 0.15s, transform 0.15s ease-in-out 0s;
   }
 }

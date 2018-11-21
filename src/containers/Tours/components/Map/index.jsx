@@ -160,6 +160,12 @@ class Map extends Component {
     // Send POST request to server with new marker (or step?) instance
   };
 
+  handleUpdateMarker = (marker, step, index) => this.props.dispatch(updateMarker(marker, step, index));
+
+  handleDeleteMarker = () => {
+
+  };
+
   render() {
     return (
       <>
@@ -172,6 +178,8 @@ class Map extends Component {
           tours={this.props.tours}
           activeTourStepId={this.state.activeTourStepId}
           updateMarkerPosition={this.handleUpdateMarkerPosition}
+          updateMarker={this.handleUpdateMarker}
+          deleteMarker={this.handleDeleteMarker}
         />
         <DragDropContext onDragEnd={this.handleOnDragEnd}>
           <Droppable droppableId="tour-panel">

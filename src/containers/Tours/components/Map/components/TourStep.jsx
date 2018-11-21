@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
-import { Collapse, Input, Label, FormGroup, Tooltip } from 'reactstrap';
+import { Collapse, Input, Label, FormGroup, Tooltip, Table } from 'reactstrap';
 import { TourProps } from '../../../../../shared/prop-types/ReducerProps';
 import TourStepControls from './TourStepControls';
 
@@ -163,17 +163,30 @@ class TourStep extends Component {
               <p>Transition Duration: {this.props.tourStep.viewport.transitionDuration}ms</p>
               <p>Transition Interpolator: {this.props.tourStep.viewport.transitionInterpolatorName}</p>
               <p>Transition Easing: {this.props.tourStep.viewport.transitionEasingName}</p>
-              <hr />
-              {this.props.tourStep.markers.length !== 0 && (
-                <>
-                  {this.props.tourStep.markers.map(marker => (
-                    <div key={`marker${marker.id}`}>
-                      <p>Name: {marker.name}</p>
-                      <p>Text: {`${marker.text.substring(0, 30)}...`}</p>
+              {this.props.tourStep.markers.length !== 0 ? (
+                  <>
+                    <div className="mt-3">
+                      <h5 className="bold-text">Markers</h5>
                     </div>
-                  ))}
-                  <hr />
-                </>
+                    <Table responsive hover>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Text</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.props.tourStep.markers.map(marker => (
+                          <tr key={marker.id}>
+                            <td>{marker.name}</td>
+                            <td>{marker.text.substring(0, 20)}...</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </>
+              ) : (
+                <hr />
               )}
             </Collapse>
             <TourStepControls

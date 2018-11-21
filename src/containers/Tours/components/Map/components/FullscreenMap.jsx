@@ -3,7 +3,7 @@ import ReactMapGL, { FlyToInterpolator, LinearInterpolator, Marker } from 'react
 import DeckGL, { GeoJsonLayer } from 'deck.gl';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
-import { ResizableBox } from 'react-resizable'; // eslint-disable-line
+import { FormGroup, Input, Label } from 'reactstrap';
 import Resizable from 're-resizable';
 import { SidebarProps, MapProps, ToursProps } from '../../../../../shared/prop-types/ReducerProps';
 import mapData from './mapData.json';
@@ -18,12 +18,19 @@ class FullscreenMap extends Component {
     tours: ToursProps.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
     updateMarkerPosition: PropTypes.func.isRequired,
+    updateMarker: PropTypes.func.isRequired,
+    deleteMarker: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       markerDraggable: true,
+      marker: {
+        updating: false,
+        name: '',
+        text: '',
+      },
     };
   }
 
@@ -38,6 +45,35 @@ class FullscreenMap extends Component {
 
   onViewportChange = (viewport) => {
     this.props.handleChangeMapViewport(viewport);
+  };
+
+  onMarkerChange = (e) => {
+    this.setState({
+      marker: {
+        ...this.state.marker,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  handleToggleUpdateMarker = marker =>
+    this.setState(prevState => ({
+      ...prevState,
+      marker: {
+        ...marker,
+        updating: !prevState.marker.updating,
+      },
+    }));
+
+  handleUpdateMarker = (marker, index) => {
+    if (this.state.marker.name && this.state.marker.text) {
+      this.props.updateMarker(
+        marker,
+        this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
+        index,
+      );
+      this.handleToggleUpdateMarker(marker);
+    }
   };
 
   resizeViewport = () => {
@@ -170,7 +206,7 @@ class FullscreenMap extends Component {
           {this.props.activeTourStepId !== -1 && (
             <>
               {this.props.tours.newTour.steps.filter(step =>
-                step.id === this.props.activeTourStepId)[0].markers.map(marker => (
+                step.id === this.props.activeTourStepId)[0].markers.map((marker, index) => (
                   <Marker
                     key={`marker-${marker.id}`}
                     latitude={marker.latitude}
@@ -189,9 +225,54 @@ class FullscreenMap extends Component {
                       onResizeStop={() => this.setState({ markerDraggable: true })}
                     >
                       <div className="fullscreen-map__marker" data-marker-id={marker.id}>
-                        <h3>{marker.name}</h3>
-                        <hr />
-                        <p>{marker.text}</p>
+                        {!this.state.marker.updating ? (
+                          <>
+                            <h3>{marker.name}</h3>
+                            <hr />
+                            <p>{marker.text}</p>
+                          </>
+                        ) : (
+                          <>
+                            <FormGroup>
+                              <Label>Name</Label>
+                              <Input
+                                type="text"
+                                name="name"
+                                value={this.state.marker.name}
+                                onChange={this.onMarkerChange}
+                              />
+                            </FormGroup>
+                            <FormGroup>
+                              <Label>Text</Label>
+                              <Input
+                                type="textarea"
+                                name="text"
+                                value={this.state.marker.text}
+                                onChange={this.onMarkerChange}
+                              />
+                            </FormGroup>
+                          </>
+                        )}
+                        <div className="fullscreen-map__marker__controls">
+                          {!this.state.marker.updating ? (
+                            <i
+                              className="fal fa-fw fa-pen fullscreen-map__marker__control"
+                              onClick={() => this.handleToggleUpdateMarker(marker)}
+                              role="presentation"
+                            />
+                          ) : (
+                            <i
+                              className="fal fa-fw fa-check fullscreen-map__marker__control"
+                              onClick={() => this.handleUpdateMarker(this.state.marker, index)}
+                              role="presentation"
+                            />
+                          )}
+                          <i
+                            className="fal fa-fw fa-trash-alt fullscreen-map__marker__control"
+                            onClick={() => this.props.deleteMarker(marker.id)}
+                            role="presentation"
+                          />
+                        </div>
                       </div>
                     </Resizable>
                   </Marker>

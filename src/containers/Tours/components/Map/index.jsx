@@ -36,7 +36,6 @@ class Map extends Component {
     super(props);
     this.state = {
       activeTourStepId: -1,
-      markers: [],
     };
   }
 
@@ -138,7 +137,6 @@ class Map extends Component {
       activeTourStepId: id,
       markers: step.markers,
     });
-    console.log(step);
   };
 
   handleOnDragEnd = (result) => {
@@ -167,30 +165,26 @@ class Map extends Component {
     // Send POST request to server with new marker
   };
 
-  handleUpdateMarkerPosition = (e, marker) => {
+  handleUpdateMarkerPosition = (e, marker, markerIndex) => {
     const newMarker = {
       ...marker,
       longitude: e.lngLat[0],
       latitude: e.lngLat[1],
     };
+    // Clear up the naming conventions with regards to marker and newMarker
     const step = this.props.tours.newTour.steps.filter(elem => elem.id === this.state.activeTourStepId)[0];
-    this.props.dispatch(updateMarker(newMarker, step, this.getStepIndex()));
-    this.setState(prevState => ({
-      ...prevState,
-      markers: [
-        ...prevState.markers,
-      ],
-    }));
+    this.props.dispatch(updateMarker(newMarker, markerIndex, step, this.getStepIndex()));
     // Send POST request to server with new marker (or step?) instance
   };
 
-  handleUpdateMarker = (marker, step) => {
-    this.props.dispatch(updateMarker(marker, step, this.getStepIndex()));
+  handleUpdateMarker = (marker, markerIndex, step) => {
+    this.props.dispatch(updateMarker(marker, markerIndex, step, this.getStepIndex()));
     // Send PUT request to server with new marker (or step?) instance
   };
 
   handleDeleteMarker = (marker, step) => {
     this.props.dispatch(deleteMarker(marker, step, this.getStepIndex()));
+    // Send DELETE request to server
   };
 
   render() {

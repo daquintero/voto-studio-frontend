@@ -282,9 +282,9 @@ export default function (state = initialState, action) {
             {
               ...action.step,
               markers: [
-                ...action.step.markers.slice(0, action.newMarker.id),
+                ...action.step.markers.slice(0, action.newMarkerIndex),
                 action.newMarker,
-                ...action.step.markers.slice(action.newMarker.id + 1),
+                ...action.step.markers.slice(action.newMarkerIndex + 1),
               ],
             },
             ...state.newTour.steps.slice(action.stepIndex + 1),
@@ -298,7 +298,10 @@ export default function (state = initialState, action) {
           ...state.newTour,
           steps: [
             ...state.newTour.steps.slice(0, action.stepIndex),
-
+            {
+              ...action.step,
+              markers: action.step.markers.filter(marker => marker.id !== action.marker.id),
+            },
             ...state.newTour.steps.slice(action.stepIndex + 1),
           ],
         },

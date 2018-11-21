@@ -185,18 +185,20 @@ class TourStep extends Component {
                         ))}
                       </tbody>
                     </Table>
-                    <span
-                      className="tours-panel__new"
-                      role="presentation"
-                      onClick={() => this.props.createMarker(this.props.tourStep)}
-                    >
-                      <i className="fal fa-plus mr-2" />
-                      Add new marker
-                    </span>
                     <hr />
                   </>
               ) : (
                 <hr />
+              )}
+              {this.props.tourStep.id === this.props.activeTourStepId && (
+                <span
+                  className="tours-panel__new"
+                  role="presentation"
+                  onClick={() => this.props.createMarker(this.props.tourStep)}
+                >
+                  <i className="fal fa-plus mr-2" />
+                  Add new marker
+                </span>
               )}
             </Collapse>
             <TourStepControls

@@ -74,18 +74,22 @@ class FullscreenMap extends Component {
       },
     }));
 
-  handleUpdateMarker = () => {
+  handleUpdateMarker = (markerIndex) => {
     if (this.state.marker.name && this.state.marker.text) {
       this.props.updateMarker(
         this.state.marker,
+        markerIndex,
         this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
       );
       this.handleToggleUpdateMarker(this.state.marker);
     }
   };
 
-  handleDeleteMarker = () => {
-
+  handleDeleteMarker = (marker) => {
+    this.props.deleteMarker(
+      marker,
+      this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
+    );
   };
 
   resizeViewport = () => {
@@ -220,14 +224,14 @@ class FullscreenMap extends Component {
             <>
               {this.props.tours.newTour.steps
                 .filter(s => s.id === this.props.activeTourStepId)[0].markers
-                .map(marker => (
+                .map((marker, index) => (
                   <Marker
                     key={`marker-${marker.id}`}
                     latitude={marker.latitude}
                     longitude={marker.longitude}
                     draggable={this.state.markerDraggable}
                     captureDrag={true} // eslint-disable-line
-                    onDragEnd={e => this.props.updateMarkerPosition(e, marker)}
+                    onDragEnd={e => this.props.updateMarkerPosition(e, marker, index)}
                   >
                     <Resizable
                       defaultSize={{
@@ -277,13 +281,13 @@ class FullscreenMap extends Component {
                           ) : (
                             <i
                               className="fal fa-fw fa-check fullscreen-map__marker__control"
-                              onClick={() => this.handleUpdateMarker(marker)}
+                              onClick={() => this.handleUpdateMarker(index)}
                               role="presentation"
                             />
                           )}
                           <i
                             className="fal fa-fw fa-trash-alt fullscreen-map__marker__control"
-                            onClick={() => this.props.deleteMarker(marker)}
+                            onClick={() => this.handleDeleteMarker(marker)}
                             role="presentation"
                           />
                         </div>

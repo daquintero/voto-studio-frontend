@@ -69,19 +69,20 @@ export function createMarker(newMarker, step, stepIndex) {
   };
 }
 
-export function deleteMarker(id, step, stepIndex) {
+export function deleteMarker(marker, step, stepIndex) {
   return {
     type: DELETE_MARKER,
-    id,
+    marker,
     step,
     stepIndex,
   };
 }
 
-export function updateMarker(newMarker, step, stepIndex) {
+export function updateMarker(newMarker, newMarkerIndex, step, stepIndex) {
   return {
     type: UPDATE_MARKER,
     newMarker,
+    newMarkerIndex,
     step,
     stepIndex,
   };

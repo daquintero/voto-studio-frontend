@@ -16,6 +16,7 @@ class TourStep extends Component {
     updatingTourStep: PropTypes.bool.isRequired,
     updateTourStep: PropTypes.func.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
+    createMarker: PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
@@ -184,9 +185,20 @@ class TourStep extends Component {
                         ))}
                       </tbody>
                     </Table>
+                    <hr />
                   </>
               ) : (
                 <hr />
+              )}
+              {this.props.tourStep.id === this.props.activeTourStepId && (
+                <span
+                  className="tours-panel__new"
+                  role="presentation"
+                  onClick={() => this.props.createMarker(this.props.tourStep)}
+                >
+                  <i className="fal fa-plus mr-2" />
+                  Add new marker
+                </span>
               )}
             </Collapse>
             <TourStepControls

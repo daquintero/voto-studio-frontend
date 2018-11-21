@@ -11,12 +11,13 @@ import {
   changeMapViewport,
 } from '../../../../redux/actions/mapActions';
 import {
-  createTour,
   createTourStep,
   deleteTourStep,
   updateTourStep,
   reorderTourSteps,
+  createMarker,
   updateMarker,
+  deleteMarker,
 } from '../../../../redux/actions/tourActions';
 import { SidebarProps, MapProps, ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
@@ -38,6 +39,18 @@ class Map extends Component {
     };
   }
 
+  getNewId = (arr) => {
+    if (arr.length) {
+      return Math.max(...arr.map(elem => elem.id), 0) + 1;
+    }
+    return 0;
+  };
+
+  getStepIndex = () => {
+    const step = this.props.tours.newTour.steps.filter(elem => elem.id === this.state.activeTourStepId)[0];
+    return this.props.tours.newTour.steps.indexOf(step);
+  };
+
   handleChangeMapHeight = (newMapHeight) => {
     this.props.dispatch(changeMapHeight(newMapHeight));
   };
@@ -48,12 +61,6 @@ class Map extends Component {
 
   handleChangeMapViewport = (newMapViewport) => {
     this.props.dispatch(changeMapViewport(newMapViewport));
-  };
-
-  handleCreateNewTour = (tour) => {
-    this.props.dispatch(createTour(tour));
-    this.handleToggleNewModal();
-    // Send POST request to server with new tour
   };
 
   addInterpolator(data, step) {  // eslint-disable-line
@@ -75,16 +82,10 @@ class Map extends Component {
   }
 
   handleCreateTourStep = (data) => {
-    const getNewId = () => {
-      if (this.props.tours.newTour.steps.length) {
-        return Math.max(...this.props.tours.newTour.steps.map(step => step.id), 0) + 1;
-      }
-      return 0;
-    };
     // Consider width and height values here, could be an issue. They MUST be overridden in the
     // client app.
     let step = {
-      id: getNewId(),
+      id: this.getNewId(this.props.tours.newTour.steps),
       name: data.name,
       text: data.text,
       viewport: {
@@ -130,8 +131,12 @@ class Map extends Component {
       elem.id === parseInt(id, 10))[0];
     this.handleChangeMapViewport(step.viewport);
 
-    // Set the active step in state
-    this.setState({ activeTourStepId: id });
+    // Set the active step in state and set the markers
+    // array in state to the markers of the active step
+    this.setState({
+      activeTourStepId: id,
+      markers: step.markers,
+    });
   };
 
   handleOnDragEnd = (result) => {
@@ -148,22 +153,38 @@ class Map extends Component {
     // Send PUT request to server to update order
   };
 
-  handleUpdateMarkerPosition = (e, marker) => {
+  handleCreateMarker = (step) => {
+    const newMarker = {
+      id: this.getNewId(step.markers),
+      name: 'New marker',
+      text: 'Edit me. Move me around. Do what you will...',
+      longitude: this.props.map.viewport.longitude,
+      latitude: this.props.map.viewport.latitude,
+    };
+    this.props.dispatch(createMarker(newMarker, step, this.getStepIndex()));
+    // Send POST request to server with new marker
+  };
+
+  handleUpdateMarkerPosition = (e, marker, markerIndex) => {
     const newMarker = {
       ...marker,
       longitude: e.lngLat[0],
       latitude: e.lngLat[1],
     };
+    // Clear up the naming conventions with regards to marker and newMarker
     const step = this.props.tours.newTour.steps.filter(elem => elem.id === this.state.activeTourStepId)[0];
-    const index = this.props.tours.newTour.steps.indexOf(step);
-    this.props.dispatch(updateMarker(newMarker, step, index));
+    this.props.dispatch(updateMarker(newMarker, markerIndex, step, this.getStepIndex()));
     // Send POST request to server with new marker (or step?) instance
   };
 
-  handleUpdateMarker = (marker, step, index) => this.props.dispatch(updateMarker(marker, step, index));
+  handleUpdateMarker = (marker, markerIndex, step) => {
+    this.props.dispatch(updateMarker(marker, markerIndex, step, this.getStepIndex()));
+    // Send PUT request to server with new marker (or step?) instance
+  };
 
-  handleDeleteMarker = () => {
-
+  handleDeleteMarker = (marker, step) => {
+    this.props.dispatch(deleteMarker(marker, step, this.getStepIndex()));
+    // Send DELETE request to server
   };
 
   render() {
@@ -177,7 +198,9 @@ class Map extends Component {
           handleChangeMapViewport={this.handleChangeMapViewport}
           tours={this.props.tours}
           activeTourStepId={this.state.activeTourStepId}
+          markers={this.state.markers}
           updateMarkerPosition={this.handleUpdateMarkerPosition}
+          createMarker={this.handleCreateMarker}
           updateMarker={this.handleUpdateMarker}
           deleteMarker={this.handleDeleteMarker}
         />
@@ -191,6 +214,7 @@ class Map extends Component {
                 changeToStepViewport={this.handleChangeToStepViewport}
                 updateTourStep={this.handleUpdateTourStep}
                 activeTourStepId={this.state.activeTourStepId}
+                createMarker={this.handleCreateMarker}
                 innerRef={provided.innerRef}
                 {...provided.droppableProps}
               >

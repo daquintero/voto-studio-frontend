@@ -9,10 +9,11 @@ import {
   DELETE_TOUR_STEP,
   CREATE_MARKER,
   UPDATE_MARKER,
+  DELETE_MARKER,
 } from '../actions/tourActions';
 
 
-const initialState = {
+const initialState = { // Remember to update both the tours array and the newTour object!
   tours: [
     {
       id: 0,
@@ -43,6 +44,7 @@ const initialState = {
               text: 'This is where this thing happened',
               latitude: 8,
               longitude: -80.1,
+              updating: false,
             },
           ],
         },
@@ -159,6 +161,7 @@ const initialState = {
             text: 'This is where this thing happened',
             latitude: 8,
             longitude: -80.1,
+            updating: false,
           },
         ],
       },
@@ -257,14 +260,15 @@ export default function (state = initialState, action) {
         newTour: {
           ...state.newTour,
           steps: [
-            ...state.newTour.steps.filter(step => step.id !== action.step.id),
+            ...state.newTour.steps.slice(0, action.stepIndex),
             {
               ...action.step,
-              markers: {
+              markers: [
                 ...action.step.markers,
-                ...action.marker,
-              },
+                action.newMarker,
+              ],
             },
+            ...state.newTour.steps.slice(action.stepIndex + 1),
           ],
         },
       };
@@ -274,16 +278,31 @@ export default function (state = initialState, action) {
         newTour: {
           ...state.newTour,
           steps: [
-            ...state.newTour.steps.slice(0, action.index),
+            ...state.newTour.steps.slice(0, action.stepIndex),
             {
               ...action.step,
               markers: [
-                ...action.step.markers.slice(0, action.newMarker.id),
+                ...action.step.markers.slice(0, action.newMarkerIndex),
                 action.newMarker,
-                ...action.step.markers.slice(action.newMarker.id + 1),
+                ...action.step.markers.slice(action.newMarkerIndex + 1),
               ],
             },
-            ...state.newTour.steps.slice(action.index + 1),
+            ...state.newTour.steps.slice(action.stepIndex + 1),
+          ],
+        },
+      };
+    case DELETE_MARKER:
+      return {
+        ...state,
+        newTour: {
+          ...state.newTour,
+          steps: [
+            ...state.newTour.steps.slice(0, action.stepIndex),
+            {
+              ...action.step,
+              markers: action.step.markers.filter(marker => marker.id !== action.marker.id),
+            },
+            ...state.newTour.steps.slice(action.stepIndex + 1),
           ],
         },
       };

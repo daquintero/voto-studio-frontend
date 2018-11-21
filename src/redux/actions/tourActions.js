@@ -60,27 +60,31 @@ export function reorderTourSteps(step, result) {
   };
 }
 
-export function createMarker(marker, step) {
+export function createMarker(newMarker, step, stepIndex) {
   return {
     type: CREATE_MARKER,
-    marker,
+    newMarker,
     step,
+    stepIndex,
   };
 }
 
-export function deleteMarker(id) {
+export function deleteMarker(marker, step, stepIndex) {
   return {
     type: DELETE_MARKER,
-    id,
+    marker,
+    step,
+    stepIndex,
   };
 }
 
-export function updateMarker(newMarker, step, index) {
+export function updateMarker(newMarker, newMarkerIndex, step, stepIndex) {
   return {
     type: UPDATE_MARKER,
     newMarker,
+    newMarkerIndex,
     step,
-    index,
+    stepIndex,
   };
 }
 

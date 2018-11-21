@@ -17,6 +17,7 @@ class FullscreenMap extends Component {
     handleChangeMapViewport: PropTypes.func.isRequired,
     tours: ToursProps.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
+    markers: PropTypes.instanceOf(Array).isRequired,
     updateMarkerPosition: PropTypes.func.isRequired,
     updateMarker: PropTypes.func.isRequired,
     deleteMarker: PropTypes.func.isRequired,
@@ -26,11 +27,7 @@ class FullscreenMap extends Component {
     super(props);
     this.state = {
       markerDraggable: true,
-      marker: {
-        updating: false,
-        name: '',
-        text: '',
-      },
+      marker: {},
     };
   }
 
@@ -43,17 +40,29 @@ class FullscreenMap extends Component {
     window.removeEventListener('resize', this.resizeViewport);
   }
 
+  // componentDidUpdate() {
+  //   const activeStep = this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0];
+  //   this.setState(prevState => ({
+  //     ...prevState,
+  //     markers: [
+  //       ...activeStep.markers,
+  //     ],
+  //   }));
+  // }
+
   onViewportChange = (viewport) => {
     this.props.handleChangeMapViewport(viewport);
   };
 
   onMarkerChange = (e) => {
-    this.setState({
+    e.persist();
+    this.setState(prevState => ({
+      ...prevState,
       marker: {
         ...this.state.marker,
         [e.target.name]: e.target.value,
       },
-    });
+    }));
   };
 
   handleToggleUpdateMarker = marker =>
@@ -65,15 +74,22 @@ class FullscreenMap extends Component {
       },
     }));
 
-  handleUpdateMarker = (marker, index) => {
+  handleUpdateMarker = (markerIndex) => {
     if (this.state.marker.name && this.state.marker.text) {
       this.props.updateMarker(
-        marker,
+        this.state.marker,
+        markerIndex,
         this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
-        index,
       );
-      this.handleToggleUpdateMarker(marker);
+      this.handleToggleUpdateMarker(this.state.marker);
     }
+  };
+
+  handleDeleteMarker = (marker) => {
+    this.props.deleteMarker(
+      marker,
+      this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
+    );
   };
 
   resizeViewport = () => {
@@ -161,7 +177,8 @@ class FullscreenMap extends Component {
 
   renderLayers() {
     // I have removed some of the color functionality just to make this simpler for now, I will
-    // add them in again once I've got this fully up and running
+    // add them in again once I've got this fully up and running. This GeoJsonLayer will be able to accept a
+    // variety of data that can differ for each step.
     return [
       new GeoJsonLayer({
         id: 'regions',
@@ -205,15 +222,16 @@ class FullscreenMap extends Component {
           />
           {this.props.activeTourStepId !== -1 && (
             <>
-              {this.props.tours.newTour.steps.filter(step =>
-                step.id === this.props.activeTourStepId)[0].markers.map((marker, index) => (
+              {this.props.tours.newTour.steps
+                .filter(s => s.id === this.props.activeTourStepId)[0].markers
+                .map((marker, index) => (
                   <Marker
                     key={`marker-${marker.id}`}
                     latitude={marker.latitude}
                     longitude={marker.longitude}
                     draggable={this.state.markerDraggable}
                     captureDrag={true} // eslint-disable-line
-                    onDragEnd={e => this.props.updateMarkerPosition(e, marker)}
+                    onDragEnd={e => this.props.updateMarkerPosition(e, marker, index)}
                   >
                     <Resizable
                       defaultSize={{
@@ -225,7 +243,7 @@ class FullscreenMap extends Component {
                       onResizeStop={() => this.setState({ markerDraggable: true })}
                     >
                       <div className="fullscreen-map__marker" data-marker-id={marker.id}>
-                        {!this.state.marker.updating ? (
+                        {!(this.state.marker.updating && this.state.marker.id === marker.id) || !this.state.marker ? (
                           <>
                             <h3>{marker.name}</h3>
                             <hr />
@@ -239,7 +257,7 @@ class FullscreenMap extends Component {
                                 type="text"
                                 name="name"
                                 value={this.state.marker.name}
-                                onChange={this.onMarkerChange}
+                                onChange={e => this.onMarkerChange(e)}
                               />
                             </FormGroup>
                             <FormGroup>
@@ -248,7 +266,7 @@ class FullscreenMap extends Component {
                                 type="textarea"
                                 name="text"
                                 value={this.state.marker.text}
-                                onChange={this.onMarkerChange}
+                                onChange={e => this.onMarkerChange(e)}
                               />
                             </FormGroup>
                           </>
@@ -263,13 +281,13 @@ class FullscreenMap extends Component {
                           ) : (
                             <i
                               className="fal fa-fw fa-check fullscreen-map__marker__control"
-                              onClick={() => this.handleUpdateMarker(this.state.marker, index)}
+                              onClick={() => this.handleUpdateMarker(index)}
                               role="presentation"
                             />
                           )}
                           <i
                             className="fal fa-fw fa-trash-alt fullscreen-map__marker__control"
-                            onClick={() => this.props.deleteMarker(marker.id)}
+                            onClick={() => this.handleDeleteMarker(marker)}
                             role="presentation"
                           />
                         </div>

@@ -32,6 +32,10 @@ class TourStep extends Component {
   }
   onChange = (e) => {
     e.persist();
+    if (e.target.name === 'transitionDuration') {
+      this.setState({ [e.target.name]: parseInt(e.target.value, 10) });
+      return;
+    }
     this.setState({ [e.target.name]: e.target.value });
   };
   toggleTooltip = () => {
@@ -160,6 +164,17 @@ class TourStep extends Component {
               <p>Transition Interpolator: {this.props.tourStep.viewport.transitionInterpolatorName}</p>
               <p>Transition Easing: {this.props.tourStep.viewport.transitionEasingName}</p>
               <hr />
+              {this.props.tourStep.markers.length !== 0 && (
+                <>
+                  {this.props.tourStep.markers.map(marker => (
+                    <div key={`marker${marker.id}`}>
+                      <p>Name: {marker.name}</p>
+                      <p>Text: {`${marker.text.substring(0, 30)}...`}</p>
+                    </div>
+                  ))}
+                  <hr />
+                </>
+              )}
             </Collapse>
             <TourStepControls
               collapse={this.state.collapse}

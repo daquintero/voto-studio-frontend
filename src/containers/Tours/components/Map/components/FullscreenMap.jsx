@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import StaticMap, { FlyToInterpolator, LinearInterpolator } from 'react-map-gl';  // eslint-disable-line
+import ReactMapGL, { FlyToInterpolator, LinearInterpolator, Marker } from 'react-map-gl';
 import DeckGL, { GeoJsonLayer } from 'deck.gl';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
-import { SidebarProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
+import { ResizableBox } from 'react-resizable'; // eslint-disable-line
+import Resizable from 're-resizable';
+import { SidebarProps, MapProps, ToursProps } from '../../../../../shared/prop-types/ReducerProps';
 import mapData from './mapData.json';
 
 class FullscreenMap extends Component {
@@ -13,7 +15,17 @@ class FullscreenMap extends Component {
     handleChangeMapWidth: PropTypes.func.isRequired,
     handleChangeMapHeight: PropTypes.func.isRequired,
     handleChangeMapViewport: PropTypes.func.isRequired,
+    tours: ToursProps.isRequired,
+    activeTourStepId: PropTypes.number.isRequired,
+    updateMarkerPosition: PropTypes.func.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      markerDraggable: true,
+    };
+  }
 
   componentDidMount() {
     window.addEventListener('resize', this.resizeViewport);
@@ -24,8 +36,8 @@ class FullscreenMap extends Component {
     window.removeEventListener('resize', this.resizeViewport);
   }
 
-  onViewPortChange = (viewport) => {
-    this.props.handleChangeMapViewport(viewport.viewState);
+  onViewportChange = (viewport) => {
+    this.props.handleChangeMapViewport(viewport);
   };
 
   resizeViewport = () => {
@@ -44,7 +56,7 @@ class FullscreenMap extends Component {
     // So we will store in json format a list of objects such as below
     // that describes a list of transitions. Also an additional popover/html overlay
     // will display information about each transition, ie "this is where this person did this".
-    // (Zooms will have to different for desktop and mobile versions)
+    // (Zooms will have to be different for desktop and mobile versions)
     // I'm going to look into a more efficient way of changing the viewport state, I have a feeling
     // this is suboptimal.
     // Some weird things happen with the fill (it leaves only the line fill) when the zoom is changed
@@ -143,20 +155,50 @@ class FullscreenMap extends Component {
       }),
     ];
   }
-
   render() {
     return (
       <div>
-        <DeckGL
-          layers={this.renderLayers()}
-          viewState={this.props.map.viewport}
-          controller={true}   // eslint-disable-line
-          onViewStateChange={this.onViewPortChange}
+        <ReactMapGL
+          {...this.props.map.viewport}
+          onViewportChange={this.onViewportChange}
+          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
         >
-          <StaticMap
-            mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
+          <DeckGL
+            {...this.props.map.viewport}
+            layers={this.renderLayers()}
           />
-        </DeckGL>
+          {this.props.activeTourStepId !== -1 && (
+            <>
+              {this.props.tours.newTour.steps.filter(step =>
+                step.id === this.props.activeTourStepId)[0].markers.map(marker => (
+                  <Marker
+                    key={`marker-${marker.id}`}
+                    latitude={marker.latitude}
+                    longitude={marker.longitude}
+                    draggable={this.state.markerDraggable}
+                    captureDrag={true} // eslint-disable-line
+                    onDragEnd={e => this.props.updateMarkerPosition(e, marker)}
+                  >
+                    <Resizable
+                      defaultSize={{
+                        width: 200,
+                        height: '100%',
+                      }}
+                      key={`resizable-box-${marker.id}`}
+                      onResizeStart={() => this.setState({ markerDraggable: false })}
+                      onResizeStop={() => this.setState({ markerDraggable: true })}
+                    >
+                      <div className="fullscreen-map__marker" data-marker-id={marker.id}>
+                        <h3>{marker.name}</h3>
+                        <hr />
+                        <p>{marker.text}</p>
+                      </div>
+                    </Resizable>
+                  </Marker>
+              ))}
+            </>
+          )}
+        </ReactMapGL>
       </div>
     );
   }

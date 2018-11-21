@@ -5,6 +5,9 @@ export const CREATE_TOUR_STEP = 'CREATE_TOUR_STEP';
 export const DELETE_TOUR_STEP = 'DELETE_TOUR_STEP';
 export const UPDATE_TOUR_STEP = 'UPDATE_TOUR_STEP';
 export const REORDER_TOUR_STEPS = 'REORDER_TOUR_STEPS';
+export const CREATE_MARKER = 'CREATE_MARKER';
+export const DELETE_MARKER = 'DELETE_MARKER';
+export const UPDATE_MARKER = 'UPDATE_MARKER';
 export const PUSH_NEW_TOUR = 'PUSH_NEW_TOUR';
 
 export function toggleNewTourModal() {
@@ -54,6 +57,30 @@ export function reorderTourSteps(step, result) {
     type: REORDER_TOUR_STEPS,
     step,
     result,
+  };
+}
+
+export function createMarker(marker, step) {
+  return {
+    type: CREATE_MARKER,
+    marker,
+    step,
+  };
+}
+
+export function deleteMarker(id) {
+  return {
+    type: DELETE_MARKER,
+    id,
+  };
+}
+
+export function updateMarker(newMarker, step, index) {
+  return {
+    type: UPDATE_MARKER,
+    newMarker,
+    step,
+    index,
   };
 }
 

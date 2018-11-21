@@ -7,6 +7,8 @@ import {
   UPDATE_TOUR_STEP,
   REORDER_TOUR_STEPS,
   DELETE_TOUR_STEP,
+  CREATE_MARKER,
+  UPDATE_MARKER,
 } from '../actions/tourActions';
 
 
@@ -30,7 +32,7 @@ const initialState = {
             maxZoom: 16,
             pitch: 30,
             bearing: 0,
-            transitionDuration: '2000',
+            transitionDuration: 2000,
             transitionEasingName: 'd3.easeCubic',
             transitionInterpolatorName: 'FlyToInterpolator',
           },
@@ -48,7 +50,68 @@ const initialState = {
             maxZoom: 16,
             pitch: 30,
             bearing: 0,
-            transitionDuration: '3000',
+            transitionDuration: 3000,
+            transitionEasingName: 'd3.easeCubic',
+            transitionInterpolatorName: 'FlyToInterpolator',
+          },
+        },
+      ],
+    },
+    {
+      id: 1,
+      name: 'More Testing',
+      description: 'This is another tour that is loaded by default for further testing purposes.',
+      steps: [
+        {
+          id: 0,
+          name: 'Step One',
+          text: 'Testing with some dummy steps.',
+          viewport: {
+            width: 1680,
+            height: 909,
+            latitude: 8,
+            longitude: -80.1,
+            zoom: 6,
+            maxZoom: 16,
+            pitch: 30,
+            bearing: 0,
+            transitionDuration: 2000,
+            transitionEasingName: 'd3.easeCubic',
+            transitionInterpolatorName: 'FlyToInterpolator',
+          },
+        },
+        {
+          id: 1,
+          name: 'Step Two',
+          text: 'Testing with some more dummy steps.',
+          viewport: {
+            width: 1680,
+            height: 909,
+            latitude: 8,
+            longitude: -80.1,
+            zoom: 6,
+            maxZoom: 16,
+            pitch: 30,
+            bearing: 0,
+            transitionDuration: 3000,
+            transitionEasingName: 'd3.easeCubic',
+            transitionInterpolatorName: 'FlyToInterpolator',
+          },
+        },
+        {
+          id: 2,
+          name: 'Step Three',
+          text: 'So. Much. Testing...',
+          viewport: {
+            width: 1680,
+            height: 909,
+            latitude: 8,
+            longitude: -80.1,
+            zoom: 6,
+            maxZoom: 16,
+            pitch: 30,
+            bearing: 0,
+            transitionDuration: 3000,
             transitionEasingName: 'd3.easeCubic',
             transitionInterpolatorName: 'FlyToInterpolator',
           },
@@ -72,10 +135,19 @@ const initialState = {
           maxZoom: 16,
           pitch: 30,
           bearing: 0,
-          transitionDuration: '2000',
+          transitionDuration: 2000,
           transitionEasingName: 'd3.easeCubic',
           transitionInterpolatorName: 'FlyToInterpolator',
         },
+        markers: [
+          {
+            id: 0,
+            name: 'Marker One',
+            text: 'This is where this thing happened',
+            latitude: 8,
+            longitude: -80.1,
+          },
+        ],
       },
       {
         id: 1,
@@ -90,10 +162,11 @@ const initialState = {
           maxZoom: 16,
           pitch: 30,
           bearing: 0,
-          transitionDuration: '3000',
+          transitionDuration: 3000,
           transitionEasingName: 'd3.easeCubic',
           transitionInterpolatorName: 'FlyToInterpolator',
         },
+        markers: [],
       },
     ],
   },
@@ -165,6 +238,42 @@ export default function (state = initialState, action) {
         },
       };
     }
+    case CREATE_MARKER:
+      return {
+        ...state,
+        newTour: {
+          ...state.newTour,
+          steps: [
+            ...state.newTour.steps.filter(step => step.id !== action.step.id),
+            {
+              ...action.step,
+              markers: {
+                ...action.step.markers,
+                ...action.marker,
+              },
+            },
+          ],
+        },
+      };
+    case UPDATE_MARKER:
+      return {
+        ...state,
+        newTour: {
+          ...state.newTour,
+          steps: [
+            ...state.newTour.steps.slice(0, action.index),
+            {
+              ...action.step,
+              markers: [
+                ...action.step.markers.slice(0, action.newMarker.id),
+                action.newMarker,
+                ...action.step.markers.slice(action.newMarker.id + 1),
+              ],
+            },
+            ...state.newTour.steps.slice(action.index + 1),
+          ],
+        },
+      };
     case PUSH_NEW_TOUR:
       return {
         ...state,

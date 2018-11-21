@@ -16,6 +16,7 @@ import {
   deleteTourStep,
   updateTourStep,
   reorderTourSteps,
+  updateMarker,
 } from '../../../../redux/actions/tourActions';
 import { SidebarProps, MapProps, ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
@@ -116,6 +117,7 @@ class Map extends Component {
         transitionEasing: d3.easeCubic,
         transitionEasingName: 'd3.easeCubic',
       },
+      markers: prevStep.markers,
     };
     step = this.addInterpolator(updates, step);
     this.props.dispatch(updateTourStep(step, index));
@@ -146,6 +148,18 @@ class Map extends Component {
     // Send PUT request to server to update order
   };
 
+  handleUpdateMarkerPosition = (e, marker) => {
+    const newMarker = {
+      ...marker,
+      longitude: e.lngLat[0],
+      latitude: e.lngLat[1],
+    };
+    const step = this.props.tours.newTour.steps.filter(elem => elem.id === this.state.activeTourStepId)[0];
+    const index = this.props.tours.newTour.steps.indexOf(step);
+    this.props.dispatch(updateMarker(newMarker, step, index));
+    // Send POST request to server with new marker (or step?) instance
+  };
+
   render() {
     return (
       <>
@@ -155,6 +169,9 @@ class Map extends Component {
           handleChangeMapWidth={this.handleChangeMapWidth}
           handleChangeMapHeight={this.handleChangeMapHeight}
           handleChangeMapViewport={this.handleChangeMapViewport}
+          tours={this.props.tours}
+          activeTourStepId={this.state.activeTourStepId}
+          updateMarkerPosition={this.handleUpdateMarkerPosition}
         />
         <DragDropContext onDragEnd={this.handleOnDragEnd}>
           <Droppable droppableId="tour-panel">

@@ -11,8 +11,8 @@ const wrappedRoutes = () => (
   <div>
     <Layout />
     <div className="container__wrap">
-      <Route path="/studio/tours" component={Tours} />
-      <Route path="/studio/tours/map" component={Map} />
+      <Route exact path="/studio/tours" component={Tours} />
+      <Route exact path="/studio/tours/map" component={Map} />
     </div>
   </div>
 );

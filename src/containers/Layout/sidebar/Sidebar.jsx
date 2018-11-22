@@ -24,6 +24,7 @@ const Sidebar = ({
             changeToDark={changeToDark}
             changeToLight={changeToLight}
             toggleNewTourModal={toggleNewTourModal}
+            sidebar={sidebar}
           />
         </div>
         <div className="sidebar__wrapper sidebar__wrapper--mobile">
@@ -32,6 +33,7 @@ const Sidebar = ({
             changeToDark={changeToDark}
             changeToLight={changeToLight}
             toggleNewTourModal={toggleNewTourModal}
+            sidebar={sidebar}
           />
         </div>
       </Scrollbar>

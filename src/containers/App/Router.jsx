@@ -5,6 +5,7 @@ import MainWrapper from './MainWrapper';
 
 import Tours from '../Tours';
 import Map from '../Tours/components/Map';
+import Profile from '../Account/components/Profile/index';
 
 // These routes are all the routes that include the top and side bar
 const wrappedRoutes = () => (
@@ -13,6 +14,7 @@ const wrappedRoutes = () => (
     <div className="container__wrap">
       <Route exact path="/studio/tours" component={Tours} />
       <Route exact path="/studio/tours/map" component={Map} />
+      <Route exact path="/account/profile" component={Profile} />
     </div>
   </div>
 );

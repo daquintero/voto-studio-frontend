@@ -18,9 +18,13 @@
 @import './component/tour-panel';
 @import './component/map-popover';
 @import './component/tours-panel';
+@import './component/tabs';
+@import './component/timeline';
+@import './component/material-form';
 
 //pages...
 @import 'containers/account';
+@import 'containers/profile';
 
 //objects...
 @import 'objects/layout.scss';

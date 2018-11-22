@@ -14,6 +14,7 @@ import {
 
 
 const initialState = { // Remember to update both the tours array and the newTour object!
+  idCode: 'T',
   tours: [
     {
       id: 0,
@@ -187,6 +188,18 @@ const initialState = { // Remember to update both the tours array and the newTou
     ],
   },
   newTourModal: false,
+  mapData: {
+    idCode: 'MD',
+    sets: [
+      {
+        id: 0,
+        name: 'Candidate Power',
+        description: 'A visualisation of the power a candidate has in a given region.',
+        data: {},
+        size: '1.34KB',
+      },
+    ],
+  },
 };
 
 export default function (state = initialState, action) {

@@ -28,7 +28,9 @@ class ToursList extends Component {
           <CardBody>
             <div className="card__title">
               <h5 className="bold-text">Your Tours</h5>
-              <h5 className="subhead">Here are the tours you have created</h5>
+              <h5 className="subhead">
+                Here are the tours you have created, press the edit button to edit a tour in the Map Studio
+              </h5>
             </div>
             <Table responsive hover>
               <thead>
@@ -44,7 +46,7 @@ class ToursList extends Component {
               <tbody>
                 {this.props.tours.tours.map(tour => (
                   <tr key={tour.id}>
-                    <td>T{tour.id}</td>
+                    <td>{this.props.tours.idCode}{tour.id}</td>
                     <td>{tour.name}</td>
                     <td>{tour.steps.length}</td>
                     <td>@dragon</td>

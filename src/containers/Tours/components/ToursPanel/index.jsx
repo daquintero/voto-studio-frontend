@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { openTour, toggleNewTourModal, createTour } from '../../../../redux/actions/tourActions';
 import { ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import ToursList from './components/ToursList';
+import MapDataPanel from './components/MapDataPanel';
 
 class ToursPanel extends Component {
   static propTypes = {
@@ -51,6 +52,9 @@ class ToursPanel extends Component {
             editTour={this.handleEditTour}
             toggleCreateTourForm={this.handleToggleCreateTourForm}
             createTour={this.handleCreateTour}
+          />
+          <MapDataPanel
+            tours={this.props.tours}
           />
         </Row>
       </Container>

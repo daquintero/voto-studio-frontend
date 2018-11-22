@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36c149f4-aa1e-409b-b400-8eafabd6ff36" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/components/Profile/components/ProfileActivities.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/components/Profile/components/ProfileActivity.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/components/Profile/components/ProfileMain.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/components/Profile/components/ProfileSettings.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/components/Profile/components/ProfileTabs.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/components/Profile/components/ProfileTasks.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/components/Profile/components/ProfileTimeLine.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/components/Profile/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/containers/Account/index.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scss/component/material-form.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scss/component/tabs.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scss/component/timeline.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scss/containers/profile.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shared/components/TimeLineItem.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/App/Router.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/App/Router.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Layout/sidebar/Sidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Layout/sidebar/Sidebar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scss/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scss/component/timeline.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/component/timeline.scss" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -105,7 +84,7 @@
           <entry key="jsx" value="139" />
           <entry key="png" value="1" />
           <entry key="production" value="1" />
-          <entry key="scss" value="31" />
+          <entry key="scss" value="33" />
           <entry key="svg" value="2" />
           <entry key="yml" value="1" />
         </counts>
@@ -119,7 +98,7 @@
           <entry key="JSX Harmony" value="137" />
           <entry key="JavaScript" value="46" />
           <entry key="PLAIN_TEXT" value="4" />
-          <entry key="SCSS" value="31" />
+          <entry key="SCSS" value="33" />
           <entry key="SVG" value="2" />
           <entry key="YAML" value="1" />
         </counts>
@@ -130,7 +109,7 @@
           <entry key="js" value="5301" />
           <entry key="json" value="52" />
           <entry key="jsx" value="34175" />
-          <entry key="scss" value="2532" />
+          <entry key="scss" value="2553" />
           <entry key="yml" value="10" />
         </counts>
       </usages-collector>
@@ -141,7 +120,7 @@
           <entry key="JSX Harmony" value="34122" />
           <entry key="JavaScript" value="5301" />
           <entry key="PLAIN_TEXT" value="53" />
-          <entry key="SCSS" value="2532" />
+          <entry key="SCSS" value="2553" />
           <entry key="YAML" value="10" />
         </counts>
       </usages-collector>
@@ -149,99 +128,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/containers/Account/components/Profile/index.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/containers/Tours/index.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="20" lean-forward="true" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/index.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="42" column="10" selection-start-line="42" selection-start-column="10" selection-end-line="42" selection-end-column="10" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/scss/component/timeline.scss">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/containers/Layout/index.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-510">
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/containers/Layout/sidebar/Sidebar.jsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/scss/containers/account.scss">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/scss/app.scss">
+        <entry file="file://$PROJECT_DIR$/src/scss/component/timeline.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+            <state relative-caret-position="68">
+              <caret line="4" column="19" lean-forward="true" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/scss/component/material-form.scss">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" column="3" lean-forward="true" selection-start-line="12" selection-start-column="2" selection-end-line="23" selection-end-column="3" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -266,7 +168,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/redux/reducers/transitionReducer.js" />
         <option value="$PROJECT_DIR$/src/redux/actions/transitionActions.js" />
         <option value="$PROJECT_DIR$/src/redux/reducers/index.js" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/CreateTourModal.jsx" />
@@ -317,6 +218,7 @@
         <option value="$PROJECT_DIR$/src/containers/Layout/sidebar/Sidebar.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" />
         <option value="$PROJECT_DIR$/src/scss/app.scss" />
+        <option value="$PROJECT_DIR$/src/scss/component/timeline.scss" />
       </list>
     </option>
   </component>
@@ -530,13 +432,6 @@
               <item name="scss" type="462c0819:PsiDirectoryNode" />
               <item name="component" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="voto-map-studio" type="b2602c69:ProjectViewProjectNode" />
-              <item name="voto-map-studio" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="scss" type="462c0819:PsiDirectoryNode" />
-              <item name="containers" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -603,12 +498,12 @@
       <workItem from="1542552248487" duration="21355000" />
       <workItem from="1542646621229" duration="22774000" />
       <workItem from="1542716605179" duration="5350000" />
-      <workItem from="1542813143240" duration="25711000" />
+      <workItem from="1542813143240" duration="25988000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133088000" />
+    <option name="totallyTimeSpent" value="133365000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -751,13 +646,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="55" column="4" selection-start-line="55" selection-start-column="4" selection-end-line="57" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -989,16 +877,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/scss/component/timeline.scss">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/scss/component/material-form.scss">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/scss/app.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+        <state relative-caret-position="187">
+          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="3" lean-forward="true" selection-start-line="12" selection-start-column="2" selection-end-line="23" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/scss/component/timeline.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="19" lean-forward="true" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
         </state>
       </provider>
     </entry>

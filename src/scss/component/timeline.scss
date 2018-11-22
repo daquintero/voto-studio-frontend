@@ -1,6 +1,22 @@
 .timeline {
   position: relative;
 
+  overflow-y: scroll;
+  max-height: 55vh;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+    background-color: #F5F5F5;
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(180, 180, 180, 1);
+    border: 2px solid rgba(180, 180, 180, 1);
+  }
+
   @include themify($themes) {
     color: themed('colorText');
   }

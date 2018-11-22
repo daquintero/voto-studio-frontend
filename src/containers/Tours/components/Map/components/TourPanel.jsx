@@ -12,7 +12,6 @@ class TourPanel extends Component {
     changeToStepViewport: PropTypes.func.isRequired,
     deleteTourStep: PropTypes.func.isRequired,
     updateTourStep: PropTypes.func.isRequired,
-    innerRef: PropTypes.func.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
     createMarker: PropTypes.func.isRequired,
     onDragEnd: PropTypes.func.isRequired,

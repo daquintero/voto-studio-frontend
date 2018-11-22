@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36c149f4-aa1e-409b-b400-8eafabd6ff36" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scss/component/tour-panel.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/scss/component/tour-panel.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -82,9 +84,9 @@
           <entry key="development" value="1" />
           <entry key="eslintrc" value="1" />
           <entry key="html" value="5" />
-          <entry key="js" value="46" />
+          <entry key="js" value="47" />
           <entry key="json" value="3" />
-          <entry key="jsx" value="143" />
+          <entry key="jsx" value="145" />
           <entry key="png" value="1" />
           <entry key="production" value="1" />
           <entry key="scss" value="33" />
@@ -98,8 +100,8 @@
           <entry key="HTML" value="5" />
           <entry key="Image" value="1" />
           <entry key="JSON" value="4" />
-          <entry key="JSX Harmony" value="141" />
-          <entry key="JavaScript" value="46" />
+          <entry key="JSX Harmony" value="143" />
+          <entry key="JavaScript" value="47" />
           <entry key="PLAIN_TEXT" value="4" />
           <entry key="SCSS" value="33" />
           <entry key="SVG" value="2" />
@@ -109,9 +111,9 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="html" value="27" />
-          <entry key="js" value="5301" />
+          <entry key="js" value="5327" />
           <entry key="json" value="52" />
-          <entry key="jsx" value="34338" />
+          <entry key="jsx" value="34867" />
           <entry key="scss" value="2570" />
           <entry key="yml" value="10" />
         </counts>
@@ -120,8 +122,8 @@
         <counts>
           <entry key="HTML" value="27" />
           <entry key="JSON" value="52" />
-          <entry key="JSX Harmony" value="34285" />
-          <entry key="JavaScript" value="5301" />
+          <entry key="JSX Harmony" value="34814" />
+          <entry key="JavaScript" value="5327" />
           <entry key="PLAIN_TEXT" value="53" />
           <entry key="SCSS" value="2570" />
           <entry key="YAML" value="10" />
@@ -133,32 +135,33 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="289">
+                  <caret line="95" column="4" lean-forward="true" selection-start-line="95" selection-start-column="4" selection-end-line="95" selection-end-column="4" />
+                  <folding>
+                    <element signature="e#0#41#0" expanded="true" />
+                    <element signature="e#3176#5803#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/scss/component/timeline.scss">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="68">
-                  <caret line="4" column="19" lean-forward="true" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="272">
-                  <caret line="55" column="63" selection-start-line="55" selection-start-column="63" selection-end-line="55" selection-end-column="63" />
+                  <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx">
+            <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="333">
-                  <caret line="67" column="60" lean-forward="true" selection-start-line="67" selection-start-column="60" selection-end-line="67" selection-end-column="60" />
-                  <folding>
-                    <element signature="e#0#41#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="204">
+                  <caret line="39" column="14" lean-forward="true" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
                 </state>
               </provider>
             </entry>
@@ -166,8 +169,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="258">
-                  <caret line="68" column="45" lean-forward="true" selection-start-line="68" selection-start-column="45" selection-end-line="68" selection-end-column="45" />
+                <state relative-caret-position="1156">
+                  <caret line="68" column="45" selection-start-line="68" selection-start-column="45" selection-end-line="68" selection-end-column="45" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
@@ -176,10 +179,31 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="306">
+                  <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+                  <folding>
+                    <element signature="e#0#26#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/redux/reducers/tourReducer.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="2448">
+                  <caret line="168" column="24" selection-start-line="168" selection-start-column="24" selection-end-line="168" selection-end-column="24" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-1551">
-                  <caret line="95" column="18" selection-start-line="95" selection-start-column="18" selection-end-line="95" selection-end-column="18" />
+                <state relative-caret-position="319">
+                  <caret line="160" column="18" selection-start-line="160" selection-start-column="18" selection-end-line="160" selection-end-column="18" />
                   <folding>
                     <element signature="e#0#41#0" expanded="true" />
                   </folding>
@@ -224,7 +248,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/redux/actions/transitionActions.js" />
         <option value="$PROJECT_DIR$/src/redux/reducers/index.js" />
         <option value="$PROJECT_DIR$/src/containers/Studio/components/CreateTourModal.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Layout/index.jsx" />
@@ -255,9 +278,7 @@
         <option value="$PROJECT_DIR$/src/scss/objects/layout.scss" />
         <option value="$PROJECT_DIR$/src/scss/component/fullscreen-map.scss" />
         <option value="$PROJECT_DIR$/src/redux/actions/tourActions.js" />
-        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx" />
         <option value="$PROJECT_DIR$/public/index.html" />
-        <option value="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" />
         <option value="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/components/ToursList.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Tours/components/ToursPanel/components/MapDataPanel.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Account/index.jsx" />
@@ -271,10 +292,13 @@
         <option value="$PROJECT_DIR$/src/containers/Layout/sidebar/SidebarContent.jsx" />
         <option value="$PROJECT_DIR$/src/scss/app.scss" />
         <option value="$PROJECT_DIR$/src/scss/component/timeline.scss" />
-        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx" />
-        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx" />
         <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx" />
         <option value="$PROJECT_DIR$/src/scss/component/tour-panel.scss" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx" />
+        <option value="$PROJECT_DIR$/src/redux/reducers/tourReducer.js" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx" />
+        <option value="$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx" />
       </list>
     </option>
   </component>
@@ -537,12 +561,12 @@
       <workItem from="1542552248487" duration="21355000" />
       <workItem from="1542646621229" duration="22774000" />
       <workItem from="1542716605179" duration="5350000" />
-      <workItem from="1542813143240" duration="27213000" />
+      <workItem from="1542813143240" duration="29457000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="134590000" />
+    <option name="totallyTimeSpent" value="136834000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -671,9 +695,6 @@
     <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/mapData.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/App/store.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
@@ -711,19 +732,6 @@
     <entry file="file://$PROJECT_DIR$/.eslintrc">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="222" column="50" lean-forward="true" selection-start-line="222" selection-start-column="50" selection-end-line="222" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-            <element signature="e#2841#5468#0" />
-            <element signature="e#2847#2908#0" />
-            <element signature="e#3522#4927#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
@@ -735,13 +743,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="500">
           <caret line="80" column="45" selection-start-line="80" selection-start-column="45" selection-end-line="80" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/redux/reducers/tourReducer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="16" column="14" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -899,34 +900,14 @@
     <entry file="file://$PROJECT_DIR$/src/scss/component/timeline.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="4" column="19" lean-forward="true" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1551">
-          <caret line="95" column="18" selection-start-line="95" selection-start-column="18" selection-end-line="95" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
+          <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourPanel.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="67" column="60" lean-forward="true" selection-start-line="67" selection-start-column="60" selection-end-line="67" selection-end-column="60" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="68" column="45" lean-forward="true" selection-start-line="68" selection-start-column="45" selection-end-line="68" selection-end-column="45" />
+        <state relative-caret-position="-527">
+          <caret line="8" column="22" lean-forward="true" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -935,8 +916,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/scss/component/tour-panel.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="55" column="63" selection-start-line="55" selection-start-column="63" selection-end-line="55" selection-end-column="63" />
+        <state relative-caret-position="204">
+          <caret line="39" column="14" lean-forward="true" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/redux/reducers/tourReducer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2448">
+          <caret line="168" column="24" selection-start-line="168" selection-start-column="24" selection-end-line="168" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/NewTourStep.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/TourStep.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1156">
+          <caret line="68" column="45" selection-start-line="68" selection-start-column="45" selection-end-line="68" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/index.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="160" column="18" selection-start-line="160" selection-start-column="18" selection-end-line="160" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/containers/Tours/components/Map/components/FullscreenMap.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="95" column="4" lean-forward="true" selection-start-line="95" selection-start-column="4" selection-end-line="95" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+            <element signature="e#3176#5803#0" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -69,10 +69,10 @@ class TourStep extends Component {
       <Draggable draggableId={this.props.tourStep.id.toString()} index={this.props.index}>
         {provided => (
           <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
             className={wrapperClasses}
             id={`tour-step__wrapper-${this.props.tourStep.id}`}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
           >
             <i
               className="fal fa-fw fa-arrows-v tour-step__drag"

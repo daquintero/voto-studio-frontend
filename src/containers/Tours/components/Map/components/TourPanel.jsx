@@ -77,7 +77,7 @@ class TourPanel extends Component {
               )}
             </Droppable>
           </DragDropContext>
-          {this.props.tours.newTour.name && (
+          {this.props.tours.newTour && (
             <NewTourStep createTourStep={this.props.createTourStep} />
           )}
         </div>

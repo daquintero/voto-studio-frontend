@@ -133,10 +133,7 @@ class Map extends Component {
 
     // Set the active step in state and set the markers
     // array in state to the markers of the active step
-    this.setState({
-      activeTourStepId: id,
-      markers: step.markers,
-    });
+    this.setState({ activeTourStepId: id });
   };
 
   handleOnDragEnd = (result) => {
@@ -157,9 +154,11 @@ class Map extends Component {
     const newMarker = {
       id: this.getNewId(step.markers),
       name: 'New marker',
-      text: 'Edit me. Move me around. Do what you will...',
+      text: 'Edit me. Move me around. Resize me. Do what you will...',
       longitude: this.props.map.viewport.longitude,
       latitude: this.props.map.viewport.latitude,
+      width: 200,
+      height: 200,
     };
     this.props.dispatch(createMarker(newMarker, step, this.getStepIndex()));
     // Send POST request to server with new marker
@@ -198,7 +197,6 @@ class Map extends Component {
           handleChangeMapViewport={this.handleChangeMapViewport}
           tours={this.props.tours}
           activeTourStepId={this.state.activeTourStepId}
-          markers={this.state.markers}
           updateMarkerPosition={this.handleUpdateMarkerPosition}
           createMarker={this.handleCreateMarker}
           updateMarker={this.handleUpdateMarker}

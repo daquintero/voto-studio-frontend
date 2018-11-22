@@ -17,7 +17,6 @@ class FullscreenMap extends Component {
     handleChangeMapViewport: PropTypes.func.isRequired,
     tours: ToursProps.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
-    markers: PropTypes.instanceOf(Array).isRequired,
     updateMarkerPosition: PropTypes.func.isRequired,
     updateMarker: PropTypes.func.isRequired,
     deleteMarker: PropTypes.func.isRequired,
@@ -39,16 +38,6 @@ class FullscreenMap extends Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.resizeViewport);
   }
-
-  // componentDidUpdate() {
-  //   const activeStep = this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0];
-  //   this.setState(prevState => ({
-  //     ...prevState,
-  //     markers: [
-  //       ...activeStep.markers,
-  //     ],
-  //   }));
-  // }
 
   onViewportChange = (viewport) => {
     this.props.handleChangeMapViewport(viewport);
@@ -88,6 +77,20 @@ class FullscreenMap extends Component {
   handleDeleteMarker = (marker) => {
     this.props.deleteMarker(
       marker,
+      this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
+    );
+  };
+
+  handleOnResizeStop = (e, dir, ref, diff, marker, markerIndex) => {
+    this.setState({ markerDraggable: true });
+    const newMarker = {
+      ...marker,
+      width: marker.width + diff.width,
+      height: marker.height + diff.height,
+    };
+    this.props.updateMarker(
+      newMarker,
+      markerIndex,
       this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
     );
   };
@@ -235,12 +238,12 @@ class FullscreenMap extends Component {
                   >
                     <Resizable
                       defaultSize={{
-                        width: 200,
-                        height: '100%',
+                        width: marker.width,
+                        height: marker.height,
                       }}
                       key={`resizable-box-${marker.id}`}
                       onResizeStart={() => this.setState({ markerDraggable: false })}
-                      onResizeStop={() => this.setState({ markerDraggable: true })}
+                      onResizeStop={(e, dir, ref, diff) => this.handleOnResizeStop(e, dir, ref, diff, marker, index)}
                     >
                       <div className="fullscreen-map__marker" data-marker-id={marker.id}>
                         {!(this.state.marker.updating && this.state.marker.id === marker.id) || !this.state.marker ? (

@@ -1,4 +1,3 @@
-export const TOGGLE_NEW_TOUR_MODAL = 'TOGGLE_NEW_TOUR_MODAL';
 export const CREATE_TOUR = 'CREATE_TOUR';
 export const OPEN_TOUR = 'OPEN_TOUR';
 export const CREATE_TOUR_STEP = 'CREATE_TOUR_STEP';
@@ -9,12 +8,6 @@ export const CREATE_MARKER = 'CREATE_MARKER';
 export const DELETE_MARKER = 'DELETE_MARKER';
 export const UPDATE_MARKER = 'UPDATE_MARKER';
 export const PUSH_NEW_TOUR = 'PUSH_NEW_TOUR';
-
-export function toggleNewTourModal() {
-  return {
-    type: TOGGLE_NEW_TOUR_MODAL,
-  };
-}
 
 export function createTour(newTour) {
   return {

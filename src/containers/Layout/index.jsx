@@ -8,7 +8,6 @@ import Sidebar from './sidebar/Sidebar';
 
 import { changeThemeToDark, changeThemeToLight } from '../../redux/actions/themeActions';
 import { changeMobileSidebarVisibility, changeSidebarVisibility } from '../../redux/actions/sidebarActions';
-import { toggleNewTourModal } from '../../redux/actions/tourActions';
 import { SidebarProps } from '../../shared/prop-types/ReducerProps';
 
 class Layout extends Component {
@@ -33,10 +32,6 @@ class Layout extends Component {
     this.props.dispatch(changeThemeToLight());
   };
 
-  toggleNewTourModal = () => {
-    this.props.dispatch(toggleNewTourModal());
-  };
-
   render() {
     const layoutClass = classNames({
       layout: true,
@@ -54,7 +49,6 @@ class Layout extends Component {
           changeToDark={this.changeToDark}
           changeToLight={this.changeToLight}
           changeMobileSidebarVisibility={this.changeMobileSidebarVisibility}
-          toggleNewTourModal={this.toggleNewTourModal}
         />
       </div>
     );

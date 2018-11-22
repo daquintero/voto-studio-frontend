@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FlyToInterpolator, LinearInterpolator } from 'deck.gl';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import * as d3 from 'd3';
 import {
   changeMapWidth,
@@ -205,25 +204,16 @@ class Map extends Component {
           updateMarker={this.handleUpdateMarker}
           deleteMarker={this.handleDeleteMarker}
         />
-        <DragDropContext onDragEnd={this.handleOnDragEnd}>
-          <Droppable droppableId="tour-panel">
-            {provided => (
-              <TourPanel
-                tours={this.props.tours}
-                createTourStep={this.handleCreateTourStep}
-                deleteTourStep={this.handleDeleteTourStep}
-                changeToStepViewport={this.handleChangeToStepViewport}
-                updateTourStep={this.handleUpdateTourStep}
-                activeTourStepId={this.state.activeTourStepId}
-                createMarker={this.handleCreateMarker}
-                innerRef={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                {provided.placeholder}
-              </TourPanel>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <TourPanel
+          tours={this.props.tours}
+          createTourStep={this.handleCreateTourStep}
+          deleteTourStep={this.handleDeleteTourStep}
+          changeToStepViewport={this.handleChangeToStepViewport}
+          updateTourStep={this.handleUpdateTourStep}
+          activeTourStepId={this.state.activeTourStepId}
+          createMarker={this.handleCreateMarker}
+          onDragEnd={this.handleOnDragEnd}
+        />
         <MapPopover
           activeTourStepId={this.state.activeTourStepId}
           newTour={this.props.tours.newTour}

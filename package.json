@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://voto-map-studio.surge.sh",
   "dependencies": {
+    "@material-ui/core": "^3.5.1",
     "bfj": "6.1.1",
     "bootstrap": "^4.1.3",
     "case-sensitive-paths-webpack-plugin": "2.1.2",

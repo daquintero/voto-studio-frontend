@@ -38,11 +38,13 @@ class ToursPanel extends Component {
 
   render() {
     return (
-      <Container>
+      <Container className="mt-4">
         <Row>
           <Col md={12}>
             <h3 className="page-title">Tour Panel</h3>
-            <h3 className="page-subhead subhead">This is where you can create new tours and manage existing tours
+            <h3 className="page-subhead subhead">
+              This is where you can create new tours, manage existing tours, upload
+              manage map data sets and much more
             </h3>
           </Col>
         </Row>

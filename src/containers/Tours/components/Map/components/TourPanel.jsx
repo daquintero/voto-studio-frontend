@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { ToursProps } from '../../../../../shared/prop-types/ReducerProps';
 import TourStep from './TourStep';
 import NewTourStep from './NewTourStep';
@@ -14,6 +15,7 @@ class TourPanel extends Component {
     innerRef: PropTypes.func.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
     createMarker: PropTypes.func.isRequired,
+    onDragEnd: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -54,11 +56,7 @@ class TourPanel extends Component {
         )));
 
     return (
-      <div
-        className="tour-panel__wrapper"
-        id="tour-panel__wrapper"
-        ref={this.props.innerRef}
-      >
+      <div className="tour-panel__wrapper" id="tour-panel__wrapper">
         <div className="tour-panel__content">
           <div className="tour-panel__name__wrapper">
             <h3>
@@ -67,7 +65,19 @@ class TourPanel extends Component {
             </h3>
             <p>{this.props.tours.newTour.description}</p>
           </div>
-          {tourSteps()}
+          <DragDropContext onDragEnd={this.props.onDragEnd}>
+            <Droppable droppableId="tour-panel">
+              {provided => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {tourSteps()}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
           {this.props.tours.newTour.name && (
             <NewTourStep createTourStep={this.props.createTourStep} />
           )}

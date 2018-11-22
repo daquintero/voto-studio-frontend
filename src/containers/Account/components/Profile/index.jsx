@@ -1,0 +1,32 @@
+import React, { Component } from 'react';
+import { Col, Container, Row } from 'reactstrap';
+import ProfileMain from './components/ProfileMain';
+import ProfileTasks from './components/ProfileTasks';
+import ProfileTabs from './components/ProfileTabs';
+
+class Index extends Component {
+  static propTypes = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <Container className="mt-4">
+        <div className="profile">
+          <Row>
+            <Col md={12} lg={12} xl={4}>
+              <Row>
+                <ProfileMain />
+                <ProfileTasks />
+              </Row>
+            </Col>
+            <ProfileTabs />
+          </Row>
+        </div>
+      </Container>
+    );
+  }
+}
+
+export default Index;

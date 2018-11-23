@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { hot } from 'react-hot-loader';
 import { Provider } from 'react-redux';
+import axios from 'axios';
+import { normalize, schema } from 'normalizr';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../scss/app.scss';
@@ -23,6 +25,12 @@ class App extends Component {
       this.setState({ loading: false });
       setTimeout(() => this.setState({ loaded: true }), 500);
     });
+
+    const user = new schema.Entity('users');
+    const userList = new schema.Array(user);
+
+    axios.get('http://127.0.0.1:8000/users/api/v1/')
+      .then(response => console.log(normalize(response.data, userList)));
   }
 
   render() {

@@ -9,10 +9,13 @@ export const DELETE_MARKER = 'DELETE_MARKER';
 export const UPDATE_MARKER = 'UPDATE_MARKER';
 export const PUSH_NEW_TOUR = 'PUSH_NEW_TOUR';
 
-export function createTour(newTour) {
+// Create a new tour. newTourInfo is an object of shape:
+// newTourInfo = { name: 'New Tour', desc: 'This is a new tour...' }
+export function createTour(newTourInfo) {
+  // This would return some form of new ID from the database
   return {
     type: CREATE_TOUR,
-    newTour,
+    newTourInfo,
   };
 }
 

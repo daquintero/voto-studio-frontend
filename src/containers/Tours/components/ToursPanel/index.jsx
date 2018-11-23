@@ -34,9 +34,9 @@ class ToursPanel extends Component {
   handleToggleCreateTourForm = () =>
     this.setState(prevState => ({ createTourForm: !prevState.createTourForm }));
 
-  handleCreateTour = (tour) => {
-    // Load the new tour into the newTour object
-    this.props.dispatch(createTour(tour));
+  handleCreateTour = (newTourInfo) => {
+    // Create the new tour
+    this.props.dispatch(createTour(newTourInfo));
     // Open the tour editor
     this.props.history.push('/studio/tours/map');
     // Close the createTourForm

@@ -30,7 +30,7 @@ class App extends Component {
     const userList = new schema.Array(user);
 
     axios.get('http://127.0.0.1:8000/users/api/v1/')
-      .then(response => console.log(normalize(response.data, userList)));
+      .then(response => console.log(normalize(response.data, userList)));  // eslint-disable-line
   }
 
   render() {

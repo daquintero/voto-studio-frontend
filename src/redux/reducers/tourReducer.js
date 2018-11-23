@@ -2,7 +2,6 @@ import {
   PUSH_NEW_TOUR,
   CREATE_TOUR,
   OPEN_TOUR,
-  TOGGLE_NEW_TOUR_MODAL,
   CREATE_TOUR_STEP,
   UPDATE_TOUR_STEP,
   REORDER_TOUR_STEPS,
@@ -137,61 +136,6 @@ const initialState = { // Remember to update both the tours array and the newTou
       ],
     },
   ],
-  newTour: {
-    name: 'Testing',
-    steps: [
-      {
-        id: 0,
-        name: 'Step One',
-        text: 'Testing with some dummy steps.',
-        viewport: {
-          width: 1680,
-          height: 909,
-          latitude: 8,
-          longitude: -80.1,
-          zoom: 6,
-          maxZoom: 16,
-          pitch: 30,
-          bearing: 0,
-          transitionDuration: 2000,
-          transitionEasingName: 'd3.easeCubic',
-          transitionInterpolatorName: 'FlyToInterpolator',
-        },
-        markers: [
-          {
-            id: 0,
-            name: 'Marker One',
-            text: 'This is where this thing happened',
-            latitude: 8,
-            longitude: -80.1,
-            updating: false,
-            width: 200,
-            height: 200,
-          },
-        ],
-      },
-      {
-        id: 1,
-        name: 'Step Two',
-        text: 'Testing with some more dummy steps.',
-        viewport: {
-          width: 1680,
-          height: 909,
-          latitude: 8,
-          longitude: -80.1,
-          zoom: 6,
-          maxZoom: 16,
-          pitch: 30,
-          bearing: 0,
-          transitionDuration: 3000,
-          transitionEasingName: 'd3.easeCubic',
-          transitionInterpolatorName: 'FlyToInterpolator',
-        },
-        markers: [],
-      },
-    ],
-  },
-  newTourModal: false,
   mapData: {
     idCode: 'MD',
     sets: [
@@ -204,22 +148,22 @@ const initialState = { // Remember to update both the tours array and the newTou
       },
     ],
   },
+  newMapData: {},
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case TOGGLE_NEW_TOUR_MODAL:
-      return {
-        ...state,
-        newTourModal: !state.newTourModal,
-      };
     case CREATE_TOUR:
       return {
         ...state,
-        newTour: {
-          steps: [],
-          ...action.newTour,
-        },
+        tours: [
+          ...state.tours,
+          {
+            name: action.newTourInfo.name,
+            desc: action.newTourInfo.desc,
+            steps: [],
+          },
+        ],
       };
     case OPEN_TOUR:
       return {

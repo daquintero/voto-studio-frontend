@@ -8,6 +8,7 @@ class ToursList extends Component {
     tours: ToursProps.isRequired,
     editTour: PropTypes.func.isRequired,
     toggleCreateTourForm: PropTypes.func.isRequired,
+    createTourForm: PropTypes.bool.isRequired,
     createTour: PropTypes.func.isRequired,
   };
   constructor(props) {
@@ -62,7 +63,7 @@ class ToursList extends Component {
               ))}
               </tbody>
             </Table>
-            {!this.props.tours.newTourModal ? (
+            {!this.props.createTourForm ? (
               <span
                 className="tours-panel__new"
                 role="presentation"

@@ -35,6 +35,7 @@ class Map extends Component {
     super(props);
     this.state = {
       activeTourStepId: -1,
+      loadedTourId: 0,
     };
   }
 
@@ -45,9 +46,12 @@ class Map extends Component {
     return 0;
   };
 
+  getStep = stepId => this.props.tours.tours[this.state.loadedTourId].steps
+    .filter(elem => elem.id === parseInt(stepId, 10))[0];
+
   getStepIndex = () => {
-    const step = this.props.tours.newTour.steps.filter(elem => elem.id === this.state.activeTourStepId)[0];
-    return this.props.tours.newTour.steps.indexOf(step);
+    const step = this.getStep(this.state.activeTourStepId);
+    return this.props.tours.tours[this.state.loadedTourId].steps.indexOf(step);
   };
 
   handleChangeMapHeight = (newMapHeight) => {
@@ -84,7 +88,7 @@ class Map extends Component {
     // Consider width and height values here, could be an issue. They MUST be overridden in the
     // client app.
     let step = {
-      id: this.getNewId(this.props.tours.newTour.steps),
+      id: this.getNewId(this.props.tours.tours[this.state.loadedTourId].steps),
       name: data.name,
       text: data.text,
       viewport: {
@@ -127,8 +131,7 @@ class Map extends Component {
 
   handleChangeToStepViewport = (id) => {
     // Update the viewport
-    const step = this.props.tours.newTour.steps.filter(elem =>
-      elem.id === parseInt(id, 10))[0];
+    const step = this.getStep(id);
     this.handleChangeMapViewport(step.viewport);
 
     // Set the active step in state and set the markers
@@ -139,7 +142,7 @@ class Map extends Component {
   handleOnDragEnd = (result) => {
     // Update state
     const { destination, source, draggableId } = result;
-    const step = this.props.tours.newTour.steps.filter(elem => elem.id === parseInt(draggableId, 10))[0];
+    const step = this.getStep(draggableId);
     if (!destination) {
       return;
     }
@@ -171,7 +174,7 @@ class Map extends Component {
       latitude: e.lngLat[1],
     };
     // Clear up the naming conventions with regards to marker and newMarker
-    const step = this.props.tours.newTour.steps.filter(elem => elem.id === this.state.activeTourStepId)[0];
+    const step = this.getStep(this.state.activeTourStepId);
     this.props.dispatch(updateMarker(newMarker, markerIndex, step, this.getStepIndex()));
     // Send POST request to server with new marker (or step?) instance
   };

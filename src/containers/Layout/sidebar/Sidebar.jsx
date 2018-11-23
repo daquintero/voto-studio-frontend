@@ -6,7 +6,7 @@ import SidebarContent from './SidebarContent';
 import { SidebarProps } from '../../../shared/prop-types/ReducerProps';
 
 const Sidebar = ({
-  changeToDark, changeToLight, changeMobileSidebarVisibility, sidebar, toggleNewTourModal,
+  changeToDark, changeToLight, changeMobileSidebarVisibility, sidebar,
 }) => {
   const sidebarClass = classNames({
     sidebar: true,
@@ -23,7 +23,6 @@ const Sidebar = ({
             onClick={() => {}}
             changeToDark={changeToDark}
             changeToLight={changeToLight}
-            toggleNewTourModal={toggleNewTourModal}
             sidebar={sidebar}
           />
         </div>
@@ -32,7 +31,6 @@ const Sidebar = ({
             onClick={changeMobileSidebarVisibility}
             changeToDark={changeToDark}
             changeToLight={changeToLight}
-            toggleNewTourModal={toggleNewTourModal}
             sidebar={sidebar}
           />
         </div>
@@ -46,7 +44,6 @@ Sidebar.propTypes = {
   changeToDark: PropTypes.func.isRequired,
   changeToLight: PropTypes.func.isRequired,
   changeMobileSidebarVisibility: PropTypes.func.isRequired,
-  toggleNewTourModal: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

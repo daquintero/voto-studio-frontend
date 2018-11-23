@@ -7,17 +7,11 @@ import { SidebarProps } from '../../../shared/prop-types/ReducerProps';
 class SidebarContent extends Component {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
-    toggleNewTourModal: PropTypes.func.isRequired,
     sidebar: SidebarProps.isRequired,
   };
 
   hideSidebar = () => {
     this.props.onClick();
-  };
-
-  toggleNewTourModal = (e) => {
-    e.preventDefault();
-    this.props.toggleNewTourModal();
   };
 
   render() {

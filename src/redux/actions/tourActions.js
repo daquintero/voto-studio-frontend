@@ -16,8 +16,6 @@ export function getTours() {
   return async (dispatch) => {
     try {
       const response = await tourService.list();
-      console.log(tourService.normalise.tours(response.data));
-
       dispatch({
         type: LIST_TOURS,
         tours: response.data,

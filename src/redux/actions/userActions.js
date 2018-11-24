@@ -3,9 +3,9 @@ import axios from 'axios';
 export const AUTHENTICATED_USER = 'AUTHENTICATED_USER';
 export const UNAUTHENTICATED_USER = 'UNAUTHENTICATED_USER';
 export const AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR';
+export const LOGOUT_USER = 'LOGOUT_USER';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
-console.log(process.env);
 
 const urls = {
   login: `${baseUrl}/users/api/v1/login/`,
@@ -19,7 +19,6 @@ export function loginUser(email, password, history) {
       dispatch({
         type: AUTHENTICATED_USER,
       });
-
       localStorage.setItem('user', response.data.token);
       history.push('/');
     } catch (error) {

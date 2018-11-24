@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -17,9 +17,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       )
     )}
   />
-
 );
 
-export default withRouter(connect(state => ({
+export default connect(state => ({
   auth: state.auth,
-}))(PrivateRoute));
+}))(PrivateRoute);

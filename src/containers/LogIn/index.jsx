@@ -11,9 +11,9 @@ const LogIn = () => (
               <span className="account__logo-accent">Studio</span>
             </span>
           </h3>
-          <h4 className="account__subhead subhead">Control content</h4>
+          <h4 className="account__subhead subhead">Control content seamlessly</h4>
         </div>
-        <LogInForm onSubmit />
+        <LogInForm />
       </div>
     </div>
   </div>

@@ -9,8 +9,9 @@ import {
   tourReducer,
   userReducer,
 } from '../../redux/reducers/index';
+import { LOGOUT_USER } from '../../redux/actions/userActions';
 
-const reducer = combineReducers({
+const appReducer = combineReducers({
   form: reduxFormReducer, // mounted under "form",
   theme: themeReducer,
   sidebar: sidebarReducer,
@@ -19,8 +20,15 @@ const reducer = combineReducers({
   auth: userReducer,
 });
 
+const rootReducer = (state, action) => {
+  if (action.type === LOGOUT_USER) {
+    return appReducer(undefined, action);
+  }
+  return appReducer(state, action);
+};
+
 const store = createStore(
-  reducer,
+  rootReducer,
   composeWithDevTools(applyMiddleware(thunk)),
 );
 

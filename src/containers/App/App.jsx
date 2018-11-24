@@ -24,8 +24,8 @@ class App extends Component {
       this.setState({ loading: false });
       setTimeout(() => this.setState({ loaded: true }), 500);
     });
-    const user = localStorage.getItem('user');
-    if (user) store.dispatch({ type: AUTHENTICATED_USER });
+    // Check to see if the user is already logged in
+    if (localStorage.getItem('user')) store.dispatch({ type: AUTHENTICATED_USER });
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import TimeLineItem from '../../../../../shared/components/TimeLineItem';
+import TimeLineItem from '../../../../shared/components/TimeLineItem';
 
 const Ava1 = `${process.env.PUBLIC_URL}/img/14.png`;
 const Ava2 = `${process.env.PUBLIC_URL}/img/15.png`;

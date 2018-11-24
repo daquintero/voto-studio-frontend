@@ -4,7 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { Col, Container, Row } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { openTour, createTour } from '../../../../redux/actions/tourActions';
+import { openTour, createTour, getTours } from '../../../../redux/actions/tourActions';
 import { ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import ToursList from './components/ToursList';
 import MapDataPanel from './components/MapDataPanel';
@@ -23,10 +23,12 @@ class ToursPanel extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.dispatch(getTours());
+  }
+
   handleEditTour = (id) => {
-    // Load the tour to be edited in the newTour object
-    const tour = this.props.tours.tours.filter(elem => elem.id === id)[0];
-    this.props.dispatch(openTour(tour));
+    this.props.dispatch(openTour(id));
     // Open the tour editor
     this.props.history.push('/studio/tours/map');
   };

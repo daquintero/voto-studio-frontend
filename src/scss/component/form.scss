@@ -415,6 +415,11 @@
   margin-top: 5px;
 }
 
+.form__invalid-login {
+  color: rgba(255, 0, 0, 0.7)!important;
+  font-style: italic;
+}
+
 .form__form-group-input-wrap--error-above {
 
   .form__form-group-error {

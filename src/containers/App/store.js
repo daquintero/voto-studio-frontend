@@ -7,18 +7,28 @@ import {
   themeReducer,
   mapReducer,
   tourReducer,
+  userReducer,
 } from '../../redux/reducers/index';
+import { LOGOUT_USER } from '../../redux/actions/userActions';
 
-const reducer = combineReducers({
+const appReducer = combineReducers({
   form: reduxFormReducer, // mounted under "form",
   theme: themeReducer,
   sidebar: sidebarReducer,
   map: mapReducer,
   tours: tourReducer,
+  auth: userReducer,
 });
 
+const rootReducer = (state, action) => {
+  if (action.type === LOGOUT_USER) {
+    return appReducer(undefined, action);
+  }
+  return appReducer(state, action);
+};
+
 const store = createStore(
-  reducer,
+  rootReducer,
   composeWithDevTools(applyMiddleware(thunk)),
 );
 

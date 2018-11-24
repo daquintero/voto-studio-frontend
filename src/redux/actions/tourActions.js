@@ -19,10 +19,10 @@ export function createTour(newTourInfo) {
   };
 }
 
-export function openTour(tour) {
+export function openTour(tourId) {
   return {
     type: OPEN_TOUR,
-    tour,
+    tourId,
   };
 }
 

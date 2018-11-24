@@ -31,6 +31,17 @@ class App extends Component {
 
     axios.get('http://127.0.0.1:8000/users/api/v1/')
       .then(response => console.log(normalize(response.data, userList)));  // eslint-disable-line
+
+    const marker = new schema.Entity('markers');
+    const step = new schema.Entity('steps', {
+      markers: [marker],
+    });
+    const tour = new schema.Entity('tour', {
+      steps: [step],
+    });
+
+    axios.get('http://127.0.0.1:8000/tours/api/v1/1/')
+      .then(response => console.log(normalize(response.data, tour)));  // eslint-disable-line
   }
 
   render() {

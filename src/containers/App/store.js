@@ -7,6 +7,7 @@ import {
   themeReducer,
   mapReducer,
   tourReducer,
+  userReducer,
 } from '../../redux/reducers/index';
 
 const reducer = combineReducers({
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   sidebar: sidebarReducer,
   map: mapReducer,
   tours: tourReducer,
+  auth: userReducer,
 });
 
 const store = createStore(

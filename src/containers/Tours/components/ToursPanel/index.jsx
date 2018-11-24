@@ -24,9 +24,7 @@ class ToursPanel extends Component {
   }
 
   handleEditTour = (id) => {
-    // Load the tour to be edited in the newTour object
-    const tour = this.props.tours.tours.filter(elem => elem.id === id)[0];
-    this.props.dispatch(openTour(tour));
+    this.props.dispatch(openTour(id));
     // Open the tour editor
     this.props.history.push('/studio/tours/map');
   };

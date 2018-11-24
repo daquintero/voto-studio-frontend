@@ -59,7 +59,7 @@ class TourPanel extends Component {
         <div className="tour-panel__content">
           <div className="tour-panel__name__wrapper">
             <h3>
-              {this.props.tours.newTour.name}{' - '}
+              {this.props.tours.tours[this.props.tours.loadedTourId].name}{' - '}
               {this.props.tours.newTour.steps.length} step{this.props.tours.newTour.steps.length === 1 ? '' : 's'}
             </h3>
             <p>{this.props.tours.newTour.description}</p>

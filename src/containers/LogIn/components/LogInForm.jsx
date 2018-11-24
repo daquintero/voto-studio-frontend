@@ -1,15 +1,21 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import EyeIcon from 'mdi-react/EyeIcon';
 import KeyVariantIcon from 'mdi-react/KeyVariantIcon';
 import AccountOutlineIcon from 'mdi-react/AccountOutlineIcon';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import renderCheckBoxField from '../../../shared/components/form/CheckBox';
+import { loginUser } from '../../../redux/actions/userActions';
 
 class LogInForm extends PureComponent {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    history: ReactRouterPropTypes.history.isRequired,
   };
 
   constructor() {
@@ -26,22 +32,26 @@ class LogInForm extends PureComponent {
     });
   };
 
+  submit = (values) => {
+    this.props.dispatch(loginUser(values.email, values.password, this.props.history));
+  };
+
   render() {
     const { handleSubmit } = this.props;
 
     return (
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit(this.submit)}>
         <div className="form__form-group">
-          <span className="form__form-group-label">Username</span>
+          <span className="form__form-group-label">Email</span>
           <div className="form__form-group-field">
             <div className="form__form-group-icon">
               <AccountOutlineIcon />
             </div>
             <Field
-              name="name"
+              name="email"
               component="input"
-              type="text"
-              placeholder="Name"
+              type="email"
+              placeholder="mail@example.com"
             />
           </div>
         </div>
@@ -76,13 +86,19 @@ class LogInForm extends PureComponent {
             />
           </div>
         </div>
-        <Link className="btn btn-primary account__btn account__btn--small" to="/pages/one">Sign In</Link>
-        <Link className="btn btn-outline-primary account__btn account__btn--small" to="/log_in">Create Account</Link>
+        <Button className="btn btn-primary account__btn account__btn--small" type="submit">Sign In</Button>
+        <Link className="btn btn-outline-primary account__btn account__btn--small" to="/accounts/signup">
+          Create Account
+        </Link>
       </form>
     );
   }
 }
 
-export default reduxForm({
+const reduxFormLogIn = reduxForm({
   form: 'log_in_form',
 })(LogInForm);
+
+export default withRouter(connect(state => ({
+  errorMessage: state.auth.error,
+}))(reduxFormLogIn));

@@ -29,13 +29,13 @@ class Map extends Component {
     sidebar: SidebarProps.isRequired,
     map: MapProps.isRequired,
     tours: ToursProps.isRequired,
+    loadedTourId: PropTypes.number.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       activeTourStepId: -1,
-      loadedTourId: 0,
     };
   }
 
@@ -46,12 +46,12 @@ class Map extends Component {
     return 0;
   };
 
-  getStep = stepId => this.props.tours.tours[this.state.loadedTourId].steps
+  getStep = stepId => this.props.tours.tours[this.props.loadedTourId].steps
     .filter(elem => elem.id === parseInt(stepId, 10))[0];
 
   getStepIndex = () => {
     const step = this.getStep(this.state.activeTourStepId);
-    return this.props.tours.tours[this.state.loadedTourId].steps.indexOf(step);
+    return this.props.tours.tours[this.props.loadedTourId].steps.indexOf(step);
   };
 
   handleChangeMapHeight = (newMapHeight) => {
@@ -88,7 +88,7 @@ class Map extends Component {
     // Consider width and height values here, could be an issue. They MUST be overridden in the
     // client app.
     let step = {
-      id: this.getNewId(this.props.tours.tours[this.state.loadedTourId].steps),
+      id: this.getNewId(this.props.tours.tours[this.props.loadedTourId].steps),
       name: data.name,
       text: data.text,
       viewport: {
@@ -217,7 +217,7 @@ class Map extends Component {
         />
         <MapPopover
           activeTourStepId={this.state.activeTourStepId}
-          newTour={this.props.tours.newTour}
+          newTour={this.props.tours.tours[this.props.tours.loadedTourId]}
           changeToStepViewport={this.handleChangeToStepViewport}
         />
       </>

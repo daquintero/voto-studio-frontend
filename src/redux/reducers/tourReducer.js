@@ -14,6 +14,7 @@ import {
 
 const initialState = { // Remember to update both the tours array and the newTour object!
   idCode: 'T',
+  loadedTourId: -1,
   tours: [
     {
       id: 0,
@@ -168,7 +169,7 @@ export default function (state = initialState, action) {
     case OPEN_TOUR:
       return {
         ...state,
-        newTour: action.tour,
+        loadedTourId: action.tourId,
       };
     case CREATE_TOUR_STEP:
       return {

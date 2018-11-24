@@ -1,21 +1,14 @@
-import axios from 'axios';
+import userService from '../../services/userService';
 
 export const AUTHENTICATED_USER = 'AUTHENTICATED_USER';
 export const UNAUTHENTICATED_USER = 'UNAUTHENTICATED_USER';
 export const AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR';
 export const LOGOUT_USER = 'LOGOUT_USER';
 
-const baseUrl = process.env.REACT_APP_BASE_URL;
-
-const urls = {
-  login: `${baseUrl}/users/api/v1/login/`,
-  register: `${baseUrl}/users/api/v1/register/`,
-};
-
 export function loginUser(values, history) {
   return async (dispatch) => {
     try {
-      const response = await axios.post(urls.login, { ...values });
+      const response = await userService.login(values);
       dispatch({
         type: AUTHENTICATED_USER,
       });
@@ -33,7 +26,7 @@ export function loginUser(values, history) {
 export function registerUser(values, history) {
   return async (dispatch) => {
     try {
-      const response = await axios.post(urls.register, { ...values });
+      const response = await userService.register(values);
       dispatch({
         type: AUTHENTICATED_USER,
       });

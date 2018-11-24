@@ -4,7 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { Col, Container, Row } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { openTour, createTour } from '../../../../redux/actions/tourActions';
+import { openTour, createTour, getTours } from '../../../../redux/actions/tourActions';
 import { ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import ToursList from './components/ToursList';
 import MapDataPanel from './components/MapDataPanel';
@@ -21,6 +21,10 @@ class ToursPanel extends Component {
     this.state = {
       createTourForm: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.dispatch(getTours());
   }
 
   handleEditTour = (id) => {

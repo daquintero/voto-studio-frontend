@@ -1,4 +1,5 @@
 import {
+  LIST_TOURS,
   PUSH_NEW_TOUR,
   CREATE_TOUR,
   OPEN_TOUR,
@@ -154,6 +155,11 @@ const initialState = { // Remember to update both the tours array and the newTou
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case LIST_TOURS:
+      return {
+        ...state,
+        tours: action.tours,
+      };
     case CREATE_TOUR:
       return {
         ...state,

@@ -1,3 +1,6 @@
+import tourService from '../../services/tourService';
+
+export const LIST_TOURS = 'LIST_TOURS';
 export const CREATE_TOUR = 'CREATE_TOUR';
 export const OPEN_TOUR = 'OPEN_TOUR';
 export const CREATE_TOUR_STEP = 'CREATE_TOUR_STEP';
@@ -8,6 +11,22 @@ export const CREATE_MARKER = 'CREATE_MARKER';
 export const DELETE_MARKER = 'DELETE_MARKER';
 export const UPDATE_MARKER = 'UPDATE_MARKER';
 export const PUSH_NEW_TOUR = 'PUSH_NEW_TOUR';
+
+export function getTours() {
+  return async (dispatch) => {
+    try {
+      const response = await tourService.list();
+      console.log(tourService.normalise.tours(response.data));
+
+      dispatch({
+        type: LIST_TOURS,
+        tours: response.data,
+      });
+    } catch (error) {
+      // If errors
+    }
+  };
+}
 
 // Create a new tour. newTourInfo is an object of shape:
 // newTourInfo = { name: 'New Tour', desc: 'This is a new tour...' }

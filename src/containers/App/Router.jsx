@@ -6,8 +6,9 @@ import ProtectedRoute from './ProtectedRoute';
 
 import Tours from '../Tours';
 import Map from '../Tours/components/Map';
-import Profile from '../Account/components/Profile/index';
-import LogIn from '../LogIn';
+import Profile from '../Account/Profile/index';
+import Login from '../Account/Login';
+import Register from '../Account/Register';
 
 // These routes are all the routes that include the top and side bar
 const wrappedRoutes = () => (
@@ -25,7 +26,8 @@ const Router = () => (
   <MainWrapper>
     <main>
       <Switch>
-        <Route exact path="/account/login" component={LogIn} />
+        <Route exact path="/account/login" component={Login} />
+        <Route exact path="/account/signup" component={Register} />
         <ProtectedRoute path="/" component={wrappedRoutes} />
       </Switch>
     </main>

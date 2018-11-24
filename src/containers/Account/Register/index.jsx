@@ -1,7 +1,8 @@
 import React from 'react';
-import LogInForm from './components/LogInForm';
+import { Link } from 'react-router-dom';
+import RegisterForm from './components/RegisterForm';
 
-const LogIn = () => (
+const Register = () => (
   <div className="account">
     <div className="account__wrapper">
       <div className="account__card">
@@ -11,15 +12,15 @@ const LogIn = () => (
               <span className="account__logo-accent">Studio</span>
             </span>
           </h3>
-          <h4 className="account__subhead subhead">Control content seamlessly</h4>
+          <h4 className="account__subhead subhead">Create an account</h4>
         </div>
-        <LogInForm />
+        <RegisterForm />
+        <div className="account__have-account">
+          <p>Already have an account? <Link to="/account/login">Login</Link></p>
+        </div>
       </div>
     </div>
   </div>
 );
 
-export default LogIn;
-
-// if you want to add select, date-picker and time-picker in your app you need to uncomment the first
-// four lines in /scss/components/form.scss to add styles
+export default Register;

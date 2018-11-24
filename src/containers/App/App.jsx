@@ -20,12 +20,13 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // Check to see if the user is already logged in
+    if (localStorage.getItem('user')) store.dispatch({ type: AUTHENTICATED_USER });
+
     window.addEventListener('load', () => {
       this.setState({ loading: false });
       setTimeout(() => this.setState({ loaded: true }), 500);
     });
-    // Check to see if the user is already logged in
-    if (localStorage.getItem('user')) store.dispatch({ type: AUTHENTICATED_USER });
   }
 
   render() {

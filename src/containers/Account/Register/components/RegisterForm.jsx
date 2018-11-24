@@ -1,17 +1,18 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import EyeIcon from 'mdi-react/EyeIcon';
 import KeyVariantIcon from 'mdi-react/KeyVariantIcon';
-import AccountOutlineIcon from 'mdi-react/AccountOutlineIcon';
-import { Link, withRouter } from 'react-router-dom';
+import MailRuIcon from 'mdi-react/MailRuIcon';
+import UserIcon from 'mdi-react/UserIcon';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import renderCheckBoxField from '../../../shared/components/form/CheckBox';
-import { loginUser } from '../../../redux/actions/userActions';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { registerUser } from '../../../../redux/actions/userActions';
 
-class LogInForm extends PureComponent {
+
+class RegisterForm extends PureComponent {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
@@ -23,22 +24,28 @@ class LogInForm extends PureComponent {
     errorMessage: '',
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       showPassword: false,
     };
+
+    this.showPassword = this.showPassword.bind(this);
   }
 
-  showPassword = (e) => {
+  showPassword(e) {
     e.preventDefault();
-    this.setState(prevState => ({
-      showPassword: !prevState.showPassword,
-    }));
-  };
+    this.setState({
+      showPassword: !this.state.showPassword,
+    });
+  }
 
   submit = (values) => {
-    this.props.dispatch(loginUser(values.email, values.password, this.props.history));
+    if (values.email && values.password === values.passwordRepeat) {
+      this.props.dispatch(registerUser(values, this.props.history));
+    } else {
+      // Do something here to tell the user the passwords don't match
+    }
   };
 
   render() {
@@ -51,20 +58,34 @@ class LogInForm extends PureComponent {
         )}
         <form className="form" onSubmit={handleSubmit(this.submit)}>
           <div className="form__form-group">
-            <span className="form__form-group-label">Email</span>
+            <span className="form__form-group-label">Name</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
-                <AccountOutlineIcon />
+                <UserIcon />
+              </div>
+              <Field
+                name="name"
+                component="input"
+                type="text"
+                placeholder="John Doe"
+              />
+            </div>
+          </div>
+          <div className="form__form-group">
+            <span className="form__form-group-label">E-mail</span>
+            <div className="form__form-group-field">
+              <div className="form__form-group-icon">
+                <MailRuIcon />
               </div>
               <Field
                 name="email"
                 component="input"
                 type="email"
-                placeholder="mail@example.com"
+                placeholder="example@mail.com"
               />
             </div>
           </div>
-          <div className="form__form-group">
+          <div className="form__form-group form__form-group--forgot">
             <span className="form__form-group-label">Password</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
@@ -82,33 +103,33 @@ class LogInForm extends PureComponent {
               ><EyeIcon />
               </button>
             </div>
-            <div className="account__forgot-password">
-              <a href="/">Forgot a password?</a>
-            </div>
           </div>
-          <div className="form__form-group">
+          <div className="form__form-group form__form-group--forgot">
             <div className="form__form-group-field">
+              <div className="form__form-group-icon">
+                <KeyVariantIcon />
+              </div>
               <Field
-                name="remember_me"
-                component={renderCheckBoxField}
-                label="Remember me"
+                name="passwordRepeat"
+                component="input"
+                type={this.state.showPassword ? 'text' : 'password'}
+                placeholder="Repeat password"
               />
             </div>
           </div>
-          <Button className="btn btn-primary account__btn account__btn--small" type="submit">Sign In</Button>
-          <Link className="btn btn-outline-primary account__btn account__btn--small" to="/accounts/signup">
-            Create Account
-          </Link>
+          <div className="account__btns">
+            <Button className="btn btn-primary account__btn" type="submit">Sign Up</Button>
+          </div>
         </form>
       </>
     );
   }
 }
 
-const reduxFormLogIn = reduxForm({
-  form: 'log_in_form',
-})(LogInForm);
+const reduxFormSignup = reduxForm({
+  form: 'register_form', // a unique identifier for this form
+})(RegisterForm);
 
 export default withRouter(connect(state => ({
   errorMessage: state.auth.error,
-}))(reduxFormLogIn));
+}))(reduxFormSignup));

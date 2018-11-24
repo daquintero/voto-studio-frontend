@@ -12,10 +12,10 @@ const urls = {
   register: `${baseUrl}/users/api/v1/register/`,
 };
 
-export function loginUser(email, password, history) {
+export function loginUser(values, history) {
   return async (dispatch) => {
     try {
-      const response = await axios.post(urls.login, { email, password });
+      const response = await axios.post(urls.login, { ...values });
       dispatch({
         type: AUTHENTICATED_USER,
       });
@@ -25,6 +25,24 @@ export function loginUser(email, password, history) {
       dispatch({
         type: AUTHENTICATION_ERROR,
         error: 'Invalid email or password',
+      });
+    }
+  };
+}
+
+export function registerUser(values, history) {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(urls.register, { ...values });
+      dispatch({
+        type: AUTHENTICATED_USER,
+      });
+      localStorage.setItem('user', response.data.token);
+      history.push('/');
+    } catch (error) {
+      dispatch({
+        type: AUTHENTICATION_ERROR,
+        error: 'Error registering account. Please try again later.',
       });
     }
   };

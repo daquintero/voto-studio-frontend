@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Layout from '../Layout/index';
 import MainWrapper from './MainWrapper';
+import ProtectedRoute from './ProtectedRoute';
 
 import Tours from '../Tours';
 import Map from '../Tours/components/Map';
@@ -25,7 +26,7 @@ const Router = () => (
     <main>
       <Switch>
         <Route exact path="/account/login" component={LogIn} />
-        <Route path="/" component={wrappedRoutes} />
+        <ProtectedRoute path="/" component={wrappedRoutes} />
       </Switch>
     </main>
   </MainWrapper>

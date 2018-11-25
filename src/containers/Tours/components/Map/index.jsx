@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FlyToInterpolator, LinearInterpolator } from 'deck.gl';
@@ -17,6 +18,7 @@ import {
   createMarker,
   updateMarker,
   deleteMarker,
+  getTourDetail,
 } from '../../../../redux/actions/tourActions';
 import { SidebarProps, MapProps, ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
@@ -29,14 +31,21 @@ class Map extends Component {
     sidebar: SidebarProps.isRequired,
     map: MapProps.isRequired,
     tours: ToursProps.isRequired,
-    loadedTourId: PropTypes.number.isRequired,
+    match: ReactRouterPropTypes.match.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       activeTourStepId: -1,
+      tourLoaded: false,
     };
+  }
+
+  componentDidMount() {
+    console.log(this.props);
+    this.props.dispatch(getTourDetail(this.props.match.params.tourId))
+      .then(this.setState({ tourLoaded: true })); // eslint-disable-line
   }
 
   getNewId = (arr) => {
@@ -46,12 +55,12 @@ class Map extends Component {
     return 0;
   };
 
-  getStep = stepId => this.props.tours.tours[this.props.loadedTourId].steps
+  getStep = stepId => this.props.tours.tours[this.props.tours.loadedTourId].steps
     .filter(elem => elem.id === parseInt(stepId, 10))[0];
 
   getStepIndex = () => {
     const step = this.getStep(this.state.activeTourStepId);
-    return this.props.tours.tours[this.props.loadedTourId].steps.indexOf(step);
+    return this.props.tours.tours[this.props.tours.loadedTourId].steps.indexOf(step);
   };
 
   handleChangeMapHeight = (newMapHeight) => {
@@ -88,7 +97,7 @@ class Map extends Component {
     // Consider width and height values here, could be an issue. They MUST be overridden in the
     // client app.
     let step = {
-      id: this.getNewId(this.props.tours.tours[this.props.loadedTourId].steps),
+      id: this.getNewId(this.props.tours.tours[this.props.tours.loadedTourId].steps),
       name: data.name,
       text: data.text,
       viewport: {
@@ -192,34 +201,42 @@ class Map extends Component {
   render() {
     return (
       <>
-        <FullscreenMap
-          sidebar={this.props.sidebar}
-          map={this.props.map}
-          handleChangeMapWidth={this.handleChangeMapWidth}
-          handleChangeMapHeight={this.handleChangeMapHeight}
-          handleChangeMapViewport={this.handleChangeMapViewport}
-          tours={this.props.tours}
-          activeTourStepId={this.state.activeTourStepId}
-          updateMarkerPosition={this.handleUpdateMarkerPosition}
-          createMarker={this.handleCreateMarker}
-          updateMarker={this.handleUpdateMarker}
-          deleteMarker={this.handleDeleteMarker}
-        />
-        <TourPanel
-          tours={this.props.tours}
-          createTourStep={this.handleCreateTourStep}
-          deleteTourStep={this.handleDeleteTourStep}
-          changeToStepViewport={this.handleChangeToStepViewport}
-          updateTourStep={this.handleUpdateTourStep}
-          activeTourStepId={this.state.activeTourStepId}
-          createMarker={this.handleCreateMarker}
-          onDragEnd={this.handleOnDragEnd}
-        />
-        <MapPopover
-          activeTourStepId={this.state.activeTourStepId}
-          newTour={this.props.tours.tours[this.props.tours.loadedTourId]}
-          changeToStepViewport={this.handleChangeToStepViewport}
-        />
+        {this.state.tourLoaded ? (
+          <>
+            <FullscreenMap
+              sidebar={this.props.sidebar}
+              map={this.props.map}
+              handleChangeMapWidth={this.handleChangeMapWidth}
+              handleChangeMapHeight={this.handleChangeMapHeight}
+              handleChangeMapViewport={this.handleChangeMapViewport}
+              tours={this.props.tours}
+              activeTourStepId={this.state.activeTourStepId}
+              updateMarkerPosition={this.handleUpdateMarkerPosition}
+              createMarker={this.handleCreateMarker}
+              updateMarker={this.handleUpdateMarker}
+              deleteMarker={this.handleDeleteMarker}
+            />
+            <TourPanel
+              tours={this.props.tours}
+              createTourStep={this.handleCreateTourStep}
+              deleteTourStep={this.handleDeleteTourStep}
+              changeToStepViewport={this.handleChangeToStepViewport}
+              updateTourStep={this.handleUpdateTourStep}
+              activeTourStepId={this.state.activeTourStepId}
+              createMarker={this.handleCreateMarker}
+              onDragEnd={this.handleOnDragEnd}
+            />
+            <MapPopover
+              activeTourStepId={this.state.activeTourStepId}
+              newTour={this.state.tour}
+              changeToStepViewport={this.handleChangeToStepViewport}
+            />
+          </>
+        ) : (
+          <>
+            Loading
+          </>
+        )}
       </>
     );
   }

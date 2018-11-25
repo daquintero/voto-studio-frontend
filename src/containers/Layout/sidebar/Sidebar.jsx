@@ -6,7 +6,7 @@ import SidebarContent from './SidebarContent';
 import { SidebarProps } from '../../../shared/prop-types/ReducerProps';
 
 const Sidebar = ({
-  changeToDark, changeToLight, changeMobileSidebarVisibility, sidebar,
+  changeMobileSidebarVisibility, sidebar,
 }) => {
   const sidebarClass = classNames({
     sidebar: true,
@@ -21,16 +21,12 @@ const Sidebar = ({
         <div className="sidebar__wrapper sidebar__wrapper--desktop">
           <SidebarContent
             onClick={() => {}}
-            changeToDark={changeToDark}
-            changeToLight={changeToLight}
             sidebar={sidebar}
           />
         </div>
         <div className="sidebar__wrapper sidebar__wrapper--mobile">
           <SidebarContent
             onClick={changeMobileSidebarVisibility}
-            changeToDark={changeToDark}
-            changeToLight={changeToLight}
             sidebar={sidebar}
           />
         </div>
@@ -41,8 +37,6 @@ const Sidebar = ({
 
 Sidebar.propTypes = {
   sidebar: SidebarProps.isRequired,
-  changeToDark: PropTypes.func.isRequired,
-  changeToLight: PropTypes.func.isRequired,
   changeMobileSidebarVisibility: PropTypes.func.isRequired,
 };
 

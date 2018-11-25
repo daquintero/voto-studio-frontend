@@ -6,7 +6,7 @@ import { ToursProps } from '../../../../../shared/prop-types/ReducerProps';
 class ToursList extends Component {
   static propTypes = {
     tours: ToursProps.isRequired,
-    editTour: PropTypes.func.isRequired,
+    openTour: PropTypes.func.isRequired,
     toggleCreateTourForm: PropTypes.func.isRequired,
     createTourForm: PropTypes.bool.isRequired,
     createTour: PropTypes.func.isRequired,
@@ -45,18 +45,18 @@ class ToursList extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.tours.tours.map(tour => (
+                {this.props.tours.tours.map((tour, index) => (
                   <tr key={tour.id}>
                     <td>{this.props.tours.idCode}{tour.id}</td>
                     <td>{tour.name}</td>
-                    <td>{tour.steps.length}</td>
+                    <td>{tour.step_count}</td>
                     <td>@dragon</td>
                     <td><Badge color="success">Live</Badge></td>
                     <td>
                       <i
                         className="fal fa-pen tours-panel__edit"
                         role="presentation"
-                        onClick={() => this.props.editTour(tour.id)}
+                        onClick={() => this.props.openTour(tour.id, index)}
                       />
                     </td>
                   </tr>

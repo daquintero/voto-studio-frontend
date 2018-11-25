@@ -4,7 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { Col, Container, Row } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { openTour, createTour, getTours } from '../../../../redux/actions/tourActions';
+import { createTour, getTourList } from '../../../../redux/actions/tourActions';
 import { ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import ToursList from './components/ToursList';
 import MapDataPanel from './components/MapDataPanel';
@@ -24,13 +24,11 @@ class ToursPanel extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(getTours());
+    this.props.dispatch(getTourList());
   }
 
-  handleEditTour = (id) => {
-    this.props.dispatch(openTour(id));
-    // Open the tour editor
-    this.props.history.push('/studio/tours/map');
+  handleOpenTour = (tourId) => {
+    this.props.history.push(`/studio/tours/map/${tourId}/`);
   };
 
   handleToggleCreateTourForm = () =>
@@ -61,7 +59,7 @@ class ToursPanel extends Component {
         <Row>
           <ToursList
             tours={this.props.tours}
-            editTour={this.handleEditTour}
+            openTour={this.handleOpenTour}
             toggleCreateTourForm={this.handleToggleCreateTourForm}
             createTourForm={this.state.createTourForm}
             createTour={this.handleCreateTour}

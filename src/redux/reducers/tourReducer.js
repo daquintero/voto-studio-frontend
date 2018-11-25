@@ -173,9 +173,17 @@ export default function (state = initialState, action) {
         ],
       };
     case OPEN_TOUR:
+      // Take the tour data received from the server and replace the old tour data
+      // with it using its index in the tour list
+      console.log(action.tourIndex);
       return {
         ...state,
-        loadedTourId: action.tourId,
+        tours: [
+          ...state.tours.slice(0, action.tourIndex),
+          action.tour,
+          ...state.tours.slice(action.tourIndex + 1),
+        ],
+        loadedTourId: action.tour.id,
       };
     case CREATE_TOUR_STEP:
       return {

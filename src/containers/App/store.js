@@ -4,7 +4,6 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { reducer as reduxFormReducer } from 'redux-form';
 import {
   sidebarReducer,
-  themeReducer,
   mapReducer,
   tourReducer,
   userReducer,
@@ -13,7 +12,6 @@ import { LOGOUT_USER } from '../../redux/actions/userActions';
 
 const appReducer = combineReducers({
   form: reduxFormReducer, // mounted under "form",
-  theme: themeReducer,
   sidebar: sidebarReducer,
   map: mapReducer,
   tours: tourReducer,

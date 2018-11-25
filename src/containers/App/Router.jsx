@@ -15,9 +15,9 @@ const wrappedRoutes = () => (
   <div>
     <Layout />
     <div className="container__wrap">
-      <Route exact path="/studio/tours" component={Tours} />
-      <Route exact path="/studio/tours/map" component={Map} />
-      <Route exact path="/account/profile" component={Profile} />
+      <Route exact path="/studio/tours/" component={Tours} />
+      <Route exact path="/studio/tours/map/:tourId/" component={Map} />
+      <Route exact path="/account/profile/" component={Profile} />
     </div>
   </div>
 );
@@ -26,8 +26,8 @@ const Router = () => (
   <MainWrapper>
     <main>
       <Switch>
-        <Route exact path="/account/login" component={Login} />
-        <Route exact path="/account/signup" component={Register} />
+        <Route exact path="/account/login/" component={Login} />
+        <Route exact path="/account/signup/" component={Register} />
         <ProtectedRoute path="/" component={wrappedRoutes} />
       </Switch>
     </main>

@@ -37,32 +37,33 @@ class TourPanel extends Component {
   };
 
   render() {
+    console.log(this.props);
+    const tour = this.props.tours.tours.filter(t => t.id === this.props.tours.loadedTourId)[0];
+    console.log(tour);
     const tourSteps = () => (
-      this.props.tours.newTour.steps.map((tourStep, index) =>
-        (
-          <TourStep
-            key={tourStep.id}
-            index={index}
-            tourStep={tourStep}
-            changeToStepViewport={this.props.changeToStepViewport}
-            deleteTourStep={this.props.deleteTourStep}
-            updatingTourStep={this.state.updatingTourStep}
-            toggleUpdatingTourStep={this.handleToggleUpdatingTourStep}
-            updateTourStep={this.props.updateTourStep}
-            activeTourStepId={this.props.activeTourStepId}
-            createMarker={this.props.createMarker}
-          />
-        )));
-
+      tour.steps.map((tourStep, index) => (
+        <TourStep
+          key={tourStep.id}
+          index={index}
+          tourStep={tourStep}
+          changeToStepViewport={this.props.changeToStepViewport}
+          deleteTourStep={this.props.deleteTourStep}
+          updatingTourStep={this.state.updatingTourStep}
+          toggleUpdatingTourStep={this.handleToggleUpdatingTourStep}
+          updateTourStep={this.props.updateTourStep}
+          activeTourStepId={this.props.activeTourStepId}
+          createMarker={this.props.createMarker}
+        />
+      )));
     return (
       <div className="tour-panel__wrapper" id="tour-panel__wrapper">
         <div className="tour-panel__content">
           <div className="tour-panel__name__wrapper">
             <h3>
-              {this.props.tours.tours[this.props.tours.loadedTourId].name}{' - '}
-              {this.props.tours.newTour.steps.length} step{this.props.tours.newTour.steps.length === 1 ? '' : 's'}
+              {tour.name}{' - '}
+              {tour.steps.length} step{tour.steps.length === 1 ? '' : 's'}
             </h3>
-            <p>{this.props.tours.newTour.description}</p>
+            <p>{tour.description}</p>
           </div>
           <DragDropContext onDragEnd={this.props.onDragEnd}>
             <Droppable droppableId="tour-panel">
@@ -74,12 +75,10 @@ class TourPanel extends Component {
                   {tourSteps()}
                   {provided.placeholder}
                 </div>
-              )}
+                )}
             </Droppable>
           </DragDropContext>
-          {this.props.tours.newTour && (
-            <NewTourStep createTourStep={this.props.createTourStep} />
-          )}
+          <NewTourStep createTourStep={this.props.createTourStep} />
         </div>
         <div
           style={{ float: 'left', clear: 'both' }}

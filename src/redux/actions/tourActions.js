@@ -3,6 +3,7 @@ import tourService from '../../services/tourService';
 export const LIST_TOURS = 'LIST_TOURS';
 export const CREATE_TOUR = 'CREATE_TOUR';
 export const OPEN_TOUR = 'OPEN_TOUR';
+export const OPEN_TOUR_ERROR = 'OPEN_TOUR_ERROR';
 export const CREATE_TOUR_STEP = 'CREATE_TOUR_STEP';
 export const DELETE_TOUR_STEP = 'DELETE_TOUR_STEP';
 export const UPDATE_TOUR_STEP = 'UPDATE_TOUR_STEP';
@@ -12,7 +13,7 @@ export const DELETE_MARKER = 'DELETE_MARKER';
 export const UPDATE_MARKER = 'UPDATE_MARKER';
 export const PUSH_NEW_TOUR = 'PUSH_NEW_TOUR';
 
-export function getTours() {
+export function getTourList() {
   return async (dispatch) => {
     try {
       const response = await tourService.list();
@@ -36,12 +37,23 @@ export function createTour(newTourInfo) {
   };
 }
 
-export function openTour(tourId) {
-  return {
-    type: OPEN_TOUR,
-    tourId,
-  };
-}
+export const getTourDetail = (tourId, tourIndex) => (dispatch) => {
+  console.log('runs', tourId);
+  return tourService.detail(tourId).then(
+    response =>
+      dispatch({
+        type: OPEN_TOUR,
+        tour: response.data,
+        tourIndex,
+      }),
+    error =>
+      dispatch({
+        type: OPEN_TOUR_ERROR,
+        error,
+      }),
+  );
+};
+
 
 export function createTourStep(step) {
   return {

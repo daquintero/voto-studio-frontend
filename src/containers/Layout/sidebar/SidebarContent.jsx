@@ -19,19 +19,19 @@ class SidebarContent extends Component {
       <div className="sidebar__content">
         <ul className="sidebar__block">
           <SidebarCategory title="Studio" icon="map">
-            <SidebarLink title="Tours" route="/studio/tours" onClick={this.hideSidebar} />
-            <SidebarLink title="Candidates" route="/studio/candidates" onClick={this.hideSidebar} />
+            <SidebarLink title="Tours" route="/studio/tours/" onClick={this.hideSidebar} />
+            <SidebarLink title="Candidates" route="/studio/candidates/" onClick={this.hideSidebar} />
           </SidebarCategory>
         </ul>
         <ul className="sidebar__block">
           <SidebarCategory title="Account" icon="user">
-            <SidebarLink title="Profile" route="/account/profile" onClick={this.hideSidebar} />
-            <SidebarLink title="Logout" route="/studio/candidates" onClick={this.hideSidebar} />
+            <SidebarLink title="Profile" route="/account/profile/" onClick={this.hideSidebar} />
+            <SidebarLink title="Logout" route="/studio/candidates/" onClick={this.hideSidebar} />
           </SidebarCategory>
           <SidebarCategory title="Support" icon="question-circle">
-            <SidebarLink title="Tutorials" route="/support/tutorials" onClick={this.hideSidebar} />
-            <SidebarLink title="Documentation" route="/support/docs" onClick={this.hideSidebar} />
-            <SidebarLink title="Contact" route="/support/contact" onClick={this.hideSidebar} />
+            <SidebarLink title="Tutorials" route="/support/tutorials/" onClick={this.hideSidebar} />
+            <SidebarLink title="Documentation" route="/support/docs/" onClick={this.hideSidebar} />
+            <SidebarLink title="Contact" route="/support/contact/" onClick={this.hideSidebar} />
           </SidebarCategory>
         </ul>
         {!this.props.sidebar.collapse && (

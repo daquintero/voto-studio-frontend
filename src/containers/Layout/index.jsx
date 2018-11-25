@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import Topbar from './topbar/Topbar';
 import Sidebar from './sidebar/Sidebar';
 
-import { changeThemeToDark, changeThemeToLight } from '../../redux/actions/themeActions';
 import { changeMobileSidebarVisibility, changeSidebarVisibility } from '../../redux/actions/sidebarActions';
 import { SidebarProps } from '../../shared/prop-types/ReducerProps';
 
@@ -24,14 +23,6 @@ class Layout extends Component {
     this.props.dispatch(changeMobileSidebarVisibility());
   };
 
-  changeToDark = () => {
-    this.props.dispatch(changeThemeToDark());
-  };
-
-  changeToLight = () => {
-    this.props.dispatch(changeThemeToLight());
-  };
-
   render() {
     const layoutClass = classNames({
       layout: true,
@@ -46,8 +37,6 @@ class Layout extends Component {
         />
         <Sidebar
           sidebar={this.props.sidebar}
-          changeToDark={this.changeToDark}
-          changeToLight={this.changeToLight}
           changeMobileSidebarVisibility={this.changeMobileSidebarVisibility}
         />
       </div>

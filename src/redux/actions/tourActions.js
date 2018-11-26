@@ -1,79 +1,92 @@
 import tourService from '../../services/tourService';
+import {
+  LIST_TOURS,
+  CREATE_TOUR,
+  OPEN_TOUR,
+  CREATE_TOUR_STEP,
+  UPDATE_TOUR_STEP,
+  REORDER_TOUR_STEPS,
+  DELETE_TOUR_STEP,
+  CREATE_MARKER,
+  UPDATE_MARKER,
+  DELETE_MARKER,
+} from '../actionCreators/tourActionCreators';
 
-export const LIST_TOURS = 'LIST_TOURS';
-export const CREATE_TOUR = 'CREATE_TOUR';
-export const OPEN_TOUR = 'OPEN_TOUR';
-export const OPEN_TOUR_ERROR = 'OPEN_TOUR_ERROR';
-export const CREATE_TOUR_STEP = 'CREATE_TOUR_STEP';
-export const DELETE_TOUR_STEP = 'DELETE_TOUR_STEP';
-export const UPDATE_TOUR_STEP = 'UPDATE_TOUR_STEP';
-export const REORDER_TOUR_STEPS = 'REORDER_TOUR_STEPS';
-export const CREATE_MARKER = 'CREATE_MARKER';
-export const DELETE_MARKER = 'DELETE_MARKER';
-export const UPDATE_MARKER = 'UPDATE_MARKER';
-export const PUSH_NEW_TOUR = 'PUSH_NEW_TOUR';
 
-export function getTourList() {
-  return async (dispatch) => {
-    try {
-      const response = await tourService.list();
-      dispatch({
-        type: LIST_TOURS,
-        tours: response.data,
-      });
-    } catch (error) {
-      // If errors
-    }
-  };
-}
+export const getTourList = () => dispatch =>
+  tourService.get.list().then(
+    response => dispatch({
+      type: LIST_TOURS.SUCCESS,
+      tourList: response.data,
+    }),
+    error => dispatch({
+      type: LIST_TOURS.ERROR,
+      error,
+    }),
+  );
 
-// Create a new tour. newTourInfo is an object of shape:
-// newTourInfo = { name: 'New Tour', desc: 'This is a new tour...' }
-export function createTour(newTourInfo) {
-  // This would return some form of new ID from the database
-  return {
-    type: CREATE_TOUR,
-    newTourInfo,
-  };
-}
-
-export const getTourDetail = (tourId, tourIndex) => (dispatch) => {
-  console.log('runs', tourId);
-  return tourService.detail(tourId).then(
+export const getTourDetail = tourId => dispatch =>
+  tourService.get.detail(tourId).then(
     response =>
       dispatch({
-        type: OPEN_TOUR,
+        type: OPEN_TOUR.SUCCESS,
         tour: response.data,
-        tourIndex,
       }),
     error =>
       dispatch({
-        type: OPEN_TOUR_ERROR,
+        type: OPEN_TOUR.ERROR,
         error,
       }),
   );
-};
 
+export const createTour = newTourInfo => dispatch =>
+  tourService.post.createTour(newTourInfo).then(
+    response =>
+      dispatch({
+        type: CREATE_TOUR.SUCCESS,
+        newTour: response.data,
+      }),
+    error =>
+      dispatch({
+        type: CREATE_TOUR.ERROR,
+        error,
+      }),
+  );
 
-export function createTourStep(step) {
-  return {
-    type: CREATE_TOUR_STEP,
-    step,
-  };
-}
+export const createTourStep = (step, tourId) => dispatch =>
+  tourService.post.createStep(step, tourId).then(
+    response =>
+      dispatch({
+        type: CREATE_TOUR_STEP.SUCCESS,
+        newTourStep: response.data,
+      }),
+    error =>
+      dispatch({
+        type: CREATE_TOUR_STEP.ERROR,
+        error,
+      }),
+  );
+
+export const updateTourStep = (updatedTourStep, index) => dispatch =>
+  tourService.post.updateStep(updatedTourStep, index).then(
+    response =>
+      dispatch({
+        type: UPDATE_TOUR_STEP.SUCCESS,
+        updatedTourStep: response.data,
+        index,
+      }),
+    error =>
+      dispatch({
+        type: UPDATE_TOUR_STEP.ERROR,
+        error,
+      }),
+  );
+
 
 export function deleteTourStep(id) {
   return {
     type: DELETE_TOUR_STEP,
     id,
-  };
-}
-
-export function updateTourStep(updatedTourStep, index) {
-  return {
-    type: UPDATE_TOUR_STEP,
-    updatedTourStep,
-    index,
   };
 }
 
@@ -110,11 +123,5 @@ export function updateMarker(newMarker, newMarkerIndex, step, stepIndex) {
     newMarkerIndex,
     step,
     stepIndex,
-  };
-}
-
-export function pushNewTour() {
-  return {
-    type: PUSH_NEW_TOUR,
   };
 }

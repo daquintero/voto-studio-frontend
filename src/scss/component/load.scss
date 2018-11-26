@@ -5,7 +5,7 @@
   align-items: center;
   position: fixed;
   background: #ffffff;
-  z-index: 1000;
+  z-index: 9999;
 
   & + div {
     height: 100vh;
@@ -15,6 +15,13 @@
   &.loaded {
     animation: ease loaded 0.5s;
   }
+}
+
+.load__card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .load__icon {

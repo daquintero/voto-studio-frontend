@@ -5,8 +5,9 @@ import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import { FormGroup, Input, Label } from 'reactstrap';
 import Resizable from 're-resizable';
-import { SidebarProps, MapProps, ToursProps } from '../../../../../shared/prop-types/ReducerProps';
+import { SidebarProps, MapProps, TourProps } from '../../../../../shared/prop-types/ReducerProps';
 import mapData from './mapData.json';
+import asyncLoading from '../../../../../shared/components/asyncLoading';
 
 class FullscreenMap extends Component {
   static propTypes = {
@@ -15,7 +16,7 @@ class FullscreenMap extends Component {
     handleChangeMapWidth: PropTypes.func.isRequired,
     handleChangeMapHeight: PropTypes.func.isRequired,
     handleChangeMapViewport: PropTypes.func.isRequired,
-    tours: ToursProps.isRequired,
+    openTour: TourProps.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
     updateMarkerPosition: PropTypes.func.isRequired,
     updateMarker: PropTypes.func.isRequired,
@@ -91,7 +92,7 @@ class FullscreenMap extends Component {
     this.props.updateMarker(
       newMarker,
       markerIndex,
-      this.props.tours.newTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
+      this.props.openTour.steps.filter(step => step.id === this.props.activeTourStepId)[0],
     );
   };
 
@@ -102,8 +103,6 @@ class FullscreenMap extends Component {
     if (window.innerWidth < 576) sidebarWidth = 0;
     this.props.handleChangeMapWidth(window.innerWidth - sidebarWidth);
     this.props.handleChangeMapHeight(window.innerHeight - topbarHeight);
-    this.renderLayers = this.renderLayers.bind(this);
-    this.mapTour = this.mapTour.bind(this);
   };
 
   mapTour = () => {
@@ -178,39 +177,37 @@ class FullscreenMap extends Component {
     }, 4000);
   };
 
-  renderLayers() {
+  renderLayers = () =>
     // I have removed some of the color functionality just to make this simpler for now, I will
     // add them in again once I've got this fully up and running. This GeoJsonLayer will be able to accept a
     // variety of data that can differ for each step.
-    return [
-      new GeoJsonLayer({
-        id: 'regions',
-        data: mapData,
-        opacity: 2,
-        stroked: false,
-        filled: true,
-        extruded: true,
-        wireframe: true,
-        getLineColor: [100, 100, 100],
-        getFillColor: () => [0, 0, 0],
+    new GeoJsonLayer({
+      id: 'regions',
+      data: mapData,
+      opacity: 2,
+      stroked: false,
+      filled: true,
+      extruded: true,
+      wireframe: true,
+      getLineColor: [100, 100, 100],
+      getFillColor: () => [0, 0, 0],
         getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
-        updateTriggers: {
-          getFillColor: () => [0, 0, 0],
+      updateTriggers: {
+        getFillColor: () => [0, 0, 0],
           getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
+      },
+      pickable: true,
+      onClick: e => this.handleClick(e),
+      transitions: {
+        getFillColor: {
+          duration: 500,
         },
-        pickable: true,
-        onClick: e => this.handleClick(e),
-        transitions: {
-          getFillColor: {
-            duration: 500,
-          },
-          getElevation: {
-            duration: 500,
-          },
+        getElevation: {
+          duration: 500,
         },
-      }),
-    ];
-  }
+      },
+    })
+
   render() {
     return (
       <div>
@@ -225,7 +222,7 @@ class FullscreenMap extends Component {
           />
           {this.props.activeTourStepId !== -1 && (
             <>
-              {this.props.tours.newTour.steps
+              {this.props.openTour.steps
                 .filter(s => s.id === this.props.activeTourStepId)[0].markers
                 .map((marker, index) => (
                   <Marker
@@ -306,4 +303,4 @@ class FullscreenMap extends Component {
   }
 }
 
-export default FullscreenMap;
+export default asyncLoading(false)(FullscreenMap);

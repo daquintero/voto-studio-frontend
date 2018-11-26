@@ -39,12 +39,10 @@ class TourStep extends Component {
     }
     this.setState({ [e.target.name]: e.target.value });
   };
-  toggleTooltip = () => {
-    this.setState(prevState => ({ tooltip: !prevState.tooltip }));
-  };
-  toggleCollapse = () => {
-    this.setState(prevState => ({ collapse: !prevState.collapse }));
-  };
+  toggleTooltip = () => this.setState(prevState => ({ tooltip: !prevState.tooltip }));
+
+  toggleCollapse = () => this.setState(prevState => ({ collapse: !prevState.collapse }));
+
   handleToggleUpdateTourStep = (savingTourStep) => {
     if (!this.props.updatingTourStep || savingTourStep) {
       if (this.state.updatingTourStep) {

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { ToursProps } from '../../../../../shared/prop-types/ReducerProps';
+import { TourProps } from '../../../../../shared/prop-types/ReducerProps';
 import TourStep from './TourStep';
 import NewTourStep from './NewTourStep';
+import asyncLoading from '../../../../../shared/components/asyncLoading';
 
 class TourPanel extends Component {
   static propTypes = {
-    tours: ToursProps.isRequired,
+    openTour: TourProps.isRequired,
     createTourStep: PropTypes.func.isRequired,
     changeToStepViewport: PropTypes.func.isRequired,
     deleteTourStep: PropTypes.func.isRequired,
@@ -37,9 +38,7 @@ class TourPanel extends Component {
   };
 
   render() {
-    console.log(this.props);
-    const tour = this.props.tours.tours.filter(t => t.id === this.props.tours.loadedTourId)[0];
-    console.log(tour);
+    const tour = this.props.openTour;
     const tourSteps = () => (
       tour.steps.map((tourStep, index) => (
         <TourStep
@@ -89,4 +88,4 @@ class TourPanel extends Component {
   }
 }
 
-export default TourPanel;
+export default asyncLoading(true)(TourPanel);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { Col, Container, Row } from 'reactstrap';
+import { Col, Container, Row, Card, CardBody } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createTour, getTourList } from '../../../../redux/actions/tourActions';
@@ -57,13 +57,27 @@ class ToursPanel extends Component {
           </Col>
         </Row>
         <Row>
-          <ToursList
-            tours={this.props.tours}
-            openTour={this.handleOpenTour}
-            toggleCreateTourForm={this.handleToggleCreateTourForm}
-            createTourForm={this.state.createTourForm}
-            createTour={this.handleCreateTour}
-          />
+          <Col md={12} lg={12} xl={6}>
+            <Card>
+              <CardBody>
+                <div className="card__title">
+                  <h5 className="bold-text">Your Tours</h5>
+                  <h5 className="subhead">
+                    Here are the tours you have created, press the edit button to edit a tour in the Map Studio
+                  </h5>
+                </div>
+                <ToursList
+                  loading={this.props.tours.tourList === undefined}
+                  tourList={this.props.tours.tourList}
+                  toursIdCode={this.props.tours.idCode}
+                  openTour={this.handleOpenTour}
+                  toggleCreateTourForm={this.handleToggleCreateTourForm}
+                  createTourForm={this.state.createTourForm}
+                  createTour={this.handleCreateTour}
+                />
+              </CardBody>
+            </Card>
+          </Col>
           <MapDataPanel
             tours={this.props.tours}
           />

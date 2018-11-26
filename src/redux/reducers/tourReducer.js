@@ -1,16 +1,15 @@
 import {
   LIST_TOURS,
-  PUSH_NEW_TOUR,
   CREATE_TOUR,
   OPEN_TOUR,
   CREATE_TOUR_STEP,
+  DELETE_TOUR_STEP,
   UPDATE_TOUR_STEP,
   REORDER_TOUR_STEPS,
-  DELETE_TOUR_STEP,
   CREATE_MARKER,
   UPDATE_MARKER,
   DELETE_MARKER,
-} from '../actions/tourActions';
+} from '../actionCreators/tourActionCreators';
 
 
 const initialState = { // Remember to update both the tours array and the newTour object!
@@ -155,47 +154,68 @@ const initialState = { // Remember to update both the tours array and the newTou
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case LIST_TOURS:
+    // List tours reducers
+    case LIST_TOURS.SUCCESS:
       return {
         ...state,
-        tours: action.tours,
+        tourList: action.tourList,
       };
-    case CREATE_TOUR:
+    case LIST_TOURS.ERROR:
       return {
         ...state,
-        tours: [
-          ...state.tours,
-          {
-            name: action.newTourInfo.name,
-            desc: action.newTourInfo.desc,
-            steps: [],
-          },
-        ],
+        tourList: { error: action.error },
       };
-    case OPEN_TOUR:
-      // Take the tour data received from the server and replace the old tour data
-      // with it using its index in the tour list
-      console.log(action.tourIndex);
+
+    // Create tour reducers. Should the new tour be added the openTour and opened
+    // upon creation or should it be pushed the the tour list?
+    case CREATE_TOUR.SUCCESS:
       return {
         ...state,
-        tours: [
-          ...state.tours.slice(0, action.tourIndex),
-          action.tour,
-          ...state.tours.slice(action.tourIndex + 1),
-        ],
-        loadedTourId: action.tour.id,
+        openTour: action.newTour,
       };
-    case CREATE_TOUR_STEP:
+    case CREATE_TOUR.ERROR:
       return {
         ...state,
-        newTour: {
-          ...state.newTour,
+        openTour: { error: action.error },
+      };
+
+    // Open tour reducers ------------------------------
+    case OPEN_TOUR.SUCCESS:
+      return {
+        ...state,
+        openTour: action.tour,
+      };
+    case OPEN_TOUR.ERROR:
+      return {
+        ...state,
+        openTour: { error: action.error },
+      };
+      // -----------------------------------------------
+
+    // Create tour step reducers -----------------------
+    case CREATE_TOUR_STEP.SUCCESS:
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
           steps: [
-            ...state.newTour.steps,
-            action.step,
+            ...state.openTour.steps,
+            action.newTourStep,
           ],
         },
       };
+    case CREATE_TOUR_STEP.ERROR:
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
+          steps: state.openTour.steps,
+          error: action.error,
+        },
+      };
+      // -----------------------------------------------
+
+    // Delete tour step reducers -----------------------
     case DELETE_TOUR_STEP:
       return {
         ...state,
@@ -206,11 +226,14 @@ export default function (state = initialState, action) {
           ],
         },
       };
-    case UPDATE_TOUR_STEP:
+      // -----------------------------------------------
+
+    // Update tour step reducers -----------------------
+    case UPDATE_TOUR_STEP.SUCCESS:
       return {
         ...state,
-        newTour: {
-          ...state.newTour,
+        openTour: {
+          ...state.openTour,
           steps: [
             ...state.newTour.steps.slice(0, action.index),
             action.updatedTourStep,
@@ -218,6 +241,22 @@ export default function (state = initialState, action) {
           ],
         },
       };
+
+    case UPDATE_TOUR_STEP.ERROR: // Not sure if putting the error there is correct
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
+          steps: [
+            ...state.newTour.steps.slice(0, action.index),
+            { error: action.error },
+            ...state.newTour.steps.slice(action.index + 1),
+          ],
+        },
+      };
+      // -----------------------------------------------
+
+    // Reorder tour steps reducer ----------------------
     case REORDER_TOUR_STEPS: {
       const newSteps = state.newTour.steps;
       newSteps.splice(action.result.source.index, 1);
@@ -281,14 +320,6 @@ export default function (state = initialState, action) {
             ...state.newTour.steps.slice(action.stepIndex + 1),
           ],
         },
-      };
-    case PUSH_NEW_TOUR:
-      return {
-        ...state,
-        tours: [
-          ...state.tours,
-          state.newTour,
-        ],
       };
     default:
       return state;

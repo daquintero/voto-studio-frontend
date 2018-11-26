@@ -38,44 +38,28 @@ class Map extends Component {
     super(props);
     this.state = {
       activeTourStepId: -1,
-      tourLoaded: false,
     };
   }
 
   componentDidMount() {
-    console.log(this.props);
     this.props.dispatch(getTourDetail(this.props.match.params.tourId))
       .then(this.setState({ tourLoaded: true })); // eslint-disable-line
   }
 
-  getNewId = (arr) => {
-    if (arr.length) {
-      return Math.max(...arr.map(elem => elem.id), 0) + 1;
-    }
-    return 0;
-  };
-
-  getStep = stepId => this.props.tours.tours[this.props.tours.loadedTourId].steps
-    .filter(elem => elem.id === parseInt(stepId, 10))[0];
+  getStep = stepId => this.props.tours.openTour.steps.filter(elem => elem.id === parseInt(stepId, 10))[0];
 
   getStepIndex = () => {
     const step = this.getStep(this.state.activeTourStepId);
-    return this.props.tours.tours[this.props.tours.loadedTourId].steps.indexOf(step);
+    return this.props.tours.openTour.steps.indexOf(step);
   };
 
-  handleChangeMapHeight = (newMapHeight) => {
-    this.props.dispatch(changeMapHeight(newMapHeight));
-  };
+  handleChangeMapHeight = newMapHeight => this.props.dispatch(changeMapHeight(newMapHeight));
 
-  handleChangeMapWidth = (newMapWidth) => {
-    this.props.dispatch(changeMapWidth(newMapWidth));
-  };
+  handleChangeMapWidth = newMapWidth => this.props.dispatch(changeMapWidth(newMapWidth));
 
-  handleChangeMapViewport = (newMapViewport) => {
-    this.props.dispatch(changeMapViewport(newMapViewport));
-  };
+  handleChangeMapViewport = newMapViewport => this.props.dispatch(changeMapViewport(newMapViewport));
 
-  addInterpolator(data, step) {  // eslint-disable-line
+  addInterpolator(data, step) { // eslint-disable-line
     const newStep = step;
     switch (data.transitionInterpolator) {
       case 'FlyToInterpolator':
@@ -96,23 +80,19 @@ class Map extends Component {
   handleCreateTourStep = (data) => {
     // Consider width and height values here, could be an issue. They MUST be overridden in the
     // client app.
-    let step = {
-      id: this.getNewId(this.props.tours.tours[this.props.tours.loadedTourId].steps),
+    const step = {
       name: data.name,
       text: data.text,
       viewport: {
         ...this.props.map.viewport,
         transitionDuration: data.transitionDuration,
-        transitionEasing: d3.easeCubic,
-        transitionEasingName: 'd3.easeCubic',
+        transitionEasingName: data.transitionEasingName,
+        transitionInterpolatorName: data.transitionInterpolatorName,
       },
       markers: [],
     };
-    step = this.addInterpolator(data, step);
-
-    this.props.dispatch(createTourStep(step));
-    this.setState({ activeTourStepId: step.id });
-    // Send POST request to server with new step
+    this.props.dispatch(createTourStep(step, this.props.tours.openTour.id))
+      .then(this.setState({ activeTourStepId: step.id }));
   };
 
   handleDeleteTourStep = (id) => {
@@ -201,42 +181,37 @@ class Map extends Component {
   render() {
     return (
       <>
-        {this.state.tourLoaded ? (
-          <>
-            <FullscreenMap
-              sidebar={this.props.sidebar}
-              map={this.props.map}
-              handleChangeMapWidth={this.handleChangeMapWidth}
-              handleChangeMapHeight={this.handleChangeMapHeight}
-              handleChangeMapViewport={this.handleChangeMapViewport}
-              tours={this.props.tours}
-              activeTourStepId={this.state.activeTourStepId}
-              updateMarkerPosition={this.handleUpdateMarkerPosition}
-              createMarker={this.handleCreateMarker}
-              updateMarker={this.handleUpdateMarker}
-              deleteMarker={this.handleDeleteMarker}
-            />
-            <TourPanel
-              tours={this.props.tours}
-              createTourStep={this.handleCreateTourStep}
-              deleteTourStep={this.handleDeleteTourStep}
-              changeToStepViewport={this.handleChangeToStepViewport}
-              updateTourStep={this.handleUpdateTourStep}
-              activeTourStepId={this.state.activeTourStepId}
-              createMarker={this.handleCreateMarker}
-              onDragEnd={this.handleOnDragEnd}
-            />
-            <MapPopover
-              activeTourStepId={this.state.activeTourStepId}
-              newTour={this.state.tour}
-              changeToStepViewport={this.handleChangeToStepViewport}
-            />
-          </>
-        ) : (
-          <>
-            Loading
-          </>
-        )}
+        <FullscreenMap
+          loading={this.props.tours.openTour === undefined}
+          sidebar={this.props.sidebar}
+          map={this.props.map}
+          handleChangeMapWidth={this.handleChangeMapWidth}
+          handleChangeMapHeight={this.handleChangeMapHeight}
+          handleChangeMapViewport={this.handleChangeMapViewport}
+          openTour={this.props.tours.openTour}
+          activeTourStepId={this.state.activeTourStepId}
+          updateMarkerPosition={this.handleUpdateMarkerPosition}
+          createMarker={this.handleCreateMarker}
+          updateMarker={this.handleUpdateMarker}
+          deleteMarker={this.handleDeleteMarker}
+        />
+        <TourPanel
+          loading={this.props.tours.openTour === undefined}
+          openTour={this.props.tours.openTour}
+          createTourStep={this.handleCreateTourStep}
+          deleteTourStep={this.handleDeleteTourStep}
+          changeToStepViewport={this.handleChangeToStepViewport}
+          updateTourStep={this.handleUpdateTourStep}
+          activeTourStepId={this.state.activeTourStepId}
+          createMarker={this.handleCreateMarker}
+          onDragEnd={this.handleOnDragEnd}
+        />
+        <MapPopover
+          loading={this.props.tours.openTour === undefined}
+          activeTourStepId={this.state.activeTourStepId}
+          openTour={this.props.tours.openTour}
+          changeToStepViewport={this.handleChangeToStepViewport}
+        />
       </>
     );
   }

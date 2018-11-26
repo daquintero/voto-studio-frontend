@@ -8,29 +8,28 @@ class NewTourStepControls extends Component {
     this.state = {
       name: '',
       text: '',
-      transitionInterpolator: 'FlyToInterpolator',
       transitionDuration: '2000',
-      transitionEasing: 'd3.cubicEasing',
+      transitionEasingName: 'd3.cubicEasing',
+      transitionInterpolatorName: 'FlyToInterpolator',
     };
   }
+
   onChange = (e) => {
-    // Should this be implemented differently?
-    // Refer to Medium article on binding to multiple comps
     e.persist();
     this.setState({ [e.target.name]: e.target.value });
   };
+
   onSubmit = () => {
     this.props.createTourStep(this.state);
     this.setState({
       name: '',
       text: '',
-      transitionInterpolator: 'FlyToInterpolator',
       transitionDuration: '2000',
       transitionEasing: 'd3.cubicEasing',
+      transitionInterpolator: 'FlyToInterpolator',
     });
   };
-  handleKeyPress = () => {
-  };
+
   render() {
     return (
       // Add a help link to the interpolation and easing fields

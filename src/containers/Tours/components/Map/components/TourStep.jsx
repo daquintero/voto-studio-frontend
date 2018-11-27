@@ -225,7 +225,7 @@ class TourStep extends Component {
                 )}
                 <NavLink
                   className="tour-step__control"
-                  onClick={() => this.props.deleteTourStep(this.props.deleteTourStepId)}
+                  onClick={() => this.props.deleteTourStep(this.props.tourStep.id)}
                 >
                   <span><i className="fal fa-trash-alt mr-2" />Delete</span>
                 </NavLink>

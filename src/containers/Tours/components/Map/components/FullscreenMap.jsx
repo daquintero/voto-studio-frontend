@@ -7,7 +7,6 @@ import { FormGroup, Input, Label } from 'reactstrap';
 import Resizable from 're-resizable';
 import { SidebarProps, MapProps, TourProps } from '../../../../../shared/prop-types/ReducerProps';
 import mapData from './mapData.json';
-import asyncLoading from '../../../../../shared/components/asyncLoading';
 
 class FullscreenMap extends Component {
   static propTypes = {
@@ -303,4 +302,4 @@ class FullscreenMap extends Component {
   }
 }
 
-export default asyncLoading(false)(FullscreenMap);
+export default FullscreenMap;

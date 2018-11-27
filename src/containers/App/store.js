@@ -7,14 +7,20 @@ import {
   mapReducer,
   tourReducer,
   userReducer,
+  candidateReducer,
 } from '../../redux/reducers/index';
 import { LOGOUT_USER } from '../../redux/actions/userActions';
+
+const studioReducer = combineReducers({
+  tours: tourReducer,
+  candidates: candidateReducer,
+});
 
 const appReducer = combineReducers({
   form: reduxFormReducer, // mounted under "form",
   sidebar: sidebarReducer,
   map: mapReducer,
-  tours: tourReducer,
+  studio: studioReducer,
   auth: userReducer,
 });
 

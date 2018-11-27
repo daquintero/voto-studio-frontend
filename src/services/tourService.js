@@ -28,7 +28,7 @@ const detail = tourId => api.get(`${urls.get.detail}${tourId}/`);
 // Tour POST requests
 const createTour = tour => api.post(`${urls.post.createTour}`, { tour });
 const updateTour = tour => api.post(`${urls.post.updateTour}`, { tour });
-const createStep = step => api.post(`${urls.post.createStep}`, { step });
+const createStep = (step, tourId) => api.post(`${urls.post.createStep}`, { step, tourId });
 const updateStep = step => api.post(`${urls.post.updateStep}`, { step });
 
 const markerSchema = new schema.Entity('markers');

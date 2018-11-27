@@ -9,7 +9,7 @@ class NewTourStepControls extends Component {
       name: '',
       text: '',
       transitionDuration: '2000',
-      transitionEasingName: 'd3.cubicEasing',
+      transitionEasingName: 'd3.easeCubic',
       transitionInterpolatorName: 'FlyToInterpolator',
     };
   }
@@ -25,7 +25,7 @@ class NewTourStepControls extends Component {
       name: '',
       text: '',
       transitionDuration: '2000',
-      transitionEasing: 'd3.cubicEasing',
+      transitionEasing: 'd3.easeCubic',
       transitionInterpolator: 'FlyToInterpolator',
     });
   };
@@ -87,7 +87,7 @@ class NewTourStepControls extends Component {
               onChange={e => this.onChange(e)}
               value={this.state.transitionEasing}
             >
-              <option>d3.cubicEasing</option>
+              <option>d3.easeCubic</option>
             </Input>
           </FormGroup>
         </Form>

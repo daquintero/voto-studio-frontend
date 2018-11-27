@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { ToursProps } from '../../../../../shared/prop-types/ReducerProps';
-import asyncLoading from '../../../../../shared/components/asyncLoading';
 
 const MapPopover = (props) => {
   const activeTourStep = props.openTour.steps.filter(step => step.id === props.activeTourStepId)[0];
@@ -69,4 +68,4 @@ MapPopover.propTypes = {
   changeToStepViewport: PropTypes.func.isRequired,
 };
 
-export default asyncLoading(true)(MapPopover);
+export default MapPopover;

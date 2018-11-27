@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import Loader from './Loader';
 
-const ssyncLoading = card => WrappedComponent => class Test extends Component { // eslint-disable-line
+const asyncLoading = elemType => WrappedComponent => class Test extends Component { // eslint-disable-line
   render() {
-    if (this.props.loading) return <Loader card={card} />;
+    if (!this.props.loaded || this.props.loading) return <Loader elemType={elemType} />;
+    if (this.props.error) {
+      return (
+        <>
+          <h4>Error loading data</h4>
+          <small>{this.props.error.message}</small>
+        </>
+      );
+    }
     return <WrappedComponent {...this.props} />;
   }
 };
 
-export default ssyncLoading;
+export default asyncLoading;

@@ -6,6 +6,7 @@ import {
   CREATE_TOUR_STEP,
   UPDATE_TOUR_STEP,
   REORDER_TOUR_STEPS,
+  CHANGE_ACTIVE_TOUR_STEP,
   DELETE_TOUR_STEP,
   CREATE_MARKER,
   UPDATE_MARKER,
@@ -13,8 +14,11 @@ import {
 } from '../actionCreators/tourActionCreators';
 
 
-export const getTourList = () => dispatch =>
-  tourService.get.list().then(
+export const getTourList = () => (dispatch) => {
+  dispatch({
+    type: LIST_TOURS.REQUEST,
+  });
+  return tourService.get.list().then(
     response => dispatch({
       type: LIST_TOURS.SUCCESS,
       tourList: response.data,
@@ -24,9 +28,13 @@ export const getTourList = () => dispatch =>
       error,
     }),
   );
+};
 
-export const getTourDetail = tourId => dispatch =>
-  tourService.get.detail(tourId).then(
+export const getTourDetail = tourId => (dispatch) => {
+  dispatch({
+    type: OPEN_TOUR.REQUEST,
+  });
+  return tourService.get.detail(tourId).then(
     response =>
       dispatch({
         type: OPEN_TOUR.SUCCESS,
@@ -38,9 +46,13 @@ export const getTourDetail = tourId => dispatch =>
         error,
       }),
   );
+};
 
-export const createTour = newTourInfo => dispatch =>
-  tourService.post.createTour(newTourInfo).then(
+export const createTour = newTourInfo => (dispatch) => {
+  dispatch({
+    type: CREATE_TOUR.REQUEST,
+  });
+  return tourService.post.createTour(newTourInfo).then(
     response =>
       dispatch({
         type: CREATE_TOUR.SUCCESS,
@@ -52,9 +64,14 @@ export const createTour = newTourInfo => dispatch =>
         error,
       }),
   );
+};
 
-export const createTourStep = (step, tourId) => dispatch =>
-  tourService.post.createStep(step, tourId).then(
+
+export const createTourStep = (step, tourId) => (dispatch) => {
+  dispatch({
+    type: CREATE_TOUR_STEP.REQUEST,
+  });
+  return tourService.post.createStep(step, tourId).then(
     response =>
       dispatch({
         type: CREATE_TOUR_STEP.SUCCESS,
@@ -66,9 +83,13 @@ export const createTourStep = (step, tourId) => dispatch =>
         error,
       }),
   );
+};
 
-export const updateTourStep = (updatedTourStep, index) => dispatch =>
-  tourService.post.updateStep(updatedTourStep, index).then(
+export const updateTourStep = (updatedTourStep, index) => (dispatch) => {
+  dispatch({
+    type: UPDATE_TOUR_STEP.REQUEST,
+  });
+  return tourService.post.updateStep(updatedTourStep, index).then(
     response =>
       dispatch({
         type: UPDATE_TOUR_STEP.SUCCESS,
@@ -81,7 +102,7 @@ export const updateTourStep = (updatedTourStep, index) => dispatch =>
         error,
       }),
   );
-
+};
 
 export function deleteTourStep(id) {
   return {
@@ -95,6 +116,13 @@ export function reorderTourSteps(step, result) {
     type: REORDER_TOUR_STEPS,
     step,
     result,
+  };
+}
+
+export function changeActiveTourStep(id) {
+  return {
+    type: CHANGE_ACTIVE_TOUR_STEP,
+    id,
   };
 }
 

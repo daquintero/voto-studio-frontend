@@ -35,13 +35,8 @@ class ToursPanel extends Component {
     this.setState(prevState => ({ createTourForm: !prevState.createTourForm }));
 
   handleCreateTour = (newTourInfo) => {
-    // Create the new tour
     this.props.dispatch(createTour(newTourInfo));
-    // Open the tour editor
-    this.props.history.push('/studio/tours/map');
-    // Close the createTourForm
     this.setState({ createTourForm: false });
-    // Send POST request to create new tour instance
   };
 
   render() {
@@ -67,7 +62,8 @@ class ToursPanel extends Component {
                   </h5>
                 </div>
                 <ToursList
-                  loading={this.props.tours.tourList === undefined}
+                  loaded={this.props.tours.tourList.loaded}
+                  error={this.props.tours.tourList.error}
                   tourList={this.props.tours.tourList}
                   toursIdCode={this.props.tours.idCode}
                   openTour={this.handleOpenTour}
@@ -78,9 +74,20 @@ class ToursPanel extends Component {
               </CardBody>
             </Card>
           </Col>
-          <MapDataPanel
-            tours={this.props.tours}
-          />
+          <Col md={12} lg={12} xl={6}>
+            <Card>
+              <CardBody>
+                <div className="card__title">
+                  <h5 className="bold-text">Map Data Sets</h5>
+                  <h5 className="subhead">Here are the data sets that can be used in the Map Studio</h5>
+                </div>
+                <MapDataPanel
+                  loaded={this.props.tours.mapDataList.loaded}
+                  tours={this.props.tours}
+                />
+              </CardBody>
+            </Card>
+          </Col>
         </Row>
       </Container>
     );
@@ -88,5 +95,5 @@ class ToursPanel extends Component {
 }
 
 export default withRouter(connect(state => ({
-  tours: state.tours,
+  tours: state.studio.tours,
 }))(ToursPanel));

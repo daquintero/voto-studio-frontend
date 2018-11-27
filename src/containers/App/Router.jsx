@@ -5,7 +5,7 @@ import MainWrapper from './MainWrapper';
 import ProtectedRoute from './ProtectedRoute';
 
 import Tours from '../Tours';
-import Map from '../Tours/components/Map';
+import MapWrapper from '../Tours/components/Map/MapWrapper';
 import Profile from '../Account/Profile/index';
 import Login from '../Account/Login';
 import Register from '../Account/Register';
@@ -16,7 +16,7 @@ const wrappedRoutes = () => (
     <Layout />
     <div className="container__wrap">
       <Route exact path="/studio/tours/" component={Tours} />
-      <Route exact path="/studio/tours/map/:tourId/" component={Map} />
+      <Route exact path="/studio/tours/map/:tourId/" component={MapWrapper} />
       <Route exact path="/account/profile/" component={Profile} />
     </div>
   </div>

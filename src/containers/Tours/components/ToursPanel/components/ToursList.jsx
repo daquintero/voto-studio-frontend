@@ -5,7 +5,7 @@ import asyncLoading from '../../../../../shared/components/asyncLoading';
 
 class ToursList extends Component {
   static propTypes = {
-    tourList: PropTypes.instanceOf(Array).isRequired,
+    tourList: PropTypes.instanceOf(Object).isRequired,
     toursIdCode: PropTypes.string.isRequired, // This really isn't needed tbh
     openTour: PropTypes.func.isRequired,
     toggleCreateTourForm: PropTypes.func.isRequired,
@@ -38,7 +38,7 @@ class ToursList extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.tourList.map((tour, index) => (
+            {this.props.tourList.tours.map((tour, index) => (
               <tr key={tour.id}>
                 <td>{this.props.toursIdCode}{tour.id}</td>
                 <td>{tour.name}</td>
@@ -98,4 +98,4 @@ class ToursList extends Component {
   }
 }
 
-export default asyncLoading(true)(ToursList);
+export default asyncLoading('card')(ToursList);

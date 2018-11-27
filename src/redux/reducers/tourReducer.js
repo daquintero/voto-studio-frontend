@@ -6,6 +6,7 @@ import {
   DELETE_TOUR_STEP,
   UPDATE_TOUR_STEP,
   REORDER_TOUR_STEPS,
+  CHANGE_ACTIVE_TOUR_STEP,
   CREATE_MARKER,
   UPDATE_MARKER,
   DELETE_MARKER,
@@ -15,163 +16,45 @@ import {
 const initialState = { // Remember to update both the tours array and the newTour object!
   idCode: 'T',
   loadedTourId: -1,
-  tours: [
-    {
-      id: 0,
-      name: 'Testing',
-      description: 'This is tour that is loaded by default for testing purposes.',
-      steps: [
-        {
-          id: 0,
-          name: 'Step One',
-          text: 'Testing with some dummy steps.',
-          viewport: {
-            width: 1680,
-            height: 909,
-            latitude: 8,
-            longitude: -80.1,
-            zoom: 6,
-            maxZoom: 16,
-            pitch: 30,
-            bearing: 0,
-            transitionDuration: 2000,
-            transitionEasingName: 'd3.easeCubic',
-            transitionInterpolatorName: 'FlyToInterpolator',
-          },
-          markers: [
-            {
-              id: 0,
-              name: 'Marker One',
-              text: 'This is where this thing happened',
-              latitude: 8,
-              longitude: -80.1,
-              updating: false,
-              width: 200,
-              height: 200,
-            },
-          ],
-        },
-        {
-          id: 1,
-          name: 'Step Two',
-          text: 'Testing with some more dummy steps.',
-          viewport: {
-            width: 1680,
-            height: 909,
-            latitude: 8,
-            longitude: -80.1,
-            zoom: 6,
-            maxZoom: 16,
-            pitch: 30,
-            bearing: 0,
-            transitionDuration: 3000,
-            transitionEasingName: 'd3.easeCubic',
-            transitionInterpolatorName: 'FlyToInterpolator',
-          },
-          markers: [],
-        },
-      ],
-    },
-    {
-      id: 1,
-      name: 'More Testing',
-      description: 'This is another tour that is loaded by default for further testing purposes.',
-      steps: [
-        {
-          id: 0,
-          name: 'Step One',
-          text: 'Testing with some dummy steps.',
-          viewport: {
-            width: 1680,
-            height: 909,
-            latitude: 8,
-            longitude: -80.1,
-            zoom: 6,
-            maxZoom: 16,
-            pitch: 30,
-            bearing: 0,
-            transitionDuration: 2000,
-            transitionEasingName: 'd3.easeCubic',
-            transitionInterpolatorName: 'FlyToInterpolator',
-          },
-          markers: [],
-        },
-        {
-          id: 1,
-          name: 'Step Two',
-          text: 'Testing with some more dummy steps.',
-          viewport: {
-            width: 1680,
-            height: 909,
-            latitude: 8,
-            longitude: -80.1,
-            zoom: 6,
-            maxZoom: 16,
-            pitch: 30,
-            bearing: 0,
-            transitionDuration: 3000,
-            transitionEasingName: 'd3.easeCubic',
-            transitionInterpolatorName: 'FlyToInterpolator',
-          },
-          markers: [],
-        },
-        {
-          id: 2,
-          name: 'Step Three',
-          text: 'So. Much. Testing...',
-          viewport: {
-            width: 1680,
-            height: 909,
-            latitude: 8,
-            longitude: -80.1,
-            zoom: 6,
-            maxZoom: 16,
-            pitch: 30,
-            bearing: 0,
-            transitionDuration: 3000,
-            transitionEasingName: 'd3.easeCubic',
-            transitionInterpolatorName: 'FlyToInterpolator',
-          },
-          markers: [],
-        },
-      ],
-    },
-  ],
-  mapData: {
-    idCode: 'MD',
-    sets: [
-      {
-        id: 0,
-        name: 'Candidate Power',
-        description: 'A visualisation of the power a candidate has in a given region.',
-        data: {},
-        size: '1.34KB',
-      },
-    ],
-  },
-  newMapData: {},
+  tourList: { loading: true, loaded: false },
+  openTour: { loading: false, loaded: false },
+  mapDataList: { loading: true },
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     // List tours reducers
+    case LIST_TOURS.REQUEST:
+      return {
+        ...state,
+        tourList: { loading: true, loaded: false },
+      };
     case LIST_TOURS.SUCCESS:
       return {
         ...state,
-        tourList: action.tourList,
+        tourList: {
+          loading: false,
+          loaded: true,
+          tours: action.tourList,
+        },
       };
     case LIST_TOURS.ERROR:
       return {
         ...state,
-        tourList: { error: action.error },
+        tourList: { loading: false, loaded: false, error: action.error },
       };
 
-    // Create tour reducers. Should the new tour be added the openTour and opened
-    // upon creation or should it be pushed the the tour list?
+    // Create tour reducers.
     case CREATE_TOUR.SUCCESS:
       return {
         ...state,
-        openTour: action.newTour,
+        tourList: {
+          ...state.tourList,
+          tours: [
+            ...state.tourList.tours,
+            action.newTour,
+          ],
+        },
       };
     case CREATE_TOUR.ERROR:
       return {
@@ -180,15 +63,32 @@ export default function (state = initialState, action) {
       };
 
     // Open tour reducers ------------------------------
+    case OPEN_TOUR.REQUEST:
+      return {
+        ...state,
+        openTour: {
+          loading: true,
+          loaded: false,
+        },
+      };
     case OPEN_TOUR.SUCCESS:
       return {
         ...state,
-        openTour: action.tour,
+        openTour: {
+          loading: false,
+          loaded: true,
+          ...action.tour,
+          activeTourStepId: action.tour.steps[0].id,
+        },
       };
     case OPEN_TOUR.ERROR:
       return {
         ...state,
-        openTour: { error: action.error },
+        openTour: {
+          loading: false,
+          loaded: false,
+          error: action.error,
+        },
       };
       // -----------------------------------------------
 
@@ -198,6 +98,7 @@ export default function (state = initialState, action) {
         ...state,
         openTour: {
           ...state.openTour,
+          activeTourStepId: action.newTourStep.id,
           steps: [
             ...state.openTour.steps,
             action.newTourStep,
@@ -269,6 +170,14 @@ export default function (state = initialState, action) {
         },
       };
     }
+    case CHANGE_ACTIVE_TOUR_STEP:
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
+          activeTourStepId: action.id,
+        },
+      };
     case CREATE_MARKER:
       return {
         ...state,

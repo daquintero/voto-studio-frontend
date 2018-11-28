@@ -12,6 +12,7 @@ import {
   reorderTourSteps,
 } from '../../../../../redux/actions/tourActions';
 import addTransitionClasses from '../../../../../shared/utils/addTransitionClasses';
+import Loader from '../../../../../shared/components/Loader';
 
 class TourPanel extends Component {
   static propTypes = {
@@ -89,8 +90,6 @@ class TourPanel extends Component {
       tour.steps.map((tourStep, index) => (
         <TourStep
           preloaded
-          action={tour.actionStatus}
-          actions={['CREATE_TOUR_STEP']}
           key={tourStep.id}
           index={index}
           tourStep={tourStep}
@@ -126,6 +125,12 @@ class TourPanel extends Component {
                 )}
             </Droppable>
           </DragDropContext>
+          {this.props.tours.actions.CREATE_TOUR_STEP.loading && (
+            <Loader elemType="panel" />
+          )}
+          {this.props.tours.actions.CREATE_TOUR_STEP.error && (
+            <p>{this.props.tours.actions.CREATE_TOUR_STEP.error.message}</p>
+          )}
           <NewTourStep createTourStep={this.handleCreateTourStep} />
         </div>
         <div

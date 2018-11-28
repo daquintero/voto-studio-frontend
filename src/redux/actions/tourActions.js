@@ -104,12 +104,23 @@ export const updateTourStep = (updatedTourStep, index) => (dispatch) => {
   );
 };
 
-export function deleteTourStep(id) {
-  return {
-    type: DELETE_TOUR_STEP,
-    id,
-  };
-}
+export const deleteTourStep = id => (dispatch) => {
+  dispatch({
+    type: DELETE_TOUR_STEP.REQUEST,
+  });
+  return tourService.delete.deleteStep(id).then(
+    response =>
+      dispatch({
+        type: DELETE_TOUR_STEP.SUCCESS,
+        id: response.data.id,
+      }),
+    error =>
+      dispatch({
+        type: DELETE_TOUR_STEP.ERROR,
+        error, // TODO why was error null here????
+      }),
+  );
+};
 
 export function reorderTourSteps(step, result) {
   return {

@@ -40,7 +40,6 @@ class ToursPanel extends Component {
   };
 
   render() {
-    console.log(this.props.tours.tourList);
     return (
       <Container className="mt-4">
         <Row>
@@ -63,8 +62,7 @@ class ToursPanel extends Component {
                   </h5>
                 </div>
                 <ToursList
-                  action={this.props.tours.tourList.actionStatus}
-                  actions={['LIST_TOURS']}
+                  action={this.props.tours.actions.LIST_TOURS}
                   tourList={this.props.tours.tourList}
                   toursIdCode={this.props.tours.idCode}
                   openTour={this.handleOpenTour}
@@ -83,8 +81,7 @@ class ToursPanel extends Component {
                   <h5 className="subhead">Here are the data sets that can be used in the Map Studio</h5>
                 </div>
                 <MapDataPanel
-                  action={this.props.tours.mapDataList.actionStatus}
-                  actions={['LIST_DATA']}
+                  action={this.props.tours.actions.LIST_DATA}
                   tours={this.props.tours}
                 />
               </CardBody>

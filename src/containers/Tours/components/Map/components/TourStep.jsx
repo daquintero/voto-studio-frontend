@@ -5,7 +5,6 @@ import ClassNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
 import { Collapse, Input, Label, FormGroup, Tooltip, Table, Nav, NavLink } from 'reactstrap';
 import { TourProps } from '../../../../../shared/prop-types/ReducerProps';
-import asyncLoading from '../../../../../shared/components/asyncLoading';
 
 class TourStep extends Component {
   static propTypes = {
@@ -243,7 +242,7 @@ class TourStep extends Component {
   }
 }
 
-export default asyncLoading('step')(connect(state => ({
+export default connect(state => ({
   tours: state.studio.tours,
-  maps: state.maps,
-}))(TourStep));
+  map: state.map,
+}))(TourStep);

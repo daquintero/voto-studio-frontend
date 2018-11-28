@@ -15,6 +15,9 @@ const urls = {
     createStep: `${tourApiUrl}/create_step/`,
     updateStep: `${tourApiUrl}/update_step/`,
   },
+  delete: {
+    deleteStep: `${tourApiUrl}/delete_step/`,
+  },
 };
 
 // Add auth headers to ALL api requests
@@ -26,10 +29,12 @@ const api = axios.create({
 const list = () => api.get(urls.get.list);
 const detail = tourId => api.get(`${urls.get.detail}${tourId}/`);
 // Tour POST requests
-const createTour = tour => api.post(`${urls.post.createTour}`, { tour });
-const updateTour = tour => api.post(`${urls.post.updateTour}`, { tour });
-const createStep = (step, tourId) => api.post(`${urls.post.createStep}`, { step, tourId });
-const updateStep = step => api.post(`${urls.post.updateStep}`, { step });
+const createTour = tour => api.post(urls.post.createTour, { tour });
+const updateTour = tour => api.post(urls.post.updateTour, { tour });
+const createStep = (step, tourId) => api.post(urls.post.createStep, { step, tourId });
+const updateStep = step => api.post(urls.post.updateStep, { step });
+// Tour DELETE requests (The body of a delete request must have the "data" key)
+const deleteStep = stepId => api.delete(urls.delete.deleteStep, { data: { stepId } });
 
 const markerSchema = new schema.Entity('markers');
 const stepSchema = new schema.Entity('steps', {
@@ -52,6 +57,9 @@ const tourService = {
     updateTour,
     createStep,
     updateStep,
+  },
+  delete: {
+    deleteStep,
   },
   normalise: {
     tours: normaliseTours,

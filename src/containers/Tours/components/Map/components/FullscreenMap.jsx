@@ -155,13 +155,13 @@ class FullscreenMap extends Component {
             {...this.props.map.viewport}
             layers={this.renderLayers()}
           />
-          {this.getActiveStep().markers.map((marker, index) => (
+          {this.props.tours.openTour.activeTourStepId !== -1 && this.getActiveStep().markers.map((marker, index) => (
             <Marker
               key={`marker-${marker.id}`}
               latitude={marker.latitude}
               longitude={marker.longitude}
               draggable={this.state.markerDraggable}
-                captureDrag={true} // eslint-disable-line
+              captureDrag={true} // eslint-disable-line
               onDragEnd={e => this.props.updateMarkerPosition(e, marker, index)}
             >
               <Resizable

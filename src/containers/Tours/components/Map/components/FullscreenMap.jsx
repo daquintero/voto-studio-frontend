@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import DeckGL, { GeoJsonLayer } from 'deck.gl';
 import PropTypes from 'prop-types';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 import { FormGroup, Input, Label } from 'reactstrap';
 import Resizable from 're-resizable';
 import { SidebarProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';

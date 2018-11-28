@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   viewport: {
-    width: '100%',
+    width: 'calc(100% - 290px)',
     height: 'calc(100vh - 60px)',
     latitude: 8,
     longitude: -80.1,
@@ -20,11 +20,30 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case CHANGE_MAP_WIDTH:
-      return { ...state, viewport: { ...state.viewport, width: action.newMapWidth } };
+      return {
+        ...state,
+        viewport: {
+          ...state.viewport,
+          width: action.newMapWidth,
+        },
+      };
     case CHANGE_MAP_HEIGHT:
-      return { ...state, viewport: { ...state.viewport, height: action.newMapHeight } };
+      return {
+        ...state,
+        viewport: {
+          ...state.viewport,
+          height: action.newMapHeight,
+        },
+      };
     case CHANGE_MAP_VIEWPORT:
-      return { ...state, viewport: action.newMapViewport };
+      return {
+        ...state,
+        viewport: {
+          ...action.newMapViewport,
+          width: state.viewport.width,
+          height: state.viewport.height,
+        },
+      };
     default:
       return state;
   }

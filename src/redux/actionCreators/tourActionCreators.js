@@ -39,6 +39,7 @@ export const REORDER_TOUR_STEPS = {
   ERROR: 'REORDER_TOUR_STEPS_ERROR',
 };
 
+// This action is synchronous
 export const CHANGE_ACTIVE_TOUR_STEP = 'CHANGE_ACTIVE_TOUR_STEP';
 
 export const CREATE_MARKER = {

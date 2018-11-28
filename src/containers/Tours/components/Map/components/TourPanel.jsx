@@ -2,23 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { TourProps, ToursProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
+import { ToursProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
 import TourStep from './TourStep';
 import NewTourStep from './NewTourStep';
-import { updateTourStep } from '../../../../../redux/actions/tourActions';
+import {
+  updateTourStep,
+  deleteTourStep,
+  createTourStep,
+  reorderTourSteps,
+} from '../../../../../redux/actions/tourActions';
 import addTransitionClasses from '../../../../../shared/utils/addTransitionClasses';
 
 class TourPanel extends Component {
   static propTypes = {
-    openTour: TourProps.isRequired,
     tours: ToursProps.isRequired,
-    maps: MapProps.isRequired,
-    createTourStep: PropTypes.func.isRequired,
+    map: MapProps.isRequired,
     changeToStepViewport: PropTypes.func.isRequired,
-    deleteTourStep: PropTypes.func.isRequired,
-    activeTourStepId: PropTypes.number.isRequired,
     createMarker: PropTypes.func.isRequired,
-    onDragEnd: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -28,13 +28,25 @@ class TourPanel extends Component {
     };
   }
 
-  componentDidUpdate() {
-    // this.scrollToBottom();
-  }
+  // Thinking about moving this to a utils folder in shared
+  getStep = stepId => this.props.tours.openTour.steps.filter(elem => elem.id === parseInt(stepId, 10))[0];
 
-  scrollToBottom() {
-    this.toursEnd.scrollIntoView({ behavior: 'smooth' });
-  }
+  handleCreateTourStep = (data) => {
+    const step = {
+      name: data.name,
+      text: data.text,
+      viewport: {
+        ...this.props.map.viewport,
+        transitionDuration: data.transitionDuration,
+        transitionEasingName: data.transitionEasingName,
+        transitionInterpolatorName: data.transitionInterpolatorName,
+      },
+      markers: [],
+    };
+    delete step.viewport.width;
+    delete step.viewport.height;
+    this.props.dispatch(createTourStep(step, this.props.tours.openTour.id));
+  };
 
   handleToggleUpdatingTourStep = () => {
     this.setState(prevState => ({ updatingTourStep: !prevState.updatingTourStep }));
@@ -57,22 +69,36 @@ class TourPanel extends Component {
     this.props.dispatch(updateTourStep(step, index));
   };
 
+  handleDeleteTourStep = id => this.props.dispatch(deleteTourStep(id));
+
+  handleOnDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
+    const step = this.getStep(draggableId);
+    if (!destination) {
+      return;
+    }
+    if (destination.index === source.index) {
+      return;
+    }
+    this.props.dispatch(reorderTourSteps(step, result));
+  };
+
   render() {
-    const tour = this.props.openTour;
+    const tour = this.props.tours.openTour;
     const tourSteps = () => (
       tour.steps.map((tourStep, index) => (
         <TourStep
-          loading={tourStep.loading}
-          loaded={tourStep.loaded}
+          preloaded
+          action={tour.CREATE_TOUR_STEP}
           key={tourStep.id}
           index={index}
           tourStep={tourStep}
           changeToStepViewport={this.props.changeToStepViewport}
-          deleteTourStep={this.props.deleteTourStep}
+          deleteTourStep={this.handleDeleteTourStep}
           updatingTourStep={this.state.updatingTourStep}
           toggleUpdatingTourStep={this.handleToggleUpdatingTourStep}
           updateTourStep={this.handleUpdateTourStep}
-          activeTourStepId={this.props.activeTourStepId}
+          activeTourStepId={this.props.tours.openTour.activeTourStepId}
           createMarker={this.props.createMarker}
         />
       )));
@@ -86,7 +112,7 @@ class TourPanel extends Component {
             </h3>
             <p>{tour.description}</p>
           </div>
-          <DragDropContext onDragEnd={this.props.onDragEnd}>
+          <DragDropContext onDragEnd={this.handleOnDragEnd}>
             <Droppable droppableId="tour-panel">
               {provided => (
                 <div
@@ -99,7 +125,7 @@ class TourPanel extends Component {
                 )}
             </Droppable>
           </DragDropContext>
-          <NewTourStep createTourStep={this.props.createTourStep} />
+          <NewTourStep createTourStep={this.handleCreateTourStep} />
         </div>
         <div
           style={{ float: 'left', clear: 'both' }}
@@ -112,5 +138,5 @@ class TourPanel extends Component {
 
 export default connect(state => ({
   tours: state.studio.tours,
-  maps: state.maps,
+  map: state.map,
 }))(TourPanel);

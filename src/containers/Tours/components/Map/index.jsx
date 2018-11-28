@@ -2,21 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { changeMapViewport } from '../../../../redux/actions/mapActions';
 import {
-  changeMapWidth,
-  changeMapHeight,
-  changeMapViewport,
-} from '../../../../redux/actions/mapActions';
-import {
-  createTourStep,
-  deleteTourStep,
-  reorderTourSteps,
-  changeActiveTourStep,
   createMarker,
   updateMarker,
   deleteMarker,
+  changeActiveTourStep,
 } from '../../../../redux/actions/tourActions';
-import { SidebarProps, MapProps, ToursProps } from '../../../../shared/prop-types/ReducerProps';
+import { MapProps, ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
 import TourPanel from './components/TourPanel';
 import MapPopover from './components/MapPopover';
@@ -26,11 +19,11 @@ import addTransitionClasses from '../../../../shared/utils/addTransitionClasses'
 class Map extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    sidebar: SidebarProps.isRequired,
     map: MapProps.isRequired,
     tours: ToursProps.isRequired,
   };
 
+  // Thinking about moving this to a utils folder in shared
   getStep = stepId => this.props.tours.openTour.steps.filter(elem => elem.id === parseInt(stepId, 10))[0];
 
   getStepIndex = () => {
@@ -38,32 +31,7 @@ class Map extends Component {
     return this.props.tours.openTour.steps.indexOf(step);
   };
 
-  handleChangeMapHeight = newMapHeight => this.props.dispatch(changeMapHeight(newMapHeight));
-
-  handleChangeMapWidth = newMapWidth => this.props.dispatch(changeMapWidth(newMapWidth));
-
   handleChangeMapViewport = newMapViewport => this.props.dispatch(changeMapViewport(newMapViewport));
-
-  handleCreateTourStep = (data) => {
-    // Consider width and height values here, could be an issue. They MUST be overridden in the
-    // client app.
-    const step = {
-      name: data.name,
-      text: data.text,
-      viewport: {
-        ...this.props.map.viewport,
-        transitionDuration: data.transitionDuration,
-        transitionEasingName: data.transitionEasingName,
-        transitionInterpolatorName: data.transitionInterpolatorName,
-      },
-      markers: [],
-    };
-    this.props.dispatch(createTourStep(step, this.props.tours.openTour.id));
-  };
-
-  handleDeleteTourStep = (id) => {
-    this.props.dispatch(deleteTourStep(id));
-  };
 
   handleChangeToStepViewport = (id) => {
     // Update the viewport
@@ -75,22 +43,8 @@ class Map extends Component {
     this.props.dispatch(changeActiveTourStep(id));
   };
 
-  handleOnDragEnd = (result) => {
-    // Update state
-    const { destination, source, draggableId } = result;
-    const step = this.getStep(draggableId);
-    if (!destination) {
-      return;
-    }
-    if (destination.index === source.index) {
-      return;
-    }
-    this.props.dispatch(reorderTourSteps(step, result));
-  };
-
   handleCreateMarker = (step) => {
     const newMarker = {
-      id: this.getNewId(step.markers),
       name: 'New marker',
       text: 'Edit me. Move me around. Resize me. Do what you will...',
       longitude: this.props.map.viewport.longitude,
@@ -121,30 +75,17 @@ class Map extends Component {
   };
 
   render() {
-    console.log(this.props);
-    return ( // Maybe wrap these three in a wrapper component exported with asycLoading to have only one loading circle?
+    return (
       <>
         <FullscreenMap
-          sidebar={this.props.sidebar}
-          map={this.props.map}
-          handleChangeMapWidth={this.handleChangeMapWidth}
-          handleChangeMapHeight={this.handleChangeMapHeight}
           handleChangeMapViewport={this.handleChangeMapViewport}
-          openTour={this.props.tours.openTour}
-          activeTourStepId={this.props.tours.openTour.activeTourStepId}
           updateMarkerPosition={this.handleUpdateMarkerPosition}
-          createMarker={this.handleCreateMarker}
           updateMarker={this.handleUpdateMarker}
           deleteMarker={this.handleDeleteMarker}
         />
         <TourPanel
-          openTour={this.props.tours.openTour}
-          createTourStep={this.handleCreateTourStep}
-          deleteTourStep={this.handleDeleteTourStep}
           changeToStepViewport={this.handleChangeToStepViewport}
-          activeTourStepId={this.props.tours.openTour.activeTourStepId}
           createMarker={this.handleCreateMarker}
-          onDragEnd={this.handleOnDragEnd}
         />
         <MapPopover
           activeTourStepId={this.props.tours.openTour.activeTourStepId}
@@ -157,7 +98,6 @@ class Map extends Component {
 }
 
 export default asyncLoading('map')(withRouter(connect(state => ({
-  sidebar: state.sidebar,
   map: state.map,
   tours: state.studio.tours,
 }))(Map)));

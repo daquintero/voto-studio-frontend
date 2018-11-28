@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
@@ -8,9 +9,10 @@ import asyncLoading from '../../../../../shared/components/asyncLoading';
 
 class TourStep extends Component {
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    changeToStepViewport: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     tourStep: TourProps.isRequired,
-    changeToStepViewport: PropTypes.func.isRequired,
     deleteTourStep: PropTypes.func.isRequired,
     toggleUpdatingTourStep: PropTypes.func.isRequired,
     updatingTourStep: PropTypes.bool.isRequired,
@@ -31,6 +33,7 @@ class TourStep extends Component {
       transitionEasing: this.props.tourStep.viewport.transitionInterpolatorName,
     };
   }
+
   onChange = (e) => {
     e.persist();
     if (e.target.name === 'transitionDuration') {
@@ -39,6 +42,7 @@ class TourStep extends Component {
     }
     this.setState({ [e.target.name]: e.target.value });
   };
+
   toggleTooltip = () => this.setState(prevState => ({ tooltip: !prevState.tooltip }));
 
   toggleCollapse = () => this.setState(prevState => ({ collapse: !prevState.collapse }));
@@ -58,6 +62,7 @@ class TourStep extends Component {
       }
     }
   };
+
   render() {
     const wrapperClasses = ClassNames({
       'tour-step__wrapper': true,
@@ -238,4 +243,7 @@ class TourStep extends Component {
   }
 }
 
-export default asyncLoading('step')(TourStep);
+export default asyncLoading('step')(connect(state => ({
+  tours: state.studio.tours,
+  maps: state.maps,
+}))(TourStep));

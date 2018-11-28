@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Table, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import asyncLoading from '../../../../../shared/components/asyncLoading';
+import Loader from '../../../../../shared/components/Loader';
 
 class ToursList extends Component {
   static propTypes = {
@@ -56,6 +57,12 @@ class ToursList extends Component {
                 ))}
           </tbody>
         </Table>
+        {this.props.tourList.CREATE_TOUR && this.props.tourList.CREATE_TOUR.loading && (
+          // Im not too sure if the above logic statement is the best way to do this. It basically
+          // implies that if the CREATE_TOUR object is undefined then no create tour request has been made.
+          // TODO: Add error catch here (maybe open an alert or something).
+          <Loader elemType="card" />
+        )}
         {!this.props.createTourForm ? (
           <span
             className="tours-panel__new"

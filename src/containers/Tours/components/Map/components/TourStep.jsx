@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import connect from 'react-redux/es/connect/connect';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';

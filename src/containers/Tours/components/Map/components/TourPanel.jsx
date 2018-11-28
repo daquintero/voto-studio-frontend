@@ -89,7 +89,8 @@ class TourPanel extends Component {
       tour.steps.map((tourStep, index) => (
         <TourStep
           preloaded
-          action={tour.CREATE_TOUR_STEP}
+          action={tour.actionStatus}
+          actions={['CREATE_TOUR_STEP']}
           key={tourStep.id}
           index={index}
           tourStep={tourStep}

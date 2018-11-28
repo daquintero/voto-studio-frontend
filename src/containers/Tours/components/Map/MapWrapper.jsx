@@ -10,13 +10,17 @@ import { getTourDetail } from '../../../../redux/actions/tourActions';
 class MapWrapper extends PureComponent {
   componentDidMount() {
     const { openTour } = this.props.tours;
-    if (!openTour.OPEN_TOUR || (!openTour.OPEN_TOUR.loading && !openTour.OPEN_TOUR.loaded)) {
+    if (!openTour.actionStatus || (!openTour.actionStatus.loading && !openTour.actionStatus.loaded)) {
       this.props.dispatch(getTourDetail(this.props.match.params.tourId));
     }
   }
   render() {
-    console.log(this.props);
-    return <Map action={this.props.tours.openTour.OPEN_TOUR} />;
+    return (
+      <Map
+        action={this.props.tours.openTour.actionStatus}
+        actions={['OPEN_TOUR']}
+      />
+    );
   }
 }
 

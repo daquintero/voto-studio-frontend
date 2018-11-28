@@ -115,13 +115,17 @@ const actionResult = (action, error = null) => {
   const [actionName, actionState] = action.split('.');
   switch (actionState) {
     case 'REQUEST':
-      return { [actionName]: { loading: true, loaded: false } };
+      return { actionName, loading: true, loaded: false };
     case 'SUCCESS':
-      return { [actionName]: { loading: false, loaded: true } };
+      return { actionName, loading: false, loaded: true };
     case 'ERROR':
-      return { [actionName]: { loading: false, loaded: false, error } };
+      return {
+        actionName, loading: false, loaded: false, error,
+      };
     case 'INIT':
-      return { [actionName]: { loading: false, loaded: false, init: true } };
+      return {
+        actionName, loading: false, loaded: false, init: true,
+      };
     default:
       return Error('No matching action state provided');
   }
@@ -130,9 +134,9 @@ const actionResult = (action, error = null) => {
 const initialState = {
   idCode: 'T',
   loadedTourId: -1,
-  tourList: actionResult('LIST_TOURS.INIT'),
-  openTour: actionResult('OPEN_TOUR.INIT'),
-  mapDataList: actionResult('LIST_DATA.INIT'),
+  tourList: { actionState: actionResult('LIST_TOURS.INIT') },
+  openTour: { actionStatus: actionResult('OPEN_TOUR.INIT') },
+  mapDataList: { actionStatus: actionResult('LIST_DATA.INIT') },
 };
 
 export default function (state = initialState, action) {
@@ -142,14 +146,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         tourList: {
-          ...actionResult('LIST_TOURS.REQUEST'),
+          actionStatus: actionResult('LIST_TOURS.REQUEST'),
         },
       };
     case LIST_TOURS.SUCCESS:
       return {
         ...state,
         tourList: {
-          ...actionResult('LIST_TOURS.SUCCESS'),
+          actionStatus: actionResult('LIST_TOURS.SUCCESS'),
           tours: action.tourList,
         },
       };
@@ -157,7 +161,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         tourList: {
-          ...actionResult('LIST_TOURS.ERROR', action.error),
+          actionStatus: actionResult('LIST_TOURS.ERROR'),
         },
       };
       // -----------------------------------------------
@@ -168,7 +172,7 @@ export default function (state = initialState, action) {
         ...state,
         tourList: {
           ...state.tourList,
-          ...actionResult('CREATE_TOUR.REQUEST'),
+          actionStatus: actionResult('REQUEST'),
         },
       };
     case CREATE_TOUR.SUCCESS:
@@ -176,7 +180,7 @@ export default function (state = initialState, action) {
         ...state,
         tourList: {
           ...state.tourList,
-          ...actionResult('CREATE_TOUR.SUCCESS'),
+          actionStatus: actionResult('SUCCESS'),
           tours: [
             ...state.tourList.tours,
             action.newTour,
@@ -188,7 +192,7 @@ export default function (state = initialState, action) {
         ...state,
         tourList: {
           ...state.tourList,
-          ...actionResult('CREATE_TOUR.ERROR', action.error),
+          actionStatus: actionResult('ERROR', action.error),
         },
       };
       // -----------------------------------------------
@@ -198,14 +202,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         openTour: {
-          ...actionResult('OPEN_TOUR.REQUEST'),
+          actionStatus: actionResult('OPEN_TOUR.REQUEST'),
         },
       };
     case OPEN_TOUR.SUCCESS:
       return {
         ...state,
         openTour: {
-          ...actionResult('OPEN_TOUR.SUCCESS'),
+          actionStatus: actionResult('OPEN_TOUR.SUCCESS'),
           ...action.tour,
           activeTourStepId: action.tour.steps[0].id,
         },
@@ -214,7 +218,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         openTour: {
-          ...actionResult('OPEN_TOUR.SUCCESS', action.error),
+          actionStatus: actionResult('OPEN_TOUR.SUCCESS', action.error),
         },
       };
       // -----------------------------------------------
@@ -225,7 +229,7 @@ export default function (state = initialState, action) {
         ...state,
         openTour: {
           ...state.openTour,
-          ...actionResult('CREATE_TOUR_STEP.REQUEST'),
+          actionStatus: actionResult('CREATE_TOUR_STEP.REQUEST'),
         },
       };
     case CREATE_TOUR_STEP.SUCCESS:
@@ -242,7 +246,7 @@ export default function (state = initialState, action) {
               height: 'calc(100vh - 55px)',
             },
           ],
-          ...actionResult('CREATE_TOUR_STEP.SUCCESS'),
+          actionStatus: actionResult('CREATE_TOUR_STEP.SUCCESS'),
         },
       };
     case CREATE_TOUR_STEP.ERROR:
@@ -250,7 +254,7 @@ export default function (state = initialState, action) {
         ...state,
         openTour: {
           ...state.openTour,
-          ...actionResult('CREATE_TOUR_STEP.SUCCESS', action.error),
+          actionStatus: actionResult('CREATE_TOUR_STEP.ERROR', action.error),
         },
       };
       // -----------------------------------------------

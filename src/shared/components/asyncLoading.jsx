@@ -4,7 +4,7 @@ import Loader from './Loader';
 const asyncLoading = elemType => WrappedComponent => class Test extends Component { // eslint-disable-line
   render() {
     if (this.props.preloaded) return <WrappedComponent {...this.props} />;
-    if (this.props.action) {
+    if (this.props.action && this.props.actions.indexOf(this.props.action.actionName) !== -1) {
       if (!this.props.action.loaded || this.props.action.loading) {
         return <Loader elemType={elemType} />;
       }

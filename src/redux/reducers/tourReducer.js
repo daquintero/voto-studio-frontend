@@ -330,29 +330,36 @@ export default function (state = initialState, action) {
       // -----------------------------------------------
 
     // Update tour step reducers -----------------------
+    case UPDATE_TOUR_STEP.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_TOUR_STEP.REQUEST'),
+        },
+      };
     case UPDATE_TOUR_STEP.SUCCESS:
       return {
         ...state,
         openTour: {
           ...state.openTour,
           steps: [
-            ...state.newTour.steps.slice(0, action.index),
+            ...state.openTour.steps.slice(0, action.index),
             action.updatedTourStep,
-            ...state.newTour.steps.slice(action.index + 1),
+            ...state.openTour.steps.slice(action.index + 1),
           ],
         },
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_TOUR_STEP.SUCCESS'),
+        },
       };
-
-    case UPDATE_TOUR_STEP.ERROR: // Not sure if putting the error there is correct
+    case UPDATE_TOUR_STEP.ERROR:
       return {
         ...state,
-        openTour: {
-          ...state.openTour,
-          steps: [
-            ...state.newTour.steps.slice(0, action.index),
-            { error: action.error },
-            ...state.newTour.steps.slice(action.index + 1),
-          ],
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_TOUR_STEP.ERROR'),
         },
       };
       // -----------------------------------------------

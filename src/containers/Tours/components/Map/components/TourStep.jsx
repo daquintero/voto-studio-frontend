@@ -21,6 +21,8 @@ class TourStep extends Component {
   };
   constructor(props) {
     super(props);
+    // I am using props in the constructor here only to set default values. The component
+    // does NOT depend on changes in these props.
     this.state = {
       collapse: false,
       tooltip: false,
@@ -28,8 +30,8 @@ class TourStep extends Component {
       name: this.props.tourStep.name,
       text: this.props.tourStep.text,
       transitionDuration: this.props.tourStep.viewport.transitionDuration,
-      transitionInterpolator: this.props.tourStep.viewport.transitionInterpolatorName,
-      transitionEasing: this.props.tourStep.viewport.transitionInterpolatorName,
+      transitionInterpolatorName: this.props.tourStep.viewport.transitionInterpolatorName,
+      transitionEasingName: this.props.tourStep.viewport.transitionInterpolatorName,
     };
   }
 
@@ -131,26 +133,26 @@ class TourStep extends Component {
                   />
                 </FormGroup>
                 <FormGroup>
-                  <Label for="transitionInterpolator">Transition Interpolator</Label>
+                  <Label for="transitionInterpolatorName">Transition Interpolator</Label>
                   <Input
                     type="select"
-                    name="transitionInterpolator"
-                    id="transitionInterpolator"
+                    name="transitionInterpolatorName"
+                    id="transitionInterpolatorName"
                     onChange={e => this.onChange(e)}
-                    value={this.state.transitionInterpolator}
+                    value={this.state.transitionInterpolatorName}
                   >
                     <option>FlyToInterpolator</option>
                     <option>LinearInterpolator</option>
                   </Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="transitionInterpolator">Transition Easing</Label>
+                  <Label for="transitionEasingName">Transition Easing</Label>
                   <Input
                     type="select"
-                    name="transitionEasing"
-                    id="transitionEasing"
+                    name="transitionEasingName"
+                    id="transitionEasingName"
                     onChange={e => this.onChange(e)}
-                    value={this.state.transitionEasing}
+                    value={this.state.transitionEasingName}
                   >
                     <option>d3.cubicEasing</option>
                   </Input>

@@ -6,7 +6,6 @@ import Loader from './Loader';
 // returns a class that finally renders either a loading circle, an error or the WrappedComponent.
 const asyncLoading = elemType => WrappedComponent => class Test extends Component { // eslint-disable-line
   render() {
-    console.log(this.props.action);
     // If the component has only been initialised
     if (this.props.action.init) return null;
     // If data is already in store then load component

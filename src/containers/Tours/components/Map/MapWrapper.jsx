@@ -18,16 +18,10 @@ class MapWrapper extends PureComponent {
     // If the tour to be opened matches the id of the open tour then do nothing
     // If this is not the case then load the new tour data
     const { tours } = this.props;
-    console.log('Map wrapper mounts!', tours.actions.OPEN_TOUR);
     if (tours.actions.OPEN_TOUR.init) this.props.dispatch(getTourDetail(this.props.match.params.tourId));
   }
 
-  componentWillUnmount() {
-    console.log('Map wrapper unmounts!');
-  }
-
   render() {
-    console.log('Map wrapper renders!');
     return (
       <Map action={this.props.tours.actions.OPEN_TOUR} />
     );

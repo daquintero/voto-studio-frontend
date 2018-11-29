@@ -8,6 +8,7 @@ import {
   updateMarker,
   deleteMarker,
   changeActiveTourStep,
+  closeOpenTour,
 } from '../../../../redux/actions/tourActions';
 import { MapProps, ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
@@ -22,6 +23,10 @@ class Map extends Component {
     map: MapProps.isRequired,
     tours: ToursProps.isRequired,
   };
+
+  componentWillUnmount() {
+    this.props.dispatch(closeOpenTour());
+  }
 
   // Thinking about moving this to a utils folder in shared
   getStep = stepId => this.props.tours.openTour.steps.filter(elem => elem.id === parseInt(stepId, 10))[0];
@@ -97,7 +102,7 @@ class Map extends Component {
   }
 }
 
-export default asyncLoading('map')(withRouter(connect(state => ({
+export default asyncLoading('load__page')(withRouter(connect(state => ({
   map: state.map,
   tours: state.studio.tours,
 }))(Map)));

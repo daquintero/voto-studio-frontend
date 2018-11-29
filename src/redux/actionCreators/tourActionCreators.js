@@ -60,3 +60,4 @@ export const UPDATE_MARKER = {
   ERROR: 'UPDATE_MARKER_ERROR',
 };
 
+export const CLOSE_OPEN_TOUR = 'CLOSE_OPEN_TOUR';

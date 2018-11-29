@@ -31,6 +31,43 @@
   height: 32px;
 }
 
+.load__panel {
+  width: 100%;
+  margin: 50px auto;
+  display: flex;
+  align-items: center;
+}
+
+.load__page {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.panel__update {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    height: 100%;
+    width: 270px;
+    background-color: rgba(255, 255, 255, 0.7);
+    filter: blur(0.5rem);
+    border-left: 2px solid white;
+  }
+}
+
 .load {
   .load__icon-wrap {
     margin: auto;

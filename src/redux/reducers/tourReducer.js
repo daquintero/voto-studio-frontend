@@ -10,6 +10,7 @@ import {
   CREATE_MARKER,
   UPDATE_MARKER,
   DELETE_MARKER,
+  CLOSE_OPEN_TOUR,
 } from '../actionCreators/tourActionCreators';
 
 /* Each async action will have three "states": the REQUEST state, the SUCCESS state and the ERROR state.
@@ -111,21 +112,38 @@ blows up. Now the <Loader /> component will appear when the POST request is in p
 complete. Additionally, if there is an error the error message will be shown to the user. I think this sums up my
 approach to async. I will be slowly implementing this approach in voto-studio so check the code for usage examples */
 
-const actionResult = (action, error = null) => {
+const actionResult = (action, { id = undefined, error = null } = {}) => {
   const [actionName, actionState] = action.split('.');
-  switch (actionState) {
-    case 'REQUEST':
-      return { [actionName]: { loading: true, loaded: false, init: false } };
-    case 'SUCCESS':
-      return { [actionName]: { loading: false, loaded: true, init: false } };
-    case 'ERROR':
-      return {
-        [actionName]: {
-          loading: false, loaded: false, init: false, error,
-        },
-      };
-    default:
-      return Error('No matching action state provided');
+  if (id) {
+    switch (actionState) {
+      case 'REQUEST':
+        return { [id]: { loading: true, loaded: false, init: false } };
+      case 'SUCCESS':
+        return { [id]: { loading: false, loaded: true, init: false } };
+      case 'ERROR':
+        return {
+          [id]: {
+            loading: false, loaded: false, init: false, error,
+          },
+        };
+      default:
+        return Error('No matching action state provided');
+    }
+  } else {
+    switch (actionState) {
+      case 'REQUEST':
+        return { [actionName]: { loading: true, loaded: false, init: false } };
+      case 'SUCCESS':
+        return { [actionName]: { loading: false, loaded: true, init: false } };
+      case 'ERROR':
+        return {
+          [actionName]: {
+            loading: false, loaded: false, init: false, error,
+          },
+        };
+      default:
+        return Error('No matching action state provided');
+    }
   }
 };
 
@@ -186,7 +204,7 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('LIST_TOURS.ERROR'),
+          ...actionResult('LIST_TOURS.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
@@ -220,7 +238,7 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('CREATE_TOUR.ERROR', action.error),
+          ...actionResult('CREATE_TOUR.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
@@ -253,7 +271,7 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('OPEN_TOUR.ERROR', action.error),
+          ...actionResult('OPEN_TOUR.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
@@ -292,7 +310,7 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('CREATE_TOUR_STEP.ERROR', action.error),
+          ...actionResult('CREATE_TOUR_STEP.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
@@ -324,7 +342,7 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_TOUR_STEP.ERROR'),
+          ...actionResult('DELETE_TOUR_STEP.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
@@ -335,7 +353,10 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_TOUR_STEP.REQUEST'),
+          UPDATE_TOUR_STEP: {
+            ...state.actions.UPDATE_TOUR_STEP,
+            ...actionResult('UPDATE_TOUR_STEP.REQUEST', { id: action.id }),
+          },
         },
       };
     case UPDATE_TOUR_STEP.SUCCESS:
@@ -351,7 +372,10 @@ export default function (state = initialState, action) {
         },
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_TOUR_STEP.SUCCESS'),
+          UPDATE_TOUR_STEP: {
+            ...state.actions.UPDATE_TOUR_STEP,
+            ...actionResult('UPDATE_TOUR_STEP.SUCCESS', { id: action.id }),
+          },
         },
       };
     case UPDATE_TOUR_STEP.ERROR:
@@ -359,7 +383,10 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_TOUR_STEP.ERROR'),
+          UPDATE_TOUR_STEP: {
+            ...state.actions.UPDATE_TOUR_STEP,
+            ...actionResult('UPDATE_TOUR_STEP.ERROR', { id: action.id, error: action.error }),
+          },
         },
       };
       // -----------------------------------------------
@@ -468,6 +495,14 @@ export default function (state = initialState, action) {
             },
             ...state.newTour.steps.slice(action.stepIndex + 1),
           ],
+        },
+      };
+    case CLOSE_OPEN_TOUR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          OPEN_TOUR: initializeActions(['OPEN_TOUR']),
         },
       };
     default:

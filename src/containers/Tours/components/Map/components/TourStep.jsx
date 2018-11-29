@@ -5,6 +5,7 @@ import ClassNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
 import { Collapse, Input, Label, FormGroup, Tooltip, Table, Nav, NavLink } from 'reactstrap';
 import { TourProps } from '../../../../../shared/prop-types/ReducerProps';
+import Loader from '../../../../../shared/components/Loader';
 
 class TourStep extends Component {
   static propTypes = {
@@ -72,172 +73,178 @@ class TourStep extends Component {
     return (
       <Draggable draggableId={this.props.tourStep.id.toString()} index={this.props.index}>
         {provided => (
-          <div
-            className={wrapperClasses}
-            id={`tour-step__wrapper-${this.props.tourStep.id}`}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-          >
-            <i
-              className="fal fa-fw fa-arrows-v tour-step__drag"
-              {...provided.dragHandleProps}
-            />
-            <i
-              id={`preview-${this.props.tourStep.id}`}
-              data-id={this.props.tourStep.id}
-              className="fal fa-fw fa-eye tour-step__preview"
-              onClick={() => this.props.changeToStepViewport(this.props.tourStep.id)}
-              role="presentation"
-            />
-            <Tooltip
-              placement="right"
-              isOpen={this.state.tooltip}
-              target={`preview-${this.props.tourStep.id}`}
-              toggle={this.toggleTooltip}
+          <>
+            <div
+              className={wrapperClasses}
+              id={`tour-step__wrapper-${this.props.tourStep.id}`}
+              ref={provided.innerRef}
+              {...provided.draggableProps}
             >
-              Preview step {this.props.index + 1}
-            </Tooltip>
-            {this.state.updatingTourStep &&
-            <>
-              <h4>Editing step {this.props.index + 1}</h4>
-              <hr />
-            </>
-            }
-            {this.state.updatingTourStep ? (
+              {this.props.tours.actions.UPDATE_TOUR_STEP[this.props.tourStep.id] &&
+              this.props.tours.actions.UPDATE_TOUR_STEP[this.props.tourStep.id].loading && (
+                <Loader elemClass="panel__update" />
+              )}
+              <i
+                className="fal fa-fw fa-arrows-v tour-step__drag"
+                {...provided.dragHandleProps}
+              />
+              <i
+                id={`preview-${this.props.tourStep.id}`}
+                data-id={this.props.tourStep.id}
+                className="fal fa-fw fa-eye tour-step__preview"
+                onClick={() => this.props.changeToStepViewport(this.props.tourStep.id)}
+                role="presentation"
+              />
+              <Tooltip
+                placement="right"
+                isOpen={this.state.tooltip}
+                target={`preview-${this.props.tourStep.id}`}
+                toggle={this.toggleTooltip}
+              >
+                Preview step {this.props.index + 1}
+              </Tooltip>
+              {this.state.updatingTourStep &&
               <>
-                <FormGroup>
-                  <Label for="name">Step Name</Label>
-                  <Input name="name" type="text" value={this.state.name} onChange={e => this.onChange(e)} />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="text">Text</Label>
-                  <Input name="text" type="textarea" value={this.state.text} onChange={e => this.onChange(e)} />
-                </FormGroup>
-              </>
-            ) : (
-              <>
-                <h4>Step {this.props.index + 1} | {this.props.tourStep.name}</h4>
-                <p><small>{this.props.tourStep.text}</small></p>
-              </>
-            )}
-            <hr />
-            {this.state.updatingTourStep && (
-              <>
-                <FormGroup>
-                  <Label for="transitionDuration">Transition Duration (ms)</Label>
-                  <Input
-                    name="transitionDuration"
-                    type="number"
-                    value={this.state.transitionDuration}
-                    onChange={e => this.onChange(e)}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label for="transitionInterpolatorName">Transition Interpolator</Label>
-                  <Input
-                    type="select"
-                    name="transitionInterpolatorName"
-                    id="transitionInterpolatorName"
-                    onChange={e => this.onChange(e)}
-                    value={this.state.transitionInterpolatorName}
-                  >
-                    <option>FlyToInterpolator</option>
-                    <option>LinearInterpolator</option>
-                  </Input>
-                </FormGroup>
-                <FormGroup>
-                  <Label for="transitionEasingName">Transition Easing</Label>
-                  <Input
-                    type="select"
-                    name="transitionEasingName"
-                    id="transitionEasingName"
-                    onChange={e => this.onChange(e)}
-                    value={this.state.transitionEasingName}
-                  >
-                    <option>d3.cubicEasing</option>
-                  </Input>
-                </FormGroup>
-              </>
-            )}
-            <Collapse isOpen={this.state.collapse}>
-              <p>Lat: {this.props.tourStep.viewport.latitude}</p>
-              <p>Lng: {this.props.tourStep.viewport.longitude}</p>
-              <p>Zoom: {this.props.tourStep.viewport.zoom}</p>
-              <p>Pitch: {this.props.tourStep.viewport.pitch}</p>
-              <p>Bearing: {this.props.tourStep.viewport.bearing}</p>
-              <p>Transition Duration: {this.props.tourStep.viewport.transitionDuration}ms</p>
-              <p>Transition Interpolator: {this.props.tourStep.viewport.transitionInterpolatorName}</p>
-              <p>Transition Easing: {this.props.tourStep.viewport.transitionEasingName}</p>
-              {this.props.tourStep.markers.length !== 0 ? (
-                  <>
-                    <div className="mt-3">
-                      <h5 className="bold-text">Markers</h5>
-                    </div>
-                    <Table responsive hover>
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Text</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.props.tourStep.markers.map(marker => (
-                          <tr key={marker.id}>
-                            <td>{marker.name}</td>
-                            <td>{marker.text.substring(0, 20)}...</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                    <hr />
-                  </>
-              ) : (
+                <h4>Editing step {this.props.index + 1}</h4>
                 <hr />
+              </>
+              }
+              {this.state.updatingTourStep ? (
+                <>
+                  <FormGroup>
+                    <Label for="name">Step Name</Label>
+                    <Input name="name" type="text" value={this.state.name} onChange={e => this.onChange(e)} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="text">Text</Label>
+                    <Input name="text" type="textarea" value={this.state.text} onChange={e => this.onChange(e)} />
+                  </FormGroup>
+                </>
+              ) : (
+                <>
+                  <h4>Step {this.props.index + 1} | {this.props.tourStep.name}</h4>
+                  <p><small>{this.props.tourStep.text}</small></p>
+                </>
               )}
-              {this.props.tourStep.id === this.props.activeTourStepId && (
-                <span
-                  className="tours-panel__new"
-                  role="presentation"
-                  onClick={() => this.props.createMarker(this.props.tourStep)}
-                >
-                  <i className="fal fa-plus mr-2" />
-                  Add new marker
-                </span>
+              <hr />
+              {this.state.updatingTourStep && (
+                <>
+                  <FormGroup>
+                    <Label for="transitionDuration">Transition Duration (ms)</Label>
+                    <Input
+                      name="transitionDuration"
+                      type="number"
+                      value={this.state.transitionDuration}
+                      onChange={e => this.onChange(e)}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="transitionInterpolatorName">Transition Interpolator</Label>
+                    <Input
+                      type="select"
+                      name="transitionInterpolatorName"
+                      id="transitionInterpolatorName"
+                      onChange={e => this.onChange(e)}
+                      value={this.state.transitionInterpolatorName}
+                    >
+                      <option>FlyToInterpolator</option>
+                      <option>LinearInterpolator</option>
+                    </Input>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="transitionEasingName">Transition Easing</Label>
+                    <Input
+                      type="select"
+                      name="transitionEasingName"
+                      id="transitionEasingName"
+                      onChange={e => this.onChange(e)}
+                      value={this.state.transitionEasingName}
+                    >
+                      <option>d3.cubicEasing</option>
+                    </Input>
+                  </FormGroup>
+                </>
               )}
-            </Collapse>
-            <div className="tour-step-controls__wrapper">
-              <Nav>
-                <NavLink className="tour-step__control" onClick={this.toggleCollapse}>
-                  {this.state.collapse ? (
-                    <span><i className="fal fa-angle-up mr-2" />Less</span>
-                  ) : (
-                    <span><i className="fal fa-angle-down mr-2" />More</span>
-                  )}
-                </NavLink>
-                {this.state.updatingTourStep ? (
-                  <NavLink
-                    className="tour-step__control"
-                    onClick={() => this.handleToggleUpdateTourStep(true)}
-                  >
-                    <span><i className="fal fa-check mr-2" />Save</span>
-                  </NavLink>
+              <Collapse isOpen={this.state.collapse}>
+                <p>Lat: {this.props.tourStep.viewport.latitude}</p>
+                <p>Lng: {this.props.tourStep.viewport.longitude}</p>
+                <p>Zoom: {this.props.tourStep.viewport.zoom}</p>
+                <p>Pitch: {this.props.tourStep.viewport.pitch}</p>
+                <p>Bearing: {this.props.tourStep.viewport.bearing}</p>
+                <p>Transition Duration: {this.props.tourStep.viewport.transitionDuration}ms</p>
+                <p>Transition Interpolator: {this.props.tourStep.viewport.transitionInterpolatorName}</p>
+                <p>Transition Easing: {this.props.tourStep.viewport.transitionEasingName}</p>
+                {this.props.tourStep.markers.length !== 0 ? (
+                    <>
+                      <div className="mt-3">
+                        <h5 className="bold-text">Markers</h5>
+                      </div>
+                      <Table responsive hover>
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Text</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.props.tourStep.markers.map(marker => (
+                            <tr key={marker.id}>
+                              <td>{marker.name}</td>
+                              <td>{marker.text.substring(0, 20)}...</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                      <hr />
+                    </>
                 ) : (
+                  <hr />
+                )}
+                {this.props.tourStep.id === this.props.activeTourStepId && (
+                  <span
+                    className="tours-panel__new"
+                    role="presentation"
+                    onClick={() => this.props.createMarker(this.props.tourStep)}
+                  >
+                    <i className="fal fa-plus mr-2" />
+                    Add new marker
+                  </span>
+                )}
+              </Collapse>
+              <div className="tour-step-controls__wrapper">
+                <Nav>
+                  <NavLink className="tour-step__control" onClick={this.toggleCollapse}>
+                    {this.state.collapse ? (
+                      <span><i className="fal fa-angle-up mr-2" />Less</span>
+                    ) : (
+                      <span><i className="fal fa-angle-down mr-2" />More</span>
+                    )}
+                  </NavLink>
+                  {this.state.updatingTourStep ? (
+                    <NavLink
+                      className="tour-step__control"
+                      onClick={() => this.handleToggleUpdateTourStep(true)}
+                    >
+                      <span><i className="fal fa-check mr-2" />Save</span>
+                    </NavLink>
+                  ) : (
+                    <NavLink
+                      className="tour-step__control"
+                      onClick={() => this.handleToggleUpdateTourStep(true)}
+                    >
+                      <span><i className="fal fa-pen mr-2" />Edit</span>
+                    </NavLink>
+                  )}
                   <NavLink
                     className="tour-step__control"
-                    onClick={() => this.handleToggleUpdateTourStep(true)}
+                    onClick={() => this.props.deleteTourStep(this.props.tourStep.id)}
                   >
-                    <span><i className="fal fa-pen mr-2" />Edit</span>
+                    <span><i className="fal fa-trash-alt mr-2" />Delete</span>
                   </NavLink>
-                )}
-                <NavLink
-                  className="tour-step__control"
-                  onClick={() => this.props.deleteTourStep(this.props.tourStep.id)}
-                >
-                  <span><i className="fal fa-trash-alt mr-2" />Delete</span>
-                </NavLink>
-              </Nav>
+                </Nav>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </Draggable>
     );

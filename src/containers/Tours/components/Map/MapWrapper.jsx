@@ -8,25 +8,31 @@ import Map from './index';
 import { getTourDetail } from '../../../../redux/actions/tourActions';
 
 class MapWrapper extends PureComponent {
+  static propTypes = {
+    tours: ToursProps.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    match: ReactRouterPropTypes.match.isRequired,
+  };
+
   componentDidMount() {
+    // If the tour to be opened matches the id of the open tour then do nothing
+    // If this is not the case then load the new tour data
     const { tours } = this.props;
-    if (tours.actions.OPEN_TOUR.init ||
-      (!tours.actions.OPEN_TOUR.loading && !tours.actions.OPEN_TOUR.loaded)) {
-      this.props.dispatch(getTourDetail(this.props.match.params.tourId));
-    }
+    console.log('Map wrapper mounts!', tours.actions.OPEN_TOUR);
+    if (tours.actions.OPEN_TOUR.init) this.props.dispatch(getTourDetail(this.props.match.params.tourId));
   }
+
+  componentWillUnmount() {
+    console.log('Map wrapper unmounts!');
+  }
+
   render() {
+    console.log('Map wrapper renders!');
     return (
       <Map action={this.props.tours.actions.OPEN_TOUR} />
     );
   }
 }
-
-MapWrapper.propTypes = {
-  tours: ToursProps.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  match: ReactRouterPropTypes.match.isRequired,
-};
 
 export default withRouter(connect(state => ({
   tours: state.studio.tours,

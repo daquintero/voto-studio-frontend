@@ -64,4 +64,4 @@ class MapDataPanel extends Component {
   }
 }
 
-export default asyncLoading('card')(MapDataPanel);
+export default asyncLoading('load__card')(MapDataPanel);

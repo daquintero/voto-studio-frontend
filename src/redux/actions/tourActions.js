@@ -11,6 +11,7 @@ import {
   CREATE_MARKER,
   UPDATE_MARKER,
   DELETE_MARKER,
+  CLOSE_OPEN_TOUR,
 } from '../actionCreators/tourActionCreators';
 
 
@@ -88,17 +89,20 @@ export const createTourStep = (step, tourId) => (dispatch) => {
 export const updateTourStep = (updatedTourStep, index) => (dispatch) => {
   dispatch({
     type: UPDATE_TOUR_STEP.REQUEST,
+    id: updatedTourStep.id,
   });
   return tourService.post.updateStep(updatedTourStep, index).then(
     response =>
       dispatch({
         type: UPDATE_TOUR_STEP.SUCCESS,
+        id: updatedTourStep.id,
         updatedTourStep: response.data,
         index,
       }),
     error =>
       dispatch({
         type: UPDATE_TOUR_STEP.ERROR,
+        id: updatedTourStep.id,
         error,
       }),
   );
@@ -164,3 +168,7 @@ export function updateMarker(newMarker, newMarkerIndex, step, stepIndex) {
     stepIndex,
   };
 }
+
+export const closeOpenTour = () => ({
+  type: CLOSE_OPEN_TOUR,
+});

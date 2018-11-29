@@ -4,15 +4,16 @@ import Loader from './Loader';
 // This is a higher-order-component. It is a function that takes an argument elemType that returns another
 // function that takes an argument WrappedComponent which is the component we want to load. This function
 // returns a class that finally renders either a loading circle, an error or the WrappedComponent.
-const asyncLoading = elemType => WrappedComponent => class Test extends Component { // eslint-disable-line
+const asyncLoading = elemClass => WrappedComponent => class Test extends Component { // eslint-disable-line
   render() {
+    console.log(WrappedComponent.displayName, this.props.action);
     // If the component has only been initialised
     if (this.props.action.init) return null;
     // If data is already in store then load component
     if (this.props.preloaded) return <WrappedComponent {...this.props} />;
     // Load the loading circle if the it is loading
     if (this.props.action.loading) {
-      return <Loader elemType={elemType} />;
+      return <Loader elemClass={elemClass} />;
     }
     // Show the error message if the request errors
     // TODO: Maybe provide a callback function that can be called to attempt to reload the data from the server?

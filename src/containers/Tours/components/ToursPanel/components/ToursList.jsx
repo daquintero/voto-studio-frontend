@@ -105,4 +105,4 @@ class ToursList extends Component {
   }
 }
 
-export default asyncLoading('card')(ToursList);
+export default asyncLoading('load__card')(ToursList);

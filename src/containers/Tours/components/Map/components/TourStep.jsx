@@ -66,22 +66,32 @@ class TourStep extends Component {
   };
 
   render() {
+    const {
+      activeTourStepId, tours, tourStep, index, changeToStepViewport, createMarker, deleteTourStep,
+    } = this.props;
+    const loading = tours.actions.DELETE_TOUR_STEP[tourStep.id] ?
+      tours.actions.DELETE_TOUR_STEP[tourStep.id].loading : false;
     const wrapperClasses = ClassNames({
       'tour-step__wrapper': true,
-      'tour-step__wrapper__active': this.props.tourStep.id === this.props.activeTourStepId,
+      'tour-step__wrapper__active': tourStep.id === activeTourStepId,
+    });
+    const deleteClasses = ClassNames({
+      fal: true,
+      'fa-trash-alt': true,
+      'mr-2': true,
+      'tour-step__delete__loading': loading,
     });
     return (
-      <Draggable draggableId={this.props.tourStep.id.toString()} index={this.props.index}>
+      <Draggable draggableId={this.props.tourStep.id.toString()} index={index}>
         {provided => (
           <>
             <div
               className={wrapperClasses}
-              id={`tour-step__wrapper-${this.props.tourStep.id}`}
+              id={`tour-step__wrapper-${tourStep.id}`}
               ref={provided.innerRef}
               {...provided.draggableProps}
             >
-              {this.props.tours.actions.UPDATE_TOUR_STEP[this.props.tourStep.id] &&
-              this.props.tours.actions.UPDATE_TOUR_STEP[this.props.tourStep.id].loading && (
+              {tours.actions.UPDATE_TOUR_STEP[tourStep.id] && tours.actions.UPDATE_TOUR_STEP[tourStep.id].loading && (
                 <Loader elemClass="panel__update" />
               )}
               <i
@@ -89,23 +99,23 @@ class TourStep extends Component {
                 {...provided.dragHandleProps}
               />
               <i
-                id={`preview-${this.props.tourStep.id}`}
-                data-id={this.props.tourStep.id}
+                id={`preview-${tourStep.id}`}
+                data-id={tourStep.id}
                 className="fal fa-fw fa-eye tour-step__preview"
-                onClick={() => this.props.changeToStepViewport(this.props.tourStep.id)}
+                onClick={() => changeToStepViewport(tourStep.id)}
                 role="presentation"
               />
               <Tooltip
                 placement="right"
                 isOpen={this.state.tooltip}
-                target={`preview-${this.props.tourStep.id}`}
+                target={`preview-${tourStep.id}`}
                 toggle={this.toggleTooltip}
               >
-                Preview step {this.props.index + 1}
+                Preview step {index + 1}
               </Tooltip>
               {this.state.updatingTourStep &&
               <>
-                <h4>Editing step {this.props.index + 1}</h4>
+                <h4>Editing step {index + 1}</h4>
                 <hr />
               </>
               }
@@ -122,8 +132,8 @@ class TourStep extends Component {
                 </>
               ) : (
                 <>
-                  <h4>Step {this.props.index + 1} | {this.props.tourStep.name}</h4>
-                  <p><small>{this.props.tourStep.text}</small></p>
+                  <h4>Step {index + 1} | {tourStep.name}</h4>
+                  <p><small>{tourStep.text}</small></p>
                 </>
               )}
               <hr />
@@ -166,15 +176,15 @@ class TourStep extends Component {
                 </>
               )}
               <Collapse isOpen={this.state.collapse}>
-                <p>Lat: {this.props.tourStep.viewport.latitude}</p>
-                <p>Lng: {this.props.tourStep.viewport.longitude}</p>
-                <p>Zoom: {this.props.tourStep.viewport.zoom}</p>
-                <p>Pitch: {this.props.tourStep.viewport.pitch}</p>
-                <p>Bearing: {this.props.tourStep.viewport.bearing}</p>
-                <p>Transition Duration: {this.props.tourStep.viewport.transitionDuration}ms</p>
-                <p>Transition Interpolator: {this.props.tourStep.viewport.transitionInterpolatorName}</p>
-                <p>Transition Easing: {this.props.tourStep.viewport.transitionEasingName}</p>
-                {this.props.tourStep.markers.length !== 0 ? (
+                <p>Lat: {tourStep.viewport.latitude}</p>
+                <p>Lng: {tourStep.viewport.longitude}</p>
+                <p>Zoom: {tourStep.viewport.zoom}</p>
+                <p>Pitch: {tourStep.viewport.pitch}</p>
+                <p>Bearing: {tourStep.viewport.bearing}</p>
+                <p>Transition Duration: {tourStep.viewport.transitionDuration}ms</p>
+                <p>Transition Interpolator: {tourStep.viewport.transitionInterpolatorName}</p>
+                <p>Transition Easing: {tourStep.viewport.transitionEasingName}</p>
+                {tourStep.markers.length !== 0 ? (
                     <>
                       <div className="mt-3">
                         <h5 className="bold-text">Markers</h5>
@@ -200,11 +210,11 @@ class TourStep extends Component {
                 ) : (
                   <hr />
                 )}
-                {this.props.tourStep.id === this.props.activeTourStepId && (
+                {tourStep.id === activeTourStepId && (
                   <span
                     className="tours-panel__new"
                     role="presentation"
-                    onClick={() => this.props.createMarker(this.props.tourStep)}
+                    onClick={() => createMarker(tourStep)}
                   >
                     <i className="fal fa-plus mr-2" />
                     Add new marker
@@ -237,9 +247,9 @@ class TourStep extends Component {
                   )}
                   <NavLink
                     className="tour-step__control"
-                    onClick={() => this.props.deleteTourStep(this.props.tourStep.id)}
+                    onClick={() => deleteTourStep(tourStep.id)}
                   >
-                    <span><i className="fal fa-trash-alt mr-2" />Delete</span>
+                    <span><i className={deleteClasses} />{loading ? 'Deleting' : 'Delete'}</span>
                   </NavLink>
                 </Nav>
               </div>

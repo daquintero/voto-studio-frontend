@@ -14,6 +14,7 @@ const urls = {
     updateTour: `${tourApiUrl}/update_tour/`,
     createStep: `${tourApiUrl}/create_step/`,
     updateStep: `${tourApiUrl}/update_step/`,
+    reorderTourSteps: `${tourApiUrl}/reorder_tour_steps/`,
   },
   delete: {
     deleteStep: `${tourApiUrl}/delete_step/`,
@@ -33,6 +34,7 @@ const createTour = tour => api.post(urls.post.createTour, { tour });
 const updateTour = tour => api.post(urls.post.updateTour, { tour });
 const createStep = (step, tourId) => api.post(urls.post.createStep, { step, tourId });
 const updateStep = step => api.post(urls.post.updateStep, { step });
+const reorderTourSteps = (tourId, result) => api.post(urls.post.reorderTourSteps, { tourId, result });
 // Tour DELETE requests (The body of a delete request must have the "data" key)
 const deleteStep = stepId => api.delete(urls.delete.deleteStep, { data: { stepId } });
 
@@ -57,6 +59,7 @@ const tourService = {
     updateTour,
     createStep,
     updateStep,
+    reorderTourSteps,
   },
   delete: {
     deleteStep,

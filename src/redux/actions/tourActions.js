@@ -111,6 +111,7 @@ export const updateTourStep = (updatedTourStep, index) => (dispatch) => {
 export const deleteTourStep = id => (dispatch) => {
   dispatch({
     type: DELETE_TOUR_STEP.REQUEST,
+    id,
   });
   return tourService.delete.deleteStep(id).then(
     response =>
@@ -121,18 +122,29 @@ export const deleteTourStep = id => (dispatch) => {
     error =>
       dispatch({
         type: DELETE_TOUR_STEP.ERROR,
-        error, // TODO why was error null here????
+        error,
       }),
   );
 };
 
-export function reorderTourSteps(step, result) {
-  return {
-    type: REORDER_TOUR_STEPS,
-    step,
+export const reorderTourSteps = (tourId, result) => (dispatch) => {
+  dispatch({
+    type: REORDER_TOUR_STEPS.REQUEST,
     result,
-  };
-}
+  });
+  return tourService.post.reorderTourSteps(tourId, result).then(
+    response =>
+      dispatch({
+        type: REORDER_TOUR_STEPS.SUCCESS,
+        result: response.data.result,
+      }),
+    error =>
+      dispatch({
+        type: REORDER_TOUR_STEPS.ERROR,
+        error,
+      }),
+  );
+};
 
 export function changeActiveTourStep(id) {
   return {

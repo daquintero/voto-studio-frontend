@@ -13,137 +13,23 @@ import {
   CLOSE_OPEN_TOUR,
 } from '../actionCreators/tourActionCreators';
 
-/* Each async action will have three "states": the REQUEST state, the SUCCESS state and the ERROR state.
-We will want to take action throughout the UI dependant on the what state an action is in.
-For example lets say the updateTourStep action is dispatch by a component. Initially this action is in the
-request state and up until this point everything is still synchronous. Then axios is used to send the
-tour step updates to the server and now waits for the response, this takes time and JavaScript does not
-wait until the response is back to carry on running the next line, this is where the asynchronicity comes from.
-The moment we receive a response from axios we are no longer in the REQUEST state. The next state depends on the
-outcome of the axios call. If it was successful we move into the SUCCESS state and we update the redux store with the
-SUCCESS reducer accordingly and if there is an ERROR we are in the ERROR state and update the store using the
-ERROR reducer.
-
-The actionResult function will create an object with the same name of the action that was called. It takes a string
-that describes the action and state: ACTION.STATE. For example: LIST_TOURS.REQUEST. It will then return an object
-that describes the action and its state.
-
-Example usage:
-
-actionResult(LIST_TOURS.REQUEST)
-
->>> LIST_TOURS: {
-      loading: true,
-      loaded: false,
-    }
-
-actionResult(LIST_TOURS.SUCCESS)
-
->>> LIST_TOURS: {
-      loading: false,
-      loaded: true,
-    }
-
-actionResult(LIST_TOURS.ERROR)
-
->>> LIST_TOURS: {
-      loading: false,
-      loaded: false,
-      error: ErrorObj // This will be an error object from axios
-    }
-
-Now we can pass the LIST_TOURS object to the asyncLoading component to conditionally render a loading circle,
-the component or an error message dependant on the result of the api call.
-
-<ToursList action={whateverHasBeenLoading.LIST_TOURS} ...otherProps />
-
-Where <ToursList /> is exported like so: asyncLoading('card')(ToursList). The string 'card' is to let the
-asyncLoading component how to style the loading circle and error message. In this case we know that the component
-is loading data into a card so the loading circle should be centered horizontally. If we gave 'page' (for example when
-the whole map component is loading) then we would want the loading circle in the center of the page so we would
-center is horizontally and vertically.
-
-The above usage is for when data is loaded from the server ie a GET request. What about a POST request? In this case
-we will likely have already loaded the initial data from the server and already have a populated list. By using this
-same process we can render a loading circle or error message dependent on the status of a POST request.
-
-Example usage:
-
-actionResult(CREATE_TOUR.REQUEST)
-
->>> CREATE_TOUR: {
-      loading: true,
-      loaded: false,
-    }
-
-actionResult(CREATE_TOUR.REQUEST)
-
->>> CREATE_TOUR: {
-      loading: false,
-      loaded: true,
-    }
-
-actionResult(CREATE_TOUR.REQUEST)
-
->>> CREATE_TOUR: {
-      loading: false,
-      loaded: false,
-      error: ErrorObj // This will be an error object from axios
-    }
-
-Now we have an object CREATE_TOUR that gives us all the info about the POST request we need. In the <TourList />
-render method we can now do something like this:
-
-render() {
-  return (
-    ...
-    {whateverHasBeenLoaded.CREATE_TOUR && whateverHasBeenLoaded.CREATE_TOUR.loading && (
-      <Loader />
-    )}
-    {whateverHasBeenLoaded.CREATE_TOUR && whateverHasBeenLoaded.CREATE_TOUR.error && (
-      <>{whateverHasBeenLoaded.CREATE_TOUR.error.message}</>
-    )}
-    ...
-  );
-}
-
-Note: we have to check that whateverHasBeenLoaded.CREATE_TOUR is defined first otherwise shit hits the fan and react
-blows up. Now the <Loader /> component will appear when the POST request is in progress and disappear when it is
-complete. Additionally, if there is an error the error message will be shown to the user. I think this sums up my
-approach to async. I will be slowly implementing this approach in voto-studio so check the code for usage examples */
+// I have moved large explanatory comment that was here to a Slack post
 
 const actionResult = (action, { id = undefined, error = null } = {}) => {
-  const [actionName, actionState] = action.split('.');
-  if (id) {
-    switch (actionState) {
-      case 'REQUEST':
-        return { [id]: { loading: true, loaded: false, init: false } };
-      case 'SUCCESS':
-        return { [id]: { loading: false, loaded: true, init: false } };
-      case 'ERROR':
-        return {
-          [id]: {
-            loading: false, loaded: false, init: false, error,
-          },
-        };
-      default:
-        return Error('No matching action state provided');
-    }
-  } else {
-    switch (actionState) {
-      case 'REQUEST':
-        return { [actionName]: { loading: true, loaded: false, init: false } };
-      case 'SUCCESS':
-        return { [actionName]: { loading: false, loaded: true, init: false } };
-      case 'ERROR':
-        return {
-          [actionName]: {
-            loading: false, loaded: false, init: false, error,
-          },
-        };
-      default:
-        return Error('No matching action state provided');
-    }
+  const [actionName, actionState] = id ? [id, action.split('.')[1]] : action.split('.');
+  switch (actionState) {
+    case 'REQUEST':
+      return { [actionName]: { loading: true, loaded: false, init: false } };
+    case 'SUCCESS':
+      return { [actionName]: { loading: false, loaded: true, init: false } };
+    case 'ERROR':
+      return {
+        [actionName]: {
+          loading: false, loaded: false, init: false, error,
+        },
+      };
+    default:
+      return Error('No matching action state provided');
   }
 };
 
@@ -321,7 +207,10 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_TOUR_STEP.REQUEST'),
+          DELETE_TOUR_STEP: {
+            ...state.actions.DELETE_TOUR_STEP,
+            ...actionResult('DELETE_TOUR_STEP.REQUEST', { id: action.id }),
+          },
         },
       };
     case DELETE_TOUR_STEP.SUCCESS:
@@ -334,7 +223,10 @@ export default function (state = initialState, action) {
         },
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_TOUR_STEP.SUCCESS'),
+          DELETE_TOUR_STEP: {
+            ...state.actions.DELETE_TOUR_STEP,
+            ...actionResult('DELETE_TOUR_STEP.SUCCESS', { id: action.id }),
+          },
         },
       };
     case DELETE_TOUR_STEP.ERROR:
@@ -342,7 +234,10 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_TOUR_STEP.ERROR', { error: action.error }),
+          DELETE_TOUR_STEP: {
+            ...state.actions.DELETE_TOUR_STEP,
+            ...actionResult('DELETE_TOUR_STEP.ERROR', { id: action.id, error: action.error }),
+          },
         },
       };
       // -----------------------------------------------
@@ -392,43 +287,41 @@ export default function (state = initialState, action) {
       // -----------------------------------------------
 
     // Reorder tour steps reducer ----------------------
-    case REORDER_TOUR_STEPS.REQUEST:
-      return {
-        ...state,
-        openTour: {
-          ...state.openTour,
-          REORDER_TOUR_STEPS: {
-            loading: true,
-            loaded: false,
-          },
-        },
-      };
-    case REORDER_TOUR_STEPS.SUCCESS: {
+    // This case is interesting. The update of the order must be done in the REQUEST state otherwise the
+    // steps would jump back to their original order until the server responded and then they would jump
+    // back to their new order. The SUCCESS state can be used to give the user some visual feedback that
+    // new order has been persisted.
+    case REORDER_TOUR_STEPS.REQUEST: {
       const newSteps = state.openTour.steps;
+      const step = state.openTour.steps.filter(s => s.id === parseInt(action.result.draggableId, 10))[0];
       newSteps.splice(action.result.source.index, 1);
-      newSteps.splice(action.result.destination.index, 0, action.step);
+      newSteps.splice(action.result.destination.index, 0, step);
       return {
         ...state,
         openTour: {
           ...state.openTour,
           steps: newSteps,
-          reorderingSteps: {
-            loading: false,
-            loaded: true,
-          },
+        },
+        actions: {
+          ...state.actions,
+          ...actionResult('REORDER_TOUR_STEPS.REQUEST'),
         },
       };
     }
+    case REORDER_TOUR_STEPS.SUCCESS:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('REORDER_TOUR_STEPS.SUCCESS'),
+        },
+      };
     case REORDER_TOUR_STEPS.ERROR:
       return {
         ...state,
-        openTour: {
-          ...state.openTour,
-          reorderingSteps: {
-            loading: false,
-            loaded: false,
-            error: action.error,
-          },
+        actions: {
+          ...state.actions,
+          ...actionResult('REORDER_TOUR_STEPS.ERROR', { error: action.error }),
         },
       };
 

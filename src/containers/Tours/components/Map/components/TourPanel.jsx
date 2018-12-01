@@ -73,15 +73,14 @@ class TourPanel extends Component {
   handleDeleteTourStep = id => this.props.dispatch(deleteTourStep(id));
 
   handleOnDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-    const step = this.getStep(draggableId);
+    const { destination, source } = result;
     if (!destination) {
       return;
     }
     if (destination.index === source.index) {
       return;
     }
-    this.props.dispatch(reorderTourSteps(step, result));
+    this.props.dispatch(reorderTourSteps(this.props.tours.openTour.id, result));
   };
 
   render() {
@@ -126,7 +125,7 @@ class TourPanel extends Component {
             </Droppable>
           </DragDropContext>
           {this.props.tours.actions.CREATE_TOUR_STEP.loading && (
-            <Loader elemType="panel" />
+            <Loader elemClass="load__panel" />
           )}
           {this.props.tours.actions.CREATE_TOUR_STEP.error && (
             <p>{this.props.tours.actions.CREATE_TOUR_STEP.error.message}</p>

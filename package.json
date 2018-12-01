@@ -1,8 +1,8 @@
 {
-  "name": "voto-map-studio",
+  "name": "voto-studio",
   "version": "1.4.0",
   "private": true,
-  "homepage": "http://voto-map-studio.surge.sh",
+  "homepage": "http://voto-studio.surge.sh",
   "dependencies": {
     "@material-ui/core": "^3.5.1",
     "axios": "^0.18.0",

@@ -11,6 +11,7 @@ import {
   DELETE_TOUR_STEP,
   CREATE_MARKER,
   UPDATE_MARKER,
+  UPDATE_MARKER_POSITION,
   DELETE_MARKER,
   CLOSE_OPEN_TOUR,
 } from '../actionCreators/tourActionCreators';
@@ -198,14 +199,19 @@ export const deleteMarker = (marker, step, stepIndex) => ({
   stepIndex,
 });
 
-export const updateMarker = (newMarker, newMarkerIndex, step, stepIndex) => (disptach) => {
-  disptach({
+
+// I'm testing something here. I am updating the redux store first with the date
+// we have in the front and then updating the store with the data from the server.
+// the reason for this is that the marker's position will jump back to the old position
+// and when the server responds it will jump back to the new position.
+export const updateMarker = (newMarker, newMarkerIndex, step, stepIndex) => (dispatch) => {
+  dispatch({
     type: UPDATE_MARKER.REQUEST,
     id: newMarker.id,
   });
   return tourService.post.updateMarker(newMarker).then(
     response =>
-      disptach({
+      dispatch({
         type: UPDATE_MARKER.SUCCESS,
         id: newMarker.id,
         newMarker: response.data.new_marker,
@@ -214,8 +220,32 @@ export const updateMarker = (newMarker, newMarkerIndex, step, stepIndex) => (dis
         stepIndex,
       }),
     error =>
-      disptach({
+      dispatch({
         type: UPDATE_MARKER.ERROR,
+        error,
+        id: newMarker.id,
+      }),
+  );
+};
+
+export const updateMarkerPosition = (newMarker, newMarkerIndex, step, stepIndex) => (dispatch) => {
+  dispatch({
+    type: UPDATE_MARKER_POSITION.REQUEST,
+    id: newMarker.id,
+    newMarker,
+    newMarkerIndex,
+    step,
+    stepIndex,
+  });
+  return tourService.post.updateMarker(newMarker).then(
+    response =>
+      dispatch({
+        type: UPDATE_MARKER_POSITION.SUCCESS,
+        id: response.data.id,
+      }),
+    error =>
+      dispatch({
+        type: UPDATE_MARKER_POSITION.ERROR,
         error,
         id: newMarker.id,
       }),

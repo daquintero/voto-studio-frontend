@@ -7,7 +7,7 @@ import {
   changeActiveTourStep,
   closeOpenTour,
 } from '../../../../redux/actions/tourActions';
-import { ToursProps } from '../../../../shared/prop-types/ReducerProps';
+import { ToursProps, MapProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
 import TourPanel from './components/TourPanel';
 import MapPopover from './components/MapPopover';
@@ -18,10 +18,12 @@ class Map extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     tours: ToursProps.isRequired,
+    map: MapProps.isRequired,
   };
 
   componentWillUnmount() {
     this.props.dispatch(closeOpenTour());
+    this.handleChangeMapViewport(this.props.map.defaultViewport);
   }
 
   // Thinking about moving this to a utils folder in shared
@@ -64,4 +66,5 @@ class Map extends Component {
 
 export default asyncLoading('load__page')(withRouter(connect(state => ({
   tours: state.studio.tours,
+  map: state.map,
 }))(Map)));

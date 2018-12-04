@@ -6,6 +6,8 @@ import { withRouter } from 'react-router-dom';
 import { ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import Map from './index';
 import { getTourDetail } from '../../../../redux/actions/tourActions';
+import { changeMapViewport } from '../../../../redux/actions/mapActions';
+import addTransitionClasses from '../../../../shared/utils/addTransitionClasses';
 
 class MapWrapper extends PureComponent {
   static propTypes = {
@@ -17,13 +19,27 @@ class MapWrapper extends PureComponent {
   componentDidMount() {
     // If the tour to be opened matches the id of the open tour then do nothing
     // If this is not the case then load the new tour data
-    const { tours } = this.props;
-    if (tours.actions.OPEN_TOUR.init) this.props.dispatch(getTourDetail(this.props.match.params.tourId));
+    const { tours, match, dispatch } = this.props;
+    if (tours.actions.OPEN_TOUR.init && tours.openTour.id !== parseInt(match.params.tourId, 10)) {
+      dispatch(getTourDetail(match.params.tourId))
+        .then((response) => {
+          if (response.type === 'OPEN_TOUR_SUCCESS') {
+            const { tour } = response;
+            if (tour.steps.length) {
+              dispatch(changeMapViewport(addTransitionClasses(tour.steps[0]).viewport));
+            }
+          }
+        });
+    }
   }
 
   render() {
+    const { tours, match } = this.props;
     return (
-      <Map action={this.props.tours.actions.OPEN_TOUR} />
+      <Map
+        action={this.props.tours.actions.OPEN_TOUR}
+        preloaded={tours.openTour.id === parseInt(match.params.tourId, 10)}
+      />
     );
   }
 }

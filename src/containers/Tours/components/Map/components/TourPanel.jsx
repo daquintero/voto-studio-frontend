@@ -28,9 +28,6 @@ class TourPanel extends Component {
     };
   }
 
-  // Thinking about moving this to a utils folder in shared
-  getStep = stepId => this.props.tours.openTour.steps.filter(elem => elem.id === parseInt(stepId, 10))[0];
-
   handleCreateTourStep = (data) => {
     const step = {
       name: data.name,

@@ -10,6 +10,7 @@ import {
   CHANGE_ACTIVE_TOUR_STEP,
   CREATE_MARKER,
   UPDATE_MARKER,
+  UPDATE_MARKER_POSITION,
   DELETE_MARKER,
   CLOSE_OPEN_TOUR,
 } from '../actionCreators/tourActionCreators';
@@ -60,6 +61,7 @@ const initialState = {
     'CHANGE_ACTIVE_TOUR_STEP',
     'CREATE_MARKER',
     'UPDATE_MARKER',
+    'UPDATE_MARKER_POSITION',
     'DELETE_MARKER',
     'LIST_DATA',
   ]),
@@ -470,6 +472,58 @@ export default function (state = initialState, action) {
       };
       // -----------------------------------------------
 
+    // Update marker reducers --------------------------
+    case UPDATE_MARKER_POSITION.REQUEST:
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
+          steps: [
+            ...state.openTour.steps.slice(0, action.stepIndex),
+            {
+              ...action.step,
+              markers: [
+                ...action.step.markers.slice(0, action.newMarkerIndex),
+                action.newMarker,
+                ...action.step.markers.slice(action.newMarkerIndex + 1),
+              ],
+            },
+            ...state.openTour.steps.slice(action.stepIndex + 1),
+          ],
+        },
+        actions: {
+          ...state.actions,
+          UPDATE_MARKER_POSITION: {
+            ...state.actions.UPDATE_MARKER_POSITION,
+            ...actionResult('UPDATE_MARKER_POSITION.REQUEST', { id: action.id }),
+          },
+        },
+      };
+      // Use the success state to open a notification or something
+    case UPDATE_MARKER_POSITION.SUCCESS:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          UPDATE_MARKER_POSITION: {
+            ...state.actions.UPDATE_MARKER_POSITION,
+            ...actionResult('UPDATE_MARKER_POSITION.SUCCESS', { id: action.id }),
+          },
+        },
+      };
+    case UPDATE_MARKER_POSITION.ERROR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          UPDATE_MARKER_POSITION: {
+            ...state.actions.UPDATE_MARKER_POSITION,
+            ...actionResult('UPDATE_MARKER_POSITION.ERROR', { id: action.id }),
+          },
+        },
+      };
+      // -----------------------------------------------
+
     // Delete marker reducers --------------------------
     case DELETE_MARKER.REQUEST:
       return {
@@ -503,7 +557,7 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          OPEN_TOUR: initializeActions(['OPEN_TOUR']),
+          ...initializeActions(['OPEN_TOUR']),
         },
       };
     default:

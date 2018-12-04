@@ -15,6 +15,14 @@ const initialState = {
     pitch: 30,
     bearing: 0,
   },
+  defaultViewport: {
+    latitude: 8,
+    longitude: -80.1,
+    zoom: 6,
+    maxZoom: 16,
+    pitch: 30,
+    bearing: 0,
+  },
 };
 
 export default function (state = initialState, action) {

@@ -8,7 +8,8 @@ import Resizable from 're-resizable';
 import { SidebarProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
 import mapData from './mapData.json';
 import { changeMapHeight, changeMapWidth } from '../../../../../redux/actions/mapActions';
-import { updateMarker, deleteMarker } from '../../../../../redux/actions/tourActions';
+import { updateMarker, updateMarkerPosition, deleteMarker } from '../../../../../redux/actions/tourActions';
+import Loader from '../../../../../shared/components/Loader';
 
 class FullscreenMap extends Component {
   static propTypes = {
@@ -100,7 +101,7 @@ class FullscreenMap extends Component {
         latitude: e.lngLat[1],
       },
     }));
-    this.props.dispatch(updateMarker(newMarker, markerIndex, this.getActiveStep(), this.getActiveStepIndex()));
+    this.props.dispatch(updateMarkerPosition(newMarker, markerIndex, this.getActiveStep(), this.getActiveStepIndex()));
   };
 
   handleDeleteMarker = (marker) => {
@@ -166,6 +167,7 @@ class FullscreenMap extends Component {
     });
 
   render() { // TODO: Initial viewport is not loaded from the first active step
+    const { map, tours } = this.props;
     return (
       <div>
         <Alert color="danger" isOpen={this.state.markerAlertOpen}>
@@ -173,15 +175,15 @@ class FullscreenMap extends Component {
           </p>
         </Alert>
         <ReactMapGL
-          {...this.props.map.viewport}
+          {...map.viewport}
           onViewportChange={this.onViewportChange}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
         >
           <DeckGL
-            {...this.props.map.viewport}
+            {...map.viewport}
             layers={this.renderLayers()}
           />
-          {this.props.tours.openTour.activeTourStepId !== -1 && this.getActiveStep().markers.map((marker, index) => (
+          {tours.openTour.activeTourStepId !== -1 && this.getActiveStep().markers.map((marker, index) => (
             <Marker
               key={`marker-${marker.id}`}
               latitude={marker.latitude}
@@ -200,6 +202,9 @@ class FullscreenMap extends Component {
                 onResizeStop={(e, dir, ref, diff) => this.handleOnResizeStop(e, dir, ref, diff, marker, index)}
               >
                 <div className="fullscreen-map__marker" data-marker-id={marker.id}>
+                  {tours.actions.UPDATE_MARKER[marker.id] && tours.actions.UPDATE_MARKER[marker.id].loading && (
+                    <Loader elemClass="panel__update" />
+                  )}
                   {!(this.state.marker.updating && this.state.marker.id === marker.id) || !this.state.marker ? (
                       <>
                         <h3>{marker.name}</h3>

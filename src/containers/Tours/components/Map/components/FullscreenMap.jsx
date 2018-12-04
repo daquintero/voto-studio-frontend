@@ -3,11 +3,12 @@ import ReactMapGL, { Marker } from 'react-map-gl';
 import DeckGL, { GeoJsonLayer } from 'deck.gl';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormGroup, Input, Label } from 'reactstrap';
+import { FormGroup, Input, Label, Alert } from 'reactstrap';
 import Resizable from 're-resizable';
 import { SidebarProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
 import mapData from './mapData.json';
 import { changeMapHeight, changeMapWidth } from '../../../../../redux/actions/mapActions';
+import { updateMarker, deleteMarker } from '../../../../../redux/actions/tourActions';
 
 class FullscreenMap extends Component {
   static propTypes = {
@@ -15,15 +16,13 @@ class FullscreenMap extends Component {
     sidebar: SidebarProps.isRequired,
     map: MapProps.isRequired,
     handleChangeMapViewport: PropTypes.func.isRequired,
-    updateMarkerPosition: PropTypes.func.isRequired,
-    updateMarker: PropTypes.func.isRequired,
-    deleteMarker: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       markerDraggable: true,
+      markerAlertOpen: false,
       marker: {},
     };
   }
@@ -53,10 +52,15 @@ class FullscreenMap extends Component {
   };
 
   getStep = stepId => this.props.tours.openTour.steps.filter(elem => elem.id === parseInt(stepId, 10))[0];
+
+  getActiveStepIndex = () => {
+    const step = this.getStep(this.props.tours.openTour.activeTourStepId);
+    return this.props.tours.openTour.steps.indexOf(step);
+  };
+
   getActiveStep = () =>
     this.props.tours.openTour.steps
       .filter(elem => elem.id === parseInt(this.props.tours.openTour.activeTourStepId, 10))[0];
-
 
   handleChangeMapHeight = newMapHeight => this.props.dispatch(changeMapHeight(newMapHeight));
 
@@ -73,20 +77,37 @@ class FullscreenMap extends Component {
 
   handleUpdateMarker = (markerIndex) => {
     if (this.state.marker.name && this.state.marker.text) {
-      this.props.updateMarker(
+      this.props.dispatch(updateMarker(
         this.state.marker,
         markerIndex,
-        this.getStep(),
-      );
+        this.getActiveStep(),
+        this.getActiveStepIndex(),
+      ));
       this.handleToggleUpdateMarker(this.state.marker);
-    }
+    } else this.setState({ markerAlertOpen: true });
+  };
+
+  handleUpdateMarkerPosition = (e, marker, markerIndex) => {
+    const newMarker = {
+      ...marker,
+      longitude: e.lngLat[0],
+      latitude: e.lngLat[1],
+    };
+    this.setState(prevState => ({
+      marker: {
+        ...prevState.marker,
+        longitude: e.lngLat[0],
+        latitude: e.lngLat[1],
+      },
+    }));
+    this.props.dispatch(updateMarker(newMarker, markerIndex, this.getActiveStep(), this.getActiveStepIndex()));
   };
 
   handleDeleteMarker = (marker) => {
-    this.props.deleteMarker(
+    this.props.dispatch(deleteMarker(
       marker,
       this.getActiveStep(),
-    );
+    ));
   };
 
   handleOnResizeStop = (e, dir, ref, diff, marker, markerIndex) => {
@@ -96,11 +117,12 @@ class FullscreenMap extends Component {
       width: marker.width + diff.width,
       height: marker.height + diff.height,
     };
-    this.props.updateMarker(
+    this.props.dispatch(updateMarker(
       newMarker,
       markerIndex,
       this.getActiveStep(),
-    );
+      this.getActiveStepIndex(),
+    ));
   };
 
   resizeViewport = () => {
@@ -143,9 +165,13 @@ class FullscreenMap extends Component {
       },
     });
 
-  render() {
+  render() { // TODO: Initial viewport is not loaded from the first active step
     return (
       <div>
+        <Alert color="danger" isOpen={this.state.markerAlertOpen}>
+          <p><span className="bold-text">Warning:</span> Name or text field must not be empty.
+          </p>
+        </Alert>
         <ReactMapGL
           {...this.props.map.viewport}
           onViewportChange={this.onViewportChange}
@@ -162,7 +188,7 @@ class FullscreenMap extends Component {
               longitude={marker.longitude}
               draggable={this.state.markerDraggable}
               captureDrag={true} // eslint-disable-line
-              onDragEnd={e => this.props.updateMarkerPosition(e, marker, index)}
+              onDragEnd={e => this.handleUpdateMarkerPosition(e, marker, index)}
             >
               <Resizable
                 defaultSize={{

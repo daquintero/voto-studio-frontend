@@ -8,11 +8,14 @@ class ToursList extends Component {
   static propTypes = {
     tourList: PropTypes.instanceOf(Object).isRequired,
     toursIdCode: PropTypes.string.isRequired, // This really isn't needed tbh
+    editTour: PropTypes.func.isRequired,
+    deleteTour: PropTypes.func.isRequired,
     openTour: PropTypes.func.isRequired,
     toggleCreateTourForm: PropTypes.func.isRequired,
     createTourForm: PropTypes.bool.isRequired,
     createTour: PropTypes.func.isRequired,
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,10 +23,12 @@ class ToursList extends Component {
       description: '',
     };
   }
+
   onChange = (e) => {
     e.persist();
     this.setState({ [e.target.name]: e.target.value });
   };
+
   render() {
     return (
       <>
@@ -35,7 +40,7 @@ class ToursList extends Component {
               <th>No. Steps</th>
               <th>Username</th>
               <th>Status</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -48,20 +53,30 @@ class ToursList extends Component {
                 <td><Badge color="success">Live</Badge></td>
                 <td>
                   <i
-                    className="fal fa-pen tours-panel__edit"
+                    className="fal fa-pen tours-panel__edit mr-2"
+                    role="presentation"
+                    onClick={() => this.props.editTour(tour.id, index)}
+                  />
+                  <i
+                    className="fal fa-trash-alt tours-panel__delete mr-2"
+                    role="presentation"
+                    onClick={() => this.props.deleteTour(tour.id)}
+                  />
+                  <i
+                    className="fal fa-external-link tours-panel__open mr-2"
                     role="presentation"
                     onClick={() => this.props.openTour(tour.id, index)}
                   />
                 </td>
               </tr>
-                ))}
+            ))}
           </tbody>
         </Table>
         {this.props.tourList.CREATE_TOUR && this.props.tourList.CREATE_TOUR.loading && (
           // Im not too sure if the above logic statement is the best way to do this. It basically
           // implies that if the CREATE_TOUR object is undefined then no create tour request has been made.
           // TODO: Add error catch here (maybe open an alert or something).
-          <Loader elemType="card" />
+          <Loader elemClass="card" />
         )}
         {!this.props.createTourForm ? (
           <span

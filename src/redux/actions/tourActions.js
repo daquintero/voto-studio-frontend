@@ -3,6 +3,7 @@ import {
   LIST_TOURS,
   CREATE_TOUR,
   OPEN_TOUR,
+  DELETE_TOUR,
   CREATE_TOUR_STEP,
   UPDATE_TOUR_STEP,
   REORDER_TOUR_STEPS,
@@ -13,7 +14,6 @@ import {
   DELETE_MARKER,
   CLOSE_OPEN_TOUR,
 } from '../actionCreators/tourActionCreators';
-
 
 export const getTourList = () => (dispatch) => {
   dispatch({
@@ -67,6 +67,24 @@ export const createTour = newTourInfo => (dispatch) => {
   );
 };
 
+export const deleteTour = id => (dispatch) => {
+  dispatch({
+    type: DELETE_TOUR.REQUEST,
+    id,
+  });
+  return tourService.delete.deleteTour(id).then(
+    response =>
+      dispatch({
+        type: DELETE_TOUR.SUCCESS,
+        id: response.data.id,
+      }),
+    error =>
+      dispatch({
+        type: DELETE_TOUR.ERROR,
+        error,
+      }),
+  );
+};
 
 export const createTourStep = (step, tourId) => (dispatch) => {
   dispatch({
@@ -108,16 +126,16 @@ export const updateTourStep = (updatedTourStep, index) => (dispatch) => {
   );
 };
 
-export const deleteTourStep = id => (dispatch) => {
+export const deleteTourStep = (stepId, tourId) => (dispatch) => {
   dispatch({
     type: DELETE_TOUR_STEP.REQUEST,
-    id,
+    id: stepId,
   });
-  return tourService.delete.deleteStep(id).then(
+  return tourService.delete.deleteStep(stepId, tourId).then(
     response =>
       dispatch({
         type: DELETE_TOUR_STEP.SUCCESS,
-        id: response.data.id,
+        id: response.data.stepId,
       }),
     error =>
       dispatch({
@@ -153,33 +171,56 @@ export function changeActiveTourStep(id) {
   };
 }
 
-export function createMarker(newMarker, step, stepIndex) {
-  return {
-    type: CREATE_MARKER,
-    newMarker,
-    step,
-    stepIndex,
-  };
-}
+export const createMarker = (newMarker, step, stepIndex) => (dispatch) => {
+  dispatch({
+    type: CREATE_MARKER.REQUEST,
+  });
+  return tourService.post.createMarker(newMarker, step.id).then(
+    response =>
+      dispatch({
+        type: CREATE_MARKER.SUCCESS,
+        newMarker: response.data.new_marker,
+        step,
+        stepIndex,
+      }),
+    error =>
+      dispatch({
+        type: CREATE_MARKER.ERROR,
+        error,
+      }),
+  );
+};
 
-export function deleteMarker(marker, step, stepIndex) {
-  return {
-    type: DELETE_MARKER,
-    marker,
-    step,
-    stepIndex,
-  };
-}
+export const deleteMarker = (marker, step, stepIndex) => ({
+  type: DELETE_MARKER,
+  marker,
+  step,
+  stepIndex,
+});
 
-export function updateMarker(newMarker, newMarkerIndex, step, stepIndex) {
-  return {
-    type: UPDATE_MARKER,
-    newMarker,
-    newMarkerIndex,
-    step,
-    stepIndex,
-  };
-}
+export const updateMarker = (newMarker, newMarkerIndex, step, stepIndex) => (disptach) => {
+  disptach({
+    type: UPDATE_MARKER.REQUEST,
+    id: newMarker.id,
+  });
+  return tourService.post.updateMarker(newMarker).then(
+    response =>
+      disptach({
+        type: UPDATE_MARKER.SUCCESS,
+        id: newMarker.id,
+        newMarker: response.data.new_marker,
+        newMarkerIndex,
+        step,
+        stepIndex,
+      }),
+    error =>
+      disptach({
+        type: UPDATE_MARKER.ERROR,
+        error,
+        id: newMarker.id,
+      }),
+  );
+};
 
 export const closeOpenTour = () => ({
   type: CLOSE_OPEN_TOUR,

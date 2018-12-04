@@ -19,7 +19,6 @@ class TourPanel extends Component {
     tours: ToursProps.isRequired,
     map: MapProps.isRequired,
     changeToStepViewport: PropTypes.func.isRequired,
-    createMarker: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -70,7 +69,7 @@ class TourPanel extends Component {
     this.props.dispatch(updateTourStep(step, index));
   };
 
-  handleDeleteTourStep = id => this.props.dispatch(deleteTourStep(id));
+  handleDeleteTourStep = id => this.props.dispatch(deleteTourStep(id, this.props.tours.openTour.id));
 
   handleOnDragEnd = (result) => {
     const { destination, source } = result;
@@ -88,7 +87,6 @@ class TourPanel extends Component {
     const tourSteps = () => (
       tour.steps.map((tourStep, index) => (
         <TourStep
-          preloaded
           key={tourStep.id}
           index={index}
           tourStep={tourStep}

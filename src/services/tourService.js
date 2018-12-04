@@ -15,8 +15,11 @@ const urls = {
     createStep: `${tourApiUrl}/create_step/`,
     updateStep: `${tourApiUrl}/update_step/`,
     reorderTourSteps: `${tourApiUrl}/reorder_tour_steps/`,
+    createMarker: `${tourApiUrl}/create_marker/`,
+    updateMarker: `${tourApiUrl}/update_marker/`,
   },
   delete: {
+    deleteTour: `${tourApiUrl}/delete_tour/`,
     deleteStep: `${tourApiUrl}/delete_step/`,
   },
 };
@@ -35,8 +38,11 @@ const updateTour = tour => api.post(urls.post.updateTour, { tour });
 const createStep = (step, tourId) => api.post(urls.post.createStep, { step, tourId });
 const updateStep = step => api.post(urls.post.updateStep, { step });
 const reorderTourSteps = (tourId, result) => api.post(urls.post.reorderTourSteps, { tourId, result });
+const createMarker = (newMarker, stepId) => api.post(urls.post.createMarker, { newMarker, stepId });
+const updateMarker = newMarker => api.post(urls.post.updateMarker, { newMarker });
 // Tour DELETE requests (The body of a delete request must have the "data" key)
-const deleteStep = stepId => api.delete(urls.delete.deleteStep, { data: { stepId } });
+const deleteTour = id => api.delete(urls.delete.deleteTour, { data: { id } });
+const deleteStep = (stepId, tourId) => api.delete(urls.delete.deleteStep, { data: { stepId, tourId } });
 
 const markerSchema = new schema.Entity('markers');
 const stepSchema = new schema.Entity('steps', {
@@ -60,8 +66,11 @@ const tourService = {
     createStep,
     updateStep,
     reorderTourSteps,
+    createMarker,
+    updateMarker,
   },
   delete: {
+    deleteTour,
     deleteStep,
   },
   normalise: {

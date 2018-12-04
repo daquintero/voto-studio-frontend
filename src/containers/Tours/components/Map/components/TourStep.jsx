@@ -6,6 +6,9 @@ import { Draggable } from 'react-beautiful-dnd';
 import { Collapse, Input, Label, FormGroup, Tooltip, Table, Nav, NavLink } from 'reactstrap';
 import { TourProps } from '../../../../../shared/prop-types/ReducerProps';
 import Loader from '../../../../../shared/components/Loader';
+import {
+  createMarker,
+} from '../../../../../redux/actions/tourActions';
 
 class TourStep extends Component {
   static propTypes = {
@@ -18,7 +21,6 @@ class TourStep extends Component {
     updatingTourStep: PropTypes.bool.isRequired,
     updateTourStep: PropTypes.func.isRequired,
     activeTourStepId: PropTypes.number.isRequired,
-    createMarker: PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
@@ -65,9 +67,21 @@ class TourStep extends Component {
     }
   };
 
+  handleCreateMarker = () => {
+    const newMarker = {
+      name: 'New marker',
+      text: 'Edit me. Move me around. Resize me. Do what you will...',
+      longitude: this.props.map.viewport.longitude,
+      latitude: this.props.map.viewport.latitude,
+      width: 200,
+      height: 200,
+    };
+    this.props.dispatch(createMarker(newMarker, this.props.tourStep, this.props.index));
+  };
+
   render() {
     const {
-      activeTourStepId, tours, tourStep, index, changeToStepViewport, createMarker, deleteTourStep,
+      activeTourStepId, tours, tourStep, index, changeToStepViewport, deleteTourStep,
     } = this.props;
     const loading = tours.actions.DELETE_TOUR_STEP[tourStep.id] ?
       tours.actions.DELETE_TOUR_STEP[tourStep.id].loading : false;
@@ -214,7 +228,7 @@ class TourStep extends Component {
                   <span
                     className="tours-panel__new"
                     role="presentation"
-                    onClick={() => createMarker(tourStep)}
+                    onClick={this.handleCreateMarker}
                   >
                     <i className="fal fa-plus mr-2" />
                     Add new marker

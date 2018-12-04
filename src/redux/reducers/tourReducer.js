@@ -2,6 +2,7 @@ import {
   LIST_TOURS,
   CREATE_TOUR,
   OPEN_TOUR,
+  DELETE_TOUR,
   CREATE_TOUR_STEP,
   DELETE_TOUR_STEP,
   UPDATE_TOUR_STEP,
@@ -51,6 +52,7 @@ const initialState = {
     'LIST_TOURS',
     'CREATE_TOUR',
     'OPEN_TOUR',
+    'DELETE_TOUR',
     'CREATE_TOUR_STEP',
     'DELETE_TOUR_STEP',
     'UPDATE_TOUR_STEP',
@@ -158,6 +160,45 @@ export default function (state = initialState, action) {
         actions: {
           ...state.actions,
           ...actionResult('OPEN_TOUR.ERROR', { error: action.error }),
+        },
+      };
+      // -----------------------------------------------
+
+    // Open tour reducers ------------------------------
+    case DELETE_TOUR.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          DELETE_TOUR: {
+            ...state.actions.DELETE_TOUR,
+            ...actionResult('DELETE_TOUR.REQUEST', { id: action.id }),
+          },
+        },
+      };
+    case DELETE_TOUR.SUCCESS:
+      return {
+        ...state,
+        tourList: {
+          tours: state.tourList.tours.filter(tour => tour.id !== action.id),
+        },
+        actions: {
+          ...state.actions,
+          DELETE_TOUR: {
+            ...state.actions.DELETE_TOUR,
+            ...actionResult('DELETE_TOUR.SUCCESS', { id: action.id }),
+          },
+        },
+      };
+    case DELETE_TOUR.ERROR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          DELETE_TOUR: {
+            ...state.actions.DELETE_TOUR,
+            ...actionResult('DELETE_TOUR.ERROR', { id: action.id, error: action.error }),
+          },
         },
       };
       // -----------------------------------------------
@@ -321,7 +362,7 @@ export default function (state = initialState, action) {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('REORDER_TOUR_STEPS.ERROR', { error: action.error }),
+          ...actionResult('REORDER_TOUR_STEPS.ERROR', { error: action.error }), // TODO: Feedback to reorder error
         },
       };
 
@@ -338,13 +379,21 @@ export default function (state = initialState, action) {
       // -----------------------------------------------
 
     // Create marker reducers --------------------------
-    case CREATE_MARKER:
+    case CREATE_MARKER.REQUEST:
       return {
         ...state,
-        newTour: {
-          ...state.newTour,
+        actions: {
+          ...state.actions,
+          ...actionResult('CREATE_MARKER.REQUEST'),
+        },
+      };
+    case CREATE_MARKER.SUCCESS:
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
           steps: [
-            ...state.newTour.steps.slice(0, action.stepIndex),
+            ...state.openTour.steps.slice(0, action.stepIndex),
             {
               ...action.step,
               markers: [
@@ -352,17 +401,43 @@ export default function (state = initialState, action) {
                 action.newMarker,
               ],
             },
-            ...state.newTour.steps.slice(action.stepIndex + 1),
+            ...state.openTour.steps.slice(action.stepIndex + 1),
           ],
         },
+        actions: {
+          ...state.actions,
+          ...actionResult('CREATE_MARKER.SUCCESS'),
+        },
       };
-    case UPDATE_MARKER:
+    case CREATE_MARKER.ERROR:
       return {
         ...state,
-        newTour: {
-          ...state.newTour,
+        actions: {
+          ...state.actions,
+          ...actionResult('CREATE_MARKER.ERROR', { error: action.error }),
+        },
+      };
+      // -----------------------------------------------
+
+    // Update marker reducers --------------------------
+    case UPDATE_MARKER.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          UPDATE_MARKER: {
+            ...state.actions.UPDATE_MARKER,
+            ...actionResult('UPDATE_MARKER.REQUEST', { id: action.id }),
+          },
+        },
+      };
+    case UPDATE_MARKER.SUCCESS:
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
           steps: [
-            ...state.newTour.steps.slice(0, action.stepIndex),
+            ...state.openTour.steps.slice(0, action.stepIndex),
             {
               ...action.step,
               markers: [
@@ -371,23 +446,56 @@ export default function (state = initialState, action) {
                 ...action.step.markers.slice(action.newMarkerIndex + 1),
               ],
             },
-            ...state.newTour.steps.slice(action.stepIndex + 1),
+            ...state.openTour.steps.slice(action.stepIndex + 1),
           ],
         },
+        actions: {
+          ...state.actions,
+          UPDATE_MARKER: {
+            ...state.actions.UPDATE_MARKER,
+            ...actionResult('UPDATE_MARKER.SUCCESS', { id: action.id }),
+          },
+        },
       };
-    case DELETE_MARKER:
+    case UPDATE_MARKER.ERROR:
       return {
         ...state,
-        newTour: {
-          ...state.newTour,
+        actions: {
+          ...state.actions,
+          UPDATE_MARKER: {
+            ...state.actions.UPDATE_MARKER,
+            ...actionResult('UPDATE_MARKER.ERROR', { id: action.id }),
+          },
+        },
+      };
+      // -----------------------------------------------
+
+    // Delete marker reducers --------------------------
+    case DELETE_MARKER.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('DELETE_MARKER.REQUEST'),
+        },
+      };
+    case DELETE_MARKER.SUCCESS:
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
           steps: [
-            ...state.newTour.steps.slice(0, action.stepIndex),
+            ...state.openTour.steps.slice(0, action.stepIndex),
             {
               ...action.step,
               markers: action.step.markers.filter(marker => marker.id !== action.marker.id),
             },
-            ...state.newTour.steps.slice(action.stepIndex + 1),
+            ...state.openTour.steps.slice(action.stepIndex + 1),
           ],
+        },
+        actions: {
+          ...state.actions,
+          ...actionResult('DELETE_MARKER.SUCCESS'),
         },
       };
     case CLOSE_OPEN_TOUR:

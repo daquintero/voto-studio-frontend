@@ -4,7 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { Col, Container, Row, Card, CardBody } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createTour, getTourList } from '../../../../redux/actions/tourActions';
+import { createTour, deleteTour, getTourList } from '../../../../redux/actions/tourActions';
 import { ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import ToursList from './components/ToursList';
 import MapDataPanel from './components/MapDataPanel';
@@ -30,6 +30,8 @@ class ToursPanel extends Component {
   handleOpenTour = (tourId) => {
     this.props.history.push(`/studio/tours/map/${tourId}/`);
   };
+
+  handleDeleteTour = id => this.props.dispatch(deleteTour(id));
 
   handleToggleCreateTourForm = () =>
     this.setState(prevState => ({ createTourForm: !prevState.createTourForm }));
@@ -66,6 +68,7 @@ class ToursPanel extends Component {
                   tourList={this.props.tours.tourList}
                   toursIdCode={this.props.tours.idCode}
                   openTour={this.handleOpenTour}
+                  deleteTour={this.handleDeleteTour}
                   toggleCreateTourForm={this.handleToggleCreateTourForm}
                   createTourForm={this.state.createTourForm}
                   createTour={this.handleCreateTour}

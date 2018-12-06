@@ -10,7 +10,7 @@ script:
 deploy:
   provider: surge
   skip_cleanup: true
-  domain: voto-map-studio.surge.sh
+  domain: voto-studio.surge.sh
   project: ./build/
 on:
   branch: master

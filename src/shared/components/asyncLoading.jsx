@@ -8,7 +8,7 @@ const asyncLoading = elemClass => WrappedComponent => class Test extends Compone
   render() {
     // If data is already in store then load component
     if (this.props.preloaded) return <WrappedComponent {...this.props} />;
-    // If the component has only been initialised
+    // If the component has only been initialised return null
     if (this.props.action.init) return null;
     // Load the loading circle if the it is loading
     if (this.props.action.loading) {

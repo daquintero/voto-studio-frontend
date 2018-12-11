@@ -12,42 +12,17 @@ import {
   UPDATE_MARKER,
   UPDATE_MARKER_POSITION,
   DELETE_MARKER,
+  TOGGLE_PREVIEW_TOUR_MODE,
   CLOSE_OPEN_TOUR,
 } from '../actionCreators/tourActionCreators';
-
-// I have moved large explanatory comment that was here to a Slack post
-
-const actionResult = (action, { id = undefined, error = null } = {}) => {
-  const [actionName, actionState] = id ? [id, action.split('.')[1]] : action.split('.');
-  switch (actionState) {
-    case 'REQUEST':
-      return { [actionName]: { loading: true, loaded: false, init: false } };
-    case 'SUCCESS':
-      return { [actionName]: { loading: false, loaded: true, init: false } };
-    case 'ERROR':
-      return {
-        [actionName]: {
-          loading: false, loaded: false, init: false, error,
-        },
-      };
-    default:
-      return Error('No matching action state provided');
-  }
-};
-
-const initializeActions = (actions) => {
-  const actionsObj = {};
-  for (let i = 0; i < actions.length; i += 1) {
-    Object.assign(actionsObj, { [actions[i]]: { loading: false, loaded: false, init: true } });
-  }
-  return actionsObj;
-};
+import { initializeActions, actionResult } from '../helpers/asyncHelpers';
 
 const initialState = {
   idCode: 'T',
   loadedTourId: -1,
   tourList: {},
   openTour: {},
+  previewTourMode: false,
   mapDataList: {},
   actions: initializeActions([
     'LIST_TOURS',
@@ -552,6 +527,17 @@ export default function (state = initialState, action) {
           ...actionResult('DELETE_MARKER.SUCCESS'),
         },
       };
+      // -----------------------------------------------
+
+    // Preview tour reducer ----------------------------
+    case TOGGLE_PREVIEW_TOUR_MODE:
+      return {
+        ...state,
+        previewTourMode: !state.previewTourMode,
+      };
+      // -----------------------------------------------
+
+    // Close tour reducer ------------------------------
     case CLOSE_OPEN_TOUR:
       return {
         ...state,
@@ -560,6 +546,7 @@ export default function (state = initialState, action) {
           ...initializeActions(['OPEN_TOUR']),
         },
       };
+      // -----------------------------------------------
     default:
       return state;
   }

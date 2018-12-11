@@ -13,6 +13,7 @@ import {
   UPDATE_MARKER,
   UPDATE_MARKER_POSITION,
   DELETE_MARKER,
+  TOGGLE_PREVIEW_TOUR_MODE,
   CLOSE_OPEN_TOUR,
 } from '../actionCreators/tourActionCreators';
 
@@ -251,6 +252,10 @@ export const updateMarkerPosition = (newMarker, newMarkerIndex, step, stepIndex)
       }),
   );
 };
+
+export const togglePreviewTourMode = () => ({
+  type: TOGGLE_PREVIEW_TOUR_MODE,
+});
 
 export const closeOpenTour = () => ({
   type: CLOSE_OPEN_TOUR,

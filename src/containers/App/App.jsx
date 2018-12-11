@@ -9,7 +9,7 @@ import '../../scss/app.scss';
 import Router from './Router';
 import store from './store';
 import ScrollToTop from './ScrollToTop';
-import { AUTHENTICATED_USER } from '../../redux/actions/userActions';
+import { LOGIN_USER } from '../../redux/actionCreators/userActionCreators';
 
 class App extends Component {
   constructor() {
@@ -22,7 +22,9 @@ class App extends Component {
 
   componentDidMount() {
     // Check to see if the user is already logged in
-    if (localStorage.getItem('user')) store.dispatch({ type: AUTHENTICATED_USER });
+    if (localStorage.getItem('userToken')) {
+      store.dispatch({ type: LOGIN_USER.SUCCESS });
+    }
 
     window.addEventListener('load', () => {
       this.setState({ loading: false });
@@ -36,18 +38,19 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <ScrollToTop>
-            {!loaded &&
-            <div className={`load${loading ? '' : ' loaded'}`}>
-              <div className="load__icon-wrap">
-                <svg className="load__icon">
-                  <path fill="#4ce1b6" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
-                </svg>
+            {!loaded ? (
+              <div className={`load${loading ? '' : ' loaded'}`}>
+                <div className="load__icon-wrap">
+                  <svg className="load__icon">
+                    <path fill="#4ce1b6" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+                  </svg>
+                </div>
               </div>
-            </div>
-            }
-            <div>
-              <Router />
-            </div>
+              ) : (
+                <div>
+                  <Router />
+                </div>
+            )}
           </ScrollToTop>
         </BrowserRouter>
       </Provider>

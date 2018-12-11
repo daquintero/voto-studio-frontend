@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import classnames from 'classnames';
 import { ToursProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
 import TourStep from './TourStep';
 import NewTourStep from './NewTourStep';
@@ -10,6 +11,7 @@ import {
   deleteTourStep,
   createTourStep,
   reorderTourSteps,
+  togglePreviewTourMode,
 } from '../../../../../redux/actions/tourActions';
 import addTransitionClasses from '../../../../../shared/utils/addTransitionClasses';
 import Loader from '../../../../../shared/components/Loader';
@@ -19,6 +21,7 @@ class TourPanel extends Component {
     tours: ToursProps.isRequired,
     map: MapProps.isRequired,
     changeToStepViewport: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -79,6 +82,8 @@ class TourPanel extends Component {
     this.props.dispatch(reorderTourSteps(this.props.tours.openTour.id, result));
   };
 
+  handleTogglePreviewTourMode = () => this.props.dispatch(togglePreviewTourMode());
+
   render() {
     const tour = this.props.tours.openTour;
     const tourSteps = () => (
@@ -96,15 +101,23 @@ class TourPanel extends Component {
           createMarker={this.props.createMarker}
         />
       )));
+    const wrapperClasses = classnames({
+      'tour-panel__wrapper': true,
+      'tour-panel__wrapper__hide': this.props.tours.previewTourMode,
+    });
     return (
-      <div className="tour-panel__wrapper" id="tour-panel__wrapper">
+      <div className={wrapperClasses} id="tour-panel__wrapper">
         <div className="tour-panel__content">
           <div className="tour-panel__name__wrapper">
             <h3>
-              {tour.name}{' - '}
-              {tour.steps.length} step{tour.steps.length === 1 ? '' : 's'}
+              {tour.name}
             </h3>
             <p>{tour.description}</p>
+            <i
+              className="fal fa-fw fa-eye tour-panel__tour-preview"
+              onClick={this.handleTogglePreviewTourMode}
+              role="presentation"
+            />
           </div>
           <DragDropContext onDragEnd={this.handleOnDragEnd}>
             <Droppable droppableId="tour-panel">

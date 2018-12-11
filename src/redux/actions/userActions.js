@@ -1,42 +1,47 @@
+import {
+  LOGIN_USER,
+  REGISTER_USER,
+} from '../actionCreators/userActionCreators';
 import userService from '../../services/userService';
 
-export const AUTHENTICATED_USER = 'AUTHENTICATED_USER';
-export const UNAUTHENTICATED_USER = 'UNAUTHENTICATED_USER';
-export const AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR';
-export const LOGOUT_USER = 'LOGOUT_USER';
-
-export function loginUser(values, history) {
-  return async (dispatch) => {
-    try {
-      const response = await userService.login(values);
+export const loginUser = (values, history) => (dispatch) => {
+  dispatch({
+    type: LOGIN_USER.REQUEST,
+  });
+  return userService.post.login(values).then(
+    (response) => {
       dispatch({
-        type: AUTHENTICATED_USER,
+        type: LOGIN_USER.SUCCESS,
+        email: response.data.email,
       });
-      localStorage.setItem('user', response.data.token);
+      localStorage.setItem('userToken', response.data.token);
+      localStorage.setItem('userEmail', response.data.email);
       history.push('/');
-    } catch (error) {
-      dispatch({
-        type: AUTHENTICATION_ERROR,
-        error: 'Invalid email or password',
-      });
-    }
-  };
-}
+    },
+    error => dispatch({
+      type: LOGIN_USER.ERROR,
+      error,
+    }),
+  );
+};
 
-export function registerUser(values, history) {
-  return async (dispatch) => {
-    try {
-      const response = await userService.register(values);
+export const registerUser = (values, history) => (dispatch) => {
+  dispatch({
+    type: REGISTER_USER.REQUEST,
+  });
+  return userService.post.register(values).then(
+    (response) => {
       dispatch({
-        type: AUTHENTICATED_USER,
+        type: REGISTER_USER.SUCCESS,
+        email: response.data.email,
       });
-      localStorage.setItem('user', response.data.token);
+      localStorage.setItem('userToken', response.data.token);
+      localStorage.setItem('userEmail', response.data.email);
       history.push('/');
-    } catch (error) {
-      dispatch({
-        type: AUTHENTICATION_ERROR,
-        error: 'Error registering account. Please try again later.',
-      });
-    }
-  };
-}
+    },
+    error => dispatch({
+      type: REGISTER_USER.ERROR,
+      error,
+    }),
+  );
+};

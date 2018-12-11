@@ -10,6 +10,7 @@ import {
 import { ToursProps, MapProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
 import TourPanel from './components/TourPanel';
+import PreviewPanel from './components/PreviewPanel';
 import MapPopover from './components/MapPopover';
 import asyncLoading from '../../../../shared/components/asyncLoading';
 import addTransitionClasses from '../../../../shared/utils/addTransitionClasses';
@@ -42,8 +43,9 @@ class Map extends Component {
   };
 
   render() {
+    const { tours } = this.props;
     return (
-      <>
+      <div style={{ overflow: 'hidden' }}>
         <FullscreenMap
           handleChangeMapViewport={this.handleChangeMapViewport}
           updateMarkerPosition={this.handleUpdateMarkerPosition}
@@ -54,12 +56,13 @@ class Map extends Component {
           changeToStepViewport={this.handleChangeToStepViewport}
           createMarker={this.handleCreateMarker}
         />
+        <PreviewPanel />
         <MapPopover
-          activeTourStepId={this.props.tours.openTour.activeTourStepId}
-          openTour={this.props.tours.openTour}
+          activeTourStepId={tours.openTour.activeTourStepId}
+          openTour={tours.openTour}
           changeToStepViewport={this.handleChangeToStepViewport}
         />
-      </>
+      </div>
     );
   }
 }

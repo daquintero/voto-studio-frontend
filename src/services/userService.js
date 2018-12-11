@@ -1,19 +1,23 @@
 import axios from 'axios';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
+const userApiUrl = `${baseUrl}/users/api/v1`;
 
 const urls = {
-  login: `${baseUrl}/users/api/v1/login/`,
-  register: `${baseUrl}/users/api/v1/register/`,
+  post: {
+    login: `${userApiUrl}/login/`,
+    register: `${userApiUrl}/register/`,
+  },
 };
 
-const login = values => axios.post(urls.login, { ...values });
-
-const register = values => axios.post(urls.register, { ...values });
+const login = values => axios.post(urls.post.login, { ...values });
+const register = values => axios.post(urls.post.register, { ...values });
 
 const userService = {
-  login,
-  register,
+  post: {
+    login,
+    register,
+  },
 };
 
 export default userService;

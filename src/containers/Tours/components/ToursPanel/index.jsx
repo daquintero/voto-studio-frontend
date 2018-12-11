@@ -1,54 +1,45 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { Col, Container, Row, Card, CardBody } from 'reactstrap';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createTour, deleteTour, getTourList } from '../../../../redux/actions/tourActions';
+import { getTourList } from '../../../../redux/actions/tourActions';
+import { getDataSetList } from '../../../../redux/actions/dataSuiteActions';
 import { ToursProps } from '../../../../shared/prop-types/ReducerProps';
 import ToursList from './components/ToursList';
 import MapDataPanel from './components/MapDataPanel';
 
 class ToursPanel extends Component {
   static propTypes = {
+    auth: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
     tours: ToursProps.isRequired,
-    history: ReactRouterPropTypes.history.isRequired,
+    dataSuite: PropTypes.instanceOf(Object).isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      createTourForm: false,
     };
   }
 
   componentDidMount() {
-    this.props.dispatch(getTourList());
+    const { actions } = this.props.auth;
+    // TODO: Should these reload every time the route is loaded????
+    if (actions.LOGIN_USER.loaded || actions.REGISTER_USER.loaded) {
+      this.props.dispatch(getTourList());
+      this.props.dispatch(getDataSetList());
+    }
   }
 
-  handleOpenTour = (tourId) => {
-    this.props.history.push(`/studio/tours/map/${tourId}/`);
-  };
-
-  handleDeleteTour = id => this.props.dispatch(deleteTour(id));
-
-  handleToggleCreateTourForm = () =>
-    this.setState(prevState => ({ createTourForm: !prevState.createTourForm }));
-
-  handleCreateTour = (newTourInfo) => {
-    this.props.dispatch(createTour(newTourInfo));
-    this.setState({ createTourForm: false });
-  };
-
   render() {
+    const { tours, dataSuite } = this.props;
     return (
       <Container className="mt-4">
         <Row>
           <Col md={12}>
             <h3 className="page-title">Tour Panel</h3>
             <h3 className="page-subhead subhead">
-              This is where you can create new tours, manage existing tours, upload
+              This is where you can create new tours, manage existing tours, upload or
               manage map data sets and much more
             </h3>
           </Col>
@@ -63,16 +54,7 @@ class ToursPanel extends Component {
                     Here are the tours you have created, press the edit button to edit a tour in the Map Studio
                   </h5>
                 </div>
-                <ToursList
-                  action={this.props.tours.actions.LIST_TOURS}
-                  tourList={this.props.tours.tourList}
-                  toursIdCode={this.props.tours.idCode}
-                  openTour={this.handleOpenTour}
-                  deleteTour={this.handleDeleteTour}
-                  toggleCreateTourForm={this.handleToggleCreateTourForm}
-                  createTourForm={this.state.createTourForm}
-                  createTour={this.handleCreateTour}
-                />
+                <ToursList action={tours.actions.LIST_TOURS} />
               </CardBody>
             </Card>
           </Col>
@@ -83,10 +65,7 @@ class ToursPanel extends Component {
                   <h5 className="bold-text">Map Data Sets</h5>
                   <h5 className="subhead">Here are the data sets that can be used in the Map Studio</h5>
                 </div>
-                <MapDataPanel
-                  action={this.props.tours.actions.LIST_DATA}
-                  tours={this.props.tours}
-                />
+                <MapDataPanel action={dataSuite.actions.LIST_DATA_SETS} />
               </CardBody>
             </Card>
           </Col>
@@ -96,6 +75,8 @@ class ToursPanel extends Component {
   }
 }
 
-export default withRouter(connect(state => ({
+export default connect(state => ({
   tours: state.studio.tours,
-}))(ToursPanel));
+  dataSuite: state.studio.dataSuite,
+  auth: state.auth,
+}))(ToursPanel);

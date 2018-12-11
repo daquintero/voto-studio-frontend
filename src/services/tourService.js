@@ -26,7 +26,7 @@ const urls = {
 
 // Add auth headers to ALL api requests
 const api = axios.create({
-  headers: { Authorization: `Token ${localStorage.getItem('user')}` },
+  headers: { Authorization: `Token ${localStorage.getItem('userToken')}` },
 });
 
 // Tour GET requests
@@ -52,8 +52,8 @@ const tourSchema = new schema.Entity('tour', {
   steps: [stepSchema],
 });
 
-const normaliseTours = tours => normalize(tours, [tourSchema]);
-const normaliseTour = tour => normalize(tour, tourSchema);
+const normalizeTours = tours => normalize(tours, [tourSchema]);
+const normalizeTour = tour => normalize(tour, tourSchema);
 
 const tourService = {
   get: {
@@ -73,9 +73,9 @@ const tourService = {
     deleteTour,
     deleteStep,
   },
-  normalise: {
-    tours: normaliseTours,
-    tour: normaliseTour,
+  normalize: {
+    tours: normalizeTours,
+    tour: normalizeTour,
   },
 };
 

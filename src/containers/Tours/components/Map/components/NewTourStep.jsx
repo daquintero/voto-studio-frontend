@@ -16,6 +16,10 @@ class NewTourStep extends Component {
       transitionDuration: '2000',
       transitionEasingName: 'd3.easeCubic',
       transitionInterpolatorName: 'FlyToInterpolator',
+      formErrors: {
+        name: false,
+        text: false,
+      },
     };
   }
 
@@ -25,6 +29,9 @@ class NewTourStep extends Component {
   };
 
   onSubmit = () => {
+    if (!this.state.name) this.setState(prevState => ({ formErrors: { ...prevState.formErrors, name: true } }));
+    if (!this.state.text) this.setState(prevState => ({ formErrors: { ...prevState.formErrors, text: true } }));
+    if (!this.state.name || !this.state.text) return;
     this.props.createTourStep(this.state);
     this.setState({
       name: '',
@@ -32,10 +39,15 @@ class NewTourStep extends Component {
       transitionDuration: '2000',
       transitionEasing: 'd3.easeCubic',
       transitionInterpolator: 'FlyToInterpolator',
+      formErrors: {
+        name: false,
+        text: false,
+      },
     });
   };
 
   render() {
+    const { formErrors } = this.state;
     // Add the option to hide and show the new step block
     return (
       <div className="new-tour-step__wrapper">
@@ -44,7 +56,11 @@ class NewTourStep extends Component {
         <div>
           <Form>
             <FormGroup>
-              <Label for="name">Step Name</Label>
+              <Label for="name">Step Name
+                {formErrors.name && (
+                  <span className="new-tour-step__warning-label ml-2">&lt;This field is required&gt;</span>
+                )}
+              </Label>
               <Input
                 type="text"
                 name="name"
@@ -54,7 +70,11 @@ class NewTourStep extends Component {
               />
             </FormGroup>
             <FormGroup>
-              <Label for="text">Text</Label>
+              <Label for="name">Text
+                {formErrors.text && (
+                  <span className="new-tour-step__warning-label ml-2">&lt;This field is required&gt;</span>
+                )}
+              </Label>
               <Input
                 type="textarea"
                 name="text"

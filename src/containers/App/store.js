@@ -8,13 +8,17 @@ import {
   tourReducer,
   userReducer,
   candidateReducer,
+  dataSuiteReducer,
 } from '../../redux/reducers/index';
-import { LOGOUT_USER } from '../../redux/actions/userActions';
+import { LOGOUT_USER } from '../../redux/actionCreators/userActionCreators';
 
 const studioReducer = combineReducers({
   tours: tourReducer,
   candidates: candidateReducer,
+  dataSuite: dataSuiteReducer,
 });
+
+// TODO: Big restructuring needed here...
 
 const appReducer = combineReducers({
   form: reduxFormReducer, // mounted under "form",

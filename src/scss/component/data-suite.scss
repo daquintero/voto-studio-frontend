@@ -1,0 +1,11 @@
+.data-suite {
+  &__data-panel__wrapper {
+    max-height: 40vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  &__editor__table {
+    height: 100vh;
+  }
+}
+

@@ -3,6 +3,9 @@ import {
   LIST_DATA_SETS,
   CREATE_DATA_SET,
   GET_DATA_SET_DETAIL,
+  HIGHLIGHT_FEATURE,
+  OPEN_FEATURE,
+  GET_FEATURE_DETAIL,
 } from '../actionCreators/dataSuiteActionCreators';
 
 export const getDataSetList = () => (dispatch) => {
@@ -58,3 +61,31 @@ export const getDataSetDetail = dataSetId => (dispatch) => {
       }),
   );
 };
+
+export const getFeatureDetail = featureId => (dispatch) => {
+  dispatch({
+    type: GET_FEATURE_DETAIL.REQUEST,
+  });
+  return dataSuiteService.get.featureDetail(featureId).then(
+    response =>
+      dispatch({
+        type: GET_FEATURE_DETAIL.SUCCESS,
+        feature: response.data.feature,
+      }),
+    error =>
+      dispatch({
+        type: GET_FEATURE_DETAIL.ERROR,
+        error,
+      }),
+  );
+};
+
+export const highlightFeature = featureId => ({
+  type: HIGHLIGHT_FEATURE,
+  featureId,
+});
+
+export const openFeature = featureId => ({
+  type: OPEN_FEATURE,
+  featureId,
+});

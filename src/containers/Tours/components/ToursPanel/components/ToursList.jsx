@@ -52,7 +52,7 @@ class ToursList extends Component {
   render() {
     const { tours, reset } = this.props;
     return (
-      <>
+      <div className="tours-panel__tour-list__wrapper">
         <Table responsive hover>
           <thead>
             <tr>
@@ -141,7 +141,7 @@ class ToursList extends Component {
             </ButtonToolbar>
           </form>
         )}
-      </>
+      </div>
     );
   }
 }

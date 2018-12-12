@@ -7,6 +7,7 @@ const urls = {
   get: {
     list: `${dataSuiteApiUrl}/list/`,
     detail: `${dataSuiteApiUrl}/detail/`,
+    featureDetail: `${dataSuiteApiUrl}/feature_detail/`,
   },
   post: {
     createDataSet: `${dataSuiteApiUrl}/create_data_set/`,
@@ -20,23 +21,24 @@ const api = axios.create({
   headers: { Authorization: `Token ${localStorage.getItem('userToken')}` },
 });
 
+const fileUploadHeaders = {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+};
+
 // DataSuite GET requests
 const list = () => api.get(urls.get.list);
 const detail = dataSetId => api.get(`${urls.get.detail}${dataSetId}/`);
+const featureDetail = featureId => api.get(`${urls.get.featureDetail}${featureId}/`);
 // DataSuite POST requests
-const createDataSet = newDataSet => (
-  api.post(urls.post.createDataSet, { newDataSet }, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      'Content-Disposition': newDataSet.file.name,
-    },
-  })
-);
+const createDataSet = formData => (api.post(urls.post.createDataSet, formData, fileUploadHeaders));
 
 const tourService = {
   get: {
     list,
     detail,
+    featureDetail,
   },
   post: {
     createDataSet,

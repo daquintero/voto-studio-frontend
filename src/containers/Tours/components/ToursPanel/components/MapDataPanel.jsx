@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactRoutePropTypes from 'react-router-prop-types';
 import { Table, Badge, Button, ButtonToolbar } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
@@ -16,6 +17,8 @@ class MapDataPanel extends Component {
     form: PropTypes.instanceOf(Object).isRequired,
     reset: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    history: ReactRoutePropTypes.history.isRequired,
   };
 
   constructor(props) {
@@ -25,6 +28,7 @@ class MapDataPanel extends Component {
       formErrors: {
         name: false,
         description: false,
+        file: false,
       },
     };
   }
@@ -32,26 +36,48 @@ class MapDataPanel extends Component {
   handleToggleCreateDataSetForm = () =>
     this.setState(prevState => ({ createDataSetForm: !prevState.createDataSetForm }));
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { newDataSet } = this.props.form;
-    if (!newDataSet.values) return;
-    if (!newDataSet.values.name) this.setState(prevState => ({ formErrors: { ...prevState.formErrors, name: true } }));
-    if (!newDataSet.values.description) {
-      this.setState(prevState => ({ formErrors: { ...prevState.formErrors, description: true } }));
-    }
-    if (!newDataSet.values.name || !newDataSet.values.description) return;
-    this.props.dispatch(createDataSet(newDataSet.values));
+  handleFormSubmit = (formProps) => {
+    // Validate the form data
+    const { values } = this.props.form.newDataSet;
+    const formErrors = {
+      name: false,
+      description: false,
+      file: false,
+    };
+    if (!values) return;
+    if (!values.name) formErrors.name = true;
+    if (!values.description) formErrors.description = true;
+    if (!values.buildNew && !values.data) formErrors.file = true;
+
+    this.setState({ formErrors });
+    if (formErrors.name || formErrors.description || (!values.buildNew && formErrors.file)) return;
+
+
+    // Build the formData object and dispatch action
+    const formData = new FormData();
+    if (!formProps.buildNew) formData.append('file', formProps.data.file);
+    formData.append('buildNew', formProps.buildNew.toString());
+    formData.append('description', formProps.description);
+    formData.append('name', formProps.name);
+    this.props.dispatch(createDataSet(formData));
     this.setState({ createDataSetForm: false });
   };
 
+  handleCancel = () => {
+    this.props.reset();
+    this.setState({ createDataSetForm: false });
+  };
+
+  handleEditDataSet = dataSetId => this.props.history.push(`/studio/tours/data/${dataSetId}/`);
+
   render() {
-    const { dataSuite, reset, form } = this.props;
+    const { dataSuite, form, handleSubmit } = this.props;
+    const { formErrors } = this.state;
     return (
       // There should be a refresh button in the top right as another user may upload a new
       // data set whilst one user is waiting and they shouldn't have to refresh the whole page.
       // Potential use case for django channels... collaborative Voto Studio?!?!?!?
-      <>
+      <div className="tours-panel__data-set-list__wrapper">
         <Table responsive hover>
           <thead>
             <tr>
@@ -81,7 +107,7 @@ class MapDataPanel extends Component {
                   <i
                     className="fal fa-pen tours-panel__edit"
                     role="presentation"
-                    // onClick={() => this.props.editTour(tour.id)}
+                    onClick={() => this.handleEditDataSet(set.id)}
                   />
                 </td>
               </tr>
@@ -99,9 +125,16 @@ class MapDataPanel extends Component {
           Upload new data set
           </span>
         ) : (
-          <form className="form form--horizontal" onSubmit={this.handleSubmit}>
+          <form
+            className="form form--horizontal"
+            onSubmit={handleSubmit(this.handleFormSubmit)}
+            id="new-data-set-form"
+            encType="multipart/form-data"
+          >
             <div className="form__form-group">
-              <span className="form__form-group-label">Name</span>
+              <span className="form__form-group-label">
+                Name{formErrors.name && <><br /><span className="text-danger">required field</span></>}
+              </span>
               <div className="form__form-group-field">
                 <Field
                   name="name"
@@ -112,7 +145,9 @@ class MapDataPanel extends Component {
               </div>
             </div>
             <div className="form__form-group">
-              <span className="form__form-group-label">Description</span>
+              <span className="form__form-group-label">
+                Description{formErrors.description && <><br /><span className="text-danger">required field</span></>}
+              </span>
               <div className="form__form-group-field">
                 <Field
                   name="description"
@@ -122,10 +157,10 @@ class MapDataPanel extends Component {
                 />
               </div>
             </div>
-            {(form.newDataSet && !form.newDataSet.values.buildNew) && (
+            {form.newDataSet && (form.newDataSet.values && (!form.newDataSet.values.buildNew && (
               <div className="form__form-group">
                 <span className="form__form-group-label">
-                  Data file
+                  Data file{formErrors.file && <><br /><span className="text-danger">file required</span></>}
                 </span>
                 <div className="form__form-group-field">
                   <Field
@@ -134,7 +169,7 @@ class MapDataPanel extends Component {
                     component={renderFileInputField}
                   />
                 </div>
-              </div>)}
+              </div>)))}
             <div className="form__form-group">
               <div className="form__form-group-field">
                 <Field
@@ -146,13 +181,13 @@ class MapDataPanel extends Component {
             </div>
             <ButtonToolbar className="form__button-toolbar">
               <Button color="primary" type="submit">Submit</Button>
-              <Button type="button" onClick={reset}>
+              <Button type="button" onClick={this.handleCancel}>
                 Cancel
               </Button>
             </ButtonToolbar>
           </form>
         )}
-      </>
+      </div>
     );
   }
 }

@@ -37,9 +37,7 @@ class FullscreenMap extends Component {
     window.removeEventListener('resize', this.resizeViewport);
   }
 
-  onViewportChange = (viewport) => {
-    this.props.handleChangeMapViewport(viewport);
-  };
+  onViewportChange = viewport => this.props.handleChangeMapViewport(viewport);
 
   onMarkerChange = (e) => {
     e.persist();
@@ -149,7 +147,7 @@ class FullscreenMap extends Component {
       wireframe: true,
       getLineColor: [100, 100, 100],
       getFillColor: () => [0, 0, 0],
-        getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
+      getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
       updateTriggers: {
         getFillColor: () => [0, 0, 0],
           getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line

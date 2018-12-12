@@ -13,12 +13,12 @@ import Register from '../Account/Register';
 
 // These routes are all the routes that include the top and side bar
 const wrappedRoutes = () => (
-  <div>
+  <div>W
     <Layout />
     <div className="container__wrap">
       <Route exact path="/studio/tours/" component={Tours} />
       <Route exact path="/studio/tours/map/:tourId/" component={MapWrapper} />
-      <Route exact path="/studio/tours/data-suite/:dataSetId/" component={DataSuiteWrapper} />
+      <Route exact path="/studio/tours/data/:dataSetId/" component={DataSuiteWrapper} />
       <Route exact path="/account/profile/" component={Profile} />
     </div>
   </div>

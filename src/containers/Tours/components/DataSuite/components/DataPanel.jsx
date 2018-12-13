@@ -14,16 +14,16 @@ const DataPanel = ({ dataSuite, highlightFeature, editFeature }) => (
         </tr>
       </thead>
       <tbody>
-        {dataSuite.openDataSet.data.features.map(feature => (
+        {dataSuite.openDataSet.data.features.map((feature, index) => (
           <tr key={feature.id} onMouseEnter={() => highlightFeature(feature.id)}>
             <td>{feature.id}</td>
             <td>{feature.geometry.type}</td>
-            <td>{feature.properties.length}</td>
+            <td>{Object.keys(feature.properties).length}</td>
             <td>
               <i
                 className="fal fa-pen tours-panel__edit"
                 role="presentation"
-                onClick={() => editFeature(feature.id)}
+                onClick={() => editFeature(feature.id, index)}
               />
             </td>
           </tr>

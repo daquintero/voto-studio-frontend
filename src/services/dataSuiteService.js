@@ -11,6 +11,7 @@ const urls = {
   },
   post: {
     createDataSet: `${dataSuiteApiUrl}/create_data_set/`,
+    updateFeatureProperties: `${dataSuiteApiUrl}/update_feature_properties/`,
   },
   delete: {
   },
@@ -32,7 +33,9 @@ const list = () => api.get(urls.get.list);
 const detail = dataSetId => api.get(`${urls.get.detail}${dataSetId}/`);
 const featureDetail = featureId => api.get(`${urls.get.featureDetail}${featureId}/`);
 // DataSuite POST requests
-const createDataSet = formData => (api.post(urls.post.createDataSet, formData, fileUploadHeaders));
+const createDataSet = formData => api.post(urls.post.createDataSet, formData, fileUploadHeaders);
+const updateFeatureProperties = (openFeatureId, newFeatureProperties) =>
+  api.post(urls.post.updateFeatureProperties, { openFeatureId, newFeatureProperties });
 
 const tourService = {
   get: {
@@ -42,6 +45,7 @@ const tourService = {
   },
   post: {
     createDataSet,
+    updateFeatureProperties,
   },
   delete: {
   },

@@ -4,8 +4,9 @@ import {
   CREATE_DATA_SET,
   GET_DATA_SET_DETAIL,
   HIGHLIGHT_FEATURE,
-  OPEN_FEATURE,
+  // OPEN_FEATURE,
   GET_FEATURE_DETAIL,
+  UPDATE_FEATURE_PROPERTIES,
 } from '../actionCreators/dataSuiteActionCreators';
 
 export const getDataSetList = () => (dispatch) => {
@@ -62,7 +63,7 @@ export const getDataSetDetail = dataSetId => (dispatch) => {
   );
 };
 
-export const getFeatureDetail = featureId => (dispatch) => {
+export const getFeatureDetail = (featureId, index) => (dispatch) => {
   dispatch({
     type: GET_FEATURE_DETAIL.REQUEST,
   });
@@ -70,7 +71,7 @@ export const getFeatureDetail = featureId => (dispatch) => {
     response =>
       dispatch({
         type: GET_FEATURE_DETAIL.SUCCESS,
-        feature: response.data.feature,
+        feature: Object.assign(response.data.feature, { index }),
       }),
     error =>
       dispatch({
@@ -85,7 +86,26 @@ export const highlightFeature = featureId => ({
   featureId,
 });
 
-export const openFeature = featureId => ({
-  type: OPEN_FEATURE,
-  featureId,
-});
+// export const openFeature = featureId => ({
+//   type: OPEN_FEATURE,
+//   featureId,
+// });
+// TODO: Should it be new or open feature?
+export const updateFeatureProperties = (newFeature, newFeatureProperties) => (dispatch) => {
+  dispatch({
+    type: UPDATE_FEATURE_PROPERTIES.REQUEST,
+  });
+  return dataSuiteService.post.updateFeatureProperties(newFeature.id, newFeatureProperties).then(
+    response =>
+      dispatch({
+        type: UPDATE_FEATURE_PROPERTIES.SUCCESS,
+        newFeatureProperties: response.data.new_feature_properties,
+        newFeature,
+      }),
+    error =>
+      dispatch({
+        type: UPDATE_FEATURE_PROPERTIES.ERROR,
+        error,
+      }),
+  );
+};

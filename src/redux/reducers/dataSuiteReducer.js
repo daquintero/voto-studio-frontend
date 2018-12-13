@@ -5,6 +5,7 @@ import {
   HIGHLIGHT_FEATURE,
   OPEN_FEATURE,
   GET_FEATURE_DETAIL,
+  UPDATE_FEATURE_PROPERTIES,
 } from '../actionCreators/dataSuiteActionCreators';
 import { initializeActions, actionResult } from '../helpers/asyncHelpers';
 
@@ -16,6 +17,7 @@ const initialState = {
     'CREATE_DATA_SET',
     'GET_DATA_SET_DETAIL',
     'GET_FEATURE_DETAIL',
+    'UPDATE_FEATURE',
   ]),
 };
 
@@ -151,8 +153,6 @@ export default (state = initialState, action) => {
         ...state,
         openDataSet: {
           ...state.openDataSet,
-          // TODO: This next line just triggers a change that deck looks for and doesn't change state, is this correct?
-          data: { ...state.openDataSet.data },
           highlightedFeatureId: action.featureId,
         },
       };
@@ -164,8 +164,6 @@ export default (state = initialState, action) => {
         ...state,
         openDataSet: {
           ...state.openDataSet,
-          // TODO: This next line just triggers a change that deck looks for and doesn't change state, is this correct?
-          data: { ...state.openDataSet.data },
           openFeature: {
             ...state.openDataSet.data.features.filter(f => f.id === action.featureId)[0],
             editing: true,
@@ -173,6 +171,51 @@ export default (state = initialState, action) => {
         },
       };
       // -----------------------------------------------
+
+    // Get data set detail reducers --------------------
+    case UPDATE_FEATURE_PROPERTIES.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_FEATURE_PROPERTIES.REQUEST'),
+        },
+      };
+    case UPDATE_FEATURE_PROPERTIES.SUCCESS:
+      return {
+        ...state,
+        openDataSet: {
+          ...state.openDataSet,
+          data: {
+            ...state.openDataSet.data,
+            features: [
+              ...state.openDataSet.data.features.slice(0, action.newFeature.index),
+              {
+                ...action.newFeature,
+                properties: action.newFeatureProperties,
+              },
+              ...state.openDataSet.data.features.slice(action.newFeature.index + 1),
+            ],
+          },
+          openFeature: {
+            ...state.openDataSet.openFeature,
+            properties: action.newFeatureProperties,
+          },
+        },
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_FEATURE_PROPERTIES.SUCCESS'),
+        },
+      };
+    case UPDATE_FEATURE_PROPERTIES.ERROR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_FEATURE_PROPERTIES.ERROR', { error: action.error }),
+        },
+      };
+    // -----------------------------------------------
     default:
       return state;
   }

@@ -48,7 +48,7 @@ export default class EditableTable extends PureComponent {
     this.setState({ rows });
   };
 
-  rowGetter = i => this.state.rows[i];
+  rowGetter = i => this.props.rows[i];
 
   render() {
     return (

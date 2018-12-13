@@ -1,11 +1,41 @@
+@mixin scroll {
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(180, 180, 180, 1);
+    border: 1px solid rgba(180, 180, 180, 1);
+  }
+}
+
 .data-suite {
   &__data-panel__wrapper {
     max-height: 40vh;
     overflow-y: auto;
     overflow-x: hidden;
   }
+  &__data-panel__wrapper {
+    @include scroll;
+  }
+  //&__editor__wrapper {
+  //  height: 100vh;
+  //}
   &__editor__table {
-    height: 100vh;
+    height: 100%;
+  }
+  &__map-preview__wrapper {
+    position: sticky;
+    top: 70px;
+    align-self: flex-start;
   }
 }
-
+//
+//.react-grid-Canvas {
+//  min-height: 100vh;
+//  overflow: hidden;
+//}

@@ -7,7 +7,7 @@ import asyncLoading from '../../../../shared/components/asyncLoading';
 import DataPanel from './components/DataPanel';
 import MapPreview from './components/MapPreview';
 import Editor from './components/Editor';
-import { highlightFeature, getFeatureDetail } from '../../../../redux/actions/dataSuiteActions';
+import { getFeatureDetail, highlightFeature } from '../../../../redux/actions/dataSuiteActions';
 
 class DataSuite extends Component {
   static propTypes = {
@@ -15,9 +15,7 @@ class DataSuite extends Component {
     dataSuite: PropTypes.instanceOf(Object).isRequired,
   };
 
-  componentWillUnmount() {}
-
-  handleEditFeature = featureId => this.props.dispatch(getFeatureDetail(featureId));
+  handleEditFeature = (featureId, index) => this.props.dispatch(getFeatureDetail(featureId, index));
 
   handleHighlightFeature = featureId => this.props.dispatch(highlightFeature(featureId));
 
@@ -33,7 +31,7 @@ class DataSuite extends Component {
           </Col>
         </Row>
         <Row>
-          <Col md={12} lg={12} xl={4}>
+          <Col md={12} lg={12} xl={5}>
             <Card>
               <CardBody>
                 <div className="card__title">
@@ -50,7 +48,7 @@ class DataSuite extends Component {
               </CardBody>
             </Card>
           </Col>
-          <Col md={12} lg={12} xl={8}>
+          <Col xl={7} className="data-suite__map-preview__wrapper">
             <Card>
               <CardBody>
                 <div className="card__title">
@@ -61,9 +59,7 @@ class DataSuite extends Component {
               </CardBody>
             </Card>
           </Col>
-        </Row>
-        <Row>
-          <Col xl={12}>
+          <Col xl={5}>
             <Card>
               <CardBody>
                 <div className="card__title">
@@ -72,7 +68,11 @@ class DataSuite extends Component {
                     Here you can edit the data set
                   </h5>
                 </div>
-                <Editor />
+                <Editor
+                  action={dataSuite.actions.GET_FEATURE_DETAIL}
+                  initialValues={dataSuite.openDataSet.openFeature.properties}
+                  enableReinitialize
+                />
               </CardBody>
             </Card>
           </Col>

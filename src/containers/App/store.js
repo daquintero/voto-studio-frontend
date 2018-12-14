@@ -9,6 +9,7 @@ import {
   userReducer,
   candidateReducer,
   dataSuiteReducer,
+  changesReducer,
 } from '../../redux/reducers/index';
 import { LOGOUT_USER } from '../../redux/actionCreators/userActionCreators';
 
@@ -16,6 +17,7 @@ const studioReducer = combineReducers({
   tours: tourReducer,
   candidates: candidateReducer,
   dataSuite: dataSuiteReducer,
+  changes: changesReducer,
 });
 
 // TODO: Big restructuring needed here...

@@ -23,7 +23,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    // List data sets reducers ---------------------------
+    // List data sets reducers -------------------------
     case LIST_DATA_SETS.REQUEST:
       return {
         ...state,
@@ -51,7 +51,7 @@ export default (state = initialState, action) => {
       };
       // -----------------------------------------------
 
-    // List data sets reducers ---------------------------
+    // List data sets reducers -------------------------
     case CREATE_DATA_SET.REQUEST:
       return {
         ...state,

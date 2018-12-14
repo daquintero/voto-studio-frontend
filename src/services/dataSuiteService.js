@@ -37,7 +37,7 @@ const createDataSet = formData => api.post(urls.post.createDataSet, formData, fi
 const updateFeatureProperties = (openFeatureId, newFeatureProperties) =>
   api.post(urls.post.updateFeatureProperties, { openFeatureId, newFeatureProperties });
 
-const tourService = {
+const dataSuiteService = {
   get: {
     list,
     detail,
@@ -51,4 +51,4 @@ const tourService = {
   },
 };
 
-export default tourService;
+export default dataSuiteService;

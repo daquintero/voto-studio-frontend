@@ -7,6 +7,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Tours from '../Tours';
 import MapWrapper from '../Tours/components/Map/MapWrapper';
 import DataSuiteWrapper from '../Tours/components/DataSuite/DataSuiteWrapper';
+import Changes from '../Changes';
 import Profile from '../Account/Profile/index';
 import Login from '../Account/Login';
 import Register from '../Account/Register';
@@ -19,6 +20,7 @@ const wrappedRoutes = () => (
       <Route exact path="/studio/tours/" component={Tours} />
       <Route exact path="/studio/tours/map/:tourId/" component={MapWrapper} />
       <Route exact path="/studio/tours/data/:dataSetId/" component={DataSuiteWrapper} />
+      <Route exact path="/studio/changes/" component={Changes} />
       <Route exact path="/account/profile/" component={Profile} />
     </div>
   </div>

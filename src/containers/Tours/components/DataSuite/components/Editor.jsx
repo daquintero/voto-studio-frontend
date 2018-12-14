@@ -40,7 +40,7 @@ class Editor extends Component {
     e.preventDefault();
     const { dispatch, form, dataSuite } = this.props;
     const { openFeature } = dataSuite.openDataSet;
-    dispatch(updateFeatureProperties(openFeature.id, form.openFeature.values));
+    dispatch(updateFeatureProperties(openFeature, form.openFeature.values));
   };
 
   render() {

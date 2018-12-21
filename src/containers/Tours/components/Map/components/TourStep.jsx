@@ -8,6 +8,7 @@ import { TourProps } from '../../../../../shared/prop-types/ReducerProps';
 import Loader from '../../../../../shared/components/Loader';
 import {
   createMarker,
+  updateTourStepDataSet,
 } from '../../../../../redux/actions/tourActions';
 
 class TourStep extends Component {
@@ -26,15 +27,17 @@ class TourStep extends Component {
     super(props);
     // I am using props in the constructor here only to set default values. The component
     // does NOT depend on changes in these props.
+    const { tourStep } = this.props;
     this.state = {
       collapse: false,
       tooltip: false,
       updatingTourStep: false,
-      name: this.props.tourStep.name,
-      text: this.props.tourStep.text,
-      transitionDuration: this.props.tourStep.viewport.transitionDuration,
-      transitionInterpolatorName: this.props.tourStep.viewport.transitionInterpolatorName,
-      transitionEasingName: this.props.tourStep.viewport.transitionInterpolatorName,
+      name: tourStep.name,
+      text: tourStep.text,
+      transitionDuration: tourStep.viewport.transitionDuration,
+      transitionInterpolatorName: tourStep.viewport.transitionInterpolatorName,
+      transitionEasingName: tourStep.viewport.transitionInterpolatorName,
+      dataSetId: tourStep.data_set_id,
     };
   }
 
@@ -45,6 +48,15 @@ class TourStep extends Component {
       return;
     }
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onChangeDataSet = (e) => {
+    e.persist();
+    console.log(e);
+    const { tourStep, index } = this.props;
+    const { id } = e.target.selectedOptions[0].dataset;
+    console.log(e.target.dataset);
+    this.props.dispatch(updateTourStepDataSet(id, tourStep.id, index));
   };
 
   toggleTooltip = () => this.setState(prevState => ({ tooltip: !prevState.tooltip }));
@@ -95,6 +107,10 @@ class TourStep extends Component {
       'mr-2': true,
       'tour-step__delete__loading': loading,
     });
+    let dataSetSelectOption;
+    if (tourStep.data_set_id !== -1) {
+      [dataSetSelectOption] = tours.openTour.data_set_select_options.filter(o => o.id === tourStep.data_set_id);
+    }
     return (
       <Draggable draggableId={this.props.tourStep.id.toString()} index={index}>
         {provided => (
@@ -185,6 +201,20 @@ class TourStep extends Component {
                       value={this.state.transitionEasingName}
                     >
                       <option>d3.cubicEasing</option>
+                    </Input>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="dataSet">Data Set</Label>
+                    <Input
+                      type="select"
+                      name="dataSet"
+                      id="dataSet"
+                      onChange={e => this.onChangeDataSet(e)}
+                      value={dataSetSelectOption}
+                    >
+                      {tours.openTour.data_set_select_options.map(option => (
+                        <option data-id={option.id}>{option.name}</option>
+                      ))}
                     </Input>
                   </FormGroup>
                 </>

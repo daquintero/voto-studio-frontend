@@ -14,6 +14,7 @@ const urls = {
     updateTour: `${tourApiUrl}/update_tour/`,
     createStep: `${tourApiUrl}/create_step/`,
     updateStep: `${tourApiUrl}/update_step/`,
+    updateStepDataSet: `${tourApiUrl}/update_step_data_set/`,
     reorderTourSteps: `${tourApiUrl}/reorder_tour_steps/`,
     createMarker: `${tourApiUrl}/create_marker/`,
     updateMarker: `${tourApiUrl}/update_marker/`,
@@ -37,6 +38,7 @@ const createTour = tour => api.post(urls.post.createTour, { tour });
 const updateTour = tour => api.post(urls.post.updateTour, { tour });
 const createStep = (step, tourId) => api.post(urls.post.createStep, { step, tourId });
 const updateStep = step => api.post(urls.post.updateStep, { step });
+const updateStepDataSet = (dataSetId, stepId) => api.post(urls.post.updateStepDataSet, { dataSetId, stepId });
 const reorderTourSteps = (tourId, result) => api.post(urls.post.reorderTourSteps, { tourId, result });
 const createMarker = (newMarker, stepId) => api.post(urls.post.createMarker, { newMarker, stepId });
 const updateMarker = newMarker => api.post(urls.post.updateMarker, { newMarker });
@@ -65,6 +67,7 @@ const tourService = {
     updateTour,
     createStep,
     updateStep,
+    updateStepDataSet,
     reorderTourSteps,
     createMarker,
     updateMarker,

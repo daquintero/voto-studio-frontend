@@ -6,6 +6,7 @@ import {
   CREATE_TOUR_STEP,
   DELETE_TOUR_STEP,
   UPDATE_TOUR_STEP,
+  UPDATE_TOUR_STEP_DATA_SET,
   REORDER_TOUR_STEPS,
   CHANGE_ACTIVE_TOUR_STEP,
   CREATE_MARKER,
@@ -32,6 +33,7 @@ const initialState = {
     'CREATE_TOUR_STEP',
     'DELETE_TOUR_STEP',
     'UPDATE_TOUR_STEP',
+    'UPDATE_TOUR_STEP_DATA_SET',
     'REORDER_TOUR_STEPS',
     'CHANGE_ACTIVE_TOUR_STEP',
     'CREATE_MARKER',
@@ -299,6 +301,53 @@ export default function (state = initialState, action) {
           UPDATE_TOUR_STEP: {
             ...state.actions.UPDATE_TOUR_STEP,
             ...actionResult('UPDATE_TOUR_STEP.ERROR', { id: action.id, error: action.error }),
+          },
+        },
+      };
+      // -----------------------------------------------
+
+    // Update tour step reducers -----------------------
+    case UPDATE_TOUR_STEP_DATA_SET.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          UPDATE_TOUR_STEP: {
+            ...state.actions.UPDATE_TOUR_STEP,
+            ...actionResult('UPDATE_TOUR_STEP_DATA_SET.REQUEST', { id: action.id }),
+          },
+        },
+      };
+    case UPDATE_TOUR_STEP_DATA_SET.SUCCESS:
+      return {
+        ...state,
+        openTour: {
+          ...state.openTour,
+          steps: [
+            ...state.openTour.steps.slice(0, action.index),
+            {
+              ...state.openTour.steps.filter(s => s.id === action.updatedStepId)[0],
+              dataSetId: action.newDataSetId,
+            },
+            ...state.openTour.steps.slice(action.index + 1),
+          ],
+        },
+        actions: {
+          ...state.actions,
+          UPDATE_TOUR_STEP: {
+            ...state.actions.UPDATE_TOUR_STEP,
+            ...actionResult('UPDATE_TOUR_STEP_DATA_SET.SUCCESS', { id: action.id }),
+          },
+        },
+      };
+    case UPDATE_TOUR_STEP_DATA_SET.ERROR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          UPDATE_TOUR_STEP: {
+            ...state.actions.UPDATE_TOUR_STEP,
+            ...actionResult('UPDATE_TOUR_STEP_DATA_SET.ERROR', { id: action.id, error: action.error }),
           },
         },
       };

@@ -18,6 +18,7 @@ class Changes extends PureComponent { // eslint-disable-line
   handleCommitChanges = (e) => {
     e.preventDefault();
     this.props.dispatch(commitChange(e.target.dataset.selected));
+    // TODO: open an alert here
   };
 
   render() {

@@ -13,7 +13,7 @@ import {
   reorderTourSteps,
   togglePreviewTourMode,
 } from '../../../../../redux/actions/tourActions';
-import addTransitionClasses from '../../../../../shared/utils/addTransitionClasses';
+// import addTransitionClasses from '../../../../../shared/utils/addTransitionClasses';
 import Loader from '../../../../../shared/components/Loader';
 
 class TourPanel extends Component {
@@ -41,10 +41,12 @@ class TourPanel extends Component {
         transitionEasingName: data.transitionEasingName,
         transitionInterpolatorName: data.transitionInterpolatorName,
       },
-      markers: [],
     };
+    delete step.viewport.transitionInterpolator;
+    delete step.viewport.transitionInterruption;
     delete step.viewport.width;
     delete step.viewport.height;
+    delete step.markers;
     this.props.dispatch(createTourStep(step, this.props.tours.openTour.id));
   };
 
@@ -53,7 +55,7 @@ class TourPanel extends Component {
   };
 
   handleUpdateTourStep = (updates, prevStep, index) => {
-    let step = {
+    const step = {
       id: prevStep.id,
       name: updates.name,
       text: updates.text,
@@ -63,9 +65,13 @@ class TourPanel extends Component {
         transitionInterpolatorName: updates.transitionInterpolatorName,
         transitionEasingName: 'd3.easeCubic',
       },
-      markers: prevStep.markers,
     };
-    step = addTransitionClasses(step);
+    delete step.viewport.transitionInterpolator;
+    delete step.viewport.transitionInterruption;
+    delete step.viewport.width;
+    delete step.viewport.height;
+    delete step.markers;
+    // step = addTransitionClasses(step);
     this.props.dispatch(updateTourStep(step, index));
   };
 

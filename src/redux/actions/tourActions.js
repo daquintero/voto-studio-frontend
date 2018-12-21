@@ -6,6 +6,7 @@ import {
   DELETE_TOUR,
   CREATE_TOUR_STEP,
   UPDATE_TOUR_STEP,
+  UPDATE_TOUR_STEP_DATA_SET,
   REORDER_TOUR_STEPS,
   CHANGE_ACTIVE_TOUR_STEP,
   DELETE_TOUR_STEP,
@@ -123,6 +124,29 @@ export const updateTourStep = (updatedTourStep, index) => (dispatch) => {
       dispatch({
         type: UPDATE_TOUR_STEP.ERROR,
         id: updatedTourStep.id,
+        error,
+      }),
+  );
+};
+
+export const updateTourStepDataSet = (newDataSetId, updatedStepId, index) => (dispatch) => {
+  dispatch({
+    type: UPDATE_TOUR_STEP_DATA_SET.REQUEST,
+    id: updatedStepId,
+  });
+  return tourService.post.updateStepDataSet(newDataSetId, updatedStepId).then(
+    response =>
+      dispatch({
+        type: UPDATE_TOUR_STEP_DATA_SET.SUCCESS,
+        id: updatedStepId,
+        updatedStepId,
+        newDataSetId: response.data.new_data_set_id,
+        index,
+      }),
+    error =>
+      dispatch({
+        type: UPDATE_TOUR_STEP_DATA_SET.ERROR,
+        id: updatedStepId,
         error,
       }),
   );

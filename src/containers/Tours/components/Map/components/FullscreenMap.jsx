@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { FormGroup, Input, Label, Alert } from 'reactstrap';
 import Resizable from 're-resizable';
 import { SidebarProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
-import mapData from './mapData.json';
 import { changeMapHeight, changeMapWidth } from '../../../../../redux/actions/mapActions';
 import { updateMarker, updateMarkerPosition, deleteMarker } from '../../../../../redux/actions/tourActions';
 import Loader from '../../../../../shared/components/Loader';
@@ -133,11 +132,18 @@ class FullscreenMap extends Component {
     this.handleChangeMapHeight(window.innerHeight - topbarHeight);
   };
 
-  renderLayers = () =>
+  renderLayers = () => {
     // I have removed some of the color functionality just to make this simpler for now, I will
     // add them in again once I've got this fully up and running. This GeoJsonLayer will be able to accept a
     // variety of data that can differ for each step.
-    new GeoJsonLayer({
+    // TODO: Think about this camel_case to snake_case stuff
+    const { openTour } = this.props.tours;
+    const activeStep = this.getActiveStep();
+    let mapData;
+    if (activeStep.data_set_id !== -1) {
+      mapData = openTour.data_sets.filter(d => d.id === this.getActiveStep().data_set_id)[0].data;
+    }
+    return new GeoJsonLayer({
       id: 'regions',
       data: mapData,
       opacity: 2,
@@ -150,7 +156,7 @@ class FullscreenMap extends Component {
       getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
       updateTriggers: {
         getFillColor: () => [0, 0, 0],
-          getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
+        getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
       },
       pickable: true,
       onClick: e => this.handleClick(e),
@@ -163,6 +169,7 @@ class FullscreenMap extends Component {
         },
       },
     });
+  }
 
   render() { // TODO: Initial viewport is not loaded from the first active step
     const { map, tours } = this.props;

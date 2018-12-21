@@ -18,6 +18,7 @@ export default class MatTable extends PureComponent {
   static propTypes = {
     changes: PropTypes.instanceOf(Object).isRequired,
     commitChanges: PropTypes.func.isRequired,
+    viewChangeDetail: PropTypes.func.isRequired,
   };
 
   state = {
@@ -26,7 +27,7 @@ export default class MatTable extends PureComponent {
     selected: [],
     page: 0,
     rowsPerPage: 10,
-    pageName: 'committed',
+    pageName: 'staged',
     dropdownOpen: false,
 
   };
@@ -43,9 +44,8 @@ export default class MatTable extends PureComponent {
   };
 
   handleSelectAllClick = (event, checked) => {
-    const { changeList } = this.props.changes;
     if (checked) {
-      this.setState({ selected: changeList.map(n => n.id) });
+      this.setState({ selected: this.props.changes[this.state.pageName].map(n => n.id) });
       return;
     }
     this.setState({ selected: [] });
@@ -155,7 +155,9 @@ export default class MatTable extends PureComponent {
                       </TableCell>
                       <TableCell className="material-table__cell">{d.date_changed}</TableCell>
                       <TableCell className="material-table__cell">
-                        {d.user_email === localStorage.getItem('userEmail') ? <span>You</span> : d.user_email}
+                        <a href="/">
+                          {d.user_email === localStorage.getItem('userEmail') ? <span>You</span> : d.user_email}
+                        </a>
                       </TableCell>
                     </TableRow>
                   );
@@ -169,21 +171,26 @@ export default class MatTable extends PureComponent {
           </Table>
         </div>
         <>
-          {this.state.selected.length !== 0 && (
-            <ButtonToolbar>
+          <ButtonToolbar>
+            {this.state.selected.length !== 0 && (
               <Button color="success" data-selected={this.state.selected} onClick={this.props.commitChanges}>
                 Commit {this.state.selected.length} change{this.state.selected.length === 1 ? '' : 's'}
               </Button>
-            </ButtonToolbar>
-          )}
-          <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
-            <DropdownToggle>Status</DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem>Staged</DropdownItem>
-              <DropdownItem>Committed</DropdownItem>
-              <DropdownItem>Reverted</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+            )}
+            {this.state.selected.length === 1 && (
+              <Button color="secondary" data-selected={this.state.selected} onClick={this.props.viewChangeDetail}>
+                View details
+              </Button>
+            )}
+            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
+              <DropdownToggle>Status: {this.state.pageName}</DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>Staged</DropdownItem>
+                <DropdownItem>Committed</DropdownItem>
+                <DropdownItem>Reverted</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </ButtonToolbar>
         </>
         <TablePagination
           component="div"

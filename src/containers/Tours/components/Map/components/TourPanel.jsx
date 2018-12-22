@@ -15,6 +15,7 @@ import {
 } from '../../../../../redux/actions/tourActions';
 // import addTransitionClasses from '../../../../../shared/utils/addTransitionClasses';
 import Loader from '../../../../../shared/components/Loader';
+import { changeMapWidth } from '../../../../../redux/actions/mapActions';
 
 class TourPanel extends Component {
   static propTypes = {
@@ -88,7 +89,10 @@ class TourPanel extends Component {
     this.props.dispatch(reorderTourSteps(this.props.tours.openTour.id, result));
   };
 
-  handleTogglePreviewTourMode = () => this.props.dispatch(togglePreviewTourMode());
+  handleTogglePreviewTourMode = () => {
+    this.props.dispatch(togglePreviewTourMode());
+    this.props.dispatch(changeMapWidth(window.innerWidth - 240));
+  };
 
   render() {
     const tour = this.props.tours.openTour;

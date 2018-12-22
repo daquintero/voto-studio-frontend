@@ -3,12 +3,14 @@ import ReactMapGL, { Marker } from 'react-map-gl';
 import DeckGL, { GeoJsonLayer } from 'deck.gl';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormGroup, Input, Label, Alert } from 'reactstrap';
+import { FormGroup, Input, Label } from 'reactstrap';
 import Resizable from 're-resizable';
+import classnames from 'classnames';
 import { SidebarProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
 import { changeMapHeight, changeMapWidth } from '../../../../../redux/actions/mapActions';
 import { updateMarker, updateMarkerPosition, deleteMarker } from '../../../../../redux/actions/tourActions';
 import Loader from '../../../../../shared/components/Loader';
+import mapData from './mapData.json';
 
 class FullscreenMap extends Component {
   static propTypes = {
@@ -16,6 +18,7 @@ class FullscreenMap extends Component {
     sidebar: SidebarProps.isRequired,
     map: MapProps.isRequired,
     handleChangeMapViewport: PropTypes.func.isRequired,
+    tours: PropTypes.instanceOf(Object).isRequired,
   };
 
   constructor(props) {
@@ -56,9 +59,14 @@ class FullscreenMap extends Component {
     return this.props.tours.openTour.steps.indexOf(step);
   };
 
-  getActiveStep = () =>
-    this.props.tours.openTour.steps
-      .filter(elem => elem.id === parseInt(this.props.tours.openTour.activeTourStepId, 10))[0];
+  getActiveStep = () => this.props.tours.openTour.steps
+    .filter(elem => elem.id === parseInt(this.props.tours.openTour.activeTourStepId, 10))[0];
+  // {
+  //   const { openTour } = this.props.tours.openTour;
+  //   if (openTour && openTour.activeTourStepId !== -1) {
+  //     return
+  //   }
+  // };
 
   handleChangeMapHeight = newMapHeight => this.props.dispatch(changeMapHeight(newMapHeight));
 
@@ -127,23 +135,24 @@ class FullscreenMap extends Component {
     const topbarHeight = 60;
     let sidebarWidth = 55;
     if (!this.props.sidebar.collapse) sidebarWidth = 240;
+    if (!this.props.tours.previewTourMode) sidebarWidth += 300;
     if (window.innerWidth < 576) sidebarWidth = 0;
     this.handleChangeMapWidth(window.innerWidth - sidebarWidth);
     this.handleChangeMapHeight(window.innerHeight - topbarHeight);
   };
 
-  renderLayers = () => {
+  renderLayers = () =>
     // I have removed some of the color functionality just to make this simpler for now, I will
     // add them in again once I've got this fully up and running. This GeoJsonLayer will be able to accept a
     // variety of data that can differ for each step.
     // TODO: Think about this camel_case to snake_case stuff
-    const { openTour } = this.props.tours;
-    const activeStep = this.getActiveStep();
-    let mapData;
-    if (activeStep.data_set_id !== -1) {
-      mapData = openTour.data_sets.filter(d => d.id === this.getActiveStep().data_set_id)[0].data;
-    }
-    return new GeoJsonLayer({
+    // const { openTour } = this.props.tours;
+    // const activeStep = this.getActiveStep();
+    // let mapData;
+    // if (activeStep.data_set_id !== -1) {
+    //   mapData = openTour.data_sets.filter(d => d.id === this.getActiveStep().data_set_id)[0].data;
+    // }
+    new GeoJsonLayer({
       id: 'regions',
       data: mapData,
       opacity: 2,
@@ -169,16 +178,15 @@ class FullscreenMap extends Component {
         },
       },
     });
-  }
 
   render() { // TODO: Initial viewport is not loaded from the first active step
     const { map, tours } = this.props;
+    const mapWrapperClasses = classnames({
+      'fullscreen-map__wrapper': true,
+      'fullscreen-map__wrapper__preview-mode': tours.previewTourMode,
+    });
     return (
-      <div>
-        <Alert color="danger" isOpen={this.state.markerAlertOpen}>
-          <p><span className="bold-text">Warning:</span> Name or text field must not be empty.
-          </p>
-        </Alert>
+      <div className={mapWrapperClasses}>
         <ReactMapGL
           {...map.viewport}
           onViewportChange={this.onViewportChange}

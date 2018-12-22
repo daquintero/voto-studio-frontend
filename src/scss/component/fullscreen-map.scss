@@ -1,4 +1,14 @@
 .fullscreen-map {
+  &__wrapper {
+    transition: all 0.5s;
+    margin-left: 300px;
+    div:first-child {
+      transition: all 0.5s;
+    }
+  }
+  &__wrapper__preview-mode {
+    margin-left: 0;
+  }
   &__marker {
     background-color: white;
     padding: 10px;
@@ -36,5 +46,11 @@
     transform: translateX(30px);
     z-index: 1000;
     transition: z-index 0.15s ease-in-out 0.15s, transform 0.15s ease-in-out 0s;
+  }
+}
+
+#deckgl-wrapper {
+  canvas {
+    transition: all 0.5s;
   }
 }

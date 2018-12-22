@@ -20,7 +20,6 @@ class JsonEditor extends Component {
   }
 
   handleOnChange = (e) => {
-    console.log(e);
     const { openFeature } = this.props;
     const newFeature = {
       ...openFeature,

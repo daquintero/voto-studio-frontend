@@ -14,7 +14,7 @@ import Register from '../Account/Register';
 
 // These routes are all the routes that include the top and side bar
 const wrappedRoutes = () => (
-  <div>W
+  <div>
     <Layout />
     <div className="container__wrap">
       <Route exact path="/studio/tours/" component={Tours} />

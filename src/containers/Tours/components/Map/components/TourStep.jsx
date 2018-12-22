@@ -52,10 +52,8 @@ class TourStep extends Component {
 
   onChangeDataSet = (e) => {
     e.persist();
-    console.log(e);
     const { tourStep, index } = this.props;
     const { id } = e.target.selectedOptions[0].dataset;
-    console.log(e.target.dataset);
     this.props.dispatch(updateTourStepDataSet(id, tourStep.id, index));
   };
 
@@ -212,7 +210,7 @@ class TourStep extends Component {
                       onChange={e => this.onChangeDataSet(e)}
                       value={dataSetSelectOption}
                     >
-                      {tours.openTour.data_set_select_options.map(option => (
+                      {tours.openTour.data_set_options_list.map(option => (
                         <option data-id={option.id}>{option.name}</option>
                       ))}
                     </Input>

@@ -45,7 +45,7 @@ class Map extends Component {
   render() {
     const { tours } = this.props;
     return (
-      <div style={{ overflow: 'hidden' }}>
+      <div className="tour-studio__wrapper">
         <FullscreenMap
           handleChangeMapViewport={this.handleChangeMapViewport}
           updateMarkerPosition={this.handleUpdateMarkerPosition}

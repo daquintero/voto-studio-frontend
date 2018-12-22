@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   viewport: {
-    width: 'calc(100% - 290px)',
+    width: '100%',
     height: 'calc(100vh - 60px)',
     latitude: 8,
     longitude: -80.1,

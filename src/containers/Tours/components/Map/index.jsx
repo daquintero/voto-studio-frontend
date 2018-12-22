@@ -14,6 +14,7 @@ import PreviewPanel from './components/PreviewPanel';
 import MapPopover from './components/MapPopover';
 import asyncLoading from '../../../../shared/components/asyncLoading';
 import addTransitionClasses from '../../../../shared/utils/addTransitionClasses';
+import PublishModel from '../../../../shared/components/PublishModal';
 
 class Map extends Component {
   static propTypes = {
@@ -21,6 +22,13 @@ class Map extends Component {
     tours: ToursProps.isRequired,
     map: MapProps.isRequired,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      publishTourModal: false,
+    };
+  }
 
   componentWillUnmount() {
     this.props.dispatch(closeOpenTour());
@@ -42,6 +50,8 @@ class Map extends Component {
     this.props.dispatch(changeActiveTourStep(id));
   };
 
+  handleTogglePublishTourModal = () => this.setState(prevState => ({ publishTourModal: !prevState.publishTourModal }));
+
   render() {
     const { tours } = this.props;
     return (
@@ -55,12 +65,19 @@ class Map extends Component {
         <TourPanel
           changeToStepViewport={this.handleChangeToStepViewport}
           createMarker={this.handleCreateMarker}
+          togglePublishTourModal={this.handleTogglePublishTourModal}
+          publishTourModal={this.state.publishTourModal}
         />
         <PreviewPanel />
         <MapPopover
           activeTourStepId={tours.openTour.activeTourStepId}
           openTour={tours.openTour}
           changeToStepViewport={this.handleChangeToStepViewport}
+        />
+        <PublishModel
+          tours={tours}
+          isOpen={this.state.publishTourModal}
+          toggle={this.handleTogglePublishTourModal}
         />
       </div>
     );

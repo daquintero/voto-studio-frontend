@@ -15,6 +15,7 @@ import {
   DELETE_MARKER,
   TOGGLE_PREVIEW_TOUR_MODE,
   CLOSE_OPEN_TOUR,
+  PUBLISH_TOUR,
 } from '../actionCreators/tourActionCreators';
 import { initializeActions, actionResult } from '../helpers/asyncHelpers';
 
@@ -41,6 +42,7 @@ const initialState = {
     'UPDATE_MARKER_POSITION',
     'DELETE_MARKER',
     'LIST_DATA',
+    'PUBLISH_TOUR',
   ]),
 };
 
@@ -596,6 +598,41 @@ export default function (state = initialState, action) {
         },
       };
       // -----------------------------------------------
+
+    // Publish tour reducers ---------------------------
+    case PUBLISH_TOUR.INIT:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...initializeActions(['PUBLISH_TOUR']),
+        },
+      };
+    case PUBLISH_TOUR.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('PUBLISH_TOUR.REQUEST'),
+        },
+      };
+    case PUBLISH_TOUR.SUCCESS:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('PUBLISH_TOUR.SUCCESS'),
+        },
+      };
+    case PUBLISH_TOUR.ERROR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('PUBLISH_TOUR.ERROR', { error: action.error }),
+        },
+      };
+    // -----------------------------------------------
     default:
       return state;
   }

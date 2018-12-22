@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import classnames from 'classnames';
-import { ToursProps, MapProps } from '../../../../../shared/prop-types/ReducerProps';
+import { Button, ButtonToolbar } from 'reactstrap';
+import { ToursProps, MapProps, SidebarProps } from '../../../../../shared/prop-types/ReducerProps';
 import TourStep from './TourStep';
 import NewTourStep from './NewTourStep';
 import {
@@ -23,6 +24,9 @@ class TourPanel extends Component {
     map: MapProps.isRequired,
     changeToStepViewport: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
+    sidebar: SidebarProps.isRequired,
+    publishTourModal: PropTypes.bool.isRequired,
+    togglePublishTourModal: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -90,12 +94,18 @@ class TourPanel extends Component {
   };
 
   handleTogglePreviewTourMode = () => {
-    this.props.dispatch(togglePreviewTourMode());
-    this.props.dispatch(changeMapWidth(window.innerWidth - 240));
+    const {
+      sidebar, dispatch, tours,
+    } = this.props;
+    dispatch(togglePreviewTourMode());
+    const sidebarWidth = sidebar.collapse ? 55 : 240;
+    const tourPanelWidth = !tours.previewTourMode ? 0 : 300;
+    dispatch(changeMapWidth(window.innerWidth - (sidebarWidth + tourPanelWidth)));
   };
 
   render() {
-    const tour = this.props.tours.openTour;
+    const { tours, togglePublishTourModal } = this.props;
+    const tour = tours.openTour;
     const tourSteps = () => (
       tour.steps.map((tourStep, index) => (
         <TourStep
@@ -107,13 +117,13 @@ class TourPanel extends Component {
           updatingTourStep={this.state.updatingTourStep}
           toggleUpdatingTourStep={this.handleToggleUpdatingTourStep}
           updateTourStep={this.handleUpdateTourStep}
-          activeTourStepId={this.props.tours.openTour.activeTourStepId}
+          activeTourStepId={tours.openTour.activeTourStepId}
           createMarker={this.props.createMarker}
         />
       )));
     const wrapperClasses = classnames({
       'tour-panel__wrapper': true,
-      'tour-panel__wrapper__hide': this.props.tours.previewTourMode,
+      'tour-panel__wrapper__hide': tours.previewTourMode,
     });
     return (
       <div className={wrapperClasses} id="tour-panel__wrapper">
@@ -123,11 +133,18 @@ class TourPanel extends Component {
               {tour.name}
             </h3>
             <p>{tour.description}</p>
-            <i
-              className="fal fa-fw fa-eye tour-panel__tour-preview"
-              onClick={this.handleTogglePreviewTourMode}
-              role="presentation"
-            />
+            <ButtonToolbar>
+              <Button className="tour-panel__tour-preview" onClick={this.handleTogglePreviewTourMode}>
+                <i className="fal fa-fw fa-eye" /> Preview Mode
+              </Button>
+              <Button
+                className="tour-panel__tour-preview"
+                color="success"
+                onClick={togglePublishTourModal}
+              >
+                <i className="fal fa-fw fa-globe-americas" /> Publish
+              </Button>
+            </ButtonToolbar>
           </div>
           <DragDropContext onDragEnd={this.handleOnDragEnd}>
             <Droppable droppableId="tour-panel">
@@ -142,11 +159,11 @@ class TourPanel extends Component {
                 )}
             </Droppable>
           </DragDropContext>
-          {this.props.tours.actions.CREATE_TOUR_STEP.loading && (
+          {tours.actions.CREATE_TOUR_STEP.loading && (
             <Loader elemClass="load__panel" />
           )}
-          {this.props.tours.actions.CREATE_TOUR_STEP.error && (
-            <p>{this.props.tours.actions.CREATE_TOUR_STEP.error.message}</p>
+          {tours.actions.CREATE_TOUR_STEP.error && (
+            <p>{tours.actions.CREATE_TOUR_STEP.error.message}</p>
           )}
           <NewTourStep createTourStep={this.handleCreateTourStep} />
         </div>
@@ -162,4 +179,5 @@ class TourPanel extends Component {
 export default connect(state => ({
   tours: state.studio.tours,
   map: state.map,
+  sidebar: state.sidebar,
 }))(TourPanel);

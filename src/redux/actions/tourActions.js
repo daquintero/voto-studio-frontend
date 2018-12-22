@@ -16,6 +16,7 @@ import {
   DELETE_MARKER,
   TOGGLE_PREVIEW_TOUR_MODE,
   CLOSE_OPEN_TOUR,
+  PUBLISH_TOUR,
 } from '../actionCreators/tourActionCreators';
 
 export const getTourList = () => (dispatch) => {
@@ -284,3 +285,24 @@ export const togglePreviewTourMode = () => ({
 export const closeOpenTour = () => ({
   type: CLOSE_OPEN_TOUR,
 });
+
+export const initPublishTour = () => ({
+  type: PUBLISH_TOUR.INIT,
+});
+
+export const publishTour = tourId => (dispatch) => {
+  dispatch({
+    type: PUBLISH_TOUR.REQUEST,
+  });
+  return tourService.get.publish(tourId).then(
+    () =>
+      dispatch({
+        type: PUBLISH_TOUR.SUCCESS,
+      }),
+    error =>
+      dispatch({
+        type: PUBLISH_TOUR.ERROR,
+        error,
+      }),
+  );
+};

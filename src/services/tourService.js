@@ -8,6 +8,7 @@ const urls = {
   get: {
     list: `${tourApiUrl}/list/`,
     detail: `${tourApiUrl}/detail/`,
+    publish: `${tourApiUrl}/publish_tour/`,
   },
   post: {
     createTour: `${tourApiUrl}/create_tour/`,
@@ -33,6 +34,7 @@ const api = axios.create({
 // Tour GET requests
 const list = () => api.get(urls.get.list);
 const detail = tourId => api.get(`${urls.get.detail}${tourId}/`);
+const publish = tourId => api.get(`${urls.get.publish}${tourId}/`);
 // Tour POST requests
 const createTour = tour => api.post(urls.post.createTour, { tour });
 const updateTour = tour => api.post(urls.post.updateTour, { tour });
@@ -40,8 +42,8 @@ const createStep = (step, tourId) => api.post(urls.post.createStep, { step, tour
 const updateStep = step => api.post(urls.post.updateStep, { step });
 const updateStepDataSet = (dataSetId, stepId) => api.post(urls.post.updateStepDataSet, { dataSetId, stepId });
 const reorderTourSteps = (tourId, result) => api.post(urls.post.reorderTourSteps, { tourId, result });
-const createMarker = (newMarker, stepId) => api.post(urls.post.createMarker, { newMarker, stepId });
-const updateMarker = newMarker => api.post(urls.post.updateMarker, { newMarker });
+const createMarker = (marker, stepId) => api.post(urls.post.createMarker, { marker, stepId });
+const updateMarker = marker => api.post(urls.post.updateMarker, { marker });
 // Tour DELETE requests (The body of a delete request must have the "data" key)
 const deleteTour = id => api.delete(urls.delete.deleteTour, { data: { id } });
 const deleteStep = (stepId, tourId) => api.delete(urls.delete.deleteStep, { data: { stepId, tourId } });
@@ -61,6 +63,7 @@ const tourService = {
   get: {
     list,
     detail,
+    publish,
   },
   post: {
     createTour,

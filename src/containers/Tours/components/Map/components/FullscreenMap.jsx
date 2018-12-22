@@ -32,9 +32,9 @@ class FullscreenMap extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.resizeViewport);
-    this.resizeViewport();
+    // this.resizeViewport();
   }
-
+  //
   componentWillUnmount() {
     window.removeEventListener('resize', this.resizeViewport);
   }
@@ -61,12 +61,6 @@ class FullscreenMap extends Component {
 
   getActiveStep = () => this.props.tours.openTour.steps
     .filter(elem => elem.id === parseInt(this.props.tours.openTour.activeTourStepId, 10))[0];
-  // {
-  //   const { openTour } = this.props.tours.openTour;
-  //   if (openTour && openTour.activeTourStepId !== -1) {
-  //     return
-  //   }
-  // };
 
   handleChangeMapHeight = newMapHeight => this.props.dispatch(changeMapHeight(newMapHeight));
 

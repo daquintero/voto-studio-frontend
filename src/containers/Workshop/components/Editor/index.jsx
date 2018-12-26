@@ -33,6 +33,10 @@ class Editor extends Component {
     this.props.dispatch(getRelatedFields(values[0], values[1].toLowerCase()));
   };
 
+  handleUpdateRelatedField = (instance, index) => {
+    console.log(instance, index);
+  };
+
   render() {
     const { workshop, reset } = this.props;
     const { form } = workshop;
@@ -91,7 +95,7 @@ class Editor extends Component {
                                 </tr>
                               </thead>
                               <tbody>
-                                {form.related_fields[f].related_instances.map(o => (
+                                {form.related_fields[f].related_instances.map((o, index) => (
                                   <tr key={o.table_values.id}>
                                     <td>{o.table_values.id}</td>
                                     <td>{o.table_values.descriptor}</td>
@@ -103,7 +107,11 @@ class Editor extends Component {
                                       )}
                                     </td>
                                     <td>
-                                      <a href="/" className="text-danger">
+                                      <a
+                                        href="/"
+                                        className="text-danger"
+                                        onClick={() => this.handleUpdateRelatedField(o, index)}
+                                      >
                                         <i className="fal fa-fw fa-minus-circle" /> Remove
                                       </a>
                                     </td>

@@ -2,6 +2,7 @@ import {
   LIST_ITEMS,
   BUILD_FORM,
   GET_RELATED_FIELDS,
+  UPDATE_RELATED_FIELD,
 } from '../actionCreators/workshopActionCreators';
 import { initializeActions, actionResult } from '../helpers/asyncHelpers';
 
@@ -12,6 +13,7 @@ const initialState = {
     'LIST_ITEMS',
     'BUILD_FORM',
     'GET_RELATED_FIELDS',
+    'UPDATE_RELATED_FIELD',
   ]),
 };
 
@@ -108,6 +110,37 @@ export default function (state = initialState, action) {
         actions: {
           ...state.actions,
           ...actionResult('GET_RELATED_FIELDS.ERROR', { error: action.error }),
+        },
+      };
+      // -----------------------------------------------
+
+    // Build form reducers -----------------------------
+    case UPDATE_RELATED_FIELD.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_RELATED_FIELD.REQUEST'),
+        },
+      };
+    case UPDATE_RELATED_FIELD.SUCCESS:
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          relatedFieldOptions: action.relatedFields,
+        },
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_RELATED_FIELD.SUCCESS'),
+        },
+      };
+    case UPDATE_RELATED_FIELD.ERROR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_RELATED_FIELD.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------

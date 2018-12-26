@@ -66,9 +66,15 @@ export const updateRelatedField = updateData => (dispatch) => {
   });
   return workshopService.post.updateRelatedField(updateData).then(
     response =>
-      dispatch({}),
+      dispatch({
+        type: UPDATE_RELATED_FIELD.SUCCESS,
+        updates: response.data.updates,
+      }),
     error =>
-      dispatch({})
+      dispatch({
+        type: UPDATE_RELATED_FIELD.ERROR,
+        error,
+      }),
   );
 };
 

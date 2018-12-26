@@ -14,9 +14,11 @@ const urls = {
   },
 };
 
+const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+
 // Add auth headers to ALL api requests
 const api = axios.create({
-  headers: { Authorization: `Token ${localStorage.getItem('userToken')}` },
+  headers: { Authorization: `Token ${user.token}` },
 });
 
 // Changes GET requests

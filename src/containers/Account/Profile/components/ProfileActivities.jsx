@@ -1,49 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import ProfileActivity from './ProfileActivity';
+import { getUserStatistics } from '../../../../redux/actions/userActions';
+import Loader from '../../../../shared/components/Loader';
 
-const Ava1 = `${process.env.PUBLIC_URL}/img/12.png`;
-const Ava2 = `${process.env.PUBLIC_URL}/img/15.png`;
-const Ava3 = `${process.env.PUBLIC_URL}/img/11.png`;
-const Ava4 = `${process.env.PUBLIC_URL}/img/photo_notification.png`;
-const Img1 = `${process.env.PUBLIC_URL}/img/9.png`;
-const Img2 = `${process.env.PUBLIC_URL}/img/13.png`;
+class ProfileActivities extends Component {
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    auth: PropTypes.instanceOf(Object).isRequired,
+  };
 
-const ProfileActivities = () => (
-  <div>
-    <ProfileActivity img={Ava1} date="1 min ago" name="Lora Kolly">
-      <p>Dependent certainty off discovery him his tolerably offending. Ham for attention remainder sometimes
-            additions recommend fat our.
-      </p>
-    </ProfileActivity>
-    <ProfileActivity img={Ava1} date="3 hours ago" name="Anna Bro">
-      <p>Dependent certainty off discovery him his tolerably offending. Ham for attention remainder sometimes
-            additions recommend fat our. Dependent certainty off discovery him his tolerably offending. Ham for
-            attention remainder sometimes additions recommend fat our..
-      </p>
-    </ProfileActivity>
-    <ProfileActivity img={Ava2} date="3 hours ago" name="Michel Tompson">
-      <p>Dependent certainty off discovery him his <a href="/">tolerably</a> offending.</p>
-      <img src={Img1} alt="" />
-      <img src={Img2} alt="" />
-    </ProfileActivity>
-    <ProfileActivity img={Ava3} date="5 hours ago" name="Antony Mirrel ">
-      <p>Dependent certainty off discovery him his tolerably offending. Ham for attention remainder sometimes
-            additions recommend fat our.
-      </p>
-    </ProfileActivity>
-    <ProfileActivity img={Ava4} date="20.05.2017" name="Lora Kolly">
-      <p>Dependent certainty off discovery him his tolerably offending. Ham for attention remainder sometimes
-            additions recommend fat our. Dependent certainty off discovery him his tolerably offending. Ham for
-            attention remainder sometimes additions recommend fat our..
-      </p>
-    </ProfileActivity>
-    <ProfileActivity img={Ava1} date="20.05.2017" name="Maria Anderson-Bella">
-      <p>Dependent certainty off discovery him his tolerably offending. Ham for attention remainder sometimes
-            additions recommend fat our. Dependent certainty off discovery him his tolerably offending. Ham for
-            attention remainder sometimes additions recommend fat our..
-      </p>
-    </ProfileActivity>
-  </div>
-);
+  componentDidMount() {
+    this.props.dispatch(getUserStatistics(JSON.parse(localStorage.getItem('user')).id));
+  }
 
-export default ProfileActivities;
+  render() {
+    const { auth } = this.props;
+    return (
+      <>
+        {!auth.actions.GET_USER_STATISTICS.init && (auth.actions.GET_USER_STATISTICS.loading ? (
+          <Loader elemClass="load__card" />
+        ) : (
+          <>
+            {auth.user.statistics.activities.map(a => (
+              <ProfileActivity key={a.id} icn="fa-globe-americas" date="1 min ago" name={auth.user.name}>
+                <p>{a.description}</p>
+              </ProfileActivity>
+            ))}
+          </>
+        ))}
+      </>
+    );
+  }
+}
+
+export default connect(state => ({
+  auth: state.auth,
+}))(ProfileActivities);

@@ -71,7 +71,7 @@ class ToursList extends Component {
                 <td>{tour.name}</td>
                 <td>{tour.step_count}</td>
                 <td>
-                  {tour.user_email === localStorage.getItem('userEmail') ? (
+                  {tour.user_email === JSON.parse(localStorage.getItem('user')).email ? (
                     <a href="/">You</a>
                   ) : (
                     <a href="/">{tour.user_email}</a>

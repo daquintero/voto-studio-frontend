@@ -1,12 +1,13 @@
 /* eslint-disable react/no-children-prop */
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 
 const renderTextField = ({
-  input, label, meta: { touched, error }, defaultValue, children,
+  input, label, meta: { touched, error }, children,
 }) => (
   <TextField
     className="material-form__field"
@@ -14,14 +15,12 @@ const renderTextField = ({
     error={touched && error}
     {...input}
     children={children}
-    value={defaultValue}
   />
 );
 
 renderTextField.propTypes = {
   input: PropTypes.shape().isRequired,
   label: PropTypes.string.isRequired,
-  defaultValue: PropTypes.string,
   meta: PropTypes.shape({
     touched: PropTypes.bool,
     error: PropTypes.string,
@@ -34,7 +33,6 @@ renderTextField.defaultProps = {
   meta: null,
   select: false,
   children: [],
-  defaultValue: '',
 };
 
 class ProfileSettings extends PureComponent {
@@ -43,32 +41,16 @@ class ProfileSettings extends PureComponent {
     reset: PropTypes.func.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = {
-      name: 'Larry Boom',
-      email: 'boom@mail.com',
-    };
-  }
-
-  handleChange = name => (event) => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
-
   render() {
     const { handleSubmit, reset } = this.props;
     return (
       <form className="material-form" onSubmit={handleSubmit}>
         <div>
-          <span className="material-form__label">Full Name</span>
+          <span className="material-form__label">Name</span>
           <Field
-            name="username"
+            name="name"
             component={renderTextField}
             placeholder="Name"
-            defaultValue={this.state.name}
-            onChange={this.handleChange('name')}
           />
         </div>
         <div>
@@ -77,32 +59,13 @@ class ProfileSettings extends PureComponent {
             name="email"
             component={renderTextField}
             placeholder="example@mail.com"
-            defaultValue={this.state.email}
-            onChange={this.handleChange('email')}
             type="email"
           />
         </div>
         <div>
-          <span className="material-form__label">URL</span>
+          <span className="material-form__label">Bio</span>
           <Field
-            name="url"
-            component={renderTextField}
-            placeholder="https://themeforest.net"
-            type="url"
-          />
-        </div>
-        <div>
-          <span className="material-form__label">Password</span>
-          <Field
-            name="password"
-            component={renderTextField}
-            type="password"
-          />
-        </div>
-        <div>
-          <span className="material-form__label">Text Area</span>
-          <Field
-            name="textarea"
+            name="bio"
             component={renderTextField}
             placeholder="Type message here"
             multiline
@@ -120,7 +83,11 @@ class ProfileSettings extends PureComponent {
   }
 }
 
-export default reduxForm({
+const ProfileSettingsWithForm = reduxForm({
   form: 'profile_settings_form', // a unique identifier for this form
 })(ProfileSettings);
 
+export default connect(state => ({
+  reduxForm: state.form,
+  initialValues: state.auth.user,
+}))(ProfileSettingsWithForm);

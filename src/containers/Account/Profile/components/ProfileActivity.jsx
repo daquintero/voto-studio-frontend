@@ -5,6 +5,7 @@ export default class ProfileActivity extends PureComponent {
   static propTypes = {
     date: PropTypes.string,
     img: PropTypes.string,
+    icn: PropTypes.string,
     name: PropTypes.string,
     children: PropTypes.oneOfType([
       PropTypes.element,
@@ -15,14 +16,17 @@ export default class ProfileActivity extends PureComponent {
   static defaultProps = {
     date: '',
     img: '',
+    icn: '',
     name: '',
   };
 
   render() {
+    const { img, icn } = this.props;
     return (
       <div className="profile__activity">
-        <div className="profile__activity-avatar">
-          <img src={this.props.img} alt="" />
+        <div className={`profile__activity-avatar ${icn && 'text-center'}`}>
+          {img && (<img src={img} alt="" />)}
+          {icn && (<i className={`fal fa-4x ${icn}`} />)}
         </div>
         <div>
           <p className="profile__activity-name">{this.props.name}

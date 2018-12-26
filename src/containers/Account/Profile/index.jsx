@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Col, Container, Row } from 'reactstrap';
 import ProfileMain from './components/ProfileMain';
-import ProfileTasks from './components/ProfileTasks';
 import ProfileTabs from './components/ProfileTabs';
 
 class Index extends Component {
-  static propTypes = {};
+  static propTypes = {
+    user: PropTypes.instanceOf(Object).isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = {};
   }
   render() {
+    const { user } = this.props;
     return (
       <Container className="mt-4">
         <div className="profile">
           <Row>
             <Col md={12} lg={12} xl={4}>
               <Row>
-                <ProfileMain />
-                <ProfileTasks />
+                <ProfileMain user={user} />
               </Row>
             </Col>
             <ProfileTabs />
@@ -29,4 +32,6 @@ class Index extends Component {
   }
 }
 
-export default Index;
+export default connect(state => ({
+  user: state.auth.user,
+}))(Index);

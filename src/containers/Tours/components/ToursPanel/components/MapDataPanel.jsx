@@ -96,7 +96,7 @@ class MapDataPanel extends Component {
                 <td>{set.name}</td>
                 <td>{(set.file_size / 1024).toFixed(3)}</td>
                 <td>
-                  {set.user_email === localStorage.getItem('userEmail') ? (
+                  {set.user_email === JSON.parse(localStorage.getItem('user')).email ? (
                     <a href="/">You</a>
                   ) : (
                     <a href="/">{set.user_email}</a>

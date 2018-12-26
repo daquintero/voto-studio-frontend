@@ -10,6 +10,7 @@ import Router from './Router';
 import store from './store';
 import ScrollToTop from './ScrollToTop';
 import { LOGIN_USER } from '../../redux/actionCreators/userActionCreators';
+import { getUserDetail } from '../../redux/actions/userActions';
 
 class App extends Component {
   constructor() {
@@ -21,9 +22,12 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
     // Check to see if the user is already logged in
-    if (localStorage.getItem('userToken')) {
-      store.dispatch({ type: LOGIN_USER.SUCCESS });
+    if (user.token) {
+      store.dispatch(getUserDetail(user.id)).then((response) => {
+        store.dispatch({ type: LOGIN_USER.SUCCESS, user: response.user });
+      });
     }
 
     window.addEventListener('load', () => {

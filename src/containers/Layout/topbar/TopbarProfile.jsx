@@ -1,11 +1,15 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import DownIcon from 'mdi-react/ChevronDownIcon';
 import { Collapse } from 'reactstrap';
 import TopbarMenuLink from './TopbarMenuLink';
 
-const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
+class TopbarProfile extends PureComponent {
+  static propTypes = {
+    auth: PropTypes.instanceOf(Object).isRequired,
+  };
 
-export default class TopbarProfile extends PureComponent {
   constructor() {
     super();
     this.state = {
@@ -18,11 +22,13 @@ export default class TopbarProfile extends PureComponent {
   };
 
   render() {
+    const { user } = this.props.auth;
+    const Ava = `${process.env.REACT_APP_BASE_URL}${user.profile_picture_url}`;
     return (
       <div className="topbar__profile">
         <button className="topbar__avatar" onClick={this.toggle}>
           <img className="topbar__avatar-img" src={Ava} alt="avatar" />
-          <p className="topbar__avatar-name">Roman Johanson</p>
+          <p className="topbar__avatar-name">{user.name}</p>
           <DownIcon className="topbar__icon" />
         </button>
         {this.state.collapse && <button className="topbar__back" onClick={this.toggle} />}
@@ -38,3 +44,7 @@ export default class TopbarProfile extends PureComponent {
     );
   }
 }
+
+export default connect(state => ({
+  auth: state.auth,
+}))(TopbarProfile);

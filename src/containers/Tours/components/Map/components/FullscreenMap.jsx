@@ -10,7 +10,7 @@ import { SidebarProps, MapProps } from '../../../../../shared/prop-types/Reducer
 import { changeMapHeight, changeMapWidth } from '../../../../../redux/actions/mapActions';
 import { updateMarker, updateMarkerPosition, deleteMarker } from '../../../../../redux/actions/tourActions';
 import Loader from '../../../../../shared/components/Loader';
-import mapData from './populated_areas.json';
+import mapData from './mapData.json';
 
 class FullscreenMap extends Component {
   static propTypes = {

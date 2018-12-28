@@ -17,27 +17,29 @@ const urls = {
   },
 };
 
-const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+const getUser = () => (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
 
-// Add auth headers to ALL api requests
-const api = axios.create({
-  headers: { Authorization: `Token ${user.token}` },
+const getHeaders = () => ({
+  headers: {
+    Authorization: `Token ${getUser().token}`,
+  },
 });
 
-const fileUploadHeaders = {
+const fileUploadHeaders = () => ({
   headers: {
+    Authorization: `Token ${getUser().token}`, // TODO: make the getHeaders function more general
     'Content-Type': 'multipart/form-data',
   },
-};
+});
 
 // DataSuite GET requests
-const list = () => api.get(urls.get.list);
-const detail = dataSetId => api.get(`${urls.get.detail}${dataSetId}/`);
-const featureDetail = featureId => api.get(`${urls.get.featureDetail}${featureId}/`);
+const list = () => axios.get(urls.get.list, getHeaders());
+const detail = dataSetId => axios.get(`${urls.get.detail}${dataSetId}/`, getHeaders());
+const featureDetail = featureId => axios.get(`${urls.get.featureDetail}${featureId}/`, getHeaders());
 // DataSuite POST requests
-const createDataSet = formData => api.post(urls.post.createDataSet, formData, fileUploadHeaders);
+const createDataSet = formData => axios.post(urls.post.createDataSet, formData, fileUploadHeaders());
 const updateFeatureProperties = (openFeatureId, newFeatureProperties) =>
-  api.post(urls.post.updateFeatureProperties, { openFeatureId, newFeatureProperties });
+  axios.post(urls.post.updateFeatureProperties, { openFeatureId, newFeatureProperties }, getHeaders());
 
 const dataSuiteService = {
   get: {

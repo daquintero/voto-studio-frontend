@@ -15,6 +15,8 @@ import Profile from '../Account/Profile/index';
 import Login from '../Account/Login';
 import Register from '../Account/Register';
 
+const EditorWrapper = props => <Editor enableReinitialize {...props} />;
+
 // These routes are all the routes that include the top and side bar
 const wrappedRoutes = () => (
   <div>
@@ -22,7 +24,7 @@ const wrappedRoutes = () => (
     <div className="container__wrap">
       <Route exact path="/" component={Dashboard} />
       <Route exact path="/workshop/" component={Workshop} />
-      <Route exact path="/workshop/editor/:appName/:modelName/:id/" component={Editor} />
+      <Route exact path="/workshop/editor/:appName/:modelName/:id/" render={EditorWrapper} />
       <Route exact path="/studio/tours/" component={Tours} />
       <Route exact path="/studio/tours/map/:tourId/" component={MapWrapper} />
       <Route exact path="/studio/tours/data/:dataSetId/" component={DataSuiteWrapper} />

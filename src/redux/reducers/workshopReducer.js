@@ -51,6 +51,7 @@ export default function (state = initialState, action) {
     case BUILD_FORM.INIT:
       return {
         ...state,
+        form: {},
         actions: {
           ...state.actions,
           ...initializeActions(['BUILD_FORM']),
@@ -97,7 +98,7 @@ export default function (state = initialState, action) {
         ...state,
         form: {
           ...state.form,
-          relatedFieldOptions: action.relatedFields,
+          relatedFieldOptions: action.relatedFields, // TODO: confusing key here
         },
         actions: {
           ...state.actions,
@@ -128,7 +129,18 @@ export default function (state = initialState, action) {
         ...state,
         form: {
           ...state.form,
-          relatedFieldOptions: action.relatedFields,
+          relatedFields: [
+            ...state.form.relatedFields.slice(0, action.relatedIndex),
+            {
+              ...state.form.relatedFields[action.relatedIndex],
+              relatedInstances: [
+                ...state.form.relatedFields[action.relatedIndex].relatedInstances,
+                action.updates.relatedField,
+              ],
+            },
+            ...state.form.relatedFields.slice(action.relatedIndex + 1),
+          ],
+          relatedFieldOptions: [],
         },
         actions: {
           ...state.actions,

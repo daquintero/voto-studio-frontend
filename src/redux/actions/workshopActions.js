@@ -2,6 +2,7 @@ import {
   LIST_ITEMS,
   BUILD_FORM,
   GET_RELATED_FIELDS,
+  UPDATE_BASIC_FIELDS,
   UPDATE_RELATED_FIELD,
 } from '../actionCreators/workshopActionCreators';
 import workshopService from '../../services/workshopService';
@@ -42,15 +43,15 @@ export const buildForm = (appLabel, modelName, id) => (dispatch) => {
   );
 };
 
-export const getRelatedFields = (appLabel, modelName) => (dispatch) => {
+export const getRelatedFields = requestData => (dispatch) => {
   dispatch({
     type: GET_RELATED_FIELDS.REQUEST,
   });
-  return workshopService.get.relatedFields(appLabel, modelName).then(
+  return workshopService.get.relatedFields(requestData).then(
     response =>
       dispatch({
         type: GET_RELATED_FIELDS.SUCCESS,
-        relatedFields: response.data.related_fields,
+        relatedFields: response.data.relatedFields,
       }),
     error =>
       dispatch({
@@ -60,7 +61,25 @@ export const getRelatedFields = (appLabel, modelName) => (dispatch) => {
   );
 };
 
-export const updateRelatedField = updateData => (dispatch) => {
+export const updateBasicFields = updateData => (dispatch) => {
+  dispatch({
+    type: UPDATE_BASIC_FIELDS.REQUEST,
+  });
+  return workshopService.post.updateBasicFields(updateData).then(
+    response =>
+      dispatch({
+        type: UPDATE_BASIC_FIELDS.SUCCESS,
+        updates: response.data.updates,
+      }),
+    error =>
+      dispatch({
+        type: UPDATE_BASIC_FIELDS.ERROR,
+        error,
+      }),
+  );
+};
+
+export const updateRelatedField = (updateData, relatedIndex) => (dispatch) => {
   dispatch({
     type: UPDATE_RELATED_FIELD.REQUEST,
   });
@@ -69,6 +88,8 @@ export const updateRelatedField = updateData => (dispatch) => {
       dispatch({
         type: UPDATE_RELATED_FIELD.SUCCESS,
         updates: response.data.updates,
+        relatedIndex,
+        fieldName: updateData.fieldName,
       }),
     error =>
       dispatch({

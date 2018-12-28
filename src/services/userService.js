@@ -15,17 +15,17 @@ const urls = {
   },
 };
 
-const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+const getUser = () => (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
 
-const authorizationHeaders = {
+const getAuthorizationHeaders = () => ({
   headers: {
-    Authorization: `Token ${user.token}`,
+    Authorization: `Token ${getUser().token}`,
   },
-};
+});
 
 // GET requests
-const detail = id => axios.get(`${urls.get.detail}${id}/`, authorizationHeaders);
-const statistics = id => axios.get(`${urls.get.statistics}${id}/`, authorizationHeaders);
+const detail = id => axios.get(`${urls.get.detail}${id}/`, getAuthorizationHeaders());
+const statistics = id => axios.get(`${urls.get.statistics}${id}/`, getAuthorizationHeaders());
 // POST requests
 const login = values => axios.post(urls.post.login, { ...values });
 const register = values => axios.post(urls.post.register, { ...values });

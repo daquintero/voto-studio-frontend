@@ -10,7 +10,7 @@ const ProfileMain = ({ user }) => (
       <CardBody className="profile__card">
         <div className="profile__information">
           <div className="profile__avatar">
-            <img src={`${process.env.REACT_APP_BASE_URL}${user.profile_picture_url}`} alt="avatar" />
+            <img src={`${process.env.REACT_APP_BASE_URL}${user.profilePictureUrl}`} alt="avatar" />
           </div>
           <div className="profile__data">
             <p className="profile__name">{user.name}</p>

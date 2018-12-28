@@ -1,0 +1,12 @@
+.workshop {
+  &__button-panel__wrapper {
+  }
+  &__button-panel__button {
+    margin-bottom: 5px;
+    display: block;
+  }
+  &__button-panel__button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}

@@ -69,12 +69,12 @@ class ToursList extends Component {
               <tr key={tour.id}>
                 <td>{tours.idCode}{tour.id}</td>
                 <td>{tour.name}</td>
-                <td>{tour.step_count}</td>
+                <td>{tour.stepCount}</td>
                 <td>
-                  {tour.user_email === JSON.parse(localStorage.getItem('user')).email ? (
+                  {tour.userEmail === JSON.parse(localStorage.getItem('user')).email ? (
                     <a href="/">You</a>
                   ) : (
-                    <a href="/">{tour.user_email}</a>
+                    <a href="/">{tour.userEmail}</a>
                   )}
                 </td>
                 <td><Badge color="success">Live</Badge></td>

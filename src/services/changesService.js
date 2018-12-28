@@ -14,17 +14,18 @@ const urls = {
   },
 };
 
-const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+const getUser = () => (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
 
-// Add auth headers to ALL api requests
-const api = axios.create({
-  headers: { Authorization: `Token ${user.token}` },
+const getHeaders = () => ({
+  headers: {
+    Authorization: `Token ${getUser().token}`,
+  },
 });
 
 // Changes GET requests
-const list = () => api.get(urls.get.list);
+const list = () => axios.get(urls.get.list, getHeaders());
 // Changes POST requests
-const commit = selected => api.post(urls.post.commit, { selected });
+const commit = selected => axios.post(urls.post.commit, { selected }, getHeaders());
 
 const changesService = {
   get: {

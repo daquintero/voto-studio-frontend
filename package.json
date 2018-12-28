@@ -49,6 +49,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-router-prop-types": "^1.0.4",
+    "react-select": "^2.1.2",
     "react-smooth-scrollbar": "^8.0.6",
     "reactstrap": "^6.4.0",
     "redux": "^4.0.0",

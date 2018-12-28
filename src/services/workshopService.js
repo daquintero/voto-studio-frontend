@@ -10,25 +10,36 @@ const urls = {
     relatedFields: `${workshopApiUrl}/related_fields/`,
   },
   post: {
+    updateBasicFields: `${workshopApiUrl}/update_basic_fields/`,
     updateRelatedField: `${workshopApiUrl}/update_related_field/`,
   },
   delete: {
   },
 };
 
-const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+const getUser = () => (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
 
-// Add auth headers to ALL api requests
-const api = axios.create({
-  headers: { Authorization: `Token ${user.token}` },
+const getHeaders = () => ({
+  headers: {
+    Authorization: `Token ${getUser().token}`,
+  },
 });
 
 // GET requests
-const list = () => api.get(urls.get.list);
-const build = (appName, modelName, id) => api.get(`${urls.get.build}${appName}/${modelName}/${id}/`);
-const relatedFields = (appName, modelName) => api.get(`${urls.get.relatedFields}${appName}/${modelName}/`);
+const list = () => axios.get(urls.get.list, getHeaders());
+const build = ({ appName, modelName, id }) =>
+  axios.get(`${urls.get.build}?al=${appName}&mn=${modelName}&id=${id}`, getHeaders());
+const relatedFields = ({
+  parentAppName, parentModelName, parentId, relatedAppName, relatedModelName, relatedFieldName,
+}) =>
+  axios.get(
+    `${urls.get.relatedFields}?pal=${parentAppName}&pmn=${parentModelName}&pid=${parentId}&ral=${relatedAppName}` +
+    `&rmn=${relatedModelName}&rfn=${relatedFieldName}`,
+    getHeaders(),
+  );
 // POST requests
-const updateRelatedField = updateData => api.post(urls.post.updateRelatedField, { ...updateData });
+const updateBasicFields = values => axios.post(urls.post.updateBasicFields, { ...values }, getHeaders());
+const updateRelatedField = updateData => axios.post(urls.post.updateRelatedField, { ...updateData }, getHeaders());
 
 const workshopService = {
   get: {
@@ -37,6 +48,7 @@ const workshopService = {
     relatedFields,
   },
   post: {
+    updateBasicFields,
     updateRelatedField,
   },
   delete: {

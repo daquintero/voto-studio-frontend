@@ -23,7 +23,7 @@ class TopbarProfile extends PureComponent {
 
   render() {
     const { user } = this.props.auth;
-    const Ava = `${process.env.REACT_APP_BASE_URL}${user.profile_picture_url}`;
+    const Ava = `${process.env.REACT_APP_BASE_URL}${user.profilePictureUrl}`;
     return (
       <div className="topbar__profile">
         <button className="topbar__avatar" onClick={this.toggle}>

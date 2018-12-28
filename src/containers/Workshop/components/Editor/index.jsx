@@ -5,40 +5,121 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import { Container, Col, Row, Card, CardBody, ButtonToolbar, Button, Input, FormGroup, Table } from 'reactstrap';
-import { buildForm, getRelatedFields } from '../../../../redux/actions/workshopActions';
+import {
+  buildForm,
+  getRelatedFields,
+  updateBasicFields,
+  updateRelatedField,
+} from '../../../../redux/actions/workshopActions';
 import Loader from '../../../../shared/components/Loader';
+import renderSelectField from '../../../../shared/components/form/Select';
+import renderCheckboxField from '../../../../shared/components/form/CheckBox';
+import { BUILD_FORM, GET_RELATED_FIELDS } from '../../../../redux/actionCreators/workshopActionCreators';
 
 class Editor extends Component {
   static propTypes = {
     workshop: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
     match: ReactRouterPropTypes.match.isRequired,
-    reset: PropTypes.func.isRequired,
+    workshopForm: PropTypes.instanceOf(Object).isRequired,
   };
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fieldName: '',
+      id: this.props.match.params.id,
+    };
   }
 
   componentDidMount() {
     const { dispatch, match } = this.props;
     const { appName, modelName, id } = match.params;
-    dispatch(buildForm(appName, modelName, id));
+
+    dispatch(buildForm(match.params))
+      .then((action) => {
+      // Grab the related fields for the first option in the dropdown
+        if (action.type === BUILD_FORM.SUCCESS) {
+          const firstRelatedField = action.form.relatedFields[0];
+          const values = firstRelatedField.modelLabel.split('.');
+
+          dispatch(getRelatedFields({
+            parentAppName: appName,
+            parentModelName: modelName,
+            parentId: id,
+            relatedAppName: values[0],
+            relatedModelName: values[1].toLowerCase(),
+            relatedFieldName: firstRelatedField.fieldName,
+          }))
+            .then((nextAction) => {
+              if (nextAction.type === GET_RELATED_FIELDS.SUCCESS) {
+                this.setState({
+                  fieldName: firstRelatedField.fieldName,
+                });
+              }
+            });
+        }
+      });
   }
 
   onChange = (e) => {
     e.persist();
-    const values = e.target.selectedOptions[0].value.split('.');
-    this.props.dispatch(getRelatedFields(values[0], values[1].toLowerCase()));
+    const { appName, modelName, id } = this.props.match.params;
+
+    const selected = e.target.selectedOptions[0];
+    const values = selected.value.split('.');
+
+    this.setState({
+      fieldName: selected.dataset.field,
+    });
+    this.props.dispatch(getRelatedFields({
+      parentAppName: appName,
+      parentModelName: modelName,
+      parentId: id,
+      relatedAppName: values[0],
+      relatedModelName: values[1].toLowerCase(),
+      relatedFieldName: selected.dataset.field,
+    }));
   };
 
-  handleUpdateRelatedField = (instance, index) => {
-    console.log(instance, index);
+  handleUpdateBasicFields = (e) => {
+    e.preventDefault();
+    const { workshop, workshopForm, dispatch } = this.props;
+    // Check if values object is empty, if so then return.
+    if (Object.keys(workshopForm.values).length === 0 && workshopForm.values.constructor === Object) return;
+    const updateData = {
+      modelLabel: workshop.form.parentModel.modelLabel,
+      id: this.state.id,
+      values: workshopForm.values,
+    };
+    dispatch(updateBasicFields(updateData)).then(action => this.setState({ id: action.updates.id }));
+  };
+
+  handleUpdateRelatedField = (type, tableValues) => {
+    const { dispatch, workshop } = this.props;
+    const updateData = {
+      modelLabel: workshop.form.parentModel.modelLabel,
+      relatedModelLabel: tableValues.modelLabel,
+      id: this.state.id,
+      relatedId: tableValues.id,
+      updateType: type,
+      fieldName: this.state.fieldName,
+    };
+    const relatedIndex = workshop.form.relatedFields.findIndex(f => f.name === this.state.fieldName);
+    const ids = workshop.form.relatedFields[relatedIndex].relatedInstances.map(o => o.tableValues.id);
+    if (!ids.includes(tableValues.id)) {
+      dispatch(updateRelatedField(updateData, relatedIndex)).then(action => this.setState({ id: action.updates.id }));
+    }
+  };
+
+  renderField = (field) => {
+    if (field.type === 'select') return renderSelectField;
+    if (field.type === 'checkbox') return renderCheckboxField;
+    return 'input';
   };
 
   render() {
-    const { workshop, reset } = this.props;
+    const { workshop } = this.props;
     const { form } = workshop;
     const { loading, loaded, error } = workshop.actions.BUILD_FORM;
     return (
@@ -52,7 +133,10 @@ class Editor extends Component {
                 <Row>
                   <Col md={12}>
                     <h3 className="page-title text-capitalize">
-                      {form.new ? 'Create' : 'Edit'} {form.parent_model.name}
+                      {form.new ? 'Create' : 'Edit'} {form.parentModel.name}
+                    </h3>
+                    <h3 className="page-subhead subhead">
+                      Edit the basic info of this piece of content and add or remove related pieces of content
                     </h3>
                   </Col>
                 </Row>
@@ -60,31 +144,35 @@ class Editor extends Component {
                   <Col md={6}>
                     <Card>
                       <CardBody>
-                        <form className="form form--horizontal" onSubmit={this.handleSubmit}>
-                          {Object.keys(form.basic_fields).map(f => (
-                            <div className="form__form-group" key={f}>
-                              <span className="form__form-group-label text-capitalize">{f.replace(/_/g, ' ')}</span>
+                        <h3 className="page-title text-capitalize">Edit Basic Fields</h3>
+                        <h3 className="page-subhead subhead">
+                          Edit the basic info for this piece of content
+                        </h3>
+                        <form className="form form--horizontal" onSubmit={this.handleUpdateBasicFields}>
+                          {form.basicFields.map(f => (
+                            <div className="form__form-group" key={f.name}>
+                              <span className="form__form-group-label text-capitalize">{f.verboseName}</span>
                               <div className="form__form-group-field">
                                 <Field
-                                  name={f}
-                                  component="input"
-                                  type={form.basic_fields[f].type}
-                                  placeholder="My new data set"
+                                  name={f.name}
+                                  component={this.renderField(f)}
+                                  field={f}
+                                  type={f.type}
+                                  options={f.options}
+                                  placeholder={
+                                    `${f.select ? 'Choose' : 'Enter'} ${f.verboseName}...`
+                                  }
                                 />
                               </div>
                             </div>
                           ))}
                           <ButtonToolbar className="form__button-toolbar">
-                            <Button color="primary" type="submit">Submit</Button>
-                            <Button type="button" onClick={reset}>
-                              Cancel
-                            </Button>
+                            <Button color="primary" size="sm" type="submit">Submit</Button>
                           </ButtonToolbar>
                         </form>
-                        {Object.keys(form.related_fields)
-                          .map(f => Boolean(form.related_fields[f].related_instances.length) && (
-                          <div key={f}>
-                            <h3 className="page-title text-capitalize">{f.replace(/_/g, ' ')}</h3>
+                        {form.relatedFields.map((f, tableIndex) => Boolean(f.relatedInstances.length) && (
+                          <div key={f.name} className="mb-4">
+                            <h3 className="page-title text-capitalize">{f.name.replace(/_/g, ' ')}</h3>
                             <Table responsive hover>
                               <thead>
                                 <tr>
@@ -95,25 +183,30 @@ class Editor extends Component {
                                 </tr>
                               </thead>
                               <tbody>
-                                {form.related_fields[f].related_instances.map((o, index) => (
-                                  <tr key={o.table_values.id}>
-                                    <td>{o.table_values.id}</td>
-                                    <td>{o.table_values.descriptor}</td>
+                                {f.relatedInstances.map((o, rowIndex) => (
+                                  <tr key={o.tableValues.id}>
+                                    <td>{o.tableValues.id}</td>
+                                    <td>{o.tableValues.descriptor}</td>
                                     <td>
-                                      {o.table_values.user_email === JSON.parse(localStorage.getItem('user')).email ? (
+                                      {o.tableValues.userEmail === JSON.parse(localStorage.getItem('user')).email ? (
                                         <a href="/">You</a>
                                       ) : (
-                                        <a href="/">{o.table_values.user_email}</a>
+                                        <a href="/">{o.tableValues.userEmail}</a>
                                       )}
                                     </td>
                                     <td>
-                                      <a
-                                        href="/"
+                                      <p
+                                        role="presentation"
                                         className="text-danger"
-                                        onClick={() => this.handleUpdateRelatedField(o, index)}
+                                        onClick={() => this.handleUpdateRelatedField(
+                                          'remove',
+                                          o.tableValues,
+                                          tableIndex,
+                                          rowIndex,
+                                        )}
                                       >
                                         <i className="fal fa-fw fa-minus-circle" /> Remove
-                                      </a>
+                                      </p>
                                     </td>
                                   </tr>
                               ))}
@@ -129,23 +222,25 @@ class Editor extends Component {
                       <CardBody>
                         <h3 className="page-title text-capitalize">Add Related Fields</h3>
                         <h3 className="page-subhead subhead">
-                          Search for and add any related content.
+                          Search for and add any related content
                         </h3>
                         <FormGroup>
                           <Input
+                            className="text-capitalize"
                             type="select"
                             name="transitionEasing"
                             id="transitionEasing"
                             onChange={e => this.onChange(e)}
                             value={this.state.transitionEasing}
                           >
-                            {Object.keys(form.related_fields).map(f => (
+                            {form.relatedFields.map(f => (
                               <option
-                                key={f}
+                                key={f.name}
                                 className="text-capitalize"
-                                value={form.related_fields[f].model_label}
+                                value={f.modelLabel}
+                                data-field={f.name}
                               >
-                                {f.replace(/_/g, ' ')}
+                                {f.verboseNamePlural}
                               </option>
                             ))}
                           </Input>
@@ -160,18 +255,30 @@ class Editor extends Component {
                             </tr>
                           </thead>
                           <tbody>
-                            {form.relatedFieldOptions && form.relatedFieldOptions.map(o => (
-                              <tr>
+                            {form.relatedFieldOptions && form.relatedFieldOptions.map((o, index) => (
+                              <tr key={o.id}>
                                 <td>{o.id}</td>
-                                <td>{o.table_values.descriptor}</td>
+                                <td>{o.tableValues.descriptor}</td>
                                 <td>
-                                  {o.table_values.user_email === JSON.parse(localStorage.getItem('user')).email ? (
+                                  {o.tableValues.userEmail === JSON.parse(localStorage.getItem('user')).email ? (
                                     <a href="/">You</a>
                                   ) : (
-                                    <a href="/">{o.table_values.user_email}</a>
+                                    <a href="/">{o.tableValues.userEmail}</a>
                                   )}
                                 </td>
-                                <td><a href="/"><i className="fal fa-fw fa-plus" />Add</a></td>
+                                <td>
+                                  <p
+                                    role="presentation"
+                                    className="text-success"
+                                    onClick={() => this.handleUpdateRelatedField(
+                                       'add',
+                                       o.tableValues,
+                                       index,
+                                     )}
+                                  >
+                                    <i className="fal fa-fw fa-plus" />Add
+                                  </p>
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -198,10 +305,11 @@ class Editor extends Component {
 }
 
 const EditorWithForm = reduxForm({
-  form: 'workshop_form',
+  form: 'workshopForm',
 })(Editor);
 
 export default withRouter(connect(state => ({
   workshop: state.studio.workshop,
-  initialValues: state.studio.workshop.form.default_values,
+  workshopForm: state.form.workshopForm,
+  initialValues: state.studio.workshop.form.defaultValues,
 }))(EditorWithForm));

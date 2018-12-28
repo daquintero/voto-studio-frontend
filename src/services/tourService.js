@@ -26,29 +26,31 @@ const urls = {
   },
 };
 
-const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {};
+const getUser = () => (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
 
-// Add auth headers to ALL api requests
-const api = axios.create({
-  headers: { Authorization: `Token ${user.token}` },
+const getHeaders = () => ({
+  headers: {
+    Authorization: `Token ${getUser().token}`,
+  },
 });
 
 // Tour GET requests
-const list = () => api.get(urls.get.list);
-const detail = tourId => api.get(`${urls.get.detail}${tourId}/`);
-const publish = tourId => api.get(`${urls.get.publish}${tourId}/`);
+const list = () => axios.get(urls.get.list, getHeaders());
+const detail = tourId => axios.get(`${urls.get.detail}${tourId}/`, getHeaders());
+const publish = tourId => axios.get(`${urls.get.publish}${tourId}/`, getHeaders());
 // Tour POST requests
-const createTour = tour => api.post(urls.post.createTour, { tour });
-const updateTour = tour => api.post(urls.post.updateTour, { tour });
-const createStep = (step, tourId) => api.post(urls.post.createStep, { step, tourId });
-const updateStep = step => api.post(urls.post.updateStep, { step });
-const updateStepDataSet = (dataSetId, stepId) => api.post(urls.post.updateStepDataSet, { dataSetId, stepId });
-const reorderTourSteps = (tourId, result) => api.post(urls.post.reorderTourSteps, { tourId, result });
-const createMarker = (marker, stepId) => api.post(urls.post.createMarker, { marker, stepId });
-const updateMarker = marker => api.post(urls.post.updateMarker, { marker });
+const createTour = tour => axios.post(urls.post.createTour, { tour }, getHeaders());
+const updateTour = tour => axios.post(urls.post.updateTour, { tour }, getHeaders());
+const createStep = (step, tourId) => axios.post(urls.post.createStep, { step, tourId }, getHeaders());
+const updateStep = step => axios.post(urls.post.updateStep, { step }, getHeaders());
+const updateStepDataSet = (dataSetId, stepId) =>
+  axios.post(urls.post.updateStepDataSet, { dataSetId, stepId }, getHeaders());
+const reorderTourSteps = (tourId, result) => axios.post(urls.post.reorderTourSteps, { tourId, result }, getHeaders());
+const createMarker = (marker, stepId) => axios.post(urls.post.createMarker, { marker, stepId }, getHeaders());
+const updateMarker = marker => axios.post(urls.post.updateMarker, { marker }, getHeaders());
 // Tour DELETE requests (The body of a delete request must have the "data" key)
-const deleteTour = id => api.delete(urls.delete.deleteTour, { data: { id } });
-const deleteStep = (stepId, tourId) => api.delete(urls.delete.deleteStep, { data: { stepId, tourId } });
+const deleteTour = id => axios.delete(urls.delete.deleteTour, { data: { id } }, getHeaders());
+const deleteStep = (stepId, tourId) => axios.delete(urls.delete.deleteStep, { data: { stepId, tourId } }, getHeaders());
 
 const markerSchema = new schema.Entity('markers');
 const stepSchema = new schema.Entity('steps', {

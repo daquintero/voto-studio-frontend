@@ -106,8 +106,8 @@ class TourStep extends Component {
       'tour-step__delete__loading': loading,
     });
     let dataSetSelectOption;
-    if (tourStep.data_set_id !== -1) {
-      [dataSetSelectOption] = tours.openTour.data_set_select_options.filter(o => o.id === tourStep.data_set_id);
+    if (tourStep.dataSetId !== -1) {
+      [dataSetSelectOption] = tours.openTour.dataSetSelectOptions.filter(o => o.id === tourStep.dataSetId);
     }
     return (
       <Draggable draggableId={this.props.tourStep.id.toString()} index={index}>
@@ -210,7 +210,7 @@ class TourStep extends Component {
                       onChange={e => this.onChangeDataSet(e)}
                       value={dataSetSelectOption}
                     >
-                      {tours.openTour.data_set_options_list.map(option => (
+                      {tours.openTour.dataSetOptionsList.map(option => (
                         <option data-id={option.id}>{option.name}</option>
                       ))}
                     </Input>

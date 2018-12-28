@@ -17,7 +17,7 @@ export const getDataSetList = () => (dispatch) => {
     response =>
       dispatch({
         type: LIST_DATA_SETS.SUCCESS,
-        dataSets: response.data.data_sets,
+        dataSets: response.data.dataSets,
       }),
     error =>
       dispatch({
@@ -53,7 +53,7 @@ export const getDataSetDetail = dataSetId => (dispatch) => {
     response =>
       dispatch({
         type: GET_DATA_SET_DETAIL.SUCCESS,
-        dataSet: response.data.data_set,
+        dataSet: response.data.dataSet,
       }),
     error =>
       dispatch({
@@ -99,7 +99,7 @@ export const updateFeatureProperties = (newFeature, newFeatureProperties) => (di
     response =>
       dispatch({
         type: UPDATE_FEATURE_PROPERTIES.SUCCESS,
-        newFeatureProperties: response.data.new_feature_properties,
+        newFeatureProperties: response.data.newFeatureProperties,
         newFeature,
       }),
     error =>

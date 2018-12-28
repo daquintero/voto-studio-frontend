@@ -7,17 +7,17 @@ import {
   mapReducer,
   tourReducer,
   userReducer,
-  candidateReducer,
   dataSuiteReducer,
   changesReducer,
+  workshopReducer,
 } from '../../redux/reducers/index';
 import { LOGOUT_USER } from '../../redux/actionCreators/userActionCreators';
 
 const studioReducer = combineReducers({
   tours: tourReducer,
-  candidates: candidateReducer,
   dataSuite: dataSuiteReducer,
   changes: changesReducer,
+  workshop: workshopReducer,
 });
 
 // TODO: Big restructuring needed here...

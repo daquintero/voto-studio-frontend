@@ -103,3 +103,9 @@
     }
   }
 }
+
+.table-row__no-pointer {
+  &:hover {
+    cursor: auto!important;
+  }
+}

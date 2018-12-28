@@ -141,7 +141,7 @@ export const updateTourStepDataSet = (newDataSetId, updatedStepId, index) => (di
         type: UPDATE_TOUR_STEP_DATA_SET.SUCCESS,
         id: updatedStepId,
         updatedStepId,
-        newDataSetId: response.data.new_data_set_id,
+        newDataSetId: response.data.newDataSetId,
         index,
       }),
     error =>
@@ -206,7 +206,7 @@ export const createMarker = (newMarker, step, stepIndex) => (dispatch) => {
     response =>
       dispatch({
         type: CREATE_MARKER.SUCCESS,
-        newMarker: response.data.new_marker,
+        newMarker: response.data.newMarker,
         step,
         stepIndex,
       }),
@@ -240,7 +240,7 @@ export const updateMarker = (newMarker, newMarkerIndex, step, stepIndex) => (dis
       dispatch({
         type: UPDATE_MARKER.SUCCESS,
         id: newMarker.id,
-        newMarker: response.data.new_marker,
+        newMarker: response.data.newMarker,
         newMarkerIndex,
         step,
         stepIndex,

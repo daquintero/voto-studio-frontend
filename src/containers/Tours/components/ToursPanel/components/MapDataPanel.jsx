@@ -94,12 +94,12 @@ class MapDataPanel extends Component {
               <tr key={set.id}>
                 <td>{dataSuite.idCode}{set.id}</td>
                 <td>{set.name}</td>
-                <td>{(set.file_size / 1024).toFixed(3)}</td>
+                <td>{(set.fileSize / 1024).toFixed(3)}</td>
                 <td>
-                  {set.user_email === localStorage.getItem('userEmail') ? (
+                  {set.userEmail === JSON.parse(localStorage.getItem('user')).email ? (
                     <a href="/">You</a>
                   ) : (
-                    <a href="/">{set.user_email}</a>
+                    <a href="/">{set.userEmail}</a>
                   )}
                 </td>
                 <td><Badge color="success">Live</Badge></td>

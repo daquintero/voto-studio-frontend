@@ -53,13 +53,13 @@ class MapPreview extends PureComponent {
       extruded: true,
       wireframe: true,
       getLineColor: [100, 100, 100],
-      getFillColor: f => this.handleGetFillColor(f),
-      // getFillColor: f => console.log(f.id),
-      getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
+      // getFillColor: f => this.handleGetFillColor(f),
+      getFillColor: () => [0, 0, 0],
+      // getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
       // getElevation: f => console.log(f),
       updateTriggers: {
-        getFillColor: f => this.handleGetFillColor(f),
-        getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
+        // getFillColor: f => this.handleGetFillColor(f),
+        // getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
       },
       pickable: true,
       onClick: e => this.handleClick(e),

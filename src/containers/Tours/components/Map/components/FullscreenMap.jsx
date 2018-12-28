@@ -33,6 +33,7 @@ class FullscreenMap extends Component {
   componentDidMount() {
     window.addEventListener('resize', this.resizeViewport);
     // this.resizeViewport();
+    this.handleChangeMapHeight(window.innerHeight - 60);
   }
   //
   componentWillUnmount() {
@@ -139,7 +140,7 @@ class FullscreenMap extends Component {
     // I have removed some of the color functionality just to make this simpler for now, I will
     // add them in again once I've got this fully up and running. This GeoJsonLayer will be able to accept a
     // variety of data that can differ for each step.
-    // TODO: Think about this camel_case to snake_case stuff
+    // TODO: Think about this camelCase to snake_case stuff
     // const { openTour } = this.props.tours;
     // const activeStep = this.getActiveStep();
     // let mapData;
@@ -156,10 +157,11 @@ class FullscreenMap extends Component {
       wireframe: true,
       getLineColor: [100, 100, 100],
       getFillColor: () => [0, 0, 0],
-      getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
+      getElevation: () => 100,
+      // getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
       updateTriggers: {
         getFillColor: () => [0, 0, 0],
-        getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
+        // getElevation: f => f.properties.electoralData[2014].Presidente['partidoPRD'] / 5, // eslint-disable-line
       },
       pickable: true,
       onClick: e => this.handleClick(e),
@@ -173,7 +175,7 @@ class FullscreenMap extends Component {
       },
     });
 
-  render() { // TODO: Initial viewport is not loaded from the first active step
+  render() {
     const { map, tours } = this.props;
     const mapWrapperClasses = classnames({
       'fullscreen-map__wrapper': true,

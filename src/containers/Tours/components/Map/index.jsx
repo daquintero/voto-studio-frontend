@@ -6,6 +6,8 @@ import { changeMapViewport } from '../../../../redux/actions/mapActions';
 import {
   changeActiveTourStep,
   closeOpenTour,
+  initPublishTour,
+  publishTour,
 } from '../../../../redux/actions/tourActions';
 import { ToursProps, MapProps } from '../../../../shared/prop-types/ReducerProps';
 import FullscreenMap from './components/FullscreenMap';
@@ -14,7 +16,7 @@ import PreviewPanel from './components/PreviewPanel';
 import MapPopover from './components/MapPopover';
 import asyncLoading from '../../../../shared/components/asyncLoading';
 import addTransitionClasses from '../../../../shared/utils/addTransitionClasses';
-import PublishModel from '../../../../shared/components/PublishModal';
+import PublishModal from '../../../../shared/components/PublishModal';
 
 class Map extends Component {
   static propTypes = {
@@ -52,6 +54,10 @@ class Map extends Component {
 
   handleTogglePublishTourModal = () => this.setState(prevState => ({ publishTourModal: !prevState.publishTourModal }));
 
+  handlePublishTour = () => this.props.dispatch(publishTour(this.props.tours.openTour.id));
+
+  handleOnClose = () => this.props.dispatch(initPublishTour());
+
   render() {
     const { tours } = this.props;
     return (
@@ -74,8 +80,11 @@ class Map extends Component {
           openTour={tours.openTour}
           changeToStepViewport={this.handleChangeToStepViewport}
         />
-        <PublishModel
-          tours={tours}
+        <PublishModal
+          name={tours.openTour.name}
+          action={tours.actions.PUBLISH_TOUR}
+          publish={this.handlePublishTour}
+          onClose={this.handleOnClose}
           isOpen={this.state.publishTourModal}
           toggle={this.handleTogglePublishTourModal}
         />

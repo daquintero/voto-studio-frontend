@@ -6,17 +6,17 @@ import Loader from './Loader';
 
 class ModalComponent extends PureComponent {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    // item: PropTypes.instanceOf(Object).isRequired,
     action: PropTypes.instanceOf(Object).isRequired,
     toggle: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    publish: PropTypes.func.isRequired,
+    deleteItem: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
   };
 
   render() {
     const {
-      name, action, toggle, isOpen, publish, onClose,
+      action, toggle, isOpen, deleteItem, onClose,
     } = this.props;
     const { loading, loaded, error } = action;
 
@@ -37,10 +37,10 @@ class ModalComponent extends PureComponent {
                     <div className="modal__header">
                       <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
                       <i className="fal fa-fw fa-6x fa-check-circle" />
-                      <h4 className="bold-text modal__title">Published {name}</h4>
+                      <h4 className="bold-text modal__title">Deleted</h4>
                     </div>
                     <div className="modal__body">
-                      Successfully published! To revert this action goto the <code>Changes</code> section.
+                      Successfully deleted! To revert this action goto the <code>Changes</code> section.
                     </div>
                     <ButtonToolbar className="modal__footer">
                       <><Button onClick={toggle}>Continue editing</Button>{' '}</>
@@ -53,34 +53,34 @@ class ModalComponent extends PureComponent {
                         <div className="modal__header">
                           <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
                           <i className="fal fa-fw fa-6x fa-times-circle" />
-                          <h4 className="bold-text modal__title">Cannot publish {name}</h4>
+                          <h4 className="bold-text modal__title">Cannot delete</h4>
                         </div>
                         <div className="modal__body">
                           {error.message}
                         </div>
                         <ButtonToolbar className="modal__footer">
-                          <><Button onClick={toggle}>Back to tour</Button>{' '}</>
+                          <><Button onClick={toggle}>Back to workshop</Button>{' '}</>
                         </ButtonToolbar>
                       </>
                     ) : (
                       <>
                         <div className="modal__header">
                           <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
-                          <i className="fal fa-fw fa-6x fa-globe-americas" />
-                          <h4 className="bold-text modal__title">Publish {name}</h4>
+                          <i className="fal fa-fw fa-6x fa-trash-alt" />
+                          <h4 className="bold-text modal__title">Delete?</h4>
                         </div>
                         <div className="modal__body">
-                          This will update what the users can see on the main site. Are you sure you want to publish?
+                          This will delete this item. Are you sure you want to continue?
                         </div>
                         <ButtonToolbar className="modal__footer">
                           <>
                             <Button onClick={toggle}>Cancel</Button>{' '}
                             <Button
-                              color="success"
-                              onClick={!loaded ? publish : toggle}
+                              color="danger"
+                              onClick={!loaded ? deleteItem : toggle}
                               disabled={loading}
                             >
-                            Confirm
+                              Delete
                             </Button>
                           </>
                         </ButtonToolbar>

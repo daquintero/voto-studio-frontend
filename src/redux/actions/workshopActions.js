@@ -1,9 +1,13 @@
 import {
   LIST_ITEMS,
+  GET_ITEM_DETAIL,
+  DELETE_ITEM,
   BUILD_FORM,
   GET_RELATED_FIELDS,
   UPDATE_BASIC_FIELDS,
   UPDATE_RELATED_FIELD,
+  SEARCH_RELATED_FIELDS,
+  PUBLISH_WORKSHOP_CONTENT,
 } from '../actionCreators/workshopActionCreators';
 import workshopService from '../../services/workshopService';
 
@@ -20,6 +24,45 @@ export const listItems = () => (dispatch) => {
     error =>
       dispatch({
         type: LIST_ITEMS.ERROR,
+        error,
+      }),
+  );
+};
+
+export const getItemDetail = (appLabel, modelName, id) => (dispatch) => {
+  dispatch({
+    type: GET_ITEM_DETAIL.REQUEST,
+  });
+  return workshopService.get.detail(appLabel, modelName, id).then(
+    response =>
+      dispatch({
+        type: GET_ITEM_DETAIL.SUCCESS,
+        item: response.data.item,
+      }),
+    error =>
+      dispatch({
+        type: GET_ITEM_DETAIL.ERROR,
+        error,
+      }),
+  );
+};
+
+export const deleteItem = ({
+  appLabel, modelName, id, index,
+}) => (dispatch) => {
+  dispatch({
+    type: DELETE_ITEM.REQUEST,
+  });
+  return workshopService.delete.item(appLabel, modelName, id).then(
+    response =>
+      dispatch({
+        type: DELETE_ITEM.SUCCESS,
+        item: response.data.item,
+        index: parseInt(index, 10),
+      }),
+    error =>
+      dispatch({
+        type: DELETE_ITEM.ERROR,
         error,
       }),
   );
@@ -51,7 +94,9 @@ export const getRelatedFields = requestData => (dispatch) => {
     response =>
       dispatch({
         type: GET_RELATED_FIELDS.SUCCESS,
-        relatedFields: response.data.relatedFields,
+        relatedFieldOptions: response.data.relatedFieldOptions,
+        tableHeads: response.data.tableHeads,
+        verboseName: response.data.verboseName,
       }),
     error =>
       dispatch({
@@ -99,4 +144,38 @@ export const updateRelatedField = (updateData, relatedIndex) => (dispatch) => {
   );
 };
 
-export const submitForm = () => {};
+export const searchRelatedFields = searchParameters => (dispatch) => {
+  dispatch({
+    type: SEARCH_RELATED_FIELDS.REQUEST,
+  });
+  return workshopService.search.relatedFields(searchParameters).then(
+    response =>
+      dispatch({
+        type: SEARCH_RELATED_FIELDS.SUCCESS,
+        results: response.data.results,
+      }),
+    error =>
+      dispatch({
+        type: SEARCH_RELATED_FIELDS.ERROR,
+        error,
+      }),
+  );
+};
+
+export const publishWorkshopContent = () => (dispatch) => {
+  dispatch({
+    type: PUBLISH_WORKSHOP_CONTENT.REQUEST,
+  });
+  return workshopService.post.publish().then(
+    response =>
+      dispatch({
+        type: PUBLISH_WORKSHOP_CONTENT.SUCCESS,
+        result: response.data.result,
+      }),
+    error =>
+      dispatch({
+        type: PUBLISH_WORKSHOP_CONTENT.ERROR,
+        error,
+      }),
+  );
+};

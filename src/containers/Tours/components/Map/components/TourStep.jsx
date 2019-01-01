@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ClassNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
-import { Collapse, Input, Label, FormGroup, Tooltip, Table, Nav, NavLink } from 'reactstrap';
+import { Collapse, Tooltip, Table, Nav, NavLink } from 'reactstrap';
 import { TourProps } from '../../../../../shared/prop-types/ReducerProps';
 import Loader from '../../../../../shared/components/Loader';
 import {
@@ -141,80 +141,91 @@ class TourStep extends Component {
               >
                 Preview step {index + 1}
               </Tooltip>
-              {this.state.updatingTourStep &&
-              <>
-                <h4>Editing step {index + 1}</h4>
-                <hr />
-              </>
-              }
-              {this.state.updatingTourStep ? (
-                <>
-                  <FormGroup>
-                    <Label for="name">Step Name</Label>
-                    <Input name="name" type="text" value={this.state.name} onChange={e => this.onChange(e)} />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="text">Text</Label>
-                    <Input name="text" type="textarea" value={this.state.text} onChange={e => this.onChange(e)} />
-                  </FormGroup>
-                </>
-              ) : (
+              {!this.state.updatingTourStep ? (
                 <>
                   <h4>Step {index + 1} | {tourStep.name}</h4>
                   <p><small>{tourStep.text}</small></p>
+                  <hr />
                 </>
-              )}
-              <hr />
-              {this.state.updatingTourStep && (
+              ) : (
                 <>
-                  <FormGroup>
-                    <Label for="transitionDuration">Transition Duration (ms)</Label>
-                    <Input
-                      name="transitionDuration"
-                      type="number"
-                      value={this.state.transitionDuration}
-                      onChange={e => this.onChange(e)}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="transitionInterpolatorName">Transition Interpolator</Label>
-                    <Input
-                      type="select"
-                      name="transitionInterpolatorName"
-                      id="transitionInterpolatorName"
-                      onChange={e => this.onChange(e)}
-                      value={this.state.transitionInterpolatorName}
-                    >
-                      <option>FlyToInterpolator</option>
-                      <option>LinearInterpolator</option>
-                    </Input>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="transitionEasingName">Transition Easing</Label>
-                    <Input
-                      type="select"
-                      name="transitionEasingName"
-                      id="transitionEasingName"
-                      onChange={e => this.onChange(e)}
-                      value={this.state.transitionEasingName}
-                    >
-                      <option>d3.cubicEasing</option>
-                    </Input>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="dataSet">Data Set</Label>
-                    <Input
-                      type="select"
-                      name="dataSet"
-                      id="dataSet"
-                      onChange={e => this.onChangeDataSet(e)}
-                      value={dataSetSelectOption}
-                    >
-                      {tours.openTour.dataSetOptionsList.map(option => (
-                        <option data-id={option.id}>{option.name}</option>
-                      ))}
-                    </Input>
-                  </FormGroup>
+                  <div className="mb-4">
+                    <h4>Editing step {index + 1}</h4>
+                    <h4 className="subhead">Make changes and then click save.</h4>
+                  </div>
+                  <hr />
+                  <form className="form">
+                    <div className="form__form-group">
+                      <span className="form__form-group-label">Step Name</span>
+                      <input
+                        name="name"
+                        type="text"
+                        value={this.state.name}
+                        onChange={this.onChange}
+                        className="form__form-group-field form__form-group-field-step"
+                      />
+                    </div>
+                    <div className="form__form-group">
+                      <span className="form__form-group-label">Text</span>
+                      <input
+                        name="text"
+                        type="textarea"
+                        value={this.state.text}
+                        onChange={this.onChange}
+                        className="form__form-group-field form__form-group-field-step"
+                      />
+                    </div>
+                    <div className="form__form-group">
+                      <span className="form__form-group-label">Transition Duration (ms)</span>
+                      <input
+                        name="transitionDuration"
+                        type="number"
+                        value={this.state.transitionDuration}
+                        onChange={this.onChange}
+                        className="form__form-group-field form__form-group-field-step"
+                      />
+                    </div>
+                    <div className="form__form-group">
+                      <span className="form__form-group-label">Transition Interpolator</span>
+                      <select
+                        name="transitionInterpolatorName"
+                        id="transitionInterpolatorName"
+                        onChange={this.onChange}
+                        value={this.state.transitionInterpolatorName}
+                        className="form__form-group-select"
+                      >
+                        <option>FlyToInterpolator</option>
+                        <option>LinearInterpolator</option>
+                      </select>
+                    </div>
+                    <div className="form__form-group">
+                      <span className="form__form-group-label">Transition Easing</span>
+                      <select
+                        name="transitionEasingName"
+                        id="transitionEasingName"
+                        onChange={this.onChange}
+                        value={this.state.transitionEasingName}
+                        className="form__form-group-select"
+                      >
+                        <option>d3.cubicEasing</option>
+                      </select>
+                    </div>
+                    <div className="form__form-group">
+                      <span className="form__form-group-label">Data set</span>
+                      <select
+                        name="dataSet"
+                        id="dataSet"
+                        onChange={this.onChangeDataSet}
+                        value={dataSetSelectOption}
+                        className="form__form-group-select"
+                      >
+                        {tours.openTour.dataSetOptionsList.map(option => (
+                          <option data-id={option.id}>{option.name}</option>
+                        ))}
+                        <option value="">None</option>
+                      </select>
+                    </div>
+                  </form>
                 </>
               )}
               <Collapse isOpen={this.state.collapse}>

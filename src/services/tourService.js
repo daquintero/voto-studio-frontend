@@ -49,8 +49,9 @@ const reorderTourSteps = (tourId, result) => axios.post(urls.post.reorderTourSte
 const createMarker = (marker, stepId) => axios.post(urls.post.createMarker, { marker, stepId }, getHeaders());
 const updateMarker = marker => axios.post(urls.post.updateMarker, { marker }, getHeaders());
 // Tour DELETE requests (The body of a delete request must have the "data" key)
-const deleteTour = id => axios.delete(urls.delete.deleteTour, { data: { id } }, getHeaders());
-const deleteStep = (stepId, tourId) => axios.delete(urls.delete.deleteStep, { data: { stepId, tourId } }, getHeaders());
+const deleteTour = id => axios.delete(urls.delete.deleteTour, { data: { id }, ...getHeaders() });
+const deleteStep = (stepId, tourId) =>
+  axios.delete(urls.delete.deleteStep, { data: { stepId, tourId }, ...getHeaders() });
 
 const markerSchema = new schema.Entity('markers');
 const stepSchema = new schema.Entity('steps', {

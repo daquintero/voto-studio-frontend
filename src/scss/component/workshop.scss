@@ -9,4 +9,9 @@
     cursor: pointer;
     text-decoration: underline;
   }
+  &__form-action {
+  }
+  &__form-action:hover {
+    cursor: pointer;
+  }
 }

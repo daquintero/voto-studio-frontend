@@ -7,14 +7,17 @@
 @import './base/typography';          // base styles of h1-h6, p, span
 
 //components...
+@import './component/alert';
 @import 'component/btn';
 @import './component/card';
 @import './component/check-box';
+@import './component/collapse';
 @import './component/sidebar';
 @import './component/topbar';
 @import './component/load';
 @import './component/form';
 @import './component/select-options';
+@import './component/notification';
 @import './component/modal';
 @import './component/tour-studio';
 @import './component/fullscreen-map';

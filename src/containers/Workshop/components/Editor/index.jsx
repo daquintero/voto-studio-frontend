@@ -2,44 +2,73 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { Field, reduxForm } from 'redux-form';
-import { Container, Col, Row, Card, CardBody, ButtonToolbar, Button, Input, FormGroup, Table } from 'reactstrap';
+import { withRouter, Link } from 'react-router-dom';
+import { Field, reduxForm, reset } from 'redux-form';
+import {
+  Container,
+  Col,
+  Row,
+  Card,
+  CardBody,
+  ButtonToolbar,
+  Button,
+  Input,
+  FormGroup,
+  Table,
+  UncontrolledTooltip,
+} from 'reactstrap';
+import NotificationSystem from 'rc-notification';
 import {
   buildForm,
   getRelatedFields,
   updateBasicFields,
   updateRelatedField,
+  searchRelatedFields,
 } from '../../../../redux/actions/workshopActions';
 import Loader from '../../../../shared/components/Loader';
 import renderSelectField from '../../../../shared/components/form/Select';
 import renderCheckboxField from '../../../../shared/components/form/CheckBox';
-import { BUILD_FORM, GET_RELATED_FIELDS } from '../../../../redux/actionCreators/workshopActionCreators';
+import {
+  BUILD_FORM,
+  GET_RELATED_FIELDS,
+  UPDATE_BASIC_FIELDS,
+} from '../../../../redux/actionCreators/workshopActionCreators';
+import { FullWideNotification } from '../../../../shared/components/Notification';
 
 class Editor extends Component {
   static propTypes = {
     workshop: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
     match: ReactRouterPropTypes.match.isRequired,
-    workshopForm: PropTypes.instanceOf(Object).isRequired,
+    history: ReactRouterPropTypes.history.isRequired,
+    workshopForm: PropTypes.instanceOf(Object),
   };
+
+  static defaultProps = {
+    workshopForm: {},
+  };
+
+  static notificationTC = null;
 
   constructor(props) {
     super(props);
     this.state = {
       fieldName: '',
+      hasRelatedFields: false,
       id: this.props.match.params.id,
     };
   }
 
   componentDidMount() {
+    NotificationSystem.newInstance({}, n => this.notificationTC = n); // eslint-disable-line
+
     const { dispatch, match } = this.props;
     const { appName, modelName, id } = match.params;
 
     dispatch(buildForm(match.params))
       .then((action) => {
       // Grab the related fields for the first option in the dropdown
-        if (action.type === BUILD_FORM.SUCCESS) {
+        if (action.type === BUILD_FORM.SUCCESS && action.form.relatedFields.length) {
           const firstRelatedField = action.form.relatedFields[0];
           const values = firstRelatedField.modelLabel.split('.');
 
@@ -55,11 +84,20 @@ class Editor extends Component {
               if (nextAction.type === GET_RELATED_FIELDS.SUCCESS) {
                 this.setState({
                   fieldName: firstRelatedField.fieldName,
+                  hasRelatedFields: true,
                 });
               }
             });
+        } else {
+          this.setState({
+            hasRelatedFields: false,
+          });
         }
       });
+  }
+
+  componentWillUnmount() {
+    this.notificationTC.destroy();
   }
 
   onChange = (e) => {
@@ -71,6 +109,8 @@ class Editor extends Component {
 
     this.setState({
       fieldName: selected.dataset.field,
+      relatedAppName: values[0],
+      relatedModelName: values[1].toLowerCase(),
     });
     this.props.dispatch(getRelatedFields({
       parentAppName: appName,
@@ -82,9 +122,32 @@ class Editor extends Component {
     }));
   };
 
+  showNotification = ({ notification, position }) => {
+    this.notificationTC.notice({
+      content: notification,
+      duration: 5,
+      closable: true,
+      style: { top: 0, left: 0 },
+      className: position,
+    });
+  };
+
+  searchRelatedFields = (e) => {
+    e.persist();
+    this.props.dispatch(searchRelatedFields({
+      query: e.target.value,
+      term: 'name',
+      al: this.state.relatedAppName,
+      mn: this.state.relatedModelName,
+    }));
+  };
+
   handleUpdateBasicFields = (e) => {
     e.preventDefault();
-    const { workshop, workshopForm, dispatch } = this.props;
+    const {
+      workshop, workshopForm, dispatch, match, history,
+    } = this.props;
+    const { appName, modelName, id } = match.params;
     // Check if values object is empty, if so then return.
     if (Object.keys(workshopForm.values).length === 0 && workshopForm.values.constructor === Object) return;
     const updateData = {
@@ -92,7 +155,21 @@ class Editor extends Component {
       id: this.state.id,
       values: workshopForm.values,
     };
-    dispatch(updateBasicFields(updateData)).then(action => this.setState({ id: action.updates.id }));
+    dispatch(updateBasicFields(updateData)).then((action) => {
+      this.setState({ id: action.updates.id });
+      if (action.type === UPDATE_BASIC_FIELDS.SUCCESS) {
+        this.showNotification({
+          notification: <FullWideNotification
+            message="Testing dfgsdfg  sdfgsdfg  sdfgsdfg dfg"
+            color="success"
+          />,
+          position: 'top',
+        });
+        if (id === 'new') {
+          history.push(`/workshop/editor/${appName}/${modelName}/${action.updates.id}/`);
+        }
+      }
+    });
   };
 
   handleUpdateRelatedField = (type, tableValues) => {
@@ -112,6 +189,13 @@ class Editor extends Component {
     }
   };
 
+  buildPlaceholder = (field) => {
+    if (field.readOnly) {
+      return '';
+    }
+    return (`${field.select ? 'Choose' : 'Enter'} ${field.verboseName}...`);
+  };
+
   renderField = (field) => {
     if (field.type === 'select') return renderSelectField;
     if (field.type === 'checkbox') return renderCheckboxField;
@@ -119,7 +203,7 @@ class Editor extends Component {
   };
 
   render() {
-    const { workshop } = this.props;
+    const { workshop, dispatch } = this.props;
     const { form } = workshop;
     const { loading, loaded, error } = workshop.actions.BUILD_FORM;
     return (
@@ -132,6 +216,9 @@ class Editor extends Component {
               <>
                 <Row>
                   <Col md={12}>
+                    <Link to="/workshop/" className="text-black-50">
+                      <i className="fal fa-chevron-circle-left" /> back to workshop
+                    </Link>
                     <h3 className="page-title text-capitalize">
                       {form.new ? 'Create' : 'Edit'} {form.parentModel.name}
                     </h3>
@@ -159,15 +246,23 @@ class Editor extends Component {
                                   field={f}
                                   type={f.type}
                                   options={f.options}
-                                  placeholder={
-                                    `${f.select ? 'Choose' : 'Enter'} ${f.verboseName}...`
-                                  }
+                                  placeholder={this.buildPlaceholder(f)}
+                                  defaultChecked={f.type === 'checkbox' && f.defaultChecked}
+                                  readOnly={f.readOnly}
                                 />
                               </div>
+                              {f.readOnly && (
+                                <span className="form__form-group-description">
+                                  This is a &quot;read-only&quot; field
+                                </span>
+                              )}
                             </div>
                           ))}
                           <ButtonToolbar className="form__button-toolbar">
-                            <Button color="primary" size="sm" type="submit">Submit</Button>
+                            <Button color="success" size="sm" type="submit">Submit</Button>
+                            <Button color="secondary" size="sm" onClick={() => dispatch(reset('workshopForm'))}>
+                              Undo changes
+                            </Button>
                           </ButtonToolbar>
                         </form>
                         {form.relatedFields.map((f, tableIndex) => Boolean(f.relatedInstances.length) && (
@@ -177,7 +272,11 @@ class Editor extends Component {
                               <thead>
                                 <tr>
                                   <th>ID</th>
-                                  <th>Description</th>
+                                  {f.tableHeads ? f.tableHeads.map(o => (
+                                    <th className="text-capitalize">{o.replace(/_/g, ' ')}</th>
+                                  )) : (
+                                    <th />
+                                  )}
                                   <th>User</th>
                                   <th>Action</th>
                                 </tr>
@@ -195,9 +294,9 @@ class Editor extends Component {
                                       )}
                                     </td>
                                     <td>
-                                      <p
+                                      <span
                                         role="presentation"
-                                        className="text-danger"
+                                        className="workshop__form-action mr-3"
                                         onClick={() => this.handleUpdateRelatedField(
                                           'remove',
                                           o.tableValues,
@@ -205,8 +304,34 @@ class Editor extends Component {
                                           rowIndex,
                                         )}
                                       >
-                                        <i className="fal fa-fw fa-minus-circle" /> Remove
-                                      </p>
+                                        <i
+                                          className="fal fa-fw fa-minus-circle text-danger"
+                                          id={`remove-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                        />
+                                      </span>
+                                      <span
+                                        role="presentation"
+                                        className="workshop__form-action"
+                                        data-obj={JSON.stringify(o)}
+                                        onClick={this.handleViewItem}
+                                      >
+                                        <i
+                                          className="fal fa-fw fa-eye text-success"
+                                          id={`details-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                        />
+                                      </span>
+                                      <UncontrolledTooltip
+                                        placement="top"
+                                        target={`remove-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                      >
+                                        Remove {f.verboseName}
+                                      </UncontrolledTooltip>
+                                      <UncontrolledTooltip
+                                        placement="top"
+                                        target={`details-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                      >
+                                        View {f.verboseName}
+                                      </UncontrolledTooltip>
                                     </td>
                                   </tr>
                               ))}
@@ -216,73 +341,141 @@ class Editor extends Component {
                         ))}
                       </CardBody>
                     </Card>
-                  </Col>
-                  <Col md={6}>
                     <Card>
                       <CardBody>
-                        <h3 className="page-title text-capitalize">Add Related Fields</h3>
-                        <h3 className="page-subhead subhead">
-                          Search for and add any related content
-                        </h3>
-                        <FormGroup>
-                          <Input
-                            className="text-capitalize"
-                            type="select"
-                            name="transitionEasing"
-                            id="transitionEasing"
-                            onChange={e => this.onChange(e)}
-                            value={this.state.transitionEasing}
-                          >
-                            {form.relatedFields.map(f => (
-                              <option
-                                key={f.name}
-                                className="text-capitalize"
-                                value={f.modelLabel}
-                                data-field={f.name}
-                              >
-                                {f.verboseNamePlural}
-                              </option>
-                            ))}
-                          </Input>
-                        </FormGroup>
-                        <Table responsive hover>
-                          <thead>
-                            <tr>
-                              <th>ID</th>
-                              <th>Description</th>
-                              <th>User</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {form.relatedFieldOptions && form.relatedFieldOptions.map((o, index) => (
-                              <tr key={o.id}>
-                                <td>{o.id}</td>
-                                <td>{o.tableValues.descriptor}</td>
-                                <td>
-                                  {o.tableValues.userEmail === JSON.parse(localStorage.getItem('user')).email ? (
-                                    <a href="/">You</a>
-                                  ) : (
-                                    <a href="/">{o.tableValues.userEmail}</a>
-                                  )}
-                                </td>
-                                <td>
-                                  <p
-                                    role="presentation"
-                                    className="text-success"
-                                    onClick={() => this.handleUpdateRelatedField(
-                                       'add',
-                                       o.tableValues,
-                                       index,
-                                     )}
+                        {this.state.hasRelatedFields ? (
+                          <>
+                            <h3 className="page-title text-capitalize">Add Related Fields</h3>
+                            <h3 className="page-subhead subhead">
+                              Search for and add any related content
+                            </h3>
+                            <Row>
+                              <Col xl={8}>
+                                <FormGroup>
+                                  <Input
+                                    type="text"
+                                    name="transitionEasing"
+                                    id="transitionEasing"
+                                    onKeyUp={this.searchRelatedFields}
+                                  />
+                                </FormGroup>
+                              </Col>
+                              <Col xl={4}>
+                                <FormGroup>
+                                  <Input
+                                    className="text-capitalize"
+                                    type="select"
+                                    name="transitionEasing"
+                                    id="transitionEasing"
+                                    onChange={e => this.onChange(e)}
+                                    value={this.state.transitionEasing}
                                   >
-                                    <i className="fal fa-fw fa-plus" />Add
-                                  </p>
-                                </td>
+                                    {form.relatedFields.map(f => (
+                                      <option
+                                        key={f.name}
+                                        className="text-capitalize"
+                                        value={f.modelLabel}
+                                        data-field={f.name}
+                                      >
+                                        {f.verboseNamePlural}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            {!form.relatedFieldOptions ? (
+                              <Loader elemClass="load__card" />
+                          ) : (
+                            <Table responsive hover>
+                          <>
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                {form.tableHeads.length ? form.tableHeads.map(o => (
+                                  <th className="text-capitalize">{o.replace(/_/g, ' ')}</th>
+                                )) : (
+                                  <th />
+                                )}
+                                <th>User</th>
+                                <th>Actions</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </Table>
+                            </thead>
+                            <tbody>
+                              {form.relatedFieldOptions.length ? form.relatedFieldOptions.map((o, index) => (
+                                <>
+                                  <tr key={o.id}>
+                                    <td>{o.id}</td>
+                                    {o.tableValues.descriptors.values.map(d => (
+                                      <td>{d.value}</td>
+                                    ))}
+                                    <td>
+                                      {o.tableValues
+                                        .userEmail === JSON.parse(localStorage.getItem('user')).email ? (
+                                          <a href="/">You</a>
+                                      ) : (
+                                        <a href="/">{o.tableValues.userEmail}</a>
+                                      )}
+                                    </td>
+                                    <td>
+                                      <span
+                                        role="presentation"
+                                        className="workshop__form-action mr-3"
+                                        onClick={() => this.handleUpdateRelatedField(
+                                          'add',
+                                          o.tableValues,
+                                          index,
+                                        )}
+                                      >
+                                        <i
+                                          className="fal fa-fw fa-plus-circle text-primary"
+                                          id={`add-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                        />
+                                      </span>
+                                      <span
+                                        role="presentation"
+                                        className="workshop__form-action"
+                                        data-obj={JSON.stringify(o)}
+                                        onClick={this.handleViewItem}
+                                      >
+                                        <i
+                                          className="fal fa-fw fa-eye text-success"
+                                          id={`details-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                        />
+                                      </span>
+                                      <UncontrolledTooltip
+                                        placement="top"
+                                        target={`add-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                      >
+                                        Add {form.verboseName}
+                                      </UncontrolledTooltip>
+                                      <UncontrolledTooltip
+                                        placement="top"
+                                        target={`details-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                      >
+                                        View {form.verboseName}
+                                      </UncontrolledTooltip>
+                                    </td>
+                                  </tr>
+                                </>
+                          )) : (
+                            <tr>
+                              <td>No items</td>
+                            </tr>
+                          )}
+                            </tbody>
+                          </>
+                            </Table>
+                          )}
+                          </>
+                        ) : (
+                          <>
+                            <h3 className="page-title text-capitalize">No related fields</h3>
+                            <h3 className="page-subhead subhead">
+                              This content type has no related pieces of content
+                            </h3>
+                          </>
+                        )}
                       </CardBody>
                     </Card>
                   </Col>

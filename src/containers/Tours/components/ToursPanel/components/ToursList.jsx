@@ -39,7 +39,6 @@ class ToursList extends Component {
 
   handleSubmit = (values) => {
     if (!values.name || !values.description) return;
-    if (!values.buildNew && !values.data) return;
     this.props.dispatch(createTour(values)).then((action) => {
       if (action.type === CREATE_TOUR.SUCCESS) {
         this.setState({ createTourForm: false });

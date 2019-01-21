@@ -6,15 +6,17 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import asyncLoading from '../../../../../shared/components/asyncLoading';
-import Loader from '../../../../../shared/components/Loader';
 import renderFileInputField from '../../../../../shared/components/form/FileInput';
 import { createDataSet } from '../../../../../redux/actions/dataSuiteActions';
 import renderCheckBoxField from '../../../../../shared/components/form/CheckBox';
+import validate from './validateCreateDataSetForm';
+import { CREATE_DATA_SET } from '../../../../../redux/actionCreators/dataSuiteActionCreators';
+
 
 class MapDataPanel extends Component {
   static propTypes = {
     dataSuite: PropTypes.instanceOf(Object).isRequired,
-    form: PropTypes.instanceOf(Object).isRequired,
+    newDataSetForm: PropTypes.instanceOf(Object).isRequired,
     reset: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -25,42 +27,25 @@ class MapDataPanel extends Component {
     super(props);
     this.state = {
       createDataSetForm: false,
-      formErrors: {
-        name: false,
-        description: false,
-        file: false,
-      },
     };
   }
 
   handleToggleCreateDataSetForm = () =>
     this.setState(prevState => ({ createDataSetForm: !prevState.createDataSetForm }));
 
-  handleFormSubmit = (formProps) => {
-    // Validate the form data
-    const { values } = this.props.form.newDataSet;
-    const formErrors = {
-      name: false,
-      description: false,
-      file: false,
-    };
-    if (!values) return;
-    if (!values.name) formErrors.name = true;
-    if (!values.description) formErrors.description = true;
-    if (!values.buildNew && !values.data) formErrors.file = true;
-
-    this.setState({ formErrors });
-    if (formErrors.name || formErrors.description || (!values.buildNew && formErrors.file)) return;
-
-
+  handleFormSubmit = (values) => {
     // Build the formData object and dispatch action
     const formData = new FormData();
-    if (!formProps.buildNew) formData.append('file', formProps.data.file);
-    formData.append('buildNew', formProps.buildNew.toString());
-    formData.append('description', formProps.description);
-    formData.append('name', formProps.name);
-    this.props.dispatch(createDataSet(formData));
-    this.setState({ createDataSetForm: false });
+    if (!values.buildNew) formData.append('file', values.data.file);
+    formData.append('buildNew', values.buildNew.toString());
+    formData.append('description', values.description);
+    formData.append('name', values.name);
+    this.props.dispatch(createDataSet(formData)).then((action) => {
+      if (action.type === CREATE_DATA_SET.SUCCESS) {
+        this.setState({ createDataSetForm: false });
+        this.props.reset();
+      }
+    });
   };
 
   handleCancel = () => {
@@ -70,9 +55,18 @@ class MapDataPanel extends Component {
 
   handleEditDataSet = dataSetId => this.props.history.push(`/studio/tours/data/${dataSetId}/`);
 
+  renderField = ({
+    input, placeholder, type, meta: { touched, error },
+  }) => (
+    <div className="form__form-group-input-wrap">
+      <input {...input} placeholder={placeholder} type={type} />
+      {touched && error && <span className="form__form-group-error">{error}</span>}
+    </div>
+  );
+
   render() {
-    const { dataSuite, form, handleSubmit } = this.props;
-    const { formErrors } = this.state;
+    const { dataSuite, newDataSetForm, handleSubmit } = this.props;
+    const { createDataSetForm } = this.state;
     return (
       // There should be a refresh button in the top right as another user may upload a new
       // data set whilst one user is waiting and they shouldn't have to refresh the whole page.
@@ -114,54 +108,48 @@ class MapDataPanel extends Component {
             ))}
           </tbody>
         </Table>
-        {dataSuite.actions.CREATE_DATA_SET.loading && (<Loader elemClass="load__card" />)}
-        {!this.state.createDataSetForm ? (
-          <span
-            className="tours-panel__new"
-            role="presentation"
+        {!createDataSetForm ? (
+          <Button
+            size="sm"
+            color="success"
+            className="tours-panel__new mt-4 mb-0"
             onClick={this.handleToggleCreateDataSetForm}
           >
             <i className="fal fa-cloud-upload mr-2" />
           Upload new data set
-          </span>
+          </Button>
         ) : (
           <form
-            className="form form--horizontal"
+            className="form form--horizontal mt-4"
             onSubmit={handleSubmit(this.handleFormSubmit)}
             id="new-data-set-form"
             encType="multipart/form-data"
           >
             <div className="form__form-group">
-              <span className="form__form-group-label">
-                Name{formErrors.name && <><br /><span className="text-danger">required field</span></>}
-              </span>
+              <span className="form__form-group-label">Name</span>
               <div className="form__form-group-field">
                 <Field
                   name="name"
-                  component="input"
+                  component={this.renderField}
                   type="text"
                   placeholder="My new data set"
                 />
               </div>
             </div>
             <div className="form__form-group">
-              <span className="form__form-group-label">
-                Description{formErrors.description && <><br /><span className="text-danger">required field</span></>}
-              </span>
+              <span className="form__form-group-label">Description</span>
               <div className="form__form-group-field">
                 <Field
                   name="description"
-                  component="input"
+                  component={this.renderField}
                   type="text"
                   placeholder="This data set shows..."
                 />
               </div>
             </div>
-            {form.newDataSet && (form.newDataSet.values && (!form.newDataSet.values.buildNew && (
+            {newDataSetForm && newDataSetForm.values && !newDataSetForm.values.buildNew && (
               <div className="form__form-group">
-                <span className="form__form-group-label">
-                  Data file{formErrors.file && <><br /><span className="text-danger">file required</span></>}
-                </span>
+                <span className="form__form-group-label">Data file</span>
                 <div className="form__form-group-field">
                   <Field
                     name="data"
@@ -169,7 +157,8 @@ class MapDataPanel extends Component {
                     component={renderFileInputField}
                   />
                 </div>
-              </div>)))}
+              </div>
+            )}
             <div className="form__form-group">
               <div className="form__form-group-field">
                 <Field
@@ -180,10 +169,18 @@ class MapDataPanel extends Component {
               </div>
             </div>
             <ButtonToolbar className="form__button-toolbar">
-              <Button color="primary" type="submit">Submit</Button>
-              <Button type="button" onClick={this.handleCancel}>
-                Cancel
+              <Button size="sm" color="success" type="submit">
+                {!dataSuite.actions.CREATE_DATA_SET.loading ? (
+                  <span>Create data set</span>
+                ) : (
+                  <span><i className="fal fa-spinner fa-spin" /> Creating data set</span>
+                )}
               </Button>
+              {!dataSuite.actions.CREATE_DATA_SET.loading && (
+                <Button size="sm" type="button" onClick={this.handleCancel}>
+                  Cancel
+                </Button>
+              )}
             </ButtonToolbar>
           </form>
         )}
@@ -192,10 +189,12 @@ class MapDataPanel extends Component {
   }
 }
 
-// This exporting business is messy. I want to look into a better way of doing this
-export default reduxForm({
-  form: 'newDataSet',
-})(asyncLoading('load__card')(withRouter(connect(state => ({
+const reduxFormMapDataPanel = reduxForm({
+  form: 'newDataSetForm',
+  validate,
+})(MapDataPanel);
+
+export default asyncLoading('load__card')(withRouter(connect(state => ({
   dataSuite: state.studio.dataSuite,
-  form: state.form,
-}))(MapDataPanel))));
+  newDataSetForm: state.form.newDataSetForm,
+}))(reduxFormMapDataPanel)));

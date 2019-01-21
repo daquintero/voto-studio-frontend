@@ -6,39 +6,50 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { Badge, Table, Button, ButtonToolbar } from 'reactstrap';
 import asyncLoading from '../../../../../shared/components/asyncLoading';
-import Loader from '../../../../../shared/components/Loader';
 import { createTour, deleteTour } from '../../../../../redux/actions/tourActions';
+import { CREATE_TOUR } from '../../../../../redux/actionCreators/tourActionCreators';
+import validate from './validateCreateTourForm';
+
 
 class ToursList extends Component {
   static propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
     tours: PropTypes.instanceOf(Object).isRequired,
-    form: PropTypes.instanceOf(Object).isRequired,
     reset: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: ReactRouterPropTypes.history.isRequired,
+    type: PropTypes.string,
+    meta: PropTypes.shape({
+      touched: PropTypes.bool,
+      error: PropTypes.string,
+    }),
+  };
+
+  static defaultProps = {
+    type: 'text',
+    meta: null,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       createTourForm: false,
-      formErrors: {
-        name: false,
-        description: false,
-      },
     };
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { newTour } = this.props.form;
-    if (!newTour.values) return;
-    if (!newTour.values.name) this.setState(prevState => ({ formErrors: { ...prevState.formErrors, name: true } }));
-    if (!newTour.values.description) {
-      this.setState(prevState => ({ formErrors: { ...prevState.formErrors, description: true } }));
-    }
-    if (!newTour.values.name || !newTour.values.description) return;
-    this.props.dispatch(createTour(newTour.values));
+  handleSubmit = (values) => {
+    if (!values.name || !values.description) return;
+    if (!values.buildNew && !values.data) return;
+    this.props.dispatch(createTour(values)).then((action) => {
+      if (action.type === CREATE_TOUR.SUCCESS) {
+        this.setState({ createTourForm: false });
+        this.props.reset();
+      }
+    });
+  };
+
+  handleCancel = () => {
+    this.props.reset();
     this.setState({ createTourForm: false });
   };
 
@@ -49,8 +60,17 @@ class ToursList extends Component {
   handleToggleCreateTourForm = () =>
     this.setState(prevState => ({ createTourForm: !prevState.createTourForm }));
 
+  renderField = ({
+    input, placeholder, type, meta: { touched, error },
+  }) => (
+    <div className="form__form-group-input-wrap">
+      <input {...input} placeholder={placeholder} type={type} />
+      {touched && error && <span className="form__form-group-error">{error}</span>}
+    </div>
+  );
+
   render() {
-    const { tours, reset } = this.props;
+    const { handleSubmit, tours } = this.props;
     return (
       <div className="tours-panel__tour-list__wrapper">
         <Table responsive hover>
@@ -99,26 +119,26 @@ class ToursList extends Component {
             ))}
           </tbody>
         </Table>
-        {tours.actions.CREATE_TOUR.loading && (<Loader elemClass="load__card" />)}
         {!this.state.createTourForm ? (
-          <span
-            className="tours-panel__new"
-            role="presentation"
+          <Button
+            size="sm"
+            color="success"
+            className="tours-panel__new mt-4 mb-0"
             onClick={this.handleToggleCreateTourForm}
           >
             <i className="fal fa-plus mr-2" />
-                  Add new tour
-          </span>
+            Create new tour
+          </Button>
         ) : (
-          <form className="form form--horizontal" onSubmit={this.handleSubmit}>
+          <form className="form form--horizontal mt-4" onSubmit={handleSubmit(this.handleSubmit)}>
             <div className="form__form-group">
               <span className="form__form-group-label">Name</span>
               <div className="form__form-group-field">
                 <Field
                   name="name"
-                  component="input"
+                  component={this.renderField}
                   type="text"
-                  placeholder="My new data set"
+                  placeholder="My new tour"
                 />
               </div>
             </div>
@@ -127,17 +147,25 @@ class ToursList extends Component {
               <div className="form__form-group-field">
                 <Field
                   name="description"
-                  component="input"
+                  component={this.renderField}
                   type="text"
-                  placeholder="This data set shows..."
+                  placeholder="This tour tells people about..."
                 />
               </div>
             </div>
             <ButtonToolbar className="form__button-toolbar">
-              <Button color="primary" type="submit">Submit</Button>
-              <Button type="button" onClick={reset}>
-                Cancel
+              <Button size="sm" color="success" type="submit">
+                {!tours.actions.CREATE_TOUR.loading ? (
+                  <span>Create tour</span>
+                ) : (
+                  <span><i className="fal fa-spinner fa-spin" /> Creating tour</span>
+                )}
               </Button>
+              {!tours.actions.CREATE_TOUR.loading && (
+                <Button size="sm" type="button" onClick={this.handleCancel}>
+                  Cancel
+                </Button>
+              )}
             </ButtonToolbar>
           </form>
         )}
@@ -146,9 +174,12 @@ class ToursList extends Component {
   }
 }
 
-export default reduxForm({
+const reduxFormToursList = reduxForm({
   form: 'newTour',
-})(asyncLoading('load__card')(withRouter(connect(state => ({
+  validate,
+})(ToursList);
+
+export default asyncLoading('load__card')(withRouter(connect(state => ({
   tours: state.studio.tours,
-  form: state.form,
-}))(ToursList))));
+  newTourForm: state.form.newTourForm,
+}))(reduxFormToursList)));

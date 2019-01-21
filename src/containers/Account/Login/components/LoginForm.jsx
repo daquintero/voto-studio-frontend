@@ -9,6 +9,8 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import renderCheckBoxField from '../../../../shared/components/form/CheckBox';
 import { loginUser } from '../../../../redux/actions/userActions';
+import validate from './validate';
+
 
 class LoginForm extends PureComponent {
   static propTypes = {
@@ -16,17 +18,22 @@ class LoginForm extends PureComponent {
     dispatch: PropTypes.func.isRequired,
     history: ReactRouterPropTypes.history.isRequired,
     errorMessage: PropTypes.string,
+    type: PropTypes.string,
+    meta: PropTypes.shape({
+      touched: PropTypes.bool,
+      error: PropTypes.string,
+    }),
   };
 
   static defaultProps = {
     errorMessage: '',
+    type: 'text',
+    meta: null,
   };
 
   constructor() {
     super();
-    this.state = {
-      showPassword: false,
-    };
+    this.state = {};
   }
 
   showPassword = (e) => {
@@ -40,13 +47,28 @@ class LoginForm extends PureComponent {
     this.props.dispatch(loginUser(values, this.props.history));
   };
 
-  render() {
-    const { handleSubmit } = this.props;
+  renderField = ({
+    input, placeholder, type, meta: { touched, error },
+  }) => (
+    <div className="form__form-group-input-wrap">
+      <input {...input} placeholder={placeholder} type={type} />
+      {touched && error && <span className="form__form-group-error">{error}</span>}
+    </div>
+  );
 
+  render() {
+    const { handleSubmit, auth } = this.props;
+    const loginUserAction = auth.actions.LOGIN_USER;
     return (
       <>
-        {this.props.errorMessage && (
-          <h4 className="form__invalid-login mb-2">{this.props.errorMessage}</h4>
+        {loginUserAction.error && (
+          <div className="mb-3">
+            {Object.keys(loginUserAction.error.response.data).map(k => (
+              <p className="text-danger" key={k}>
+                <span className="text-capitalize">{k}</span>: {loginUserAction.error.response.data[k]}
+              </p>
+            ))}
+          </div>
         )}
         <form className="form" onSubmit={handleSubmit(this.submit)}>
           <div className="form__form-group">
@@ -57,7 +79,7 @@ class LoginForm extends PureComponent {
               </div>
               <Field
                 name="email"
-                component="input"
+                component={this.renderField}
                 type="email"
                 placeholder="mail@example.com"
               />
@@ -71,13 +93,13 @@ class LoginForm extends PureComponent {
               </div>
               <Field
                 name="password"
-                component="input"
-                type={this.state.showPassword ? 'text' : 'password'}
+                component={this.renderField}
+                type="password"
                 placeholder="Password"
               />
             </div>
             <div className="account__forgot-password">
-              <a href="/">Forgot a password?</a>
+              <a href="/">Forgot password?</a>
             </div>
           </div>
           <div className="form__form-group">
@@ -89,7 +111,13 @@ class LoginForm extends PureComponent {
               />
             </div>
           </div>
-          <Button className="btn btn-primary account__btn account__btn--small" type="submit">Sign In</Button>
+          <Button className="btn btn-primary account__btn text-white" type="submit">
+            {!loginUserAction.loading ? (
+              <span>Login</span>
+            ) : (
+              <span><i className="fal fa-spinner fa-spin" /> Logging in...</span>
+            )}
+          </Button>
           <Link className="btn btn-outline-primary account__btn account__btn--small" to="/account/signup">
             Create Account
           </Link>
@@ -101,8 +129,9 @@ class LoginForm extends PureComponent {
 
 const reduxFormLogin = reduxForm({
   form: 'login_form',
+  validate,
 })(LoginForm);
 
 export default withRouter(connect(state => ({
-  errorMessage: state.auth.error,
+  auth: state.auth,
 }))(reduxFormLogin));

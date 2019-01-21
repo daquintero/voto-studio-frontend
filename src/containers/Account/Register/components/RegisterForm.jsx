@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import EyeIcon from 'mdi-react/EyeIcon';
 import KeyVariantIcon from 'mdi-react/KeyVariantIcon';
 import MailRuIcon from 'mdi-react/MailRuIcon';
 import UserIcon from 'mdi-react/UserIcon';
@@ -10,6 +9,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../../../redux/actions/userActions';
+import validate from './validate';
 
 
 class RegisterForm extends PureComponent {
@@ -18,45 +18,55 @@ class RegisterForm extends PureComponent {
     dispatch: PropTypes.func.isRequired,
     history: ReactRouterPropTypes.history.isRequired,
     errorMessage: PropTypes.string,
+    type: PropTypes.string,
+    meta: PropTypes.shape({
+      touched: PropTypes.bool,
+      error: PropTypes.string,
+    }),
   };
 
   static defaultProps = {
     errorMessage: '',
+    type: 'text',
+    meta: null,
   };
 
   constructor(props) {
     super(props);
-    this.state = {
-      showPassword: false,
-    };
-
-    this.showPassword = this.showPassword.bind(this);
+    this.state = {};
   }
 
-  showPassword(e) {
-    e.preventDefault();
-    this.setState({
-      showPassword: !this.state.showPassword,
-    });
-  }
 
-  submit = (values) => {
-    if (values.email && values.password === values.passwordRepeat) {
+  handleSubmit = (values) => {
+    if (values.email && values.name && values.password && values.password === values.passwordRepeat) {
       this.props.dispatch(registerUser(values, this.props.history));
-    } else {
-      // Do something here to tell the user the passwords don't match
     }
   };
 
-  render() {
-    const { handleSubmit } = this.props;
+  renderField = ({
+    input, placeholder, type, meta: { touched, error },
+  }) => (
+    <div className="form__form-group-input-wrap">
+      <input {...input} placeholder={placeholder} type={type} />
+      {touched && error && <span className="form__form-group-error">{error}</span>}
+    </div>
+  );
 
+  render() {
+    const { handleSubmit, auth } = this.props;
+    const registerUserAction = auth.actions.REGISTER_USER;
     return (
       <>
-        {this.props.errorMessage && (
-          <h4 className="form__invalid-login mb-2">{this.props.errorMessage}</h4>
+        {registerUserAction.error && (
+          <div className="mb-3">
+            {Object.keys(registerUserAction.error.response.data).map(k => (
+              <p className="text-danger" key={k}>
+                <span className="text-capitalize">{k}</span>: {registerUserAction.error.response.data[k]}
+              </p>
+            ))}
+          </div>
         )}
-        <form className="form" onSubmit={handleSubmit(this.submit)}>
+        <form className="form" onSubmit={handleSubmit(this.handleSubmit)}>
           <div className="form__form-group">
             <span className="form__form-group-label">Name</span>
             <div className="form__form-group-field">
@@ -65,7 +75,7 @@ class RegisterForm extends PureComponent {
               </div>
               <Field
                 name="name"
-                component="input"
+                component={this.renderField}
                 type="text"
                 placeholder="John Doe"
               />
@@ -79,7 +89,7 @@ class RegisterForm extends PureComponent {
               </div>
               <Field
                 name="email"
-                component="input"
+                component={this.renderField}
                 type="email"
                 placeholder="example@mail.com"
               />
@@ -93,15 +103,10 @@ class RegisterForm extends PureComponent {
               </div>
               <Field
                 name="password"
-                component="input"
-                type={this.state.showPassword ? 'text' : 'password'}
+                component={this.renderField}
+                type="password"
                 placeholder="Password"
               />
-              <button
-                className={`form__form-group-button${this.state.showPassword ? ' active' : ''}`}
-                onClick={e => this.showPassword(e)}
-              ><EyeIcon />
-              </button>
             </div>
           </div>
           <div className="form__form-group form__form-group--forgot">
@@ -111,14 +116,20 @@ class RegisterForm extends PureComponent {
               </div>
               <Field
                 name="passwordRepeat"
-                component="input"
-                type={this.state.showPassword ? 'text' : 'password'}
+                component={this.renderField}
+                type="password"
                 placeholder="Repeat password"
               />
             </div>
           </div>
           <div className="account__btns">
-            <Button className="btn btn-primary account__btn" type="submit">Sign Up</Button>
+            <Button className="btn btn-primary account__btn text-white" type="submit">
+              {!auth.actions.REGISTER_USER.loading ? (
+                <span>Create account</span>
+              ) : (
+                <span><i className="fal fa-spinner fa-spin" /> Creating account...</span>
+              )}
+            </Button>
           </div>
         </form>
       </>
@@ -128,8 +139,9 @@ class RegisterForm extends PureComponent {
 
 const reduxFormSignup = reduxForm({
   form: 'register_form', // a unique identifier for this form
+  validate,
 })(RegisterForm);
 
 export default withRouter(connect(state => ({
-  errorMessage: state.auth.error,
+  auth: state.auth,
 }))(reduxFormSignup));

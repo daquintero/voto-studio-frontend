@@ -55,7 +55,7 @@ class RegisterForm extends PureComponent {
   render() {
     const { handleSubmit, auth } = this.props;
     const registerUserAction = auth.actions.REGISTER_USER;
-    return (
+    return ( // TODO: Fix the error displayed when a 404 is returned!
       <>
         {registerUserAction.error && (
           <div className="mb-3">

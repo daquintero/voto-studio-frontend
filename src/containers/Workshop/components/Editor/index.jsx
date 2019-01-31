@@ -17,7 +17,8 @@ import {
   Table,
   UncontrolledTooltip,
 } from 'reactstrap';
-import NotificationSystem from 'rc-notification';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   buildForm,
   getRelatedFields,
@@ -32,8 +33,9 @@ import {
   BUILD_FORM,
   GET_RELATED_FIELDS,
   UPDATE_BASIC_FIELDS,
+  UPDATE_RELATED_FIELD,
 } from '../../../../redux/actionCreators/workshopActionCreators';
-import { FullWideNotification } from '../../../../shared/components/Notification';
+
 
 class Editor extends Component {
   static propTypes = {
@@ -48,8 +50,6 @@ class Editor extends Component {
     workshopForm: {},
   };
 
-  static notificationTC = null;
-
   constructor(props) {
     super(props);
     this.state = {
@@ -60,14 +60,13 @@ class Editor extends Component {
   }
 
   componentDidMount() {
-    NotificationSystem.newInstance({}, n => this.notificationTC = n); // eslint-disable-line
-
     const { dispatch, match } = this.props;
     const { appName, modelName, id } = match.params;
 
     dispatch(buildForm(match.params))
       .then((action) => {
-      // Grab the related fields for the first option in the dropdown
+        if (this.isUnmounted) return;
+        // Grab the related fields for the first option in the dropdown
         if (action.type === BUILD_FORM.SUCCESS && action.form.relatedFields.length) {
           const firstRelatedField = action.form.relatedFields[0];
           const values = firstRelatedField.modelLabel.split('.');
@@ -97,7 +96,7 @@ class Editor extends Component {
   }
 
   componentWillUnmount() {
-    this.notificationTC.destroy();
+    this.isUnmounted = true;
   }
 
   onChange = (e) => {
@@ -122,23 +121,15 @@ class Editor extends Component {
     }));
   };
 
-  showNotification = ({ notification, position }) => {
-    this.notificationTC.notice({
-      content: notification,
-      duration: 5,
-      closable: true,
-      style: { top: 0, left: 0 },
-      className: position,
-    });
-  };
-
   searchRelatedFields = (e) => {
+    const { relatedAppName, relatedModelName } = this.state;
+    const { dispatch } = this.props;
     e.persist();
-    this.props.dispatch(searchRelatedFields({
+    dispatch(searchRelatedFields({
       query: e.target.value,
       term: 'name',
-      al: this.state.relatedAppName,
-      mn: this.state.relatedModelName,
+      al: relatedAppName,
+      mn: relatedModelName,
     }));
   };
 
@@ -156,36 +147,51 @@ class Editor extends Component {
       values: workshopForm.values,
     };
     dispatch(updateBasicFields(updateData)).then((action) => {
-      this.setState({ id: action.updates.id });
       if (action.type === UPDATE_BASIC_FIELDS.SUCCESS) {
-        this.showNotification({
-          notification: <FullWideNotification
-            message="Testing dfgsdfg  sdfgsdfg  sdfgsdfg dfg"
-            color="success"
-          />,
-          position: 'top',
+        const { created, modelNameVerbose } = action.result;
+        this.setState({ id: action.result.id });
+        toast(`${created ? 'Created' : 'Updated'} ${modelNameVerbose} (${action.result.id})`, {
+          toastId: action.result.id,
         });
         if (id === 'new') {
-          history.push(`/workshop/editor/${appName}/${modelName}/${action.updates.id}/`);
+          history.push(`/workshop/editor/${appName}/${modelName}/${action.result.id}/`);
         }
       }
     });
   };
 
-  handleUpdateRelatedField = (type, tableValues) => {
-    const { dispatch, workshop } = this.props;
+  handleUpdateRelatedField = (type, tableValues, tableIndex, rowIndex, fieldName) => {
+    console.log(type, tableValues, tableIndex, rowIndex, fieldName);
+    const {
+      dispatch, workshop, match, history,
+    } = this.props;
+    const { appName, modelName, id } = match.params;
     const updateData = {
       modelLabel: workshop.form.parentModel.modelLabel,
       relatedModelLabel: tableValues.modelLabel,
       id: this.state.id,
       relatedId: tableValues.id,
       updateType: type,
-      fieldName: this.state.fieldName,
+      fieldName,
     };
-    const relatedIndex = workshop.form.relatedFields.findIndex(f => f.name === this.state.fieldName);
+    const relatedIndex = workshop.form.relatedFields.findIndex(f => f.name === fieldName);
     const ids = workshop.form.relatedFields[relatedIndex].relatedInstances.map(o => o.tableValues.id);
-    if (!ids.includes(tableValues.id)) {
-      dispatch(updateRelatedField(updateData, relatedIndex)).then(action => this.setState({ id: action.updates.id }));
+    if (!ids.includes(tableValues.id) || true) { // eslint-disable-line
+      dispatch(updateRelatedField(updateData, relatedIndex)).then((action) => {
+        if (action.type === UPDATE_RELATED_FIELD.SUCCESS) {
+          const {
+            field, relatedField, relatedId,
+          } = action.result;
+          this.setState({ id: action.result.id });
+          toast(`${action.result.type === 'add' ? 'Added' : 'Removed'} ${relatedField.modelNameVerbose} (${relatedId})`
+            + `${action.result.type === 'add' ? ' to' : ' from'} ${field.modelNameVerbose} (${action.result.id})`, {
+            toastId: action.result.id,
+          });
+          if (id === 'new') {
+            history.push(`/workshop/editor/${appName}/${modelName}/${action.result.id}/`);
+          }
+        }
+      });
     }
   };
 
@@ -206,208 +212,211 @@ class Editor extends Component {
     const { workshop, dispatch } = this.props;
     const { form } = workshop;
     const { loading, loaded, error } = workshop.actions.BUILD_FORM;
+    const { fieldName } = this.state;
     return (
-      <Container className="mt-4">
-        {loading ? (
-          <Loader elemClass="load__card mb-3" />
-        ) : (
-          <>
-            {loaded ? (
-              <>
-                <Row>
-                  <Col md={12}>
-                    <Link to="/workshop/" className="text-black-50">
-                      <i className="fal fa-chevron-circle-left" /> back to workshop
-                    </Link>
-                    <h3 className="page-title text-capitalize">
-                      {form.new ? 'Create' : 'Edit'} {form.parentModel.name}
-                    </h3>
-                    <h3 className="page-subhead subhead">
-                      Edit the basic info of this piece of content and add or remove related pieces of content
-                    </h3>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <Card>
-                      <CardBody>
-                        <h3 className="page-title text-capitalize">Edit Basic Fields</h3>
-                        <h3 className="page-subhead subhead">
-                          Edit the basic info for this piece of content
-                        </h3>
-                        <form className="form form--horizontal" onSubmit={this.handleUpdateBasicFields}>
-                          {form.basicFields.map(f => (
-                            <div className="form__form-group" key={f.name}>
-                              <span className="form__form-group-label text-capitalize">{f.verboseName}</span>
-                              <div className="form__form-group-field">
-                                <Field
-                                  name={f.name}
-                                  component={this.renderField(f)}
-                                  field={f}
-                                  type={f.type}
-                                  options={f.options}
-                                  placeholder={this.buildPlaceholder(f)}
-                                  defaultChecked={f.type === 'checkbox' && f.defaultChecked}
-                                  readOnly={f.readOnly}
-                                />
+      <>
+        <ToastContainer pauseOnFocusLoss={false} />
+        <Container className="mt-4">
+          {loading ? (
+            <Loader elemClass="load__card mb-3" />
+          ) : (
+            <>
+              {loaded ? (
+                <>
+                  <Row>
+                    <Col md={12}>
+                      <Link to="/workshop/" className="text-black-50">
+                        <i className="fal fa-chevron-circle-left" /> back to workshop
+                      </Link>
+                      <h3 className="page-title text-capitalize">
+                        {form.new ? 'Create' : 'Edit'} {form.parentModel.name}
+                      </h3>
+                      <h3 className="page-subhead subhead">
+                        Edit the basic info of this piece of content and add or remove related pieces of content
+                      </h3>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col md={6}>
+                      <Card>
+                        <CardBody>
+                          <h3 className="page-title text-capitalize">Edit Basic Fields</h3>
+                          <h3 className="page-subhead subhead">
+                            Edit the basic info for this piece of content
+                          </h3>
+                          <form className="form form--horizontal" onSubmit={this.handleUpdateBasicFields}>
+                            {form.basicFields.map(f => (
+                              <div className="form__form-group" key={f.name}>
+                                <span className="form__form-group-label text-capitalize">{f.verboseName}</span>
+                                <div className="form__form-group-field">
+                                  <Field
+                                    name={f.name}
+                                    component={this.renderField(f)}
+                                    field={f}
+                                    type={f.type}
+                                    options={f.options}
+                                    placeholder={this.buildPlaceholder(f)}
+                                    defaultChecked={f.type === 'checkbox' && f.defaultChecked}
+                                    readOnly={f.readOnly}
+                                  />
+                                </div>
+                                {f.readOnly && (
+                                  <span className="form__form-group-description">
+                                    This is a &quot;read-only&quot; field
+                                  </span>
+                                )}
                               </div>
-                              {f.readOnly && (
-                                <span className="form__form-group-description">
-                                  This is a &quot;read-only&quot; field
-                                </span>
-                              )}
+                            ))}
+                            <ButtonToolbar className="form__button-toolbar">
+                              <Button color="success" size="sm" type="submit">Submit</Button>
+                              <Button color="secondary" size="sm" onClick={() => dispatch(reset('workshopForm'))}>
+                                Undo changes
+                              </Button>
+                            </ButtonToolbar>
+                          </form>
+                          {form.relatedFields.map((f, tableIndex) => Boolean(f.relatedInstances.length) && (
+                            <div key={f.name} className="mb-4">
+                              <h3 className="page-title text-capitalize">{f.name.replace(/_/g, ' ')}</h3>
+                              <Table responsive hover>
+                                <thead>
+                                  <tr>
+                                    <th>ID</th>
+                                    {f.tableHeads ? f.tableHeads.map(o => (
+                                      <th className="text-capitalize">{o.replace(/_/g, ' ')}</th>
+                                    )) : (
+                                      <th />
+                                    )}
+                                    <th>User</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {f.relatedInstances.map((o, rowIndex) => (
+                                    <tr key={o.tableValues.id}>
+                                      <td>{o.tableValues.id}</td>
+                                      <td>{o.tableValues.descriptor}</td>
+                                      <td>
+                                        {o.tableValues.userEmail === JSON.parse(localStorage.getItem('user')).email ? (
+                                          <a href="/">You</a>
+                                        ) : (
+                                          <a href="/">{o.tableValues.userEmail}</a>
+                                        )}
+                                      </td>
+                                      <td>
+                                        <span
+                                          role="presentation"
+                                          className="workshop__form-action mr-3"
+                                          onClick={() => this.handleUpdateRelatedField(
+                                            'remove',
+                                            o.tableValues,
+                                            rowIndex,
+                                            tableIndex,
+                                            f.fieldName,
+                                          )}
+                                        >
+                                          <i
+                                            className="fal fa-fw fa-minus-circle text-danger"
+                                            id={`remove-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                          />
+                                        </span>
+                                        <span
+                                          role="presentation"
+                                          className="workshop__form-action"
+                                          data-obj={JSON.stringify(o)}
+                                          onClick={this.handleViewItem}
+                                        >
+                                          <i
+                                            className="fal fa-fw fa-eye text-success"
+                                            id={`details-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                          />
+                                        </span>
+                                        <UncontrolledTooltip
+                                          placement="top"
+                                          target={`remove-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                        >
+                                          Remove {f.verboseName}
+                                        </UncontrolledTooltip>
+                                        <UncontrolledTooltip
+                                          placement="top"
+                                          target={`details-${o.tableValues.modelName}-${o.tableValues.id}`}
+                                        >
+                                          View {f.verboseName}
+                                        </UncontrolledTooltip>
+                                      </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                              </Table>
                             </div>
                           ))}
-                          <ButtonToolbar className="form__button-toolbar">
-                            <Button color="success" size="sm" type="submit">Submit</Button>
-                            <Button color="secondary" size="sm" onClick={() => dispatch(reset('workshopForm'))}>
-                              Undo changes
-                            </Button>
-                          </ButtonToolbar>
-                        </form>
-                        {form.relatedFields.map((f, tableIndex) => Boolean(f.relatedInstances.length) && (
-                          <div key={f.name} className="mb-4">
-                            <h3 className="page-title text-capitalize">{f.name.replace(/_/g, ' ')}</h3>
-                            <Table responsive hover>
+                        </CardBody>
+                      </Card>
+                      <Card>
+                        <CardBody>
+                          {this.state.hasRelatedFields ? (
+                            <>
+                              <h3 className="page-title text-capitalize">Add Related Fields</h3>
+                              <h3 className="page-subhead subhead">
+                                Search for and add any related content
+                              </h3>
+                              <Row>
+                                <Col xl={8}>
+                                  <FormGroup>
+                                    <Input
+                                      type="text"
+                                      name="transitionEasing"
+                                      id="transitionEasing"
+                                      onKeyUp={this.searchRelatedFields}
+                                    />
+                                  </FormGroup>
+                                </Col>
+                                <Col xl={4}>
+                                  <FormGroup>
+                                    <Input
+                                      className="text-capitalize"
+                                      type="select"
+                                      name="transitionEasing"
+                                      id="transitionEasing"
+                                      onChange={e => this.onChange(e)}
+                                      value={this.state.transitionEasing}
+                                    >
+                                      {form.relatedFields.map(f => (
+                                        <option
+                                          key={f.name}
+                                          className="text-capitalize"
+                                          value={f.modelLabel}
+                                          data-field={f.name}
+                                        >
+                                          {f.verboseNamePlural}
+                                        </option>
+                                      ))}
+                                    </Input>
+                                  </FormGroup>
+                                </Col>
+                              </Row>
+                              {!form.relatedFieldOptions ? (
+                                <Loader elemClass="load__card" />
+                            ) : (
+                              <Table responsive hover>
+                            <>
                               <thead>
                                 <tr>
                                   <th>ID</th>
-                                  {f.tableHeads ? f.tableHeads.map(o => (
-                                    <th className="text-capitalize">{o.replace(/_/g, ' ')}</th>
+                                  {form.tableHeads.length ? form.tableHeads.map(o => (
+                                    <th key={o} className="text-capitalize">{o.replace(/_/g, ' ')}</th>
                                   )) : (
                                     <th />
                                   )}
                                   <th>User</th>
-                                  <th>Action</th>
+                                  <th>Actions</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {f.relatedInstances.map((o, rowIndex) => (
-                                  <tr key={o.tableValues.id}>
-                                    <td>{o.tableValues.id}</td>
-                                    <td>{o.tableValues.descriptor}</td>
-                                    <td>
-                                      {o.tableValues.userEmail === JSON.parse(localStorage.getItem('user')).email ? (
-                                        <a href="/">You</a>
-                                      ) : (
-                                        <a href="/">{o.tableValues.userEmail}</a>
-                                      )}
-                                    </td>
-                                    <td>
-                                      <span
-                                        role="presentation"
-                                        className="workshop__form-action mr-3"
-                                        onClick={() => this.handleUpdateRelatedField(
-                                          'remove',
-                                          o.tableValues,
-                                          tableIndex,
-                                          rowIndex,
-                                        )}
-                                      >
-                                        <i
-                                          className="fal fa-fw fa-minus-circle text-danger"
-                                          id={`remove-${o.tableValues.modelName}-${o.tableValues.id}`}
-                                        />
-                                      </span>
-                                      <span
-                                        role="presentation"
-                                        className="workshop__form-action"
-                                        data-obj={JSON.stringify(o)}
-                                        onClick={this.handleViewItem}
-                                      >
-                                        <i
-                                          className="fal fa-fw fa-eye text-success"
-                                          id={`details-${o.tableValues.modelName}-${o.tableValues.id}`}
-                                        />
-                                      </span>
-                                      <UncontrolledTooltip
-                                        placement="top"
-                                        target={`remove-${o.tableValues.modelName}-${o.tableValues.id}`}
-                                      >
-                                        Remove {f.verboseName}
-                                      </UncontrolledTooltip>
-                                      <UncontrolledTooltip
-                                        placement="top"
-                                        target={`details-${o.tableValues.modelName}-${o.tableValues.id}`}
-                                      >
-                                        View {f.verboseName}
-                                      </UncontrolledTooltip>
-                                    </td>
-                                  </tr>
-                              ))}
-                              </tbody>
-                            </Table>
-                          </div>
-                        ))}
-                      </CardBody>
-                    </Card>
-                    <Card>
-                      <CardBody>
-                        {this.state.hasRelatedFields ? (
-                          <>
-                            <h3 className="page-title text-capitalize">Add Related Fields</h3>
-                            <h3 className="page-subhead subhead">
-                              Search for and add any related content
-                            </h3>
-                            <Row>
-                              <Col xl={8}>
-                                <FormGroup>
-                                  <Input
-                                    type="text"
-                                    name="transitionEasing"
-                                    id="transitionEasing"
-                                    onKeyUp={this.searchRelatedFields}
-                                  />
-                                </FormGroup>
-                              </Col>
-                              <Col xl={4}>
-                                <FormGroup>
-                                  <Input
-                                    className="text-capitalize"
-                                    type="select"
-                                    name="transitionEasing"
-                                    id="transitionEasing"
-                                    onChange={e => this.onChange(e)}
-                                    value={this.state.transitionEasing}
-                                  >
-                                    {form.relatedFields.map(f => (
-                                      <option
-                                        key={f.name}
-                                        className="text-capitalize"
-                                        value={f.modelLabel}
-                                        data-field={f.name}
-                                      >
-                                        {f.verboseNamePlural}
-                                      </option>
-                                    ))}
-                                  </Input>
-                                </FormGroup>
-                              </Col>
-                            </Row>
-                            {!form.relatedFieldOptions ? (
-                              <Loader elemClass="load__card" />
-                          ) : (
-                            <Table responsive hover>
-                          <>
-                            <thead>
-                              <tr>
-                                <th>ID</th>
-                                {form.tableHeads.length ? form.tableHeads.map(o => (
-                                  <th className="text-capitalize">{o.replace(/_/g, ' ')}</th>
-                                )) : (
-                                  <th />
-                                )}
-                                <th>User</th>
-                                <th>Actions</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {form.relatedFieldOptions.length ? form.relatedFieldOptions.map((o, index) => (
-                                <>
+                                {form.relatedFieldOptions.length ? form.relatedFieldOptions.map((o, index) => (
                                   <tr key={o.id}>
                                     <td>{o.id}</td>
                                     {o.tableValues.descriptors.values.map(d => (
-                                      <td>{d.value}</td>
+                                      <td key={d.name}>{d.value}</td>
                                     ))}
                                     <td>
                                       {o.tableValues
@@ -425,6 +434,8 @@ class Editor extends Component {
                                           'add',
                                           o.tableValues,
                                           index,
+                                          null,
+                                          fieldName,
                                         )}
                                       >
                                         <i
@@ -457,42 +468,42 @@ class Editor extends Component {
                                       </UncontrolledTooltip>
                                     </td>
                                   </tr>
-                                </>
-                          )) : (
-                            <tr>
-                              <td>No items</td>
-                            </tr>
+                            )) : (
+                              <tr>
+                                <td>No items</td>
+                              </tr>
+                            )}
+                              </tbody>
+                            </>
+                              </Table>
+                            )}
+                            </>
+                          ) : (
+                            <>
+                              <h3 className="page-title text-capitalize">No related fields</h3>
+                              <h3 className="page-subhead subhead">
+                                This content type has no related pieces of content
+                              </h3>
+                            </>
                           )}
-                            </tbody>
-                          </>
-                            </Table>
-                          )}
-                          </>
-                        ) : (
-                          <>
-                            <h3 className="page-title text-capitalize">No related fields</h3>
-                            <h3 className="page-subhead subhead">
-                              This content type has no related pieces of content
-                            </h3>
-                          </>
-                        )}
-                      </CardBody>
-                    </Card>
-                  </Col>
-                </Row>
-              </>
-            ) : (
-              <>
-                {error && (
-                  <>
-                    Error
-                  </>
-                )}
-              </>
-            )}
-          </>
-        )}
-      </Container>
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  </Row>
+                </>
+              ) : (
+                <>
+                  {error && (
+                    <>
+                      Error
+                    </>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </Container>
+      </>
     );
   }
 }

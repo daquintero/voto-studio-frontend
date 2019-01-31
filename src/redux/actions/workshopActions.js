@@ -114,7 +114,7 @@ export const updateBasicFields = updateData => (dispatch) => {
     response =>
       dispatch({
         type: UPDATE_BASIC_FIELDS.SUCCESS,
-        updates: response.data.updates,
+        result: response.data.result,
       }),
     error =>
       dispatch({
@@ -132,7 +132,7 @@ export const updateRelatedField = (updateData, relatedIndex) => (dispatch) => {
     response =>
       dispatch({
         type: UPDATE_RELATED_FIELD.SUCCESS,
-        updates: response.data.updates,
+        result: response.data.result,
         relatedIndex,
         fieldName: updateData.fieldName,
       }),

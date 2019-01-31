@@ -211,30 +211,56 @@ export default function (state = initialState, action) {
           ...actionResult('UPDATE_RELATED_FIELD.REQUEST'),
         },
       };
-    case UPDATE_RELATED_FIELD.SUCCESS:
-      return {
-        ...state,
-        form: {
-          ...state.form,
-          relatedFields: [
-            ...state.form.relatedFields.slice(0, action.relatedIndex),
-            {
-              ...state.form.relatedFields[action.relatedIndex],
-              relatedInstances: [
-                ...state.form.relatedFields[action.relatedIndex].relatedInstances,
-                action.updates.relatedField,
-              ],
-            },
-            ...state.form.relatedFields.slice(action.relatedIndex + 1),
-          ],
-          relatedFieldOptions: state.form.relatedFieldOptions
-            .filter(f => f.id !== action.updates.relatedField.tableValues.id),
-        },
-        actions: {
-          ...state.actions,
-          ...actionResult('UPDATE_RELATED_FIELD.SUCCESS'),
-        },
-      };
+    case UPDATE_RELATED_FIELD.SUCCESS: {
+      if (action.result.type === 'add') {
+        return {
+          ...state,
+          form: {
+            ...state.form,
+            relatedFields: [
+              ...state.form.relatedFields.slice(0, action.relatedIndex),
+              {
+                ...state.form.relatedFields[action.relatedIndex],
+                relatedInstances: [
+                  ...state.form.relatedFields[action.relatedIndex].relatedInstances,
+                  action.result.relatedField,
+                ],
+              },
+              ...state.form.relatedFields.slice(action.relatedIndex + 1),
+            ],
+            relatedFieldOptions: state.form.relatedFieldOptions
+              .filter(f => f.id !== action.result.relatedField.tableValues.id),
+          },
+          actions: {
+            ...state.actions,
+            ...actionResult('UPDATE_RELATED_FIELD.SUCCESS'),
+          },
+        };
+      }
+      if (action.result.type === 'remove') {
+        console.log(action);
+        return {
+          ...state,
+          form: {
+            ...state.form,
+            relatedFields: [
+              ...state.form.relatedFields.slice(0, action.relatedIndex),
+              {
+                ...state.form.relatedFields[action.relatedIndex],
+                relatedInstances: state.form.relatedFields[action.relatedIndex].relatedInstances
+                  .filter(f => f.tableValues.id !== action.result.relatedId),
+              },
+              ...state.form.relatedFields.slice(action.relatedIndex + 1),
+            ],
+          },
+          actions: {
+            ...state.actions,
+            ...actionResult('UPDATE_RELATED_FIELD.SUCCESS'),
+          },
+        };
+      }
+      return state;
+    }
     case UPDATE_RELATED_FIELD.ERROR:
       return {
         ...state,

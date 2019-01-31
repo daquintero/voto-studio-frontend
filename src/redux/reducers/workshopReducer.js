@@ -238,7 +238,6 @@ export default function (state = initialState, action) {
         };
       }
       if (action.result.type === 'remove') {
-        console.log(action);
         return {
           ...state,
           form: {

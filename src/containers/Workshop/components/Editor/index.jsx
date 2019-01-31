@@ -161,7 +161,6 @@ class Editor extends Component {
   };
 
   handleUpdateRelatedField = (type, tableValues, tableIndex, rowIndex, fieldName) => {
-    console.log(type, tableValues, tableIndex, rowIndex, fieldName);
     const {
       dispatch, workshop, match, history,
     } = this.props;

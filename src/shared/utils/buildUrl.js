@@ -5,4 +5,4 @@ const buildQueryString = (params) => {
     .join('&')}`;
 };
 
-export default obj => `${obj.pathname.toLowerCase()}${buildQueryString(obj.params)}`;
+export default (pathName, params) => `${pathName.toLowerCase()}${buildQueryString(params)}`;

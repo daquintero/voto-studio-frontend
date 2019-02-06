@@ -7,7 +7,7 @@ import {
   mapReducer,
   userReducer,
   workshopReducer,
-  contentReducer,
+  mediaReducer,
   tourReducer,
   dataSuiteReducer,
   changesReducer,
@@ -16,7 +16,7 @@ import { LOGOUT_USER } from '../../redux/actionCreators/userActionCreators';
 
 const studioReducer = combineReducers({
   workshop: workshopReducer,
-  content: contentReducer,
+  media: mediaReducer,
   tours: tourReducer,
   dataSuite: dataSuiteReducer,
   changes: changesReducer,

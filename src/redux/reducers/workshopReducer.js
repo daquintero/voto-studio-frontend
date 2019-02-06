@@ -51,7 +51,7 @@ const initialState = {
   },
 };
 
-export default function (state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
     // List items reducers -----------------------------
     case LIST_ITEMS.REQUEST:
@@ -549,4 +549,4 @@ export default function (state = initialState, action) {
     default:
       return state;
   }
-}
+};

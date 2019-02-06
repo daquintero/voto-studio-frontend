@@ -61,6 +61,7 @@
     "react-select": "^2.3.0",
     "react-smooth-scrollbar": "^8.0.6",
     "react-toastify": "^4.5.2",
+    "react-transition-group": "^2.5.3",
     "reactstrap": "^6.4.0",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.5",

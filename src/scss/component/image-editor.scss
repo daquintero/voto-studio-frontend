@@ -1,0 +1,30 @@
+.image-editor {
+  &__wrapper {
+  }
+
+  &__preview {
+    max-height: 300px;
+    //max-width: 70%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+  }
+
+  &__form {
+    //width: 70%;
+    margin: 0 auto;
+  }
+
+  &__form__field {
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 12px;
+    transition: border 0.3s;
+    height: 32px;
+
+    @include themify($themes) {
+      border: 1px solid themed('colorFieldsBorder');
+      color: themed('colorText');
+    }
+  }
+}

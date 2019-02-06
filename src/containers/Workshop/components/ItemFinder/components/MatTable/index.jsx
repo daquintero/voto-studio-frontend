@@ -45,7 +45,7 @@ class MatTable extends Component {
       selected: [],
       page: 0,
       squashLength: 30,
-      rowsPerPage: 5,
+      rowsPerPage: 10,
       ...props.defaults,
     };
   }

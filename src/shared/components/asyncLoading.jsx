@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Loader from './Loader';
+import Loader from './Loader/Loader';
 
 // This is a higher-order-component. It is a function that takes an argument elemType that returns another
 // function that takes an argument WrappedComponent which is the component we want to load. This function

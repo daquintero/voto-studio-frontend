@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, ButtonToolbar, Modal } from 'reactstrap'; // eslint-disable-line
-import Loader from '../components/Loader';
+import Loader from './Loader/Loader';
 import squashString from '../utils/squashString';
 
 class ModalComponent extends PureComponent {
@@ -40,13 +40,13 @@ class ModalComponent extends PureComponent {
               <>
                 {loaded && (
                   <>
-                    <h3 className="page-title">Detail view: {item.detailValues[0].value} ({item.id})</h3>
+                    <h3 className="page-title">Detail view: {item.detailInfo[0].value} ({item.id})</h3>
                     <h3 className="page-subhead subhead">
                       <Link to={this.buildUrl(item.modelLabel, item.id)}>Edit this item</Link>
                     </h3>
                     <table>
                       <tbody>
-                        {item.detailValues.map(d => (
+                        {item.detailInfo.map(d => (
                       <>
                         {d.type === 'basic' && (
                           <tr key={d.name}>

@@ -30,14 +30,12 @@ class SelectField extends PureComponent {
   };
 
   customStyles = {
-    control: provided => ({
-      ...provided,
-      minHeight: 32,
-      height: 32,
-      padding: 0,
-      border: '1px solid #f2f4f7',
+    control: base => ({
+      ...base,
+      height: 40,
+      minHeight: 40,
+      borderColor: '#dce1e9',
       borderRadius: 0,
-      color: '#646777',
     }),
     placeholder: provided => ({
       ...provided,
@@ -45,8 +43,8 @@ class SelectField extends PureComponent {
     }),
     option: provided => ({
       ...provided,
-      height: 32,
       borderRadius: 0,
+
     }),
     menu: provided => ({
       ...provided,

@@ -1,12 +1,13 @@
 @import 'settings/variable';  //themes' colors
+@import 'settings/custom.scss';
 
-//base...
+// base...
 @import 'generic/normalize.scss';
 @import 'generic/box-sizing.scss';
 @import './base/scaffolding';         // styles of base elements
 @import './base/typography';          // base styles of h1-h6, p, span
 
-//components...
+// components...
 @import './component/alert';
 @import 'component/btn';
 @import './component/card';
@@ -31,11 +32,12 @@
 @import './component/data-suite';
 @import './component/table';
 @import './component/material-table';
+@import './component/text-editor';
 
-//pages...
+// pages...
 @import 'containers/account';
 @import 'containers/profile';
 
-//objects...
+// objects...
 @import 'objects/layout.scss';
 

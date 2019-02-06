@@ -15,3 +15,51 @@
     cursor: pointer;
   }
 }
+
+.workshop__itemfinder {
+  &__form {
+
+  }
+
+  &__input {
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 12px;
+    height: 38px;
+    transition: border 0.3s;
+    background: transparent;
+
+    @include themify($themes) {
+      border: 1px solid themed('colorFieldsBorder');
+      color: themed('colorText');
+    }
+
+    &[disabled] {
+
+      @include themify($themes) {
+        background: themed('colorBackgroundBody');
+      }
+
+      &:focus, &:active {
+
+        @include themify($themes) {
+          border-color: themed('colorBorder');
+        }
+      }
+    }
+
+    &:focus, &:active {
+      outline: none;
+      border-color: $color-accent;
+    }
+  }
+}
+
+.workshop__location-picker {
+  &__tooltip {
+    &__wrapper {
+      background-color: white;
+      padding: 10px;
+    }
+  }
+}

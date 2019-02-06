@@ -1,21 +1,27 @@
+// Absolute Imports
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Layout from '../Layout/index';
+
+// Wrappers
 import MainWrapper from './MainWrapper';
 import ProtectedRoute from './ProtectedRoute';
+import MapWrapper from '../Tours/components/Map/MapWrapper';
+import DataSuiteWrapper from '../Tours/components/DataSuite/DataSuiteWrapper';
 
+// Components
+import Layout from '../Layout';
 import Dashboard from '../Dashboard';
 import Workshop from '../Workshop';
 import Editor from '../Workshop/components/Editor';
+import Content from '../Content';
 import Tours from '../Tours';
-import MapWrapper from '../Tours/components/Map/MapWrapper';
-import DataSuiteWrapper from '../Tours/components/DataSuite/DataSuiteWrapper';
-import Changes from '../Changes';
-import Profile from '../Account/Profile/index';
+import Profile from '../Account/Profile';
 import Login from '../Account/Login';
 import Register from '../Account/Register';
 
+
 const EditorWrapper = props => <Editor enableReinitialize {...props} />;
+
 
 // These routes are all the routes that include the top and side bar
 const wrappedRoutes = () => (
@@ -24,15 +30,16 @@ const wrappedRoutes = () => (
     <div className="container__wrap">
       <Route exact path="/" component={Dashboard} />
       <Route exact path="/workshop/" component={Workshop} />
-      <Route exact path="/workshop/editor/:appName/:modelName/:id/" render={EditorWrapper} />
+      <Route exact path="/workshop/editor/" render={EditorWrapper} />
+      <Route exact path="/content/" component={Content} />
       <Route exact path="/studio/tours/" component={Tours} />
       <Route exact path="/studio/tours/map/:tourId/" component={MapWrapper} />
       <Route exact path="/studio/tours/data/:dataSetId/" component={DataSuiteWrapper} />
-      <Route exact path="/studio/changes/" component={Changes} />
       <Route exact path="/account/profile/" component={Profile} />
     </div>
   </div>
 );
+
 
 const Router = () => (
   <MainWrapper>
@@ -45,5 +52,6 @@ const Router = () => (
     </main>
   </MainWrapper>
 );
+
 
 export default Router;

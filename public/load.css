@@ -1,5 +1,5 @@
 .load__icon {
-  animation: linear load 2s infinite;
+  /*animation: linear load 2s infinite;*/
   width: 32px;
   height: 32px;
 }
@@ -15,11 +15,11 @@
   align-items: center;
 }
 
-@keyframes load {
-  from {
-    transform: rotate(0deg) scale(2);
-  }
-  to {
-    transform: rotate(360deg) scale(2);
-  }
-}
+/*@keyframes load {*/
+  /*from {*/
+    /*transform: rotate(0deg) scale(2);*/
+  /*}*/
+  /*to {*/
+    /*transform: rotate(360deg) scale(2);*/
+  /*}*/
+/*}*/

@@ -5,9 +5,12 @@ import {
   BUILD_FORM,
   GET_RELATED_FIELDS,
   UPDATE_BASIC_FIELDS,
-  UPDATE_RELATED_FIELD,
+  UPDATE_RELATED_FIELDS,
   SEARCH_RELATED_FIELDS,
   PUBLISH_WORKSHOP_CONTENT,
+  BUILD_FINDER,
+  GET_INSTANCE_LIST,
+  GET_LOCATION_PICKER_DATA_SET,
 } from '../actionCreators/workshopActionCreators';
 import workshopService from '../../services/workshopService';
 
@@ -68,11 +71,11 @@ export const deleteItem = ({
   );
 };
 
-export const buildForm = (appLabel, modelName, id) => (dispatch) => {
+export const buildForm = queryStringValues => (dispatch) => {
   dispatch({
     type: BUILD_FORM.REQUEST,
   });
-  return workshopService.get.build(appLabel, modelName, id).then(
+  return workshopService.get.build(queryStringValues).then(
     response =>
       dispatch({
         type: BUILD_FORM.SUCCESS,
@@ -94,7 +97,7 @@ export const getRelatedFields = requestData => (dispatch) => {
     response =>
       dispatch({
         type: GET_RELATED_FIELDS.SUCCESS,
-        relatedFieldOptions: response.data.relatedFieldOptions,
+        relatedFieldInstances: response.data.relatedFieldInstances,
         tableHeads: response.data.tableHeads,
         verboseName: response.data.verboseName,
       }),
@@ -124,21 +127,19 @@ export const updateBasicFields = updateData => (dispatch) => {
   );
 };
 
-export const updateRelatedField = (updateData, relatedIndex) => (dispatch) => {
+export const updateRelatedFields = updateData => (dispatch) => {
   dispatch({
-    type: UPDATE_RELATED_FIELD.REQUEST,
+    type: UPDATE_RELATED_FIELDS.REQUEST,
   });
-  return workshopService.post.updateRelatedField(updateData).then(
+  return workshopService.post.updateRelatedFields(updateData).then(
     response =>
       dispatch({
-        type: UPDATE_RELATED_FIELD.SUCCESS,
+        type: UPDATE_RELATED_FIELDS.SUCCESS,
         result: response.data.result,
-        relatedIndex,
-        fieldName: updateData.fieldName,
       }),
     error =>
       dispatch({
-        type: UPDATE_RELATED_FIELD.ERROR,
+        type: UPDATE_RELATED_FIELDS.ERROR,
         error,
       }),
   );
@@ -175,6 +176,79 @@ export const publishWorkshopContent = () => (dispatch) => {
     error =>
       dispatch({
         type: PUBLISH_WORKSHOP_CONTENT.ERROR,
+        error,
+      }),
+  );
+};
+
+export const buildFinder = () => (dispatch) => {
+  dispatch({
+    type: BUILD_FINDER.REQUEST,
+  });
+  return workshopService.get.buildFinder().then(
+    response =>
+      dispatch({
+        type: BUILD_FINDER.SUCCESS,
+        finder: response.data.finder,
+      }),
+    error =>
+      dispatch({
+        type: BUILD_FINDER.ERROR,
+        error,
+      }),
+  );
+};
+
+export const getInstanceList = modelLabel => (dispatch) => {
+  dispatch({
+    type: GET_INSTANCE_LIST.REQUEST,
+  });
+  return workshopService.get.instanceList(modelLabel).then(
+    response =>
+      dispatch({
+        type: GET_INSTANCE_LIST.SUCCESS,
+        list: response.data.list,
+      }),
+    error =>
+      dispatch({
+        type: GET_INSTANCE_LIST.ERROR,
+        error,
+      }),
+  );
+};
+
+export const getRelatedInstanceList = (relatedModelLabel, modelLabel, fieldName, id) => (dispatch) => {
+  dispatch({
+    type: GET_INSTANCE_LIST.REQUEST,
+  });
+  return workshopService.get.relatedInstanceList(relatedModelLabel, modelLabel, fieldName, id).then(
+    response =>
+      dispatch({
+        type: GET_INSTANCE_LIST.SUCCESS,
+        list: response.data.list,
+      }),
+    error =>
+      dispatch({
+        type: GET_INSTANCE_LIST.ERROR,
+        error,
+      }),
+  );
+};
+
+export const getLocationPickerDataSet = () => (dispatch) => {
+  dispatch({
+    type: GET_LOCATION_PICKER_DATA_SET.REQUEST,
+  });
+  return workshopService.get.locationPickerDataSet().then(
+    response =>
+      dispatch({
+        type: GET_LOCATION_PICKER_DATA_SET.SUCCESS,
+        dataSet: response.data.dataSet,
+        locationIdName: response.data.locationIdName,
+      }),
+    error =>
+      dispatch({
+        type: GET_LOCATION_PICKER_DATA_SET.ERROR,
         error,
       }),
   );

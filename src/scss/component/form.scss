@@ -6,9 +6,9 @@
     width: 100%;
     padding: 5px 10px;
     font-size: 12px;
-    height: 32px;
     transition: border 0.3s;
     background: transparent;
+    height: 32px;
 
     &::-webkit-input-placeholder {
       color: $color-additional;
@@ -67,6 +67,12 @@
       margin-left: 80px;
     }
 
+    .form__form-group-field-editor {
+      width: calc(100% - 80px);
+      padding-left: 10px;
+      margin-left: 80px;
+    }
+
     .form__form-group-label {
       width: 80px;
       max-height: 32px;
@@ -74,6 +80,10 @@
       margin: auto 0;
 
       & + .form__form-group-field {
+        margin-left: 0;
+      }
+
+      & + .form__form-group-field-editor {
         margin-left: 0;
       }
     }
@@ -101,6 +111,12 @@
       }
 
       .form__form-group-field {
+        width: calc(100% - 120px);
+        margin-left: 120px;
+        padding-left: 20px;
+      }
+
+      .form__form-group-field-editor {
         width: calc(100% - 120px);
         margin-left: 120px;
         padding-left: 20px;
@@ -295,6 +311,13 @@
 }
 
 .form__form-group-field {
+  width: 100%;
+  display: flex;
+  margin: auto;
+  height: 40px;
+}
+
+.form__form-group-field-editor {
   width: 100%;
   display: flex;
   margin: auto;

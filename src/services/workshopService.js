@@ -12,6 +12,9 @@ const urls = {
     detail: `${workshopApiUrl}/detail/`,
     build: `${workshopApiUrl}/build/`,
     relatedFields: `${workshopApiUrl}/related_fields/`,
+    buildFinder: `${workshopApiUrl}/finder/`,
+    instanceList: `${workshopApiUrl}/list_instances/`,
+    locationPicketDataSet: `${workshopApiUrl}/location_picker/`,
   },
   post: {
     updateBasicFields: `${workshopApiUrl}/update_basic_fields/`,
@@ -43,26 +46,47 @@ const getHeaders = () => ({
 
 // GET requests
 const list = () => axios.get(urls.get.list, getHeaders());
-const detail = (appName, modelName, id) =>
-  axios.get(`${urls.get.detail}${buildQueryString({ al: appName, mn: modelName, id })}`, getHeaders());
-const build = ({ appName, modelName, id }) =>
-  axios.get(`${urls.get.build}${buildQueryString({ al: appName, mn: modelName, id })}`, getHeaders());
+
+const detail = (appLabel, modelName, id) =>
+  axios.get(`${urls.get.detail}${buildQueryString({ al: appLabel, mn: modelName, id })}`, getHeaders());
+
+const build = queryStringValues =>
+  axios.get(`${urls.get.build}${buildQueryString(queryStringValues)}`, getHeaders());
+
 const relatedFields = ({
-  parentAppName, parentModelName, parentId, relatedAppName, relatedModelName, relatedFieldName,
+  parentAppLabel, parentModelName, parentId, relatedAppLabel, relatedModelName, relatedFieldName,
 }) => axios.get(
   `${urls.get.relatedFields}${buildQueryString({
-    pal: parentAppName,
+    pal: parentAppLabel,
     pmn: parentModelName,
     pid: parentId,
-    ral: relatedAppName,
+    ral: relatedAppLabel,
     rmn: relatedModelName,
     rfn: relatedFieldName,
   })}`,
   getHeaders(),
 );
+
+const buildFinder = () => axios.get(urls.get.buildFinder, getHeaders());
+
+const instanceList = relatedModelLabel =>
+  axios.get(`${urls.get.instanceList}${buildQueryString({ rml: relatedModelLabel })}`, getHeaders());
+
+const relatedInstanceList = (relatedModelLabel, modelLabel, fieldName, id) => axios.get(
+  `${urls.get.instanceList}${buildQueryString({
+    rml: relatedModelLabel,
+    ml: modelLabel,
+    fn: fieldName,
+    id,
+  })}`,
+  getHeaders(),
+);
+
+const locationPickerDataSet = () => axios.get(urls.get.locationPicketDataSet, getHeaders());
+
 // POST requests
 const updateBasicFields = values => axios.post(urls.post.updateBasicFields, { ...values }, getHeaders());
-const updateRelatedField = updateData => axios.post(urls.post.updateRelatedField, { ...updateData }, getHeaders());
+const updateRelatedFields = updateData => axios.post(urls.post.updateRelatedField, { ...updateData }, getHeaders());
 const publish = () => axios.post(urls.post.publish, {}, getHeaders());
 // DELETE requests
 const item = (appLabel, modelName, id) =>
@@ -77,10 +101,14 @@ const workshopService = {
     detail,
     build,
     relatedFields,
+    buildFinder,
+    instanceList,
+    relatedInstanceList,
+    locationPickerDataSet,
   },
   post: {
     updateBasicFields,
-    updateRelatedField,
+    updateRelatedFields,
     publish,
   },
   delete: {

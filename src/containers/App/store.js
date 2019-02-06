@@ -5,19 +5,21 @@ import { reducer as reduxFormReducer } from 'redux-form';
 import {
   sidebarReducer,
   mapReducer,
-  tourReducer,
   userReducer,
+  workshopReducer,
+  contentReducer,
+  tourReducer,
   dataSuiteReducer,
   changesReducer,
-  workshopReducer,
 } from '../../redux/reducers/index';
 import { LOGOUT_USER } from '../../redux/actionCreators/userActionCreators';
 
 const studioReducer = combineReducers({
+  workshop: workshopReducer,
+  content: contentReducer,
   tours: tourReducer,
   dataSuite: dataSuiteReducer,
   changes: changesReducer,
-  workshop: workshopReducer,
 });
 
 // TODO: Big restructuring needed here...

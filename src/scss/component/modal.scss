@@ -1,9 +1,7 @@
 .modal {
-
 }
 
 .modal-dialog {
-  max-width: 385px;
 }
 
 .modal-content {
@@ -12,7 +10,6 @@
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
   position: relative;
   padding: 50px 40px 60px 40px;
-  text-align: center;
 
   @include themify($themes) {
     background-color: themed('colorBackground');
@@ -140,8 +137,7 @@
 }
 
 .modal-dialog--header {
-  width: 520px;
-  max-width: 520px;
+  //width: 520px;
 
   .modal-content {
     padding: 0;

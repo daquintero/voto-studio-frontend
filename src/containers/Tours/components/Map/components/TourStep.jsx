@@ -5,7 +5,7 @@ import ClassNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
 import { Collapse, Tooltip, Table, Nav, NavLink } from 'reactstrap';
 import { TourProps } from '../../../../../shared/prop-types/ReducerProps';
-import Loader from '../../../../../shared/components/Loader';
+import Loader from '../../../../../shared/components/Loader/Loader';
 import {
   createMarker,
   updateTourStepDataSet,

@@ -147,13 +147,10 @@ class Editor extends Component {
           // If we are creating a new instance then redirect
           // to a new form page with the id of the new instance.
           if (id === 'new') {
-            history.push(buildUrl({
-              pathname: '/workshop/editor/',
-              params: {
-                al: appLabel,
-                mn: modelName,
-                id: action.result.id,
-              },
+            history.push(buildUrl('/workshop/editor/', {
+              al: appLabel,
+              mn: modelName,
+              id: action.result.id,
             }));
           }
         }
@@ -282,6 +279,9 @@ class Editor extends Component {
                     <Col xl={8}>
                       <Card>
                         <CardBody>
+                          <h3 className="page-title text-capitalize">
+                            Basic Fields
+                          </h3>
 
                           {/* Basic fields form */}
                           <form className="form form--horizontal" onSubmit={this.handleUpdateBasicFields}>
@@ -299,14 +299,65 @@ class Editor extends Component {
                       </Card>
                     </Col>
                   </Row>
+
+                  {/* Related fields section */}
+                  <Row>
+                    <Col xl={8}>
+                      <Card>
+                        <CardBody>
+                          <Row>
+                            <Col>
+                              <h3 className="page-title text-capitalize">
+                                Media
+                              </h3>
+                            </Col>
+                            <Col>
+                              <Button className="float-right" onClick={this.handleToggleRelatedContentFinder}>
+                                Add media
+                              </Button>
+                            </Col>
+                          </Row>
+                          <Collapse
+                            title="Images"
+                            className="with-shadow"
+                          >
+                            Hello
+                          </Collapse>
+                          <Collapse
+                            title="Videos"
+                            className="with-shadow"
+                          >
+                            Hello
+                          </Collapse>
+                          <Collapse
+                            title="Resources"
+                            className="with-shadow"
+                          >
+                            Hello
+                          </Collapse>
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  </Row>
+
+                  {/* Related fields section */}
                   {!workshop.form.new && (
                     <Row>
                       <Col xl={8}>
                         <Card>
                           <CardBody>
-                            <Button onClick={this.handleToggleRelatedContentFinder}>
-                              Add related content
-                            </Button>
+                            <Row>
+                              <Col>
+                                <h3 className="page-title text-capitalize">
+                                  Related Fields
+                                </h3>
+                              </Col>
+                              <Col>
+                                <Button className="float-right" onClick={this.handleToggleRelatedContentFinder}>
+                                  Add related content
+                                </Button>
+                              </Col>
+                            </Row>
 
                             {/* Related fields tables */}
                             {form.relatedFields.map(field => Boolean(field.relatedInstances.instances.length) && (

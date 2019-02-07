@@ -3,6 +3,7 @@ import {
   GET_IMAGE_LIST,
   UPLOAD_IMAGES,
   UPDATE_IMAGE,
+  DELETE_IMAGES,
 } from '../actionCreators/mediaActionCreators';
 
 
@@ -55,6 +56,24 @@ export const updateImage = updateData => (dispatch) => {
     error =>
       dispatch({
         type: UPDATE_IMAGE.ERROR,
+        error,
+      }),
+  );
+};
+
+export const deleteImages = deleteData => (dispatch) => {
+  dispatch({
+    type: DELETE_IMAGES.REQUEST,
+  });
+  return mediaService.delete.images(deleteData).then(
+    response =>
+      dispatch({
+        type: DELETE_IMAGES.SUCCESS,
+        response: response.data,
+      }),
+    error =>
+      dispatch({
+        type: DELETE_IMAGES.ERROR,
         error,
       }),
   );

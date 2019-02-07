@@ -26,9 +26,15 @@ class ImageUploader extends Component {
     media: PropTypes.instanceOf(Object).isRequired,
 
     // Forms
-    imageUploaderForm: PropTypes.instanceOf(Object).isRequired,
+    imageUploaderForm: PropTypes.instanceOf(Object),
     reset: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    // Form
+    imageUploaderForm: {},
+  };
+
 
   constructor(props) {
     super(props);

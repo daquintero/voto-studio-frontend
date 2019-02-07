@@ -256,7 +256,7 @@ export default (state = initialState, action) => {
         ...state,
         form: {
           ...state.form,
-          new: !action.result.created,
+          new: false,
           parentModel: {
             ...state.form.parentModel,
             id: action.result.id,

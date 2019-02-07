@@ -13,6 +13,7 @@ const urls = {
     updateImage: `${mediaApiUrl}/update_image/`,
   },
   delete: {
+    images: `${mediaApiUrl}/delete_images/`,
   },
 };
 
@@ -37,6 +38,10 @@ const uploadImages = uploadData => axios.post(urls.post.images, uploadData, {
 
 const updateImage = updateData => axios.post(urls.post.updateImage, updateData, getHeaders());
 
+// DELETE requests
+const deleteImages = deleteData => axios.delete(urls.delete.images, { data: deleteData, ...getHeaders() });
+
+
 const mediaService = {
   get: {
     images: getImages,
@@ -46,6 +51,7 @@ const mediaService = {
     updateImage,
   },
   delete: {
+    images: deleteImages,
   },
 };
 

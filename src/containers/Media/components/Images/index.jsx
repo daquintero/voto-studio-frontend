@@ -8,8 +8,13 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { getImageList } from '../../../../redux/actions/mediaActions';
-import { GET_IMAGE_LIST, TOGGLE_IMAGE_UPLOADER } from '../../../../redux/actionCreators/mediaActionCreators';
+import { deleteImages, getImageList } from '../../../../redux/actions/mediaActions';
+import {
+  GET_IMAGE_LIST,
+  TOGGLE_IMAGE_EDITOR,
+  TOGGLE_IMAGE_UPLOADER,
+  DELETE_IMAGES,
+} from '../../../../redux/actionCreators/mediaActionCreators';
 
 // Components
 import Gallery from './components/Gallery';
@@ -44,14 +49,33 @@ class Images extends Component {
       });
   }
 
-  handleSelectImage = (newSelected) => {
+  handleOnClick = (e) => {
+    const { selected } = this.state;
+    const { id } = e.currentTarget.dataset;
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
     this.setState({ selected: newSelected });
   };
 
   handleToggleImageEditor = () => {
-    this.setState(prevState => ({
-      imageEditor: !prevState.imageEditor,
-    }));
+    const { dispatch } = this.props;
+    dispatch({
+      type: TOGGLE_IMAGE_EDITOR,
+    });
   };
 
   handleToggleImageUploader = () => {
@@ -70,6 +94,18 @@ class Images extends Component {
       .then((action) => {
         if (action.type === GET_IMAGE_LIST.SUCCESS) {
           this.setState(prevState => ({ currentPage: prevState.currentPage + parseInt(direction, 10) }));
+        }
+      });
+  };
+
+  handleDeleteImages = () => {
+    const { dispatch } = this.props;
+    const { selected } = this.state;
+
+    dispatch(deleteImages({ ids: selected }))
+      .then((action) => {
+        if (action.type === DELETE_IMAGES.SUCCESS) {
+          this.setState({ selected: [] });
         }
       });
   };
@@ -99,16 +135,19 @@ class Images extends Component {
           <Button color="primary" size="sm" disabled={selected.length !== 1} onClick={this.handleToggleImageEditor}>
             Edit
           </Button>
-          <Button color="danger" size="sm" disabled={selected.length === 0}>
+          <Button color="danger" size="sm" disabled={selected.length === 0} onClick={this.handleDeleteImages}>
             Delete {selected.length !== 0 && selected.length}
           </Button>
         </ButtonToolbar>
-        <Gallery selectImage={this.handleSelectImage} />
+        <Gallery
+          onClick={this.handleOnClick}
+          selected={selected}
+        />
         <ImageEditor
           toggle={this.handleToggleImageEditor}
           isOpen={imageEditor}
           image={image}
-          initialValues={{ title: image.title }}
+          initialValues={image && { title: image.title }}
           enableReinitialize
         />
         <ImageUploader

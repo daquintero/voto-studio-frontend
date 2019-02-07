@@ -20,6 +20,8 @@ import userTableCell from '../../../../../../shared/components/UserTableCell';
 
 // Functions
 import squashString from '../../../../../../shared/utils/squashString';
+
+// Actions
 import { updateRelatedFields } from '../../../../../../redux/actions/workshopActions';
 import { UPDATE_RELATED_FIELDS } from '../../../../../../redux/actionCreators/workshopActionCreators';
 

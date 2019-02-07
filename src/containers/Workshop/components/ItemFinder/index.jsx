@@ -80,13 +80,10 @@ class InstanceFinder extends Component {
   openEditor = (id) => {
     const { history, finderForm } = this.props;
     const [appLabel, modelName] = finderForm.values.type.value.split('.');
-    history.push(buildUrl({
-      pathname: '/workshop/editor/',
-      params: {
-        al: appLabel.toLowerCase(),
-        mn: modelName.toLowerCase(),
-        id,
-      },
+    history.push(buildUrl('/workshop/editor/', {
+      al: appLabel.toLowerCase(),
+      mn: modelName.toLowerCase(),
+      id,
     }));
   };
 

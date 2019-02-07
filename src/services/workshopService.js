@@ -88,9 +88,11 @@ const locationPickerDataSet = () => axios.get(urls.get.locationPicketDataSet, ge
 const updateBasicFields = values => axios.post(urls.post.updateBasicFields, { ...values }, getHeaders());
 const updateRelatedFields = updateData => axios.post(urls.post.updateRelatedField, { ...updateData }, getHeaders());
 const publish = () => axios.post(urls.post.publish, {}, getHeaders());
+
 // DELETE requests
 const item = (appLabel, modelName, id) =>
   axios.delete(urls.delete.item, { data: { appLabel, modelName, id }, ...getHeaders() });
+
 // Search GET request
 const searchRelatedFields = searchParameters =>
   axios.get(`${urls.search.relatedFields}${buildQueryString(searchParameters)}`, getHeaders());

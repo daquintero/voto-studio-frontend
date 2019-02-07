@@ -11,7 +11,7 @@ import {
 
 // Actions
 import { updateImage } from '../../../../../redux/actions/mediaActions';
-import { UPDATE_IMAGE } from '../../../../../redux/actionCreators/mediaActionCreators';
+import { TOGGLE_IMAGE_EDITOR, UPDATE_IMAGE } from '../../../../../redux/actionCreators/mediaActionCreators';
 
 // Functions
 import imageUrl from '../../../../../shared/utils/imageUrl';
@@ -20,14 +20,21 @@ import imageUrl from '../../../../../shared/utils/imageUrl';
 class ImageEditor extends Component {
   static propTypes = {
     toggle: PropTypes.func.isRequired,
-    isOpen: PropTypes.bool.isRequired,
-    image: PropTypes.instanceOf(Object).isRequired,
+    image: PropTypes.instanceOf(Object),
 
     // Redux
     dispatch: PropTypes.func.isRequired,
+    media: PropTypes.instanceOf(Object).isRequired,
 
     // Form
-    imageEditorForm: PropTypes.instanceOf(Object).isRequired,
+    imageEditorForm: PropTypes.instanceOf(Object),
+  };
+
+  static defaultProps = {
+    image: {},
+
+    // Form
+    imageEditorForm: {},
   };
 
   constructor(props) {
@@ -36,11 +43,13 @@ class ImageEditor extends Component {
   }
 
   handleSave = () => {
-    const { dispatch, imageEditorForm } = this.props;
-    dispatch(updateImage({ title: imageEditorForm.values.title }))
+    const { dispatch, imageEditorForm, image } = this.props;
+    dispatch(updateImage({ id: image.id, title: imageEditorForm.values.title }))
       .then((action) => {
         if (action.type === UPDATE_IMAGE.SUCCESS) {
-          dispatch({});
+          dispatch({
+            type: TOGGLE_IMAGE_EDITOR,
+          });
         }
       });
   };
@@ -48,12 +57,12 @@ class ImageEditor extends Component {
   render() {
     // Props
     const {
-      toggle, isOpen, image,
+      toggle, image, media,
     } = this.props;
 
     return (
       <Modal
-        isOpen={isOpen}
+        isOpen={media.images.imageEditorOpen}
         toggle={toggle}
         size="md"
       >
@@ -88,4 +97,7 @@ const ImageEditorWithForm = reduxForm({
   form: 'imageEditorForm',
 })(ImageEditor);
 
-export default connect()(ImageEditorWithForm);
+export default connect(state => ({
+  media: state.studio.media,
+  imageEditorForm: state.form.imageEditorForm,
+}))(ImageEditorWithForm);

@@ -12,53 +12,24 @@ import imageUrl from '../../../../../shared/utils/imageUrl';
 
 class Gallery extends Component {
   static propTypes = {
+    selected: PropTypes.instanceOf(Array).isRequired,
+
     // Redux
-    // dispatch: PropTypes.func.isRequired,
     media: PropTypes.instanceOf(Object).isRequired,
 
     // Callbacks
-    selectImage: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this.state = {
-      selected: [],
-    };
+    this.state = {};
   }
 
-  handleOnClick = (e) => {
-    const { selectImage } = this.props;
-    const { selected } = this.state;
-    const { id } = e.currentTarget.dataset;
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    this.setState({ selected: newSelected }, selectImage(newSelected));
-  };
-
   render() {
-    // State
-    const {
-      selected,
-    } = this.state;
-
     // Props
     const {
-      media,
+      media, onClick, selected,
     } = this.props;
 
     return (
@@ -68,7 +39,7 @@ class Gallery extends Component {
             <div
               className="gallery__img__wrapper shadow"
               role="presentation"
-              onClick={this.handleOnClick}
+              onClick={onClick}
               data-id={image.id}
             >
               {selected.indexOf(image.id.toString()) !== -1 && (

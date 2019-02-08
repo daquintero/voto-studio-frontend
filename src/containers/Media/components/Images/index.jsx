@@ -1,7 +1,9 @@
 // Absolute Imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropsTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   ButtonToolbar,
   Button,
@@ -13,7 +15,7 @@ import {
   GET_IMAGE_LIST,
   TOGGLE_IMAGE_EDITOR,
   TOGGLE_IMAGE_UPLOADER,
-  DELETE_IMAGES,
+  DELETE_IMAGES, SELECT_IMAGE,
 } from '../../../../redux/actionCreators/mediaActionCreators';
 
 // Components
@@ -27,21 +29,24 @@ class Images extends Component {
     // Redux
     dispatch: PropTypes.func.isRequired,
     media: PropTypes.instanceOf(Object).isRequired,
+    workshop: PropTypes.instanceOf(Object).isRequired,
+
+    // Router
+    location: ReactRouterPropsTypes.location.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      selected: [],
-      imageEditor: false,
       currentPage: 0,
       pageSize: 24,
     };
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(getImageList(0))
+    const { dispatch, location, workshop } = this.props;
+    const excludeIds = location.pathname.includes('workshop') ? workshop.form.mediaFields.images.map(o => o.id) : [];
+    dispatch(getImageList(0, excludeIds))
       .then((action) => {
         if (action.type === GET_IMAGE_LIST.SUCCESS) {
           this.setState({ pageSize: action.response.pageSize });
@@ -50,7 +55,8 @@ class Images extends Component {
   }
 
   handleOnClick = (e) => {
-    const { selected } = this.state;
+    const { dispatch, media } = this.props;
+    const { selected } = media.images;
     const { id } = e.currentTarget.dataset;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -68,7 +74,10 @@ class Images extends Component {
       );
     }
 
-    this.setState({ selected: newSelected });
+    dispatch({
+      type: SELECT_IMAGE,
+      selected: newSelected,
+    });
   };
 
   handleToggleImageEditor = () => {
@@ -99,13 +108,16 @@ class Images extends Component {
   };
 
   handleDeleteImages = () => {
-    const { dispatch } = this.props;
-    const { selected } = this.state;
+    const { dispatch, media } = this.props;
+    const { selected } = media.images;
 
     dispatch(deleteImages({ ids: selected }))
       .then((action) => {
         if (action.type === DELETE_IMAGES.SUCCESS) {
-          this.setState({ selected: [] });
+          dispatch({
+            type: SELECT_IMAGE,
+            selected: [],
+          });
         }
       });
   };
@@ -113,13 +125,18 @@ class Images extends Component {
   render() {
     // State
     const {
-      selected, imageEditor, imageUploader, currentPage, pageSize,
+      imageEditor, imageUploader, currentPage, pageSize,
     } = this.state;
 
     // Props
     const {
       media,
     } = this.props;
+
+    // Media
+    const {
+      selected,
+    } = media.images;
 
     let image = {
       title: '',
@@ -142,6 +159,7 @@ class Images extends Component {
         <Gallery
           onClick={this.handleOnClick}
           selected={selected}
+          images={media.images.instances}
         />
         <ImageEditor
           toggle={this.handleToggleImageEditor}
@@ -176,6 +194,7 @@ class Images extends Component {
   }
 }
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   media: state.studio.media,
-}))(Images);
+  workshop: state.studio.workshop,
+}))(Images));

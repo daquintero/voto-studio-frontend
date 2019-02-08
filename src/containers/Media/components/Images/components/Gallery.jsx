@@ -1,64 +1,105 @@
 // Absolute Imports
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  Row,
   Col,
 } from 'reactstrap';
+import {
+  DragDropContext,
+  Droppable,
+} from 'react-beautiful-dnd';
 
-// Functions
-import imageUrl from '../../../../../shared/utils/imageUrl';
+// Actions
+import { updateMediaOrder } from '../../../../../redux/actions/workshopActions';
 
-class Gallery extends Component {
+// Components
+import Image from './Image';
+
+class Gallery extends PureComponent {
   static propTypes = {
-    selected: PropTypes.instanceOf(Array).isRequired,
-
-    // Redux
-    media: PropTypes.instanceOf(Object).isRequired,
+    selected: PropTypes.instanceOf(Array),
+    images: PropTypes.instanceOf(Array),
+    imageDims: PropTypes.instanceOf(Object),
+    controls: PropTypes.bool,
+    draggable: PropTypes.bool,
 
     // Callbacks
     onClick: PropTypes.func.isRequired,
+    onRemove: PropTypes.func,
+
+    // Redux
+    dispatch: PropTypes.func.isRequired,
+    workshop: PropTypes.instanceOf(Object).isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  static defaultProps = {
+    selected: [],
+    images: null,
+    imageDims: {
+      xs: 12, sm: 6, md: 4, lg: 3, xl: 2,
+    },
+    controls: false,
+    draggable: false,
+    onRemove: () => {},
+  };
+
+  onDragEnd = (result) => {
+    const { dispatch, workshop } = this.props;
+    const { modelLabel, id } = workshop.form.parentModel;
+
+    dispatch(updateMediaOrder({
+      modelLabel,
+      id,
+      result,
+      mediaType: 'images',
+    }));
+  };
 
   render() {
     // Props
     const {
-      media, onClick, selected,
+      onClick, selected, images, imageDims, controls, draggable, onRemove,
     } = this.props;
 
-    return (
-      <Row>
-        {media.images.instances.map(image => (
-          <Col className="mb-4" key={image.id} xl={2}>
+    return images.length ? (
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <Droppable droppableId="gallery" direction="horizontal">
+          {provided => (
             <div
-              className="gallery__img__wrapper shadow"
-              role="presentation"
-              onClick={onClick}
-              data-id={image.id}
+              className="row"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
             >
-              {selected.indexOf(image.id.toString()) !== -1 && (
-                <div className="gallery__img__selected">
-                  <p><i className="fal fa-2x fa-check-square" /></p>
-                </div>
-              )}
-              <img className="gallery__img" src={imageUrl(image.url)} alt={image.title} />
-              <div className="gallery__img__info">
-                <p className="gallery__img__title">{image.title}</p>
-              </div>
+              {images.map((image, index) => (
+                <Col
+                  className="mb-4"
+                  key={image.id}
+                  {...imageDims}
+                >
+                  <Image
+                    onClick={onClick}
+                    image={image}
+                    isSelected={selected.indexOf(image.id.toString()) !== -1}
+                    controls={controls}
+                    draggable={draggable}
+                    innerRef={provided.innerRef}
+                    index={index}
+                    onRemove={onRemove}
+                  />
+                  {provided.placeholder}
+                </Col>
+                ))}
             </div>
-          </Col>
-        ))}
-      </Row>
+            )}
+        </Droppable>
+      </DragDropContext>
+    ) : (
+      <h4>No images</h4>
     );
   }
 }
 
 export default connect(state => ({
-  media: state.studio.media,
+  workshop: state.studio.workshop,
 }))(Gallery);

@@ -6,6 +6,7 @@ import {
   TOGGLE_IMAGE_EDITOR,
   UPDATE_IMAGE,
   DELETE_IMAGES,
+  SELECT_IMAGE,
 } from '../actionCreators/mediaActionCreators';
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
     imageUploaderOpen: false,
     imageEditorOpen: false,
     instances: [],
+    selected: [],
   },
   videos: {
     instances: [],
@@ -42,7 +44,10 @@ export default (state = initialState, action) => {
     case GET_IMAGE_LIST.SUCCESS:
       return {
         ...state,
-        images: action.response,
+        images: {
+          ...state.images,
+          ...action.response,
+        },
         actions: {
           ...state.actions,
           ...actionResult('GET_IMAGE_LIST.SUCCESS'),
@@ -54,6 +59,17 @@ export default (state = initialState, action) => {
         actions: {
           ...state.actions,
           ...actionResult('GET_IMAGE_LIST.ERROR', { error: action.error }),
+        },
+      };
+      // -----------------------------------------------
+
+    // Toggle Image Uploader reducer -------------------
+    case SELECT_IMAGE:
+      return {
+        ...state,
+        images: {
+          ...state.images,
+          selected: action.selected,
         },
       };
       // -----------------------------------------------
@@ -78,15 +94,27 @@ export default (state = initialState, action) => {
           ...actionResult('UPLOAD_IMAGES.REQUEST'),
         },
       };
-    case UPLOAD_IMAGES.SUCCESS:
+    case UPLOAD_IMAGES.SUCCESS: {
+      const { instances, imageCount } = action.response;
+      let newInstances;
+
+      if (imageCount < state.images.pageSize) {
+        newInstances = [
+          ...instances,
+          ...state.images.instances,
+        ];
+      } else {
+        newInstances = [
+          ...instances,
+          ...state.images.instances.slice(0, state.images.instances.length - instances.length),
+        ];
+      }
+
       return {
         ...state,
         images: {
           ...state.images,
-          instances: [
-            ...action.response.instances,
-            ...state.images.instances.slice(action.response.instances.length),
-          ],
+          instances: newInstances,
           imageCount: action.response.imageCount,
         },
         actions: {
@@ -94,6 +122,7 @@ export default (state = initialState, action) => {
           ...actionResult('UPLOAD_IMAGES.SUCCESS'),
         },
       };
+    }
     case UPLOAD_IMAGES.ERROR:
       return {
         ...state,
@@ -178,7 +207,6 @@ export default (state = initialState, action) => {
         },
       };
       // -----------------------------------------------
-
     default:
       return state;
   }

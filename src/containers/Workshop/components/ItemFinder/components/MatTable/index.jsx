@@ -26,8 +26,10 @@ const getSorting = (order, orderBy) =>
 class MatTable extends Component {
   static propTypes = {
     defaults: PropTypes.instanceOf(Object),
+
     // Redux
     workshop: PropTypes.instanceOf(Object).isRequired,
+
     // Callbacks
     editItem: PropTypes.func.isRequired,
     selectItem: PropTypes.func.isRequired,

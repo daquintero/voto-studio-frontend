@@ -5,6 +5,8 @@ export const GET_IMAGE_LIST = {
   ERROR: 'GET_IMAGE_LIST_ERROR',
 };
 
+export const SELECT_IMAGE = 'SELECT_IMAGE';
+
 export const TOGGLE_IMAGE_UPLOADER = 'TOGGLE_IMAGE_UPLOADER';
 
 export const UPLOAD_IMAGES = {

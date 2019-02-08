@@ -20,25 +20,34 @@ import { ToastContainer, toast } from 'react-toastify';
 // CSS
 import 'react-toastify/dist/ReactToastify.css';
 
+// Images
+import iPhone from './img/iPhone.svg';
+
 // Actions
 import {
   buildForm,
-  getRelatedFields,
   updateBasicFields,
+  updateMediaRelationships,
+  updateRelatedFields,
 } from '../../../../redux/actions/workshopActions';
 import {
   BUILD_FORM,
   TOGGLE_LOCATION_PICKER,
   TOGGLE_RELATED_CONTENT_FINDER,
   UPDATE_BASIC_FIELDS,
+  TOGGLE_MEDIA_CENTER,
+  UPDATE_MEDIA_RELATIONSHIPS,
 } from '../../../../redux/actionCreators/workshopActionCreators';
+import { SELECT_IMAGE } from '../../../../redux/actionCreators/mediaActionCreators';
 
 // Components
 import Collapse from '../../../../shared/components/Collapse';
 import EditorField from '../../../../shared/components/form/TextEditor/EditorField';
 import Loader from '../../../../shared/components/Loader/Loader';
-import MatTable from './components/MatTable';
+import EditorTableWrapper from './components/EditorTableWrapper';
 import LocationPicker from './components/LocationPicker';
+import MediaCenter from './components/MediaCenter';
+import Gallery from '../../../Media/components/Images/components/Gallery';
 import RelatedContentFinder from './components/RelatedContentFinder/';
 
 // Functions
@@ -52,9 +61,11 @@ class Editor extends Component {
     // Redux
     workshop: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
+
     // Router
     location: ReactRouterPropTypes.location.isRequired,
     history: ReactRouterPropTypes.history.isRequired,
+
     // Form
     workshopForm: PropTypes.instanceOf(Object),
   };
@@ -74,30 +85,46 @@ class Editor extends Component {
   componentDidMount() {
     const { dispatch, location } = this.props;
     const queryStringValues = queryString.parse(location.search);
-
-    dispatch(buildForm(queryStringValues))
-      .then((action) => {
-        if (this.isUnmounted) return;
-        // Grab the related fields for the first option in the dropdown
-        if (action.type === BUILD_FORM.SUCCESS && action.form.relatedFields.length) {
-          const firstRelatedField = action.form.relatedFields[0];
-          const values = firstRelatedField.modelLabel.split('.');
-
-          dispatch(getRelatedFields({
-            parentAppLabel: queryStringValues.al,
-            parentModelName: queryStringValues.mn,
-            parentId: queryStringValues.id,
-            relatedAppLabel: values[0],
-            relatedModelName: values[1].toLowerCase(),
-            relatedFieldName: firstRelatedField.fieldName,
-          }));
-        }
-      });
+    dispatch(buildForm(queryStringValues));
   }
 
   componentWillUnmount() {
     this.isUnmounted = true;
+    this.props.dispatch({
+      type: BUILD_FORM.INIT,
+    });
   }
+
+  getTableProps = props => ({
+    ...props,
+    actions: [
+      {
+        name: 'edit',
+        icon: 'fal fa-fw fa-edit',
+        tooltipContent: obj => `Edit ${obj.fieldName}`,
+        props: {
+          className: 'workshop__form-action',
+          onClick: () => console.log('edit'),
+        },
+      },
+      {
+        name: 'detail',
+        icon: 'fal fa-fw fa-eye',
+        tooltipContent: obj => `View ${obj.fieldName}`,
+        props: {
+          className: 'workshop__form-action',
+          onClick: () => console.log('detail'),
+        },
+      },
+    ],
+  });
+
+  handleToggleLocationPicker = (e) => {
+    e.preventDefault();
+    this.props.dispatch({
+      type: TOGGLE_LOCATION_PICKER,
+    });
+  };
 
   handleUpdateBasicFields = (e) => {
     e.preventDefault();
@@ -157,17 +184,78 @@ class Editor extends Component {
       });
   };
 
-  handleToggleLocationPicker = (e) => {
-    e.preventDefault();
+  handleToggleMediaCenter = () => {
     this.props.dispatch({
-      type: TOGGLE_LOCATION_PICKER,
+      type: TOGGLE_MEDIA_CENTER,
     });
+  };
+
+  handleMediaOnAdd = (selected, mediaType) => {
+    const { dispatch, workshop } = this.props;
+
+    dispatch(updateMediaRelationships({
+      modelLabel: workshop.form.parentModel.modelLabel,
+      id: workshop.form.parentModel.id,
+      mediaType,
+      mediaIds: selected,
+      updateType: 'add',
+    }))
+      .then((action) => {
+        if (action.type === UPDATE_MEDIA_RELATIONSHIPS.SUCCESS) {
+          dispatch({
+            type: TOGGLE_MEDIA_CENTER,
+          });
+          dispatch({
+            type: SELECT_IMAGE,
+            selected: [],
+          });
+        }
+      });
+  };
+
+  handleMediaOnRemove = (e) => {
+    const { dispatch, workshop } = this.props;
+    const obj = JSON.parse(e.target.dataset.obj);
+
+    dispatch(updateMediaRelationships({
+      modelLabel: workshop.form.parentModel.modelLabel,
+      id: workshop.form.parentModel.id,
+      mediaType: obj.type,
+      mediaIds: [obj.id],
+      updateType: 'remove',
+    }));
+  };
+
+  handleRelatedOnSelect = (selected, field) => {
+    this.setState({ selected: { [field.fieldName]: selected } });
   };
 
   handleToggleRelatedContentFinder = () => {
     this.props.dispatch({
       type: TOGGLE_RELATED_CONTENT_FINDER,
     });
+  };
+
+  handleRelatedOnRemove = (e) => {
+    const {
+      selected,
+    } = this.state;
+    const {
+      workshop, dispatch,
+    } = this.props;
+
+    const field = JSON.parse(e.target.dataset.field);
+
+    const updateData = {
+      modelLabel: workshop.form.parentModel.modelLabel,
+      relatedModelLabel: field.modelLabel,
+      id: workshop.form.parentModel.id,
+      relatedIds: selected[field.fieldName],
+      updateType: 'remove',
+      fieldName: field.fieldName,
+    };
+
+    dispatch(updateRelatedFields(updateData));
   };
 
   buildPlaceholder = (field) => {
@@ -246,7 +334,7 @@ class Editor extends Component {
           </div>
           {field.readOnly && (
             <span className="form__form-group-description">
-            This is a &quot;read-only&quot; field
+              This is a &quot;read-only&quot; field
             </span>
           )}
         </div>
@@ -257,6 +345,7 @@ class Editor extends Component {
       <>
         <ToastContainer pauseOnFocusLoss={false} />
         <LocationPicker />
+        <MediaCenter toggle={this.handleToggleMediaCenter} onAdd={this.handleMediaOnAdd} />
         <RelatedContentFinder />
         <Container className="mt-4">
           {loading ? (
@@ -266,7 +355,7 @@ class Editor extends Component {
               {loaded ? (
                 <>
                   <Row>
-                    <Col md={12}>
+                    <Col xs={8}>
                       <h3 className="page-title text-capitalize">
                         {form.new ? 'Create' : 'Edit'} {form.parentModel.name}
                       </h3>
@@ -274,8 +363,16 @@ class Editor extends Component {
                         Edit the basic info of this piece of content and add or remove related pieces of content
                       </h3>
                     </Col>
-                  </Row>
-                  <Row>
+
+                    <Col xs={4}>
+                      <h3 className="page-title text-capitalize">
+                        Live Preview
+                      </h3>
+                      <h3 className="page-subhead subhead">
+                        This will update as you edit the piece of content
+                      </h3>
+                    </Col>
+
                     <Col xl={8}>
                       <Card>
                         <CardBody>
@@ -297,86 +394,95 @@ class Editor extends Component {
                           </form>
                         </CardBody>
                       </Card>
-                    </Col>
-                  </Row>
 
-                  {/* Related fields section */}
-                  <Row>
-                    <Col xl={8}>
+                      {!workshop.form.new && (
+                        <>
+                          {/* Related fields section */}
+                          <Card>
+                            <CardBody>
+                              <Row>
+                                <Col>
+                                  <h3 className="page-title text-capitalize">
+                                Media
+                                  </h3>
+                                </Col>
+                                <Col>
+                                  <Button
+                                    color="primary"
+                                    className="float-right"
+                                    onClick={this.handleToggleMediaCenter}
+                                  >
+                                Add media
+                                  </Button>
+                                </Col>
+                              </Row>
+                              <Collapse
+                                title="Images"
+                                className="with-shadow"
+                              >
+                                <Gallery
+                                  images={form.mediaFields.images}
+                                  imageDims={{
+                               xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
+                              }}
+                                  controls
+                                  draggable
+                                  onRemove={this.handleMediaOnRemove}
+                                />
+                              </Collapse>
+                              <Collapse
+                                title="Videos"
+                                className="with-shadow"
+                              >
+                            Hello
+                              </Collapse>
+                              <Collapse
+                                title="Resources"
+                                className="with-shadow"
+                              >
+                            Hello
+                              </Collapse>
+                            </CardBody>
+                          </Card>
+
+                          {/* Related fields section */}
+                          <Card>
+                            <CardBody>
+                              <Row>
+                                <Col>
+                                  <h3 className="page-title text-capitalize">
+                                  Related Content
+                                  </h3>
+                                </Col>
+                                <Col>
+                                  <Button
+                                    color="primary"
+                                    className="float-right"
+                                    onClick={this.handleToggleRelatedContentFinder}
+                                  >
+                                  Add related content
+                                  </Button>
+                                </Col>
+                              </Row>
+                              <EditorTableWrapper
+                                fields={workshop.form.relatedFields}
+                                action={workshop.actions.UPDATE_RELATED_FIELDS}
+                              />
+                            </CardBody>
+                          </Card>
+                        </>
+                      )}
+                    </Col>
+
+                    {/* Live preview panel */}
+                    <Col xl={4}>
                       <Card>
                         <CardBody>
-                          <Row>
-                            <Col>
-                              <h3 className="page-title text-capitalize">
-                                Media
-                              </h3>
-                            </Col>
-                            <Col>
-                              <Button className="float-right" onClick={this.handleToggleRelatedContentFinder}>
-                                Add media
-                              </Button>
-                            </Col>
-                          </Row>
-                          <Collapse
-                            title="Images"
-                            className="with-shadow"
-                          >
-                            Hello
-                          </Collapse>
-                          <Collapse
-                            title="Videos"
-                            className="with-shadow"
-                          >
-                            Hello
-                          </Collapse>
-                          <Collapse
-                            title="Resources"
-                            className="with-shadow"
-                          >
-                            Hello
-                          </Collapse>
+                          <img src={iPhone} alt="iPhone preview" style={{ opacity: 0.3 }} />
                         </CardBody>
                       </Card>
                     </Col>
                   </Row>
-
-                  {/* Related fields section */}
-                  {!workshop.form.new && (
-                    <Row>
-                      <Col xl={8}>
-                        <Card>
-                          <CardBody>
-                            <Row>
-                              <Col>
-                                <h3 className="page-title text-capitalize">
-                                  Related Fields
-                                </h3>
-                              </Col>
-                              <Col>
-                                <Button className="float-right" onClick={this.handleToggleRelatedContentFinder}>
-                                  Add related content
-                                </Button>
-                              </Col>
-                            </Row>
-
-                            {/* Related fields tables */}
-                            {form.relatedFields.map(field => Boolean(field.relatedInstances.instances.length) && (
-                              <div key={field.name} className="mb-4">
-
-                                {/* Related fields table */}
-                                <Collapse
-                                  title={`${field.verboseNamePluralTitle} (${field.relatedInstances.instances.length})`}
-                                  className="with-shadow"
-                                >
-                                  <MatTable field={field} />
-                                </Collapse>
-                              </div>
-                            ))}
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    </Row>
-                  )}
                 </>
               ) : (
                 <>

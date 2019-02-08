@@ -5,6 +5,8 @@ import {
   BUILD_FORM,
   GET_RELATED_FIELDS,
   UPDATE_BASIC_FIELDS,
+  UPDATE_MEDIA_RELATIONSHIPS,
+  UPDATE_MEDIA_ORDER,
   UPDATE_RELATED_FIELDS,
   PUBLISH_WORKSHOP_CONTENT,
   BUILD_FINDER,
@@ -12,7 +14,9 @@ import {
   GET_LOCATION_PICKER_DATA_SET,
   TOGGLE_LOCATION_PICKER,
   SELECT_POSITION,
-  SAVE_POSITION, TOGGLE_RELATED_CONTENT_FINDER,
+  SAVE_POSITION,
+  TOGGLE_MEDIA_CENTER,
+  TOGGLE_RELATED_CONTENT_FINDER,
 } from '../actionCreators/workshopActionCreators';
 import { initializeActions, actionResult } from '../helpers/asyncHelpers';
 
@@ -46,6 +50,9 @@ const initialState = {
     options: [],
   },
   locationPicker: locationPickerDefault,
+  mediaCenter: {
+    open: false,
+  },
   relatedContentFinder: {
     open: false,
   },
@@ -273,6 +280,115 @@ export default (state = initialState, action) => {
         actions: {
           ...state.actions,
           ...actionResult('UPDATE_BASIC_FIELDS.ERROR', { error: action.error }),
+        },
+      };
+      // -----------------------------------------------
+
+    // Toggle Media Center reducer ---------------------
+    case TOGGLE_MEDIA_CENTER:
+      return {
+        ...state,
+        mediaCenter: {
+          ...state.mediaCenter,
+          open: !state.mediaCenter.open,
+        },
+      };
+
+    // Update Media Relationships reducers -------------
+    case UPDATE_MEDIA_RELATIONSHIPS.REQUEST:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_MEDIA_RELATIONSHIPS.REQUEST'),
+        },
+      };
+    case UPDATE_MEDIA_RELATIONSHIPS.SUCCESS: {
+      const {
+        updateType, mediaIds, mediaType, newInstances,
+      } = action.response;
+      let mediaFields;
+
+      if (updateType === 'add') {
+        mediaFields = {
+          ...state.form.mediaFields,
+          [mediaType]: [...state.form.mediaFields[mediaType], ...newInstances],
+        };
+      }
+
+      if (updateType === 'remove') {
+        mediaFields = {
+          ...state.form.mediaFields,
+          [mediaType]: state.form.mediaFields[mediaType].filter(f => !mediaIds.includes(f.id)),
+        };
+      }
+
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          mediaFields,
+        },
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_MEDIA_RELATIONSHIPS.SUCCESS'),
+        },
+      };
+    }
+    case UPDATE_MEDIA_RELATIONSHIPS.ERROR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_MEDIA_RELATIONSHIPS.ERROR', { error: action.error }),
+        },
+      };
+      // -----------------------------------------------
+
+    // Update Images reducers --------------------------
+    case UPDATE_MEDIA_ORDER.REQUEST: {
+      const { mediaType, result } = action.orderData;
+      const newMedia = state.form.mediaFields[mediaType];
+      const media = state.form.mediaFields[mediaType].filter(f => f.id === parseInt(result.draggableId, 10))[0];
+      newMedia.splice(result.source.index, 1);
+      newMedia.splice(result.destination.index, 0, media);
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          mediaFields: {
+            ...state.form.mediaFields,
+            [mediaType]: newMedia,
+          },
+        },
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_MEDIA_ORDER.REQUEST'),
+        },
+      };
+    }
+    case UPDATE_MEDIA_ORDER.SUCCESS:
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          mediaFields: {
+            ...state.form.mediaFields,
+            [action.response.mediaType]: state.form.mediaFields[action.response.mediaType]
+              .sort((a, b) => action.response.order.indexOf(a.id) - action.response.order.indexOf(b.id)),
+          },
+        },
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_MEDIA_ORDER.SUCCESS'),
+        },
+      };
+    case UPDATE_MEDIA_ORDER.ERROR:
+      return {
+        ...state,
+        actions: {
+          ...state.actions,
+          ...actionResult('UPDATE_MEDIA_ORDER.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------

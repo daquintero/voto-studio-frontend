@@ -18,6 +18,8 @@ const urls = {
   },
   post: {
     updateBasicFields: `${workshopApiUrl}/update_basic_fields/`,
+    updateMediaRelationships: `${workshopApiUrl}/update_media_relationships/`,
+    updateMediaOrder: `${workshopApiUrl}/update_media_order/`,
     updateRelatedField: `${workshopApiUrl}/update_related_field/`,
     publish: `${workshopApiUrl}/publish/`,
   },
@@ -85,8 +87,10 @@ const relatedInstanceList = (relatedModelLabel, modelLabel, fieldName, id) => ax
 const locationPickerDataSet = () => axios.get(urls.get.locationPicketDataSet, getHeaders());
 
 // POST requests
-const updateBasicFields = values => axios.post(urls.post.updateBasicFields, { ...values }, getHeaders());
-const updateRelatedFields = updateData => axios.post(urls.post.updateRelatedField, { ...updateData }, getHeaders());
+const updateBasicFields = values => axios.post(urls.post.updateBasicFields, values, getHeaders());
+const updateMediaRelationships = updateData => axios.post(urls.post.updateMediaRelationships, updateData, getHeaders());
+const updateMediaOrder = orderData => axios.post(urls.post.updateMediaOrder, orderData, getHeaders());
+const updateRelatedFields = updateData => axios.post(urls.post.updateRelatedField, updateData, getHeaders());
 const publish = () => axios.post(urls.post.publish, {}, getHeaders());
 
 // DELETE requests
@@ -110,6 +114,8 @@ const workshopService = {
   },
   post: {
     updateBasicFields,
+    updateMediaRelationships,
+    updateMediaOrder,
     updateRelatedFields,
     publish,
   },

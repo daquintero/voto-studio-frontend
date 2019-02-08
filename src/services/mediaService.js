@@ -26,7 +26,10 @@ const getHeaders = () => ({
 });
 
 // GET requests
-const getImages = pageNumber => axios.get(buildUrl(urls.get.images, { page: pageNumber }), getHeaders());
+const getImages = (pageNumber, excludeIds) => axios.get(buildUrl(urls.get.images, {
+  page: pageNumber,
+  exclude: excludeIds.join('-'),
+}), getHeaders());
 
 // POST requests
 const uploadImages = uploadData => axios.post(urls.post.images, uploadData, {
@@ -35,7 +38,6 @@ const uploadImages = uploadData => axios.post(urls.post.images, uploadData, {
     'Content-Type': 'multipart/form-data',
   },
 });
-
 const updateImage = updateData => axios.post(urls.post.updateImage, updateData, getHeaders());
 
 // DELETE requests

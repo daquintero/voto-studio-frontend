@@ -18,8 +18,6 @@ import Images from './components/Images';
 
 
 class Media extends Component {
-  static propTypes = {};
-
   constructor(props) {
     super(props);
     this.state = {
@@ -79,12 +77,10 @@ class Media extends Component {
                     <Images />
                   </TabPane>
                   <TabPane tabId="2">
-                    <p>Direction has strangers now believing. Respect enjoyed gay far exposed parlors towards.
-                    </p>
+                    <p>Videos</p>
                   </TabPane>
                   <TabPane tabId="3">
-                    <p>Direction has strangers now believing. Respect enjoyed gay far exposed parlors towards.
-                    </p>
+                    <p>Resources</p>
                   </TabPane>
                 </TabContent>
               </div>

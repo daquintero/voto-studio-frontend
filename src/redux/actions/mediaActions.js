@@ -7,11 +7,11 @@ import {
 } from '../actionCreators/mediaActionCreators';
 
 
-export const getImageList = pageNumber => (dispatch) => {
+export const getImageList = (pageNumber, excludeIds) => (dispatch) => {
   dispatch({
     type: GET_IMAGE_LIST.REQUEST,
   });
-  return mediaService.get.images(pageNumber).then(
+  return mediaService.get.images(pageNumber, excludeIds).then(
     response =>
       dispatch({
         type: GET_IMAGE_LIST.SUCCESS,

@@ -26,8 +26,10 @@ const getSorting = (order, orderBy) =>
 class MatTable extends Component {
   static propTypes = {
     defaults: PropTypes.instanceOf(Object),
+
     // Redux
     workshop: PropTypes.instanceOf(Object).isRequired,
+
     // Callbacks
     editItem: PropTypes.func.isRequired,
     selectItem: PropTypes.func.isRequired,
@@ -134,90 +136,90 @@ class MatTable extends Component {
             />
             <TableBody>
               {instances
-                  .sort(getSorting(order, orderBy))
-                  .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                  .map((instance) => {
-                    const isSelected = this.isSelected(instance.id);
+                .sort(getSorting(order, orderBy))
+                .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                .map((instance) => {
+                  const isSelected = this.isSelected(instance.id);
 
-                    return (
-                      <TableRow
-                        className="material-table__row"
-                        role="checkbox"
-                        onClick={event => this.handleClick(event, instance.id)}
-                        aria-checked={isSelected}
-                        tabIndex={-1}
-                        key={instance.id}
-                        selected={isSelected}
-                      >
-                        {/* Checkbox column */}
-                        <TableCell className="material-table__cell" padding="checkbox">
-                          <Checkbox checked={isSelected} className="material-table__checkbox" />
+                  return (
+                    <TableRow
+                      className="material-table__row"
+                      role="checkbox"
+                      onClick={event => this.handleClick(event, instance.id)}
+                      aria-checked={isSelected}
+                      tabIndex={-1}
+                      key={instance.id}
+                      selected={isSelected}
+                    >
+                      {/* Checkbox column */}
+                      <TableCell className="material-table__cell" padding="checkbox">
+                        <Checkbox checked={isSelected} className="material-table__checkbox" />
+                      </TableCell>
+
+                      {/* ID column */}
+                      <TableCell className="material-table__cell">{instance.id}</TableCell>
+
+                      {/* Descriptor columns */}
+                      {instance.tableValues.descriptors.map(descriptor => (
+                        <TableCell
+                          key={descriptor.name}
+                          className="material-table__cell"
+                          component="th"
+                          scope="row"
+                          padding="default"
+                        >
+                          {squashString(descriptor.value, squashLength)}
                         </TableCell>
+                      ))}
 
-                        {/* ID column */}
-                        <TableCell className="material-table__cell">{instance.id}</TableCell>
+                      {/* User column */}
+                      <TableCell className="material-table__cell">
+                        {userTableCell(instance.tableValues.userEmail, instance.tableValues.userId)}
+                      </TableCell>
 
-                        {/* Descriptor columns */}
-                        {instance.tableValues.descriptors.map(descriptor => (
-                          <TableCell
-                            key={descriptor.name}
-                            className="material-table__cell"
-                            component="th"
-                            scope="row"
-                            padding="default"
-                          >
-                            {squashString(descriptor.value, squashLength)}
-                          </TableCell>
-                        ))}
+                      {/* Actions column */}
+                      <TableCell className="material-table__cell">
+                        <span
+                          className="workshop__form-action"
+                          role="presentation"
+                          data-obj={JSON.stringify(instance)}
+                          onClick={editItem}
+                          data-id={instance.id}
+                        >
+                          <i
+                            className="fal fa-fw fa-edit mr-3 text-primary"
+                            id={`edit-${modelName}-${instance.tableValues.id}`}
+                          />
+                        </span>
+                        <span
+                          className="workshop__form-action"
+                          role="presentation"
+                          data-obj={JSON.stringify(instance)}
+                          onClick={this.handleViewItem}
+                        >
+                          <i
+                            className="fal fa-fw fa-eye mr-3 text-info"
+                            id={`details-${modelName}-${instance.tableValues.id}`}
+                          />
+                        </span>
 
-                        {/* User column */}
-                        <TableCell className="material-table__cell">
-                          {userTableCell(instance.tableValues.userEmail, instance.tableValues.userId)}
-                        </TableCell>
-
-                        {/* Actions column */}
-                        <TableCell className="material-table__cell">
-                          <span
-                            className="workshop__form-action"
-                            role="presentation"
-                            data-obj={JSON.stringify(instance)}
-                            onClick={editItem}
-                            data-id={instance.id}
-                          >
-                            <i
-                              className="fal fa-fw fa-edit mr-3 text-primary"
-                              id={`edit-${modelName}-${instance.tableValues.id}`}
-                            />
-                          </span>
-                          <span
-                            className="workshop__form-action"
-                            role="presentation"
-                            data-obj={JSON.stringify(instance)}
-                            onClick={this.handleViewItem}
-                          >
-                            <i
-                              className="fal fa-fw fa-eye mr-3 text-info"
-                              id={`details-${modelName}-${instance.tableValues.id}`}
-                            />
-                          </span>
-
-                          {/* Tooltips */}
-                          <UncontrolledTooltip
-                            placement="top"
-                            target={`edit-${modelName}-${instance.tableValues.id}`}
-                          >
-                              Edit {verboseName}
-                          </UncontrolledTooltip>
-                          <UncontrolledTooltip
-                            placement="top"
-                            target={`details-${modelName}-${instance.tableValues.id}`}
-                          >
-                              View {verboseName}
-                          </UncontrolledTooltip>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                        {/* Tooltips */}
+                        <UncontrolledTooltip
+                          placement="top"
+                          target={`edit-${modelName}-${instance.tableValues.id}`}
+                        >
+                            Edit {verboseName}
+                        </UncontrolledTooltip>
+                        <UncontrolledTooltip
+                          placement="top"
+                          target={`details-${modelName}-${instance.tableValues.id}`}
+                        >
+                            View {verboseName}
+                        </UncontrolledTooltip>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
 
               {/* Fill with empty rows */}
               {emptyRows > 0 && (

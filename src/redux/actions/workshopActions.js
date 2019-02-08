@@ -5,6 +5,8 @@ import {
   BUILD_FORM,
   GET_RELATED_FIELDS,
   UPDATE_BASIC_FIELDS,
+  UPDATE_MEDIA_RELATIONSHIPS,
+  UPDATE_MEDIA_ORDER,
   UPDATE_RELATED_FIELDS,
   SEARCH_RELATED_FIELDS,
   PUBLISH_WORKSHOP_CONTENT,
@@ -122,6 +124,43 @@ export const updateBasicFields = updateData => (dispatch) => {
     error =>
       dispatch({
         type: UPDATE_BASIC_FIELDS.ERROR,
+        error,
+      }),
+  );
+};
+
+export const updateMediaRelationships = updateData => (dispatch) => {
+  dispatch({
+    type: UPDATE_MEDIA_RELATIONSHIPS.REQUEST,
+  });
+  return workshopService.post.updateMediaRelationships(updateData).then(
+    response =>
+      dispatch({
+        type: UPDATE_MEDIA_RELATIONSHIPS.SUCCESS,
+        response: response.data,
+      }),
+    error =>
+      dispatch({
+        type: UPDATE_MEDIA_RELATIONSHIPS.ERROR,
+        error,
+      }),
+  );
+};
+
+export const updateMediaOrder = orderData => (dispatch) => {
+  dispatch({
+    type: UPDATE_MEDIA_ORDER.REQUEST,
+    orderData,
+  });
+  return workshopService.post.updateMediaOrder(orderData).then(
+    response =>
+      dispatch({
+        type: UPDATE_MEDIA_ORDER.SUCCESS,
+        response: response.data,
+      }),
+    error =>
+      dispatch({
+        type: UPDATE_MEDIA_ORDER.ERROR,
         error,
       }),
   );

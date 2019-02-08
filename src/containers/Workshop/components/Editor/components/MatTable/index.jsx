@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   UncontrolledTooltip,
-  ButtonToolbar,
-  Button,
 } from 'reactstrap';
+import classNames from 'classnames';
 
 // Components
 import Table from '@material-ui/core/Table';
@@ -21,24 +20,36 @@ import userTableCell from '../../../../../../shared/components/UserTableCell';
 // Functions
 import squashString from '../../../../../../shared/utils/squashString';
 
-// Actions
-import { updateRelatedFields } from '../../../../../../redux/actions/workshopActions';
-import { UPDATE_RELATED_FIELDS } from '../../../../../../redux/actionCreators/workshopActionCreators';
-
 const getSorting = (order, orderBy) =>
   (order === 'desc' ? (a, b) => b[orderBy] - a[orderBy] : (a, b) => a[orderBy] - b[orderBy]);
 
 
 class MatTable extends Component {
   static propTypes = {
-    field: PropTypes.instanceOf(Object).isRequired,
+    field: PropTypes.instanceOf(Object),
+    actions: PropTypes.instanceOf(Object),
 
     // Redux
     workshop: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
 
     // Callbacks
-    editItem: PropTypes.func.isRequired,
+    onSelect: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    field: {},
+    actions: [
+      {
+        name: '',
+        icon: '',
+        tooltipContent: '',
+        props: {
+          className: classNames(''),
+          onClick: () => {},
+        },
+      },
+    ],
   };
 
   constructor(props) {
@@ -73,6 +84,7 @@ class MatTable extends Component {
 
   handleClick = (event, id) => {
     const { selected } = this.state;
+    const { onSelect, field } = this.props;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -89,7 +101,7 @@ class MatTable extends Component {
       );
     }
 
-    this.setState({ selected: newSelected });
+    this.setState({ selected: newSelected }, onSelect(newSelected, field));
   };
 
   handleChangePage = (event, page) => {
@@ -98,29 +110,6 @@ class MatTable extends Component {
 
   handleChangeRowsPerPage = (event) => {
     this.setState({ rowsPerPage: event.target.value });
-  };
-
-  handleRemoveItem = () => {
-    const { selected } = this.state;
-    const {
-      workshop, dispatch, field,
-    } = this.props;
-
-    const updateData = {
-      modelLabel: workshop.form.parentModel.modelLabel,
-      relatedModelLabel: field.modelLabel,
-      id: workshop.form.parentModel.id,
-      relatedIds: selected,
-      updateType: 'remove',
-      fieldName: field.name,
-    };
-
-    dispatch(updateRelatedFields(updateData)).then((action) => {
-      if (action.type === UPDATE_RELATED_FIELDS.SUCCESS) {
-        this.setState({ selected: [] });
-      }
-      return null;
-    });
   };
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
@@ -133,12 +122,12 @@ class MatTable extends Component {
 
     // Props
     const {
-      field, editItem, workshop,
+      field, actions,
     } = this.props;
 
     // Redux
     const {
-      verboseName, modelName, relatedInstances,
+      modelName, relatedInstances,
     } = field;
     const {
       instances, tableHeads,
@@ -204,43 +193,17 @@ class MatTable extends Component {
 
                       {/* Actions column */}
                       <TableCell className="material-table__cell">
-                        <span
-                          className="workshop__form-action"
-                          role="presentation"
-                          data-obj={JSON.stringify(instance)}
-                          onClick={editItem}
-                          data-id={instance.id}
-                        >
-                          <i
-                            className="fal fa-fw fa-edit mr-3 text-primary"
-                            id={`edit-${modelName}-${instance.tableValues.id}`}
-                          />
-                        </span>
-                        <span
-                          className="workshop__form-action"
-                          role="presentation"
-                          data-obj={JSON.stringify(instance)}
-                          onClick={this.handleViewItem}
-                        >
-                          <i
-                            className="fal fa-fw fa-eye mr-3 text-info"
-                            id={`details-${modelName}-${instance.tableValues.id}`}
-                          />
-                        </span>
-
-                        {/* Tooltips */}
-                        <UncontrolledTooltip
-                          placement="top"
-                          target={`edit-${modelName}-${instance.tableValues.id}`}
-                        >
-                            Edit {verboseName}
-                        </UncontrolledTooltip>
-                        <UncontrolledTooltip
-                          placement="top"
-                          target={`details-${modelName}-${instance.tableValues.id}`}
-                        >
-                            View {verboseName}
-                        </UncontrolledTooltip>
+                        {actions.map(action => (
+                          <span {...action.props} data-obj={JSON.stringify(instance)}>
+                            <i className={action.icon} id={`${action.name}-${modelName}-${instance.id}`} />
+                            <UncontrolledTooltip
+                              placement="top"
+                              target={`${action.name}-${modelName}-${instance.id}`}
+                            >
+                              {action.tooltipContent(field)}
+                            </UncontrolledTooltip>
+                          </span>
+                        ))}
                       </TableCell>
                     </TableRow>
                   );
@@ -255,15 +218,6 @@ class MatTable extends Component {
             </TableBody>
           </Table>
         </div>
-        <ButtonToolbar>
-          <Button color="danger" disabled={selected.length === 0} onClick={this.handleRemoveItem}>
-            {!workshop.actions.UPDATE_RELATED_FIELDS.loading ? (
-              <span><i className="fal fa-minus" /> Remove {selected.length !== 0 && selected.length}</span>
-            ) : (
-              <span><i className="fal fa-spin fa-spinner" /> Removing...</span>
-            )}
-          </Button>
-        </ButtonToolbar>
         <TablePagination
           component="div"
           className="material-table__pagination"

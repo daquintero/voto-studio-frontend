@@ -1,6 +1,13 @@
-import React, { PureComponent } from 'react';
+// Absolute Imports
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonToolbar, Dropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
+import { connect } from 'react-redux';
+import {
+  UncontrolledTooltip,
+} from 'reactstrap';
+import classNames from 'classnames';
+
+// Components
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,31 +15,55 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import MatTableHead from './MatTableHead';
-// import MatTableToolbar from './MatTableToolbar';
+import userTableCell from '../../../components/UserTableCell';
 
-function getSorting(order, orderBy) {
-  return order === 'desc' ? (a, b) => b[orderBy] - a[orderBy] : (a, b) => a[orderBy] - b[orderBy];
-}
+// Functions
+import squashString from '../../../utils/squashString';
 
-export default class MatTable extends PureComponent {
+const getSorting = (order, orderBy) =>
+  (order === 'desc' ? (a, b) => b[orderBy] - a[orderBy] : (a, b) => a[orderBy] - b[orderBy]);
+
+
+class MatTable extends Component {
   static propTypes = {
-    changes: PropTypes.instanceOf(Object).isRequired,
-    commitChanges: PropTypes.func.isRequired,
-    viewChangeDetail: PropTypes.func.isRequired,
+    instances: PropTypes.instanceOf(Array),
+    tableHeads: PropTypes.instanceOf(Array),
+    actions: PropTypes.instanceOf(Object),
+
+    // Redux
+    workshop: PropTypes.instanceOf(Object).isRequired,
+    dispatch: PropTypes.func.isRequired,
+
+    // Callbacks
+    onSelect: PropTypes.func.isRequired,
   };
 
-  state = {
-    order: 'asc',
-    orderBy: 'calories',
-    selected: [],
-    page: 0,
-    rowsPerPage: 10,
-    pageName: 'staged',
-    dropdownOpen: false,
-
+  static defaultProps = {
+    instances: [],
+    tableHeads: [],
+    actions: [
+      {
+        name: '',
+        icon: '',
+        tooltipContent: '',
+        props: {
+          className: classNames(''),
+          onClick: () => {},
+        },
+      },
+    ],
   };
 
-  toggleDropdown = () => this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
+  constructor(props) {
+    super(props);
+    this.state = {
+      order: 'asc',
+      orderBy: 'calories',
+      selected: [],
+      page: 0,
+      rowsPerPage: 5,
+    };
+  }
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -44,8 +75,10 @@ export default class MatTable extends PureComponent {
   };
 
   handleSelectAllClick = (event, checked) => {
+    const { field } = this.props;
+    const { instances } = field.relatedInstances;
     if (checked) {
-      this.setState({ selected: this.props.changes[this.state.pageName].map(n => n.id) });
+      this.setState({ selected: instances.map(n => n.id) });
       return;
     }
     this.setState({ selected: [] });
@@ -53,6 +86,7 @@ export default class MatTable extends PureComponent {
 
   handleClick = (event, id) => {
     const { selected } = this.state;
+    const { onSelect, field } = this.props;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -69,7 +103,7 @@ export default class MatTable extends PureComponent {
       );
     }
 
-    this.setState({ selected: newSelected });
+    this.setState({ selected: newSelected }, onSelect(newSelected, field));
   };
 
   handleChangePage = (event, page) => {
@@ -80,88 +114,99 @@ export default class MatTable extends PureComponent {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  handleDeleteSelected = () => {
-    let copyData = [...this.state.data];
-    const { selected } = this.state;
-
-    for (let i = 0; i < selected.length; i += 1) {
-      copyData = copyData.filter(obj => obj.id !== selected[i]);
-    }
-
-    this.setState({ data: copyData, selected: [] });
-  };
-
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
+    // State
     const {
       order, orderBy, selected, rowsPerPage, page,
     } = this.state;
-    const { changes } = this.props;
-    let changeListData;
-    switch (this.state.pageName) {
-      case 'staged':
-        changeListData = changes.staged;
-        break;
-      case 'committed':
-        changeListData = changes.committed;
-        break;
-      case 'reverted':
-        changeListData = changes.reverted;
-        break;
-      default: return [];
-    }
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, changeListData.length - (page * rowsPerPage));
+
+    // Props
+    const {
+      tableHeads, actions, instances,
+    } = this.props;
+
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, instances.length - (page * rowsPerPage));
 
     return (
       <>
         <div className="material-table__wrap">
           <Table className="material-table">
             <MatTableHead
+              rows={tableHeads}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={this.handleSelectAllClick}
               onRequestSort={this.handleRequestSort}
-              rowCount={changeListData.length}
+              rowCount={instances.length}
             />
             <TableBody>
-              {changeListData
+              {instances
                 .sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                .map((d) => {
-                  const isSelected = this.isSelected(d.id);
+                .map((instance) => {
+                  const isSelected = this.isSelected(instance.id);
+
                   return (
                     <TableRow
                       className="material-table__row"
                       role="checkbox"
-                      onClick={event => this.handleClick(event, d.id)}
+                      onClick={event => this.handleClick(event, instance.id)}
                       aria-checked={isSelected}
                       tabIndex={-1}
-                      key={d.id}
+                      key={instance.id}
                       selected={isSelected}
                     >
+                      {/* Checkbox column */}
                       <TableCell className="material-table__cell" padding="checkbox">
                         <Checkbox checked={isSelected} className="material-table__checkbox" />
                       </TableCell>
-                      <TableCell className="material-table__cell" numeric>{d.id}</TableCell>
-                      <TableCell
-                        className="material-table__cell"
-                        component="th"
-                        scope="row"
-                        padding="default"
-                      >
-                        {d.name}
-                      </TableCell>
-                      <TableCell className="material-table__cell">{d.date_changed}</TableCell>
+
+                      {/* ID column */}
+                      <TableCell className="material-table__cell">{instance.id}</TableCell>
+
+                      {/* Descriptor columns */}
+                      {instance.tableValues.descriptors.map(descriptor => (
+                        <TableCell
+                          key={descriptor.name}
+                          className="material-table__cell"
+                          component="th"
+                          scope="row"
+                          padding="default"
+                        >
+                          {squashString(descriptor.value, 20)}
+                        </TableCell>
+                      ))}
+
+                      {/* User column */}
                       <TableCell className="material-table__cell">
-                        <a href="/">
-                          {d.user_email === localStorage.getItem('userEmail') ? <span>You</span> : d.user_email}
-                        </a>
+                        {userTableCell(instance.tableValues.userEmail, instance.tableValues.userId)}
+                      </TableCell>
+
+                      {/* Actions column */}
+                      <TableCell className="material-table__cell">
+                        {actions.map(action => (
+                          <span {...action.props} data-obj={JSON.stringify(instance)}>
+                            <i
+                              className={action.icon}
+                              id={action.id({ name: action.name, id: instance.id })}
+                            />
+                            <UncontrolledTooltip
+                              placement="top"
+                              target={action.id({ name: action.name, id: instance.id })}
+                            >
+                              {action.tooltipContent}
+                            </UncontrolledTooltip>
+                          </span>
+                        ))}
                       </TableCell>
                     </TableRow>
                   );
                 })}
+
+              {/* Fill with empty rows */}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -170,32 +215,10 @@ export default class MatTable extends PureComponent {
             </TableBody>
           </Table>
         </div>
-        <>
-          <ButtonToolbar>
-            {this.state.selected.length !== 0 && (
-              <Button color="success" data-selected={this.state.selected} onClick={this.props.commitChanges}>
-                Commit {this.state.selected.length} change{this.state.selected.length === 1 ? '' : 's'}
-              </Button>
-            )}
-            {this.state.selected.length === 1 && (
-              <Button color="secondary" data-selected={this.state.selected} onClick={this.props.viewChangeDetail}>
-                View details
-              </Button>
-            )}
-            <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
-              <DropdownToggle>Status: {this.state.pageName}</DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem>Staged</DropdownItem>
-                <DropdownItem>Committed</DropdownItem>
-                <DropdownItem>Reverted</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </ButtonToolbar>
-        </>
         <TablePagination
           component="div"
           className="material-table__pagination"
-          count={changeListData.length}
+          count={instances.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{ 'aria-label': 'Previous Page' }}
@@ -208,3 +231,7 @@ export default class MatTable extends PureComponent {
     );
   }
 }
+
+export default connect(state => ({
+  workshop: state.studio.workshop,
+}))(MatTable);

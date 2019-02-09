@@ -16,17 +16,18 @@ import {
 // Actions
 import {
   getRelatedInstanceList,
-  updateRelatedFields,
-} from '../../../../../../../redux/actions/workshopActions';
+  updateRelatedField,
+} from '../../../../../../redux/actions/workshopActions';
 import {
   GET_INSTANCE_LIST,
-  UPDATE_RELATED_FIELDS,
-} from '../../../../../../../redux/actionCreators/workshopActionCreators';
+  TOGGLE_RELATED_CONTENT_FINDER,
+  UPDATE_RELATED_FIELD,
+} from '../../../../../../redux/actionCreators/workshopActionCreators';
 
 // Components
-import MatTable from './MatTable';
-import Loader from '../../../../../../../shared/components/Loader/Loader';
-import renderSelectField from '../../../../../../../shared/components/form/Select';
+import MatTable from '../../../../../../shared/components/table/MatTable/index';
+import Loader from '../../../../../../shared/components/Loader/Loader';
+import renderSelectField from '../../../../../../shared/components/form/Select';
 
 
 class InstanceFinder extends Component {
@@ -45,7 +46,7 @@ class InstanceFinder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIds: [],
+      selected: [],
     };
   }
 
@@ -75,6 +76,32 @@ class InstanceFinder extends Component {
     return workshop.form.relatedFields.map(f => f.option);
   };
 
+  getTableProps = props => ({
+    ...props,
+    actions: [
+      {
+        name: 'edit',
+        id: ({ name, id }) => `${name}-${id}`,
+        icon: 'fal fa-fw fa-edit mr-3 text-primary',
+        tooltipContent: `Edit ${props.verboseName}`,
+        props: {
+          className: 'workshop__form-action',
+          onClick: () => {},
+        },
+      },
+      {
+        name: 'detail',
+        id: ({ name, id }) => `${name}-${id}`,
+        icon: 'fal fa-fw fa-eye mr-3 text-info',
+        tooltipContent: `View ${props.verboseName}`,
+        props: {
+          className: 'workshop__form-action',
+          onClick: () => {},
+        },
+      },
+    ],
+  });
+
   changeInstanceType = (selected) => {
     const { dispatch, workshop } = this.props;
 
@@ -90,17 +117,17 @@ class InstanceFinder extends Component {
       workshop.form.parentModel.id,
     )).then((action) => {
       if (action.type === GET_INSTANCE_LIST.SUCCESS) {
-        this.setState({ selectedIds: [] });
+        this.setState({ selected: [] });
       }
     });
   };
 
-  handleSelectItem = (newSelected) => {
-    this.setState({ selectedIds: newSelected });
+  handleOnSelect = (newSelected) => {
+    this.setState({ selected: newSelected });
   };
 
   handleAddItem = () => {
-    const { selectedIds } = this.state;
+    const { selected } = this.state;
     const { workshop, finderForm, dispatch } = this.props;
 
     const { fieldName } = workshop.form.relatedFields
@@ -110,33 +137,35 @@ class InstanceFinder extends Component {
       modelLabel: workshop.form.parentModel.modelLabel,
       relatedModelLabel: finderForm.values.type.value,
       id: workshop.form.parentModel.id,
-      relatedIds: selectedIds,
+      relatedIds: selected,
       updateType: 'add',
       fieldName,
     };
 
-    dispatch(updateRelatedFields(updateData)).then((action) => {
-      if (action.type === UPDATE_RELATED_FIELDS.SUCCESS) {
-        this.setState({ selectedIds: [] });
+    dispatch(updateRelatedField(updateData)).then((action) => {
+      if (action.type === UPDATE_RELATED_FIELD.SUCCESS) {
+        this.setState({ selected: [] });
       }
       return null;
     });
   };
 
-  render() {
-    // This
-    const {
-      getFinderOptions, handleSelectItem, handleAddItem, handleEditItem, changeInstanceType,
-    } = this;
+  handleToggleRelatedContentFinder = () => {
+    this.props.dispatch({
+      type: TOGGLE_RELATED_CONTENT_FINDER,
+    });
+    this.setState({ selected: [] });
+  };
 
+  render() {
     // State
     const {
-      selectedIds,
+      selected,
     } = this.state;
 
     // Props
     const {
-      workshop, toggleDeleteItemModal,
+      workshop,
     } = this.props;
 
     return (
@@ -151,7 +180,7 @@ class InstanceFinder extends Component {
                   <Field
                     name="search"
                     type="text"
-                    onKeyUp={this.searchInstances}
+                    // onKeyUp={this.searchInstances}
                     component="input"
                     placeholder="Search for content..."
                     className="workshop__itemfinder__input"
@@ -163,9 +192,9 @@ class InstanceFinder extends Component {
                   <Field
                     name="type"
                     type="select"
-                    onChange={changeInstanceType}
+                    onChange={this.changeInstanceType}
                     component={renderSelectField}
-                    options={getFinderOptions()}
+                    options={this.getFinderOptions()}
                     className="text-capitalize"
                   />
                 </Col>
@@ -182,9 +211,10 @@ class InstanceFinder extends Component {
                 <Loader elemClass="load__card" />
                   ) : (
                     <MatTable
-                      editItem={handleEditItem}
-                      toggleDeleteItemModal={toggleDeleteItemModal}
-                      selectItem={handleSelectItem}
+                      {...this.getTableProps(workshop.openList)}
+                      instances={workshop.openList.instances}
+                      tableHeads={workshop.openList.tableHeads}
+                      onSelect={this.handleOnSelect}
                     />
                   )}
             </div>
@@ -193,14 +223,16 @@ class InstanceFinder extends Component {
 
         {/* Item toolbar */}
         <ButtonToolbar>
-          <Button color="primary" size="sm" onClick={handleAddItem} disabled={selectedIds.length === 0}>
-            {!workshop.actions.UPDATE_RELATED_FIELDS.loading ? (
-              <span><i className="fal fa-plus" /> Add {Boolean(selectedIds.length) && selectedIds.length}</span>
+          <Button color="primary" size="sm" onClick={this.handleAddItem} disabled={selected.length === 0}>
+            {!workshop.actions.UPDATE_RELATED_FIELD.loading ? (
+              <span><i className="fal fa-plus" /> Add {Boolean(selected.length) && selected.length}</span>
             ) : (
               <span><i className="fal fa-spin fa-spinner" /> Adding...</span>
             )}
           </Button>
-          <Button size="sm">Cancel</Button>
+          <Button size="sm" onClick={this.handleToggleRelatedContentFinder}>
+            Cancel
+          </Button>
         </ButtonToolbar>
       </>
     );

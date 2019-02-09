@@ -1,4 +1,6 @@
 import axios from 'axios';
+import buildUrl from '../shared/utils/buildUrl';
+import getHeaders from '../shared/utils/getHeaders';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 const dataSuiteApiUrl = `${baseUrl}/data/api/v1`;
@@ -17,27 +19,15 @@ const urls = {
   },
 };
 
-const getUser = () => (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
-
-const getHeaders = () => ({
-  headers: {
-    Authorization: `Token ${getUser().token}`,
-  },
-});
-
-const fileUploadHeaders = () => ({
-  headers: {
-    Authorization: `Token ${getUser().token}`, // TODO: make the getHeaders function more general
-    'Content-Type': 'multipart/form-data',
-  },
-});
-
-// DataSuite GET requests
+// GET requests
 const list = () => axios.get(urls.get.list, getHeaders());
-const detail = dataSetId => axios.get(`${urls.get.detail}${dataSetId}/`, getHeaders());
-const featureDetail = featureId => axios.get(`${urls.get.featureDetail}${featureId}/`, getHeaders());
-// DataSuite POST requests
-const createDataSet = formData => axios.post(urls.post.createDataSet, formData, fileUploadHeaders());
+const detail = dataSetId => axios.get(buildUrl(urls.get.detail, { dataSetId }), getHeaders());
+const featureDetail = featureId => axios.get(buildUrl(urls.get.featureDetail, { featureId }), getHeaders());
+
+// POST requests
+const createDataSet = formData => axios.post(urls.post.createDataSet, formData, getHeaders({
+  'Content-Type': 'multipart/form-data',
+}));
 const updateFeatureProperties = (openFeatureId, newFeatureProperties) =>
   axios.post(urls.post.updateFeatureProperties, { openFeatureId, newFeatureProperties }, getHeaders());
 

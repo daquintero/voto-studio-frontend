@@ -8,12 +8,12 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { updateRelatedFields } from '../../../../../redux/actions/workshopActions';
-import { UPDATE_RELATED_FIELDS } from '../../../../../redux/actionCreators/workshopActionCreators';
+import { updateRelatedField } from '../../../../../redux/actions/workshopActions';
+import { UPDATE_RELATED_FIELD } from '../../../../../redux/actionCreators/workshopActionCreators';
 
 // Components
 import Collapse from '../../../../../shared/components/Collapse';
-import MatTable from './MatTable';
+import MatTable from '../../../../../shared/components/table/MatTable';
 
 
 class EditorTableWrapper extends Component {
@@ -37,8 +37,9 @@ class EditorTableWrapper extends Component {
     actions: [
       {
         name: 'edit',
+        id: ({ name, id }) => `${name}-${props.field.modelName}-${id}`,
         icon: 'fal fa-fw fa-edit mr-3 text-primary',
-        tooltipContent: obj => `Edit ${obj.verboseName}`,
+        tooltipContent: `Edit ${props.field.verboseName}`,
         props: {
           className: 'workshop__form-action',
           onClick: () => {},
@@ -46,8 +47,9 @@ class EditorTableWrapper extends Component {
       },
       {
         name: 'detail',
+        id: ({ name, id }) => `${name}-${props.field.modelName}-${id}`,
         icon: 'fal fa-fw fa-eye mr-3 text-info',
-        tooltipContent: obj => `View ${obj.verboseName}`,
+        tooltipContent: `View ${props.field.verboseName}`,
         props: {
           className: 'workshop__form-action',
           onClick: () => {},
@@ -76,9 +78,9 @@ class EditorTableWrapper extends Component {
       fieldName: field.name,
     };
 
-    dispatch(updateRelatedFields(updateData))
+    dispatch(updateRelatedField(updateData))
       .then((action) => {
-        if (action.type === UPDATE_RELATED_FIELDS.SUCCESS) {
+        if (action.type === UPDATE_RELATED_FIELD.SUCCESS) {
           this.setState(prevState => ({ selected: { ...prevState.selected, [field.name]: [] } }));
         }
       });
@@ -106,7 +108,10 @@ class EditorTableWrapper extends Component {
     return fields.map(field => field.relatedInstances.instances.length !== 0 && (
       <Collapse key={field.fieldName} title={this.getCollapseTitle(field)} className="with-shadow">
         <MatTable
-          {...this.getTableProps({ field, selected: selected[field.fieldName] })}
+          {...this.getTableProps({ field })}
+          instances={field.relatedInstances.instances}
+          tableHeads={field.relatedInstances.tableHeads}
+          selected={selected[field.fieldName]}
           onSelect={this.handleOnSelect}
         />
         <ButtonToolbar>
@@ -115,7 +120,7 @@ class EditorTableWrapper extends Component {
             disabled={selected[field.fieldName].length === 0}
             onClick={() => this.handleRelatedOnRemove(field)}
           >
-            {!action.loading ? (
+            {action[field.fieldName] && !action[field.fieldName].loading ? (
               <span>
                 <i className="fal fa-minus" />
                 {' Remove '}

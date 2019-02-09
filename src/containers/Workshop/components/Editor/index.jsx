@@ -27,8 +27,7 @@ import iPhone from './img/iPhone.svg';
 import {
   buildForm,
   updateBasicFields,
-  updateMediaRelationships,
-  updateRelatedFields,
+  updateMediaField,
 } from '../../../../redux/actions/workshopActions';
 import {
   BUILD_FORM,
@@ -36,7 +35,7 @@ import {
   TOGGLE_RELATED_CONTENT_FINDER,
   UPDATE_BASIC_FIELDS,
   TOGGLE_MEDIA_CENTER,
-  UPDATE_MEDIA_RELATIONSHIPS,
+  UPDATE_MEDIA_FIELD,
 } from '../../../../redux/actionCreators/workshopActionCreators';
 import { SELECT_IMAGE } from '../../../../redux/actionCreators/mediaActionCreators';
 
@@ -44,6 +43,7 @@ import { SELECT_IMAGE } from '../../../../redux/actionCreators/mediaActionCreato
 import Collapse from '../../../../shared/components/Collapse';
 import EditorField from '../../../../shared/components/form/TextEditor/EditorField';
 import Loader from '../../../../shared/components/Loader/Loader';
+import Error from '../../../../shared/components/Error';
 import EditorTableWrapper from './components/EditorTableWrapper';
 import LocationPicker from './components/LocationPicker';
 import MediaCenter from './components/MediaCenter';
@@ -53,6 +53,7 @@ import RelatedContentFinder from './components/RelatedContentFinder/';
 // Functions
 import renderSelectField from '../../../../shared/components/form/Select';
 import renderCheckboxField from '../../../../shared/components/form/CheckBox';
+import renderDatePicker from '../../../../shared/components/form/DatePicker';
 import buildUrl from '../../../../shared/utils/buildUrl';
 
 
@@ -94,30 +95,6 @@ class Editor extends Component {
       type: BUILD_FORM.INIT,
     });
   }
-
-  getTableProps = props => ({
-    ...props,
-    actions: [
-      {
-        name: 'edit',
-        icon: 'fal fa-fw fa-edit',
-        tooltipContent: obj => `Edit ${obj.fieldName}`,
-        props: {
-          className: 'workshop__form-action',
-          onClick: () => console.log('edit'),
-        },
-      },
-      {
-        name: 'detail',
-        icon: 'fal fa-fw fa-eye',
-        tooltipContent: obj => `View ${obj.fieldName}`,
-        props: {
-          className: 'workshop__form-action',
-          onClick: () => console.log('detail'),
-        },
-      },
-    ],
-  });
 
   handleToggleLocationPicker = (e) => {
     e.preventDefault();
@@ -193,7 +170,7 @@ class Editor extends Component {
   handleMediaOnAdd = (selected, mediaType) => {
     const { dispatch, workshop } = this.props;
 
-    dispatch(updateMediaRelationships({
+    dispatch(updateMediaField({
       modelLabel: workshop.form.parentModel.modelLabel,
       id: workshop.form.parentModel.id,
       mediaType,
@@ -201,7 +178,7 @@ class Editor extends Component {
       updateType: 'add',
     }))
       .then((action) => {
-        if (action.type === UPDATE_MEDIA_RELATIONSHIPS.SUCCESS) {
+        if (action.type === UPDATE_MEDIA_FIELD.SUCCESS) {
           dispatch({
             type: TOGGLE_MEDIA_CENTER,
           });
@@ -217,7 +194,7 @@ class Editor extends Component {
     const { dispatch, workshop } = this.props;
     const obj = JSON.parse(e.target.dataset.obj);
 
-    dispatch(updateMediaRelationships({
+    dispatch(updateMediaField({
       modelLabel: workshop.form.parentModel.modelLabel,
       id: workshop.form.parentModel.id,
       mediaType: obj.type,
@@ -226,36 +203,10 @@ class Editor extends Component {
     }));
   };
 
-  handleRelatedOnSelect = (selected, field) => {
-    this.setState({ selected: { [field.fieldName]: selected } });
-  };
-
   handleToggleRelatedContentFinder = () => {
     this.props.dispatch({
       type: TOGGLE_RELATED_CONTENT_FINDER,
     });
-  };
-
-  handleRelatedOnRemove = (e) => {
-    const {
-      selected,
-    } = this.state;
-    const {
-      workshop, dispatch,
-    } = this.props;
-
-    const field = JSON.parse(e.target.dataset.field);
-
-    const updateData = {
-      modelLabel: workshop.form.parentModel.modelLabel,
-      relatedModelLabel: field.modelLabel,
-      id: workshop.form.parentModel.id,
-      relatedIds: selected[field.fieldName],
-      updateType: 'remove',
-      fieldName: field.fieldName,
-    };
-
-    dispatch(updateRelatedFields(updateData));
   };
 
   buildPlaceholder = (field) => {
@@ -267,6 +218,7 @@ class Editor extends Component {
   renderField = (field) => {
     if (field.type === 'select') return renderSelectField;
     if (field.type === 'checkbox') return renderCheckboxField;
+    if (field.type === 'date' || field.type === 'datetime-local') return renderDatePicker;
 
     return 'input';
   };
@@ -386,7 +338,13 @@ class Editor extends Component {
 
                             {/* Basic fields form buttons */}
                             <ButtonToolbar className="form__button-toolbar">
-                              <Button color="success" size="sm" type="submit">Submit</Button>
+                              <Button color="success" size="sm" type="submit">
+                                {!workshop.actions.UPDATE_BASIC_FIELDS.loading ? (
+                                  <span>Submit</span>
+                                ) : (
+                                  <span><i className="fal fa-spin fa-spinner" /> Submitting...</span>
+                                )}
+                              </Button>
                               <Button color="secondary" size="sm" onClick={() => dispatch(reset('workshopForm'))}>
                                 Undo changes
                               </Button>
@@ -466,7 +424,7 @@ class Editor extends Component {
                               </Row>
                               <EditorTableWrapper
                                 fields={workshop.form.relatedFields}
-                                action={workshop.actions.UPDATE_RELATED_FIELDS}
+                                action={workshop.actions.UPDATE_RELATED_FIELD}
                               />
                             </CardBody>
                           </Card>
@@ -487,9 +445,7 @@ class Editor extends Component {
               ) : (
                 <>
                   {error && (
-                    <>
-                      Error
-                    </>
+                    <Error error={error} />
                   )}
                 </>
               )}

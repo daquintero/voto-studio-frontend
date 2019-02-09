@@ -15,35 +15,35 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { buildFinder, getInstanceList } from '../../../../redux/actions/workshopActions';
-import { BUILD_FINDER, GET_INSTANCE_LIST } from '../../../../redux/actionCreators/workshopActionCreators';
+import { buildFinder, getInstanceList } from '../../../redux/actions/workshopActions';
+import { BUILD_FINDER, GET_INSTANCE_LIST } from '../../../redux/actionCreators/workshopActionCreators';
 
 // Components
-import MatTable from './components/MatTable';
-import Loader from '../../../../shared/components/Loader/Loader';
-import renderSelectField from '../../../../shared/components/form/Select';
+import MatTable from '../../../shared/components/table/MatTable';
+import Loader from '../../../shared/components/Loader/Loader';
+import renderSelectField from '../../../shared/components/form/Select';
 
 // Functions
-import buildUrl from '../../../../shared/utils/buildUrl';
+import buildUrl from '../../../shared/utils/buildUrl';
 
 
 class InstanceFinder extends Component {
   static propTypes = {
     // Redux
-    workshop: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
+    workshop: PropTypes.instanceOf(Object).isRequired,
+
     // Router
     history: ReactRouterPropTypes.history.isRequired,
+
     // Form
     finderForm: PropTypes.instanceOf(Object).isRequired,
-    // Callbacks
-    toggleDeleteItemModal: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      selectedIds: [],
+      selected: [],
     };
   }
 
@@ -64,17 +64,44 @@ class InstanceFinder extends Component {
     this.isUnmounted = true;
   }
 
+  getTableProps = props => ({
+    ...props,
+    actions: [
+      {
+        name: 'edit',
+        id: ({ name, id }) => `${name}-${id}`,
+        'data-id': id => id,
+        icon: 'fal fa-fw fa-edit mr-3 text-primary',
+        tooltipContent: `Edit ${props.verboseName}`,
+        props: {
+          className: 'workshop__form-action',
+          onClick: this.handleEditItem,
+        },
+      },
+      {
+        name: 'detail',
+        id: ({ name, id }) => `${name}-${id}`,
+        icon: 'fal fa-fw fa-eye mr-3 text-info',
+        tooltipContent: `View ${props.verboseName}`,
+        props: {
+          className: 'workshop__form-action',
+          onClick: () => {},
+        },
+      },
+    ],
+  });
+
   changeInstanceType = (selected) => {
     const { dispatch } = this.props;
     dispatch(getInstanceList(selected.value)).then((action) => {
       if (action.type === GET_INSTANCE_LIST.SUCCESS) {
-        this.setState({ selectedIds: [] });
+        this.setState({ selected: [] });
       }
     });
   };
 
-  handleSelectItem = (newSelected) => {
-    this.setState({ selectedIds: newSelected });
+  handleOnSelect = (newSelected) => {
+    this.setState({ selected: newSelected });
   };
 
   openEditor = (id) => {
@@ -91,24 +118,19 @@ class InstanceFinder extends Component {
 
   handleEditItem = (e) => {
     e.persist();
-    const { id } = e.currentTarget.dataset;
+    const { id } = JSON.parse(e.currentTarget.dataset.obj);
     this.openEditor(id);
   };
 
   render() {
-    // This
-    const {
-      handleSelectItem, handleCreateItem, handleEditItem, changeInstanceType,
-    } = this;
-
     // State
     const {
-      selectedIds,
+      selected,
     } = this.state;
 
     // Props
     const {
-      workshop, toggleDeleteItemModal,
+      workshop,
     } = this.props;
 
     return (
@@ -125,7 +147,7 @@ class InstanceFinder extends Component {
                   <Field
                     name="search"
                     type="text"
-                    onKeyUp={this.searchInstances}
+                    // onKeyUp={this.searchInstances}
                     component="input"
                     placeholder="Search for content..."
                     className="workshop__itemfinder__input"
@@ -137,7 +159,7 @@ class InstanceFinder extends Component {
                   <Field
                     name="type"
                     type="select"
-                    onChange={changeInstanceType}
+                    onChange={this.changeInstanceType}
                     component={renderSelectField}
                     options={workshop.finder.options}
                     className="text-capitalize"
@@ -148,14 +170,14 @@ class InstanceFinder extends Component {
 
             {/* Item toolbar */}
             <ButtonToolbar>
-              <Button color="primary" size="sm" onClick={handleCreateItem}>
+              <Button color="primary" size="sm" onClick={this.handleCreateItem}>
                 <i className="fal fa-plus" /> Create
               </Button>
-              <Button color="success" size="sm" disabled={selectedIds.length === 0}>
-                Commit {selectedIds.length !== 0 && <>{selectedIds.length} item{selectedIds.length === 1 ? '' : 's'}</>}
+              <Button color="success" size="sm" disabled={selected.length === 0}>
+                Commit {selected.length !== 0 && <>{selected.length} item{selected.length === 1 ? '' : 's'}</>}
               </Button>
-              <Button color="danger" size="sm" disabled={selectedIds.length === 0}>
-                Delete {selectedIds.length !== 0 && <>{selectedIds.length} item{selectedIds.length === 1 ? '' : 's'}</>}
+              <Button color="danger" size="sm" disabled={selected.length === 0}>
+                Delete {selected.length !== 0 && <>{selected.length} item{selected.length === 1 ? '' : 's'}</>}
               </Button>
             </ButtonToolbar>
 
@@ -168,13 +190,14 @@ class InstanceFinder extends Component {
             <div className="changes__change-list__wrapper">
               {!workshop.actions.GET_INSTANCE_LIST.loaded ? (
                 <Loader elemClass="load__card" />
-                  ) : (
-                    <MatTable
-                      editItem={handleEditItem}
-                      toggleDeleteItemModal={toggleDeleteItemModal}
-                      selectItem={handleSelectItem}
-                    />
-                  )}
+              ) : (
+                <MatTable
+                  {...this.getTableProps(workshop.openList)}
+                  instances={workshop.openList.instances}
+                  tableHeads={workshop.openList.tableHeads}
+                  onSelect={this.handleOnSelect}
+                />
+              )}
             </div>
           </CardBody>
         </Card>

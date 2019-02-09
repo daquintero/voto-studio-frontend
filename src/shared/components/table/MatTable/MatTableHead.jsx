@@ -6,23 +6,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
-const rows = [
-  {
-    id: 'id', numeric: true, disablePadding: false, label: 'ID',
-  },
-  {
-    id: 'name', numeric: false, disablePadding: false, label: 'Name',
-  },
-  {
-    id: 'dateChanged', numeric: false, disablePadding: false, label: 'Data Changed',
-  },
-  {
-    id: 'user', numeric: false, disablePadding: false, label: 'User',
-  },
-];
 
 export default class MatTableHead extends PureComponent {
   static propTypes = {
+    rows: PropTypes.instanceOf(Array).isRequired,
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
@@ -37,8 +24,21 @@ export default class MatTableHead extends PureComponent {
 
   render() {
     const {
-      onSelectAllClick, order, orderBy, numSelected, rowCount,
+      rows, onSelectAllClick, order, orderBy, numSelected, rowCount,
     } = this.props;
+
+    const rowsWithExtra = [
+      {
+        id: 'id', numeric: false, disablePadding: false, label: 'ID',
+      },
+      ...rows,
+      {
+        id: 'user', numeric: false, disablePadding: false, label: 'User',
+      },
+      {
+        id: 'actions', numeric: false, disablePadding: false, label: 'Actions',
+      },
+    ];
 
     return (
       <TableHead>
@@ -51,7 +51,7 @@ export default class MatTableHead extends PureComponent {
               onChange={onSelectAllClick}
             />
           </TableCell>
-          {rows.map(row => (
+          {rowsWithExtra.map(row => (
             <TableCell
               className="material-table__cell material-table__cell--sort"
               key={row.id}

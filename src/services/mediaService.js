@@ -1,5 +1,6 @@
 import axios from 'axios';
 import buildUrl from '../shared/utils/buildUrl';
+import getHeaders from '../shared/utils/getHeaders';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 const mediaApiUrl = `${baseUrl}/media/api/v1`;
@@ -17,14 +18,6 @@ const urls = {
   },
 };
 
-const getUser = () => (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
-
-const getHeaders = () => ({
-  headers: {
-    Authorization: `Token ${getUser().token}`,
-  },
-});
-
 // GET requests
 const getImages = (pageNumber, excludeIds) => axios.get(buildUrl(urls.get.images, {
   page: pageNumber,
@@ -32,12 +25,9 @@ const getImages = (pageNumber, excludeIds) => axios.get(buildUrl(urls.get.images
 }), getHeaders());
 
 // POST requests
-const uploadImages = uploadData => axios.post(urls.post.images, uploadData, {
-  headers: {
-    ...getHeaders().headers,
-    'Content-Type': 'multipart/form-data',
-  },
-});
+const uploadImages = uploadData => axios.post(urls.post.images, uploadData, getHeaders({
+  'Content-Type': 'multipart/form-data',
+}));
 const updateImage = updateData => axios.post(urls.post.updateImage, updateData, getHeaders());
 
 // DELETE requests

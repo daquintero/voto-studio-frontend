@@ -53,7 +53,11 @@ class MediaCenter extends PureComponent {
             onClick={() => onAdd(selected, 'images')}
             disabled={selected.length === 0}
           >
-            Add {selected.length !== 0 && selected.length}
+            {!workshop.actions.UPDATE_MEDIA_FIELD.loading ? (
+              <span><i className="fal fa-plus" /> Add {Boolean(selected.length) && selected.length}</span>
+            ) : (
+              <span><i className="fal fa-spin fa-spinner" /> Adding...</span>
+            )}
           </Button>
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ButtonToolbar>

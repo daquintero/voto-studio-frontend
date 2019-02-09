@@ -3,11 +3,10 @@ import {
   GET_ITEM_DETAIL,
   DELETE_ITEM,
   BUILD_FORM,
-  GET_RELATED_FIELDS,
   UPDATE_BASIC_FIELDS,
-  UPDATE_MEDIA_RELATIONSHIPS,
+  UPDATE_MEDIA_FIELD,
   UPDATE_MEDIA_ORDER,
-  UPDATE_RELATED_FIELDS,
+  UPDATE_RELATED_FIELD,
   SEARCH_RELATED_FIELDS,
   PUBLISH_WORKSHOP_CONTENT,
   BUILD_FINDER,
@@ -91,26 +90,6 @@ export const buildForm = queryStringValues => (dispatch) => {
   );
 };
 
-export const getRelatedFields = requestData => (dispatch) => {
-  dispatch({
-    type: GET_RELATED_FIELDS.REQUEST,
-  });
-  return workshopService.get.relatedFields(requestData).then(
-    response =>
-      dispatch({
-        type: GET_RELATED_FIELDS.SUCCESS,
-        relatedFieldInstances: response.data.relatedFieldInstances,
-        tableHeads: response.data.tableHeads,
-        verboseName: response.data.verboseName,
-      }),
-    error =>
-      dispatch({
-        type: GET_RELATED_FIELDS.ERROR,
-        error,
-      }),
-  );
-};
-
 export const updateBasicFields = updateData => (dispatch) => {
   dispatch({
     type: UPDATE_BASIC_FIELDS.REQUEST,
@@ -129,19 +108,19 @@ export const updateBasicFields = updateData => (dispatch) => {
   );
 };
 
-export const updateMediaRelationships = updateData => (dispatch) => {
+export const updateMediaField = updateData => (dispatch) => {
   dispatch({
-    type: UPDATE_MEDIA_RELATIONSHIPS.REQUEST,
+    type: UPDATE_MEDIA_FIELD.REQUEST,
   });
-  return workshopService.post.updateMediaRelationships(updateData).then(
+  return workshopService.post.updateMediaField(updateData).then(
     response =>
       dispatch({
-        type: UPDATE_MEDIA_RELATIONSHIPS.SUCCESS,
+        type: UPDATE_MEDIA_FIELD.SUCCESS,
         response: response.data,
       }),
     error =>
       dispatch({
-        type: UPDATE_MEDIA_RELATIONSHIPS.ERROR,
+        type: UPDATE_MEDIA_FIELD.ERROR,
         error,
       }),
   );
@@ -166,19 +145,21 @@ export const updateMediaOrder = orderData => (dispatch) => {
   );
 };
 
-export const updateRelatedFields = updateData => (dispatch) => {
+export const updateRelatedField = updateData => (dispatch) => {
   dispatch({
-    type: UPDATE_RELATED_FIELDS.REQUEST,
+    type: UPDATE_RELATED_FIELD.REQUEST,
+    id: updateData.fieldName,
   });
-  return workshopService.post.updateRelatedFields(updateData).then(
+  return workshopService.post.updateRelatedField(updateData).then(
     response =>
       dispatch({
-        type: UPDATE_RELATED_FIELDS.SUCCESS,
+        type: UPDATE_RELATED_FIELD.SUCCESS,
         result: response.data.result,
+        id: response.data.result.fieldName,
       }),
     error =>
       dispatch({
-        type: UPDATE_RELATED_FIELDS.ERROR,
+        type: UPDATE_RELATED_FIELD.ERROR,
         error,
       }),
   );

@@ -3,11 +3,10 @@ import {
   GET_ITEM_DETAIL,
   DELETE_ITEM,
   BUILD_FORM,
-  GET_RELATED_FIELDS,
   UPDATE_BASIC_FIELDS,
-  UPDATE_MEDIA_RELATIONSHIPS,
+  UPDATE_MEDIA_FIELD,
   UPDATE_MEDIA_ORDER,
-  UPDATE_RELATED_FIELDS,
+  UPDATE_RELATED_FIELD,
   PUBLISH_WORKSHOP_CONTENT,
   BUILD_FINDER,
   GET_INSTANCE_LIST,
@@ -37,8 +36,9 @@ const initialState = {
     'GET_ITEM_DETAIL',
     'DELETE_ITEM',
     'BUILD_FORM',
-    'GET_RELATED_FIELDS',
-    'UPDATE_RELATED_FIELDS',
+    'UPDATE_BASIC_FIELDS',
+    'UPDATE_MEDIA_FIELD',
+    'UPDATE_RELATED_FIELD',
     'PUBLISH_WORKSHOP_CONTENT',
     'BUILD_FINDER',
     'GET_INSTANCE_LIST',
@@ -216,39 +216,6 @@ export default (state = initialState, action) => {
       };
       // -----------------------------------------------
 
-    // Get Related Fields reducers ---------------------
-    case GET_RELATED_FIELDS.REQUEST:
-      return {
-        ...state,
-        actions: {
-          ...state.actions,
-          ...actionResult('GET_RELATED_FIELDS.REQUEST'),
-        },
-      };
-    case GET_RELATED_FIELDS.SUCCESS:
-      return {
-        ...state,
-        form: {
-          ...state.form,
-          relatedFieldInstances: action.relatedFieldInstances,
-          tableHeads: action.tableHeads,
-          verboseName: action.verboseName,
-        },
-        actions: {
-          ...state.actions,
-          ...actionResult('GET_RELATED_FIELDS.SUCCESS'),
-        },
-      };
-    case GET_RELATED_FIELDS.ERROR:
-      return {
-        ...state,
-        actions: {
-          ...state.actions,
-          ...actionResult('GET_RELATED_FIELDS.ERROR', { error: action.error }),
-        },
-      };
-      // -----------------------------------------------
-
     // Update Basic Fields reducers --------------------
     case UPDATE_BASIC_FIELDS.REQUEST:
       return {
@@ -295,15 +262,15 @@ export default (state = initialState, action) => {
       };
 
     // Update Media Relationships reducers -------------
-    case UPDATE_MEDIA_RELATIONSHIPS.REQUEST:
+    case UPDATE_MEDIA_FIELD.REQUEST:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_MEDIA_RELATIONSHIPS.REQUEST'),
+          ...actionResult('UPDATE_MEDIA_FIELD.REQUEST'),
         },
       };
-    case UPDATE_MEDIA_RELATIONSHIPS.SUCCESS: {
+    case UPDATE_MEDIA_FIELD.SUCCESS: {
       const {
         updateType, mediaIds, mediaType, newInstances,
       } = action.response;
@@ -331,16 +298,16 @@ export default (state = initialState, action) => {
         },
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_MEDIA_RELATIONSHIPS.SUCCESS'),
+          ...actionResult('UPDATE_MEDIA_FIELD.SUCCESS'),
         },
       };
     }
-    case UPDATE_MEDIA_RELATIONSHIPS.ERROR:
+    case UPDATE_MEDIA_FIELD.ERROR:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_MEDIA_RELATIONSHIPS.ERROR', { error: action.error }),
+          ...actionResult('UPDATE_MEDIA_FIELD.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
@@ -394,15 +361,15 @@ export default (state = initialState, action) => {
       // -----------------------------------------------
 
     // Update Related Fields reducers ------------------
-    case UPDATE_RELATED_FIELDS.REQUEST:
+    case UPDATE_RELATED_FIELD.REQUEST:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_RELATED_FIELDS.REQUEST'),
+          ...actionResult('UPDATE_RELATED_FIELD.REQUEST', { id: action.id }),
         },
       };
-    case UPDATE_RELATED_FIELDS.SUCCESS: {
+    case UPDATE_RELATED_FIELD.SUCCESS: {
       const { result } = action;
       const index = state.form.relatedFields.map(f => f.modelLabel).indexOf(result.relatedField.modelLabel);
 
@@ -432,7 +399,7 @@ export default (state = initialState, action) => {
           },
           actions: {
             ...state.actions,
-            ...actionResult('UPDATE_RELATED_FIELDS.SUCCESS'),
+            ...actionResult('UPDATE_RELATED_FIELD.SUCCESS', { id: action.id }),
           },
         };
       }
@@ -457,18 +424,18 @@ export default (state = initialState, action) => {
           },
           actions: {
             ...state.actions,
-            ...actionResult('UPDATE_RELATED_FIELDS.SUCCESS'),
+            ...actionResult('UPDATE_RELATED_FIELD.SUCCESS', { id: action.id }),
           },
         };
       }
       return state;
     }
-    case UPDATE_RELATED_FIELDS.ERROR:
+    case UPDATE_RELATED_FIELD.ERROR:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_RELATED_FIELDS.ERROR', { error: action.error }),
+          ...actionResult('UPDATE_RELATED_FIELD.ERROR', { error: action.error, id: action.id }),
         },
       };
       // -----------------------------------------------

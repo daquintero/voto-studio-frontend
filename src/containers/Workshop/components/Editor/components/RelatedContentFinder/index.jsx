@@ -10,7 +10,7 @@ import {
 import { TOGGLE_RELATED_CONTENT_FINDER } from '../../../../../../redux/actionCreators/workshopActionCreators';
 
 // Components
-import ItemFinder from './components/ItemFinder';
+import RelatedContentTable from './RelatedContentTable';
 
 
 class LocationPicker extends PureComponent {
@@ -61,7 +61,7 @@ class LocationPicker extends PureComponent {
           </h3>
         </div>
         <div className="modal__body">
-          <ItemFinder
+          <RelatedContentTable
             defaults={{ rowsPerPage: 5 }}
             initialValues={workshop.form.relatedFields && { type: workshop.form.relatedFields.map(f => f.option)[0] }}
             enableReinitialize

@@ -17,7 +17,7 @@ import {
   TOGGLE_MEDIA_CENTER,
   TOGGLE_RELATED_CONTENT_FINDER,
 } from '../actionCreators/workshopActionCreators';
-import { initializeActions, actionResult } from '../helpers/asyncHelpers';
+import { initializeActions, actionResult, actionResultUnnamed } from '../helpers/asyncHelpers';
 
 const locationPickerDefault = {
   open: false,
@@ -366,7 +366,10 @@ export default (state = initialState, action) => {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_RELATED_FIELD.REQUEST', { id: action.id }),
+          UPDATE_RELATED_FIELD: {
+            ...actionResultUnnamed('UPDATE_RELATED_FIELD.REQUEST'),
+            ...actionResult('UPDATE_RELATED_FIELD.REQUEST', { id: action.id }),
+          },
         },
       };
     case UPDATE_RELATED_FIELD.SUCCESS: {
@@ -399,7 +402,10 @@ export default (state = initialState, action) => {
           },
           actions: {
             ...state.actions,
-            ...actionResult('UPDATE_RELATED_FIELD.SUCCESS', { id: action.id }),
+            UPDATE_RELATED_FIELD: {
+              ...actionResultUnnamed('UPDATE_RELATED_FIELD.SUCCESS'),
+              ...actionResult('UPDATE_RELATED_FIELD.SUCCESS', { id: action.id }),
+            },
           },
         };
       }
@@ -424,7 +430,10 @@ export default (state = initialState, action) => {
           },
           actions: {
             ...state.actions,
-            ...actionResult('UPDATE_RELATED_FIELD.SUCCESS', { id: action.id }),
+            UPDATE_RELATED_FIELD: {
+              ...actionResultUnnamed('UPDATE_RELATED_FIELD.SUCCESS'),
+              ...actionResult('UPDATE_RELATED_FIELD.SUCCESS', { id: action.id }),
+            },
           },
         };
       }
@@ -435,7 +444,10 @@ export default (state = initialState, action) => {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_RELATED_FIELD.ERROR', { error: action.error, id: action.id }),
+          UPDATE_RELATED_FIELD: {
+            ...actionResultUnnamed('UPDATE_RELATED_FIELD.ERROR'),
+            ...actionResult('UPDATE_RELATED_FIELD.ERROR', { error: action.error, id: action.id }),
+          },
         },
       };
       // -----------------------------------------------

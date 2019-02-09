@@ -264,6 +264,7 @@ class InstanceFinder extends Component {
                   instances={workshop.openList.instances}
                   instanceCount={workshop.openList.count}
                   tableHeads={workshop.openList.tableHeads}
+                  selected={selected}
                   onSelect={this.handleOnSelect}
                   onChangePage={this.handleOnChangePage}
                   page={page}

@@ -32,6 +32,7 @@ class MatTable extends Component {
     actions: PropTypes.instanceOf(Object),
     page: PropTypes.number,
     rowsPerPage: PropTypes.number,
+    selected: PropTypes.instanceOf(Array).isRequired,
 
     // Redux
     workshop: PropTypes.instanceOf(Object).isRequired,
@@ -66,7 +67,6 @@ class MatTable extends Component {
     this.state = {
       order: 'desc',
       orderBy: 'id',
-      selected: [],
     };
   }
 
@@ -80,18 +80,17 @@ class MatTable extends Component {
   };
 
   handleSelectAllClick = (event, checked) => {
-    const { field } = this.props;
+    const { field, onSelect } = this.props;
     const { instances } = field.relatedInstances;
     if (checked) {
-      this.setState({ selected: instances.map(n => n.id) });
+      onSelect(instances.map(n => n.id));
       return;
     }
-    this.setState({ selected: [] });
+    onSelect([]);
   };
 
   handleClick = (event, id) => {
-    const { selected } = this.state;
-    const { onSelect, field } = this.props;
+    const { selected, onSelect, field } = this.props;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -108,20 +107,20 @@ class MatTable extends Component {
       );
     }
 
-    this.setState({ selected: newSelected }, onSelect(newSelected, field));
+    onSelect(newSelected, field);
   };
 
-  isSelected = id => this.state.selected.indexOf(id) !== -1;
+  isSelected = id => this.props.selected.indexOf(id) !== -1;
 
   render() {
     // State
     const {
-      order, orderBy, selected,
+      order, orderBy,
     } = this.state;
 
     // Props
     const {
-      tableHeads, actions, instances, instanceCount, onChangePage, page, rowsPerPage,
+      tableHeads, actions, instances, instanceCount, onChangePage, page, rowsPerPage, selected,
     } = this.props;
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, instanceCount - (page * rowsPerPage));

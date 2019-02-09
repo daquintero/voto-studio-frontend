@@ -90,7 +90,7 @@ class EditorTableWrapper extends Component {
     this.setState(prevState => ({
       selected: {
         ...prevState.selected,
-        [field.fieldName]: selected,
+        [field.name]: selected,
       },
     }));
   };
@@ -111,6 +111,7 @@ class EditorTableWrapper extends Component {
         <MatTable
           {...this.getTableProps({ field })}
           instances={field.relatedInstances.instances}
+          instanceCount={field.relatedInstances.instances.length}
           tableHeads={field.relatedInstances.tableHeads}
           selected={selected[field.fieldName]}
           onSelect={this.handleOnSelect}
@@ -121,7 +122,7 @@ class EditorTableWrapper extends Component {
             disabled={selected[field.fieldName].length === 0}
             onClick={() => this.handleRelatedOnRemove(field)}
           >
-            {action[field.fieldName] && !action[field.fieldName].loading ? (
+            {!action[field.fieldName] || !action[field.fieldName].loading ? (
               <span>
                 <i className="fal fa-minus" />
                 {' Remove '}

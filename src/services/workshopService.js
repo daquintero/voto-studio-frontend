@@ -14,6 +14,7 @@ const urls = {
     relatedFields: `${workshopApiUrl}/get_related_fields/`,
     buildFinder: `${workshopApiUrl}/finder/`,
     instanceList: `${workshopApiUrl}/list_instances/`,
+    relatedInstanceList: `${workshopApiUrl}/list_related_instances/`,
     locationPicketDataSet: `${workshopApiUrl}/location_picker/`,
   },
   post: {
@@ -62,13 +63,17 @@ const instanceList = ({
   search: searchTerm,
 }), getHeaders());
 
-const relatedInstanceList = (relatedModelLabel, modelLabel, fieldName, id) =>
-  axios.get(buildUrl(urls.get.instanceList, {
-    rml: relatedModelLabel,
-    ml: modelLabel,
-    fn: fieldName,
-    id,
-  }), getHeaders());
+const relatedInstanceList = ({
+  relatedModelLabel, modelLabel, fieldName, id, page, pageSize, searchTerm,
+}) => axios.get(buildUrl(urls.get.relatedInstanceList, {
+  rml: relatedModelLabel,
+  ml: modelLabel,
+  fn: fieldName,
+  id,
+  page,
+  size: pageSize,
+  search: searchTerm,
+}), getHeaders());
 
 const locationPickerDataSet = () => axios.get(urls.get.locationPicketDataSet, getHeaders());
 

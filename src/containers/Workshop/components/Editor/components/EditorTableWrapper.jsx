@@ -105,6 +105,7 @@ class EditorTableWrapper extends Component {
     const {
       fields, action,
     } = this.props;
+
     return fields.map(field => field.relatedInstances.instances.length !== 0 && (
       <Collapse key={field.fieldName} title={this.getCollapseTitle(field)} className="with-shadow">
         <MatTable

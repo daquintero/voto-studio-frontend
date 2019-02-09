@@ -237,15 +237,15 @@ export const getInstanceList = listData => (dispatch) => {
   );
 };
 
-export const getRelatedInstanceList = (relatedModelLabel, modelLabel, fieldName, id) => (dispatch) => {
+export const getRelatedInstanceList = listData => (dispatch) => {
   dispatch({
     type: GET_INSTANCE_LIST.REQUEST,
   });
-  return workshopService.get.relatedInstanceList(relatedModelLabel, modelLabel, fieldName, id).then(
+  return workshopService.get.relatedInstanceList(listData).then(
     response =>
       dispatch({
         type: GET_INSTANCE_LIST.SUCCESS,
-        list: response.data.list,
+        response: response.data,
       }),
     error =>
       dispatch({

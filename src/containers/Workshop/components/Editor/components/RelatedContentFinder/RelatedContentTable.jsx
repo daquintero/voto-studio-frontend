@@ -47,23 +47,28 @@ class InstanceFinder extends Component {
     super(props);
     this.state = {
       selected: [],
+      page: 0,
+      rowsPerPage: 5,
+      timeout: null,
     };
   }
 
   componentDidMount() {
+    const { rowsPerPage } = this.state;
     const { dispatch, workshop } = this.props;
-
     const relatedModelLabel = workshop.form.relatedFields[0].modelLabel;
-
     const { fieldName } = workshop.form.relatedFields
       .filter(f => f.modelLabel === relatedModelLabel)[0];
+    const page = 0;
 
-    dispatch(getRelatedInstanceList(
+    dispatch(getRelatedInstanceList({
       relatedModelLabel,
-      workshop.form.parentModel.modelLabel,
+      modelLabel: workshop.form.parentModel.modelLabel,
       fieldName,
-      workshop.form.parentModel.id,
-    ));
+      id: workshop.form.parentModel.id,
+      page,
+      pageSize: rowsPerPage,
+    }));
   }
 
   componentWillUnmount() {
@@ -102,23 +107,87 @@ class InstanceFinder extends Component {
     ],
   });
 
-  changeInstanceType = (selected) => {
-    const { dispatch, workshop } = this.props;
-
-    const relatedModelLabel = selected.value;
-
+  handleOnChangePage = (event, page) => {
+    const { rowsPerPage } = this.state;
+    const { dispatch, workshop, finderForm } = this.props;
+    const relatedModelLabel = finderForm.values.type.value;
     const { fieldName } = workshop.form.relatedFields
       .filter(f => f.modelLabel === relatedModelLabel)[0];
 
-    dispatch(getRelatedInstanceList(
-      selected.value,
-      workshop.form.parentModel.modelLabel,
+    dispatch(getRelatedInstanceList({
+      relatedModelLabel,
+      modelLabel: workshop.form.parentModel.modelLabel,
       fieldName,
-      workshop.form.parentModel.id,
-    )).then((action) => {
-      if (action.type === GET_INSTANCE_LIST.SUCCESS) {
-        this.setState({ selected: [] });
-      }
+      id: workshop.form.parentModel.id,
+      page,
+      pageSize: rowsPerPage,
+    }))
+      .then((action) => {
+        if (action.type === GET_INSTANCE_LIST.SUCCESS) {
+          this.setState({ selected: [], page });
+        }
+      });
+  };
+
+  changeInstanceType = (selected) => {
+    const { rowsPerPage } = this.state;
+    const { dispatch, workshop } = this.props;
+    const relatedModelLabel = selected.value;
+    const { fieldName } = workshop.form.relatedFields
+      .filter(f => f.modelLabel === relatedModelLabel)[0];
+    const page = 0;
+
+    dispatch(getRelatedInstanceList({
+      relatedModelLabel,
+      modelLabel: workshop.form.parentModel.modelLabel,
+      fieldName,
+      id: workshop.form.parentModel.id,
+      page,
+      pageSize: rowsPerPage,
+    }))
+      .then((action) => {
+        if (action.type === GET_INSTANCE_LIST.SUCCESS) {
+          this.setState({ selected: [], page });
+        }
+      });
+  };
+
+  searchInstances = (searchTerm) => {
+    const { rowsPerPage } = this.state;
+    const { dispatch, workshop, finderForm } = this.props;
+    const relatedModelLabel = finderForm.values.type.value;
+    const { fieldName } = workshop.form.relatedFields
+      .filter(f => f.modelLabel === relatedModelLabel)[0];
+    const page = 0;
+
+    dispatch(getRelatedInstanceList({
+      relatedModelLabel,
+      modelLabel: workshop.form.parentModel.modelLabel,
+      fieldName,
+      id: workshop.form.parentModel.id,
+      page,
+      pageSize: rowsPerPage,
+      searchTerm,
+    }))
+      .then((action) => {
+        if (action.type === GET_INSTANCE_LIST.SUCCESS) {
+          this.setState({ selected: [], page });
+        }
+      });
+  };
+
+  handleSearchInstances = (e) => {
+    e.persist();
+    const { timeout } = this.state;
+
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    this.setState({
+      timeout: setTimeout(() => {
+        this.searchInstances(e.target.value);
+      }, 600),
     });
   };
 
@@ -160,7 +229,7 @@ class InstanceFinder extends Component {
   render() {
     // State
     const {
-      selected,
+      selected, page, rowsPerPage,
     } = this.state;
 
     // Props
@@ -180,7 +249,7 @@ class InstanceFinder extends Component {
                   <Field
                     name="search"
                     type="text"
-                    // onKeyUp={this.searchInstances}
+                    onKeyUp={this.handleSearchInstances}
                     component="input"
                     placeholder="Search for content..."
                     className="workshop__itemfinder__input"
@@ -213,8 +282,12 @@ class InstanceFinder extends Component {
                     <MatTable
                       {...this.getTableProps(workshop.openList)}
                       instances={workshop.openList.instances}
+                      instanceCount={workshop.openList.count}
                       tableHeads={workshop.openList.tableHeads}
                       onSelect={this.handleOnSelect}
+                      onChangePage={this.handleOnChangePage}
+                      page={page}
+                      rowsPerPage={rowsPerPage}
                     />
                   )}
             </div>

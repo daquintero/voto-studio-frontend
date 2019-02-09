@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<itemDeleteModal /> renders correctly without crashing 1`] = `
+exports[`<LocationPickerModal /> renders correctly without crashing 1`] = `
 <Router
   history={
     Object {
@@ -23,7 +23,12 @@ exports[`<itemDeleteModal /> renders correctly without crashing 1`] = `
   }
 >
    
-  <itemDeleteModal />
+  <LocationPickerModal
+    colored={false}
+    header={false}
+    message=""
+    title=""
+  />
    
 </Router>
 `;

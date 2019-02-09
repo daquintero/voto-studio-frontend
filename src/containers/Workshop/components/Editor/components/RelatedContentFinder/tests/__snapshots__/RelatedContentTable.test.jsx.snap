@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Workshop /> renders correctly without crashing 1`] = `
+exports[`<RelatedContentTable /> renders correctly without crashing 1`] = `
 <Router
   history={
     Object {
@@ -23,7 +23,7 @@ exports[`<Workshop /> renders correctly without crashing 1`] = `
   }
 >
    
-  <Connect(Workshop) />
+  <withRouter(Connect(ReduxForm)) />
    
 </Router>
 `;

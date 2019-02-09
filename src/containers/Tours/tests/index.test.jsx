@@ -3,7 +3,7 @@ import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import Tours from '.';
+import Tours from '..';
 
 describe('<Tours />', () => {
   it('renders correctly without crashing', () => {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<itemDeleteModal /> renders correctly without crashing 1`] = `
+exports[`<EditorTableWrapper /> renders correctly without crashing 1`] = `
 <Router
   history={
     Object {
@@ -23,7 +23,7 @@ exports[`<itemDeleteModal /> renders correctly without crashing 1`] = `
   }
 >
    
-  <itemDeleteModal />
+  <withRouter(Connect(ReduxForm)) />
    
 </Router>
 `;

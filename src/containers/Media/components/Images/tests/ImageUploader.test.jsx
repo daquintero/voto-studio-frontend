@@ -1,15 +1,15 @@
-// Test for the Workshop
+// Test for the ImageUploader
 import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import Workshop from '.';
+import ImageUploader from '../components/ImageUploader';
 
-describe('<Workshop />', () => {
+describe('<ImageUploader />', () => {
   it('renders correctly without crashing', () => {
     // Memory router needed for DOM nesting behavior
     const context = {};
-    const component = shallow(<StaticRouter location="/" context={context}> <Workshop /> </StaticRouter>);
+    const component = shallow(<StaticRouter location="/" context={context}> <ImageUploader /> </StaticRouter>);
     expect(toJson(component, { noKey: true })).toMatchSnapshot();
   });
 });

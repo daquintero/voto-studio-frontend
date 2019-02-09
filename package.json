@@ -93,6 +93,9 @@
     "babel-preset-react-app": "^5.0.2",
     "babel-runtime": "6.26.0",
     "css-loader": "1.0.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "enzyme-to-json": "^3.3.5",
     "eslint": "5.6.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-react-app": "^3.0.3",
@@ -103,6 +106,7 @@
     "eslint-plugin-react": "7.11.1",
     "node-sass": "^4.9.3",
     "react-hot-loader": "^4.3.4",
+    "react-test-renderer": "^16.8.0",
     "sass-loader": "7.1.0",
     "webpack": "4.19.1",
     "webpack-dev-server": "^3.1.14",
@@ -124,7 +128,8 @@
     ],
     "resolver": "jest-pnp-resolver",
     "setupFiles": [
-      "react-app-polyfill/jsdom"
+      "react-app-polyfill/jsdom",
+      "./test-setup.js"
     ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx}",
@@ -152,6 +157,9 @@
       "web.jsx",
       "jsx",
       "node"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ]
   },
   "babel": {

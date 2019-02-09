@@ -99,7 +99,7 @@ class LoginForm extends PureComponent {
               />
             </div>
             <div className="account__forgot-password">
-              <a href="/">Forgot password?</a>
+              <a href="/">Olvidaste tu contraseña?</a>
             </div>
           </div>
           <div className="form__form-group">
@@ -107,7 +107,7 @@ class LoginForm extends PureComponent {
               <Field
                 name="remember_me"
                 component={renderCheckBoxField}
-                label="Remember me"
+                label="Recuérdame"
               />
             </div>
           </div>
@@ -119,7 +119,7 @@ class LoginForm extends PureComponent {
             )}
           </Button>
           <Link className="btn btn-outline-primary account__btn account__btn--small" to="/account/signup">
-            Create Account
+            Solicita una cuenta con permisos
           </Link>
         </form>
       </>

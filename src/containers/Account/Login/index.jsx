@@ -1,17 +1,25 @@
 import React from 'react';
+import { Container, Row, Col } from 'reactstrap';
 import LoginForm from './components/LoginForm';
+
+const viLogo = `${process.env.PUBLIC_URL}/img/vi-logo.svg`;
+
 
 const Login = () => (
   <div className="account">
     <div className="account__wrapper">
       <div className="account__card">
         <div className="account__head">
-          <h3 className="account__title">Welcome to
-            <span className="account__logo"> Voto
-              <span className="account__logo-accent">Studio</span>
-            </span>
-          </h3>
-          <h4 className="account__subhead subhead">Control content seamlessly</h4>
+          <Container>
+            <Row noGutters>
+              <Col xs={12}>
+                <a href="https://www.votoinformado2019.com">
+                  <img className="rounded mx-auto enlarge" src={viLogo} alt="Error" />
+                </a>
+                <h2 className="p-2">Voto Studio</h2>
+              </Col>
+            </Row>
+          </Container>
         </div>
         <LoginForm />
       </div>

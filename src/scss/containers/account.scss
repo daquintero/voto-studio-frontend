@@ -244,3 +244,8 @@
     flex-wrap: wrap;
   }
 }
+
+// CUSTOM
+.enlarge:hover {
+  transform: scale(1.02);
+}

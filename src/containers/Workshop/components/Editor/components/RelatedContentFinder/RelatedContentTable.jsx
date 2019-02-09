@@ -85,6 +85,7 @@ class InstanceFinder extends Component {
     ...props,
     actions: [
       {
+        key: id => `edit-${id}`,
         name: 'edit',
         id: ({ name, id }) => `${name}-${id}`,
         icon: 'fal fa-fw fa-edit mr-3 text-primary',
@@ -95,6 +96,7 @@ class InstanceFinder extends Component {
         },
       },
       {
+        key: id => `detail-${id}`,
         name: 'detail',
         id: ({ name, id }) => `${name}-${id}`,
         icon: 'fal fa-fw fa-eye mr-3 text-info',

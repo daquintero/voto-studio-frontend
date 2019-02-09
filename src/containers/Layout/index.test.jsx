@@ -3,7 +3,7 @@ import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import { shallow } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import Layout from '../index';
+import Layout from './index';
 
 describe('<Layout />', () => {
   it('renders correctly without crashing', () => {

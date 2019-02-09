@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<TimeLineItem /> renders correctly without crashing 1`] = `
+exports[`<ImageUploader /> renders correctly without crashing 1`] = `
 <Router
   history={
     Object {
@@ -23,12 +23,7 @@ exports[`<TimeLineItem /> renders correctly without crashing 1`] = `
   }
 >
    
-  <TimeLineItem
-    date=""
-    img=""
-    title=""
-    type=""
-  />
+  <Connect(ReduxForm) />
    
 </Router>
 `;

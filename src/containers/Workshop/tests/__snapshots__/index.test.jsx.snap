@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Modal /> renders correctly without crashing 1`] = `
+exports[`<Workshop /> renders correctly without crashing 1`] = `
 <Router
   history={
     Object {
@@ -23,12 +23,7 @@ exports[`<Modal /> renders correctly without crashing 1`] = `
   }
 >
    
-  <ModalComponent
-    colored={false}
-    header={false}
-    message=""
-    title=""
-  />
+  <Connect(Workshop) />
    
 </Router>
 `;

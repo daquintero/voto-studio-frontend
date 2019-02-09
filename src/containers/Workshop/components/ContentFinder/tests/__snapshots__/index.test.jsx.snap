@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ItemFinder /> renders correctly without crashing 1`] = `
+exports[`<ContentFinder /> renders correctly without crashing 1`] = `
 <Router
   history={
     Object {

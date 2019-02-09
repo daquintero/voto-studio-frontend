@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<EditorField /> renders correctly without crashing 1`] = `
+exports[`<ImageEditor /> renders correctly without crashing 1`] = `
 <Router
   history={
     Object {
@@ -23,7 +23,7 @@ exports[`<EditorField /> renders correctly without crashing 1`] = `
   }
 >
    
-  <EditorField />
+  <Connect(ReduxForm) />
    
 </Router>
 `;

@@ -25,7 +25,7 @@ class SidebarContent extends Component {
         <ul className="sidebar__block">
           <SidebarCategory title="Account" icon="user">
             <SidebarLink title="Profile" route="/account/profile/" onClick={this.hideSidebar} />
-            <SidebarLink title="Logout" route="/studio/candidates/" onClick={this.hideSidebar} />
+            <SidebarLink title="Logout" route="/account/login" onClick={this.hideSidebar} />
           </SidebarCategory>
           <SidebarCategory title="Support" icon="question-circle">
             <SidebarLink title="Tutorials" route="/support/tutorials/" onClick={this.hideSidebar} />

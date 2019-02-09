@@ -4,7 +4,7 @@ import { Container, Col, Row, Card, CardBody } from 'reactstrap';
 
 class Dashboard extends PureComponent {
   getColDims = () => ({
-    xs: 12, sm: 12, md: 4, lg: 3, xl: 2,
+    xs: 12, sm: 12, md: 3, lg: 3, xl: 3,
   });
 
   render() {

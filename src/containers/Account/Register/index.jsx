@@ -13,7 +13,7 @@ const Register = () => (
           <Container>
             <Row noGutters>
               <Col xs={12}>
-                <a href="https://www.votoinformado2019.com">
+                <a href="http://www.votoinformado2019.com">
                   <img className="rounded mx-auto enlarge" src={viLogo} alt="Error" />
                 </a>
                 <h2 className="p-2">Voto Studio</h2>

@@ -1,7 +1,11 @@
 const buildQueryString = (params) => {
   const esc = encodeURIComponent;
   return `?${Object.keys(params)
-    .map(k => `${esc(k)}=${esc(params[k])}`)
+    .map((k) => { // eslint-disable-line
+      if (params[k] !== undefined) {
+        return `${esc(k)}=${esc(params[k])}`;
+      }
+    })
     .join('&')}`;
 };
 

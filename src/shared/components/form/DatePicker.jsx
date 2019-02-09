@@ -13,7 +13,7 @@ class DatePickerField extends PureComponent {
     return (
       <div className="date-picker">
         <DatePicker
-          dropdownMode=""
+          dropdownMode="select"
           className="form__form-group-datepicker"
           selected={moment(this.props.value) || null}
           onChange={this.props.onChange}

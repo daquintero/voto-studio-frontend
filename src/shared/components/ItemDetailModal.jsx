@@ -9,10 +9,15 @@ import squashString from '../utils/squashString';
 class ModalComponent extends PureComponent {
   static propTypes = {
     toggle: PropTypes.func.isRequired,
-    isOpen: PropTypes.bool.isRequired,
+    isOpen: PropTypes.bool,
     onClose: PropTypes.func.isRequired,
-    item: PropTypes.instanceOf(Object).isRequired,
+    item: PropTypes.instanceOf(Object),
     action: PropTypes.instanceOf(Object).isRequired,
+  };
+
+  static defaultProps = {
+    item: {},
+    isOpen: false,
   };
 
   buildUrl = (modelLabel, id) => {

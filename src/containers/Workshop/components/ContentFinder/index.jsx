@@ -15,19 +15,19 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { buildFinder, getInstanceList } from '../../../redux/actions/workshopActions';
-import { BUILD_FINDER, GET_INSTANCE_LIST } from '../../../redux/actionCreators/workshopActionCreators';
+import { buildFinder, getInstanceList } from '../../../../redux/actions/workshopActions';
+import { BUILD_FINDER, GET_INSTANCE_LIST } from '../../../../redux/actionCreators/workshopActionCreators';
 
 // Components
-import MatTable from '../../../shared/components/table/MatTable';
-import Loader from '../../../shared/components/Loader/Loader';
-import renderSelectField from '../../../shared/components/form/Select';
+import MatTable from '../../../../shared/components/table/MatTable/index';
+import Loader from '../../../../shared/components/Loader/Loader';
+import renderSelectField from '../../../../shared/components/form/Select';
 
 // Functions
-import buildUrl from '../../../shared/utils/buildUrl';
+import buildUrl from '../../../../shared/utils/buildUrl';
 
 
-class InstanceFinder extends Component {
+class ContentFinder extends Component {
   static propTypes = {
     // Redux
     dispatch: PropTypes.func.isRequired,
@@ -37,7 +37,11 @@ class InstanceFinder extends Component {
     history: ReactRouterPropTypes.history.isRequired,
 
     // Form
-    finderForm: PropTypes.instanceOf(Object).isRequired,
+    finderForm: PropTypes.instanceOf(Object),
+  };
+
+  static defaultProps = {
+    finderForm: {},
   };
 
   constructor(props) {
@@ -77,7 +81,7 @@ class InstanceFinder extends Component {
     ...props,
     actions: [
       {
-        key: id => id,
+        key: id => `edit-${id}`,
         name: 'edit',
         id: ({ name, id }) => `${name}-${id}`,
         'data-id': id => id,
@@ -89,7 +93,7 @@ class InstanceFinder extends Component {
         },
       },
       {
-        key: id => id,
+        key: id => `detail-${id}`,
         name: 'detail',
         id: ({ name, id }) => `${name}-${id}`,
         icon: 'fal fa-fw fa-eye mr-3 text-info',
@@ -138,6 +142,8 @@ class InstanceFinder extends Component {
         }
       });
   };
+
+  handleOnChangeRowsPerPage = () => {};
 
   handleSearchInstances = (e) => {
     e.persist();
@@ -207,23 +213,23 @@ class InstanceFinder extends Component {
         {/* Item search form card */}
         <Card className="pb-3">
           <CardBody className="p-3">
-            <form className="workshop__itemfinder__form" onSubmit={this.handleUpdateBasicFields}>
+            <form className="workshop__content-finder__form" onSubmit={this.handleUpdateBasicFields}>
               <Row>
 
                 {/* Search bar */}
-                <Col xl={8}>
+                <Col sm={12} md={6} lg={6} xl={8} className="mb-sm-3 mb-xs-3">
                   <Field
                     name="search"
                     type="text"
                     onKeyUp={this.handleSearchInstances}
                     component="input"
                     placeholder="Search for content..."
-                    className="workshop__itemfinder__input"
+                    className="workshop__content-finder__input"
                   />
                 </Col>
 
                 {/* Item type selector */}
-                <Col>
+                <Col sm={12} md={6} lg={6} xl={4}>
                   <Field
                     name="type"
                     type="select"
@@ -267,6 +273,7 @@ class InstanceFinder extends Component {
                   selected={selected}
                   onSelect={this.handleOnSelect}
                   onChangePage={this.handleOnChangePage}
+                  onChangeRowsPerPage={this.handleOnChangeRowsPerPage}
                   page={page}
                   rowsPerPage={rowsPerPage}
                 />
@@ -279,11 +286,11 @@ class InstanceFinder extends Component {
   }
 }
 
-const InstanceFinderWithForm = reduxForm({
+const ContentFinderWithForm = reduxForm({
   form: 'finderForm',
-})(InstanceFinder);
+})(ContentFinder);
 
 export default withRouter(connect(state => ({
   workshop: state.studio.workshop,
   finderForm: state.form.finderForm,
-}))(InstanceFinderWithForm));
+}))(ContentFinderWithForm));

@@ -183,7 +183,11 @@ class MatTable extends Component {
                       {/* Actions column */}
                       <TableCell className="material-table__cell">
                         {actions.map(action => (
-                          <span {...action.props} data-obj={JSON.stringify(instance)}>
+                          <span
+                            {...action.props}
+                            data-obj={JSON.stringify(instance)}
+                            key={action.key(instance.id)}
+                          >
                             <i
                               className={action.icon}
                               id={action.id({ name: action.name, id: instance.id })}

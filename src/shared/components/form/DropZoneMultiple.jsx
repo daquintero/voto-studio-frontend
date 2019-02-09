@@ -12,7 +12,7 @@ import {
 class DropZoneMultipleField extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -20,6 +20,10 @@ class DropZoneMultipleField extends PureComponent {
         name: PropTypes.string,
       })),
     ]).isRequired,
+  };
+
+  static defaultProps = {
+    onSubmit: () => {},
   };
 
   constructor() {

@@ -1,0 +1,13 @@
+.dashboard {
+  &__icon {
+    color: {
+
+    }
+    &:hover {
+
+    }
+    &:hover a {
+      transform: translateY(-10px);
+    }
+  }
+}

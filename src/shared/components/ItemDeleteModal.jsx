@@ -9,9 +9,13 @@ class ModalComponent extends PureComponent {
     // item: PropTypes.instanceOf(Object).isRequired,
     action: PropTypes.instanceOf(Object).isRequired,
     toggle: PropTypes.func.isRequired,
-    isOpen: PropTypes.bool.isRequired,
+    isOpen: PropTypes.bool,
     deleteItem: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    isOpen: false,
   };
 
   render() {

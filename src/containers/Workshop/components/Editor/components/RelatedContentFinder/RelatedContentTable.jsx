@@ -242,22 +242,22 @@ class InstanceFinder extends Component {
         {/* Item search form card */}
         <Card className="pb-3">
           <CardBody className="p-3">
-            <form className="workshop__itemfinder__form" onSubmit={this.handleUpdateBasicFields}>
+            <form className="workshop__content-finder__form" onSubmit={this.handleUpdateBasicFields}>
               <Row>
                 {/* Search bar */}
-                <Col xl={8}>
+                <Col sm={12} md={6} lg={6} xl={8} className="mb-sm-3">
                   <Field
                     name="search"
                     type="text"
                     onKeyUp={this.handleSearchInstances}
                     component="input"
                     placeholder="Search for content..."
-                    className="workshop__itemfinder__input"
+                    className="workshop__content-finder__input"
                   />
                 </Col>
 
                 {/* Item type selector */}
-                <Col>
+                <Col sm={12} md={6} lg={6} xl={4}>
                   <Field
                     name="type"
                     type="select"

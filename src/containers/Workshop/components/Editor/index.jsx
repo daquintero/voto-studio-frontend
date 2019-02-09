@@ -259,6 +259,7 @@ class Editor extends Component {
             <div className="form__form-group-field-editor">
               <EditorField
                 name={field.name}
+                placeholder={this.buildPlaceholder(field)}
               />
             </div>
           </div>
@@ -361,7 +362,7 @@ class Editor extends Component {
                               <Row>
                                 <Col>
                                   <h3 className="page-title text-capitalize">
-                                Media
+                                    Media
                                   </h3>
                                 </Col>
                                 <Col>
@@ -370,7 +371,7 @@ class Editor extends Component {
                                     className="float-right"
                                     onClick={this.handleToggleMediaCenter}
                                   >
-                                Add media
+                                    Add media
                                   </Button>
                                 </Col>
                               </Row>
@@ -381,24 +382,29 @@ class Editor extends Component {
                                 <Gallery
                                   images={form.mediaFields.images}
                                   imageDims={{
-                               xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
-                              }}
+                                   xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
+                                  }}
                                   controls
                                   draggable
                                   onRemove={this.handleMediaOnRemove}
+                                  onClick={() => {}}
                                 />
                               </Collapse>
                               <Collapse
                                 title="Videos"
                                 className="with-shadow"
                               >
-                            Hello
+                                <div>
+                                  Not yet implemented
+                                </div>
                               </Collapse>
                               <Collapse
                                 title="Resources"
                                 className="with-shadow"
                               >
-                            Hello
+                                <div>
+                                  Not yet implemented
+                                </div>
                               </Collapse>
                             </CardBody>
                           </Card>
@@ -409,7 +415,7 @@ class Editor extends Component {
                               <Row>
                                 <Col>
                                   <h3 className="page-title text-capitalize">
-                                  Related Content
+                                    Related Content
                                   </h3>
                                 </Col>
                                 <Col>
@@ -418,7 +424,7 @@ class Editor extends Component {
                                     className="float-right"
                                     onClick={this.handleToggleRelatedContentFinder}
                                   >
-                                  Add related content
+                                    Add related content
                                   </Button>
                                 </Col>
                               </Row>

@@ -20,7 +20,7 @@ import {
 import PublishModal from '../../shared/components/PublishModal';
 import ItemDetailModal from '../../shared/components/ItemDetailModal';
 import ItemDeleteModel from '../../shared/components/ItemDeleteModal';
-import ItemFinder from './components/ItemFinder';
+import ContentFinder from './components/ContentFinder';
 
 
 class Workshop extends Component {
@@ -110,7 +110,7 @@ class Workshop extends Component {
       <>
         <Container className="mt-3">
           <Row>
-            <ItemFinder
+            <ContentFinder
               editItem={this.handleEditItem}
               toggleDeleteItemModal={this.handleToggleItemDeleteModal}
               deleteItem={this.handleDeleteItem}

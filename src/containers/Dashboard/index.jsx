@@ -20,34 +20,34 @@ class Dashboard extends PureComponent {
         </Row>
         <Row>
           <Col {...this.getColDims()}>
-            <Card>
-              <CardBody className="text-center">
-                <Link to="/workshop">
+            <Link to="/workshop" className="dashboard__icon">
+              <Card>
+                <CardBody className="text-center">
                   <i className="fal fa-6x fa-wrench mb-3" />
                   <h3>Workshop</h3>
-                </Link>
-              </CardBody>
-            </Card>
+                </CardBody>
+              </Card>
+            </Link>
           </Col>
           <Col {...this.getColDims()}>
-            <Card>
-              <CardBody className="text-center">
-                <Link to="/media">
+            <Link to="/media" className="dashboard__icon">
+              <Card>
+                <CardBody className="text-center">
                   <i className="fal fa-6x fa-image mb-3" />
                   <h3>Media</h3>
-                </Link>
-              </CardBody>
-            </Card>
+                </CardBody>
+              </Card>
+            </Link>
           </Col>
           <Col {...this.getColDims()}>
-            <Card>
-              <CardBody className="text-center">
-                <Link to="/tours">
+            <Link to="/tours" className="dashboard__icon">
+              <Card>
+                <CardBody className="text-center">
                   <i className="fal fa-6x fa-map mb-3" />
                   <h3>Tours</h3>
-                </Link>
-              </CardBody>
-            </Card>
+                </CardBody>
+              </Card>
+            </Link>
           </Col>
         </Row>
       </Container>

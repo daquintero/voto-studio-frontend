@@ -308,7 +308,7 @@ class Editor extends Component {
               {loaded ? (
                 <>
                   <Row>
-                    <Col xs={8}>
+                    <Col xs={12} lg={8}>
                       <h3 className="page-title text-capitalize">
                         {form.new ? 'Create' : 'Edit'} {form.parentModel.name}
                       </h3>
@@ -317,7 +317,7 @@ class Editor extends Component {
                       </h3>
                     </Col>
 
-                    <Col xs={4}>
+                    <Col xs={4} className="d-none d-xl-block">
                       <h3 className="page-title text-capitalize">
                         Live Preview
                       </h3>
@@ -439,10 +439,18 @@ class Editor extends Component {
                     </Col>
 
                     {/* Live preview panel */}
+                    <Col xs={12} className="d-block d-xl-none">
+                      <h3 className="page-title text-capitalize">
+                        Live Preview
+                      </h3>
+                      <h3 className="page-subhead subhead">
+                        This will update as you edit the piece of content
+                      </h3>
+                    </Col>
                     <Col xl={4}>
                       <Card>
-                        <CardBody>
-                          <img src={iPhone} alt="iPhone preview" style={{ opacity: 0.3 }} />
+                        <CardBody className="p-5">
+                          <img src={iPhone} className="img-fluid" alt="iPhone preview" style={{ opacity: 0.3 }} />
                         </CardBody>
                       </Card>
                     </Col>

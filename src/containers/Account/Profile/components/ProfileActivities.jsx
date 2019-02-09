@@ -7,7 +7,6 @@ import Loader from '../../../../shared/components/Loader/Loader';
 
 class ProfileActivities extends Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
     auth: PropTypes.instanceOf(Object).isRequired,
   };
 

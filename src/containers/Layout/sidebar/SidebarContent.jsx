@@ -25,7 +25,7 @@ class SidebarContent extends Component {
         <ul className="sidebar__block">
           <SidebarCategory title="Account" icon="user">
             <SidebarLink title="Profile" route="/account/profile/" onClick={this.hideSidebar} />
-            <SidebarLink title="Logout" route="/account/login" onClick={this.hideSidebar} />
+            <SidebarLink title="Logout" route="/account/login/" onClick={this.hideSidebar} />
           </SidebarCategory>
           <SidebarCategory title="Support" icon="question-circle">
             <SidebarLink title="Tutorials" route="/support/tutorials/" onClick={this.hideSidebar} />
@@ -35,7 +35,7 @@ class SidebarContent extends Component {
         </ul>
         {!this.props.sidebar.collapse && (
           <ul className="sidebar__block">
-            <p className="ml-3">Version 1.0.0-beta</p>
+            <p className="ml-3">Version 1.0.3-beta</p>
           </ul>
         )}
       </div>

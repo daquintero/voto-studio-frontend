@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { Card, Col, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import ProfileTimeLine from './ProfileTimeLine';
-import ProfileActivities from './ProfileActivities';
 import ProfileSettings from './ProfileSettings';
 
 export default class ProfileTabs extends PureComponent {
@@ -37,7 +36,7 @@ export default class ProfileTabs extends PureComponent {
                       this.toggle('1');
                     }}
                   >
-                    Activity
+                    TimeLine
                   </NavLink>
                 </NavItem>
                 <NavItem>
@@ -47,28 +46,15 @@ export default class ProfileTabs extends PureComponent {
                       this.toggle('2');
                     }}
                   >
-                    TimeLine
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={classnames({ active: this.state.activeTab === '3' })}
-                    onClick={() => {
-                      this.toggle('3');
-                    }}
-                  >
                     Settings
                   </NavLink>
                 </NavItem>
               </Nav>
               <TabContent activeTab={this.state.activeTab}>
                 <TabPane tabId="1">
-                  <ProfileActivities />
-                </TabPane>
-                <TabPane tabId="2">
                   <ProfileTimeLine />
                 </TabPane>
-                <TabPane tabId="3">
+                <TabPane tabId="2">
                   <ProfileSettings />
                 </TabPane>
               </TabContent>

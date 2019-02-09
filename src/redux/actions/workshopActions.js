@@ -219,15 +219,15 @@ export const buildFinder = () => (dispatch) => {
   );
 };
 
-export const getInstanceList = modelLabel => (dispatch) => {
+export const getInstanceList = listData => (dispatch) => {
   dispatch({
     type: GET_INSTANCE_LIST.REQUEST,
   });
-  return workshopService.get.instanceList(modelLabel).then(
+  return workshopService.get.instanceList(listData).then(
     response =>
       dispatch({
         type: GET_INSTANCE_LIST.SUCCESS,
-        list: response.data.list,
+        response: response.data,
       }),
     error =>
       dispatch({

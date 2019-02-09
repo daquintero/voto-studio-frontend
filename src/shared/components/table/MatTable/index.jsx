@@ -27,8 +27,11 @@ const getSorting = (order, orderBy) =>
 class MatTable extends Component {
   static propTypes = {
     instances: PropTypes.instanceOf(Array),
+    instanceCount: PropTypes.number.isRequired,
     tableHeads: PropTypes.instanceOf(Array),
     actions: PropTypes.instanceOf(Object),
+    page: PropTypes.number,
+    rowsPerPage: PropTypes.number,
 
     // Redux
     workshop: PropTypes.instanceOf(Object).isRequired,
@@ -36,6 +39,8 @@ class MatTable extends Component {
 
     // Callbacks
     onSelect: PropTypes.func.isRequired,
+    onChangePage: PropTypes.func.isRequired,
+    onChangeRowsPerPage: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -52,16 +57,16 @@ class MatTable extends Component {
         },
       },
     ],
+    page: 0,
+    rowsPerPage: 10,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      order: 'asc',
-      orderBy: 'calories',
+      order: 'desc',
+      orderBy: 'id',
       selected: [],
-      page: 0,
-      rowsPerPage: 5,
     };
   }
 
@@ -106,28 +111,20 @@ class MatTable extends Component {
     this.setState({ selected: newSelected }, onSelect(newSelected, field));
   };
 
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
-
-  handleChangeRowsPerPage = (event) => {
-    this.setState({ rowsPerPage: event.target.value });
-  };
-
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
     // State
     const {
-      order, orderBy, selected, rowsPerPage, page,
+      order, orderBy, selected,
     } = this.state;
 
     // Props
     const {
-      tableHeads, actions, instances,
+      tableHeads, actions, instances, instanceCount, onChangePage, page, rowsPerPage,
     } = this.props;
 
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, instances.length - (page * rowsPerPage));
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, instanceCount - (page * rowsPerPage));
 
     return (
       <>
@@ -145,7 +142,6 @@ class MatTable extends Component {
             <TableBody>
               {instances
                 .sort(getSorting(order, orderBy))
-                .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                 .map((instance) => {
                   const isSelected = this.isSelected(instance.id);
 
@@ -218,12 +214,12 @@ class MatTable extends Component {
         <TablePagination
           component="div"
           className="material-table__pagination"
-          count={instances.length}
+          count={instanceCount}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{ 'aria-label': 'Previous Page' }}
           nextIconButtonProps={{ 'aria-label': 'Next Page' }}
-          onChangePage={this.handleChangePage}
+          onChangePage={onChangePage}
           onChangeRowsPerPage={this.handleChangeRowsPerPage}
           rowsPerPageOptions={[5, 10, 15]}
         />

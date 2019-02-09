@@ -44,18 +44,27 @@ class InstanceFinder extends Component {
     super(props);
     this.state = {
       selected: [],
+      page: 0,
+      rowsPerPage: 10,
+      timeout: null,
     };
   }
 
   componentDidMount() {
+    const { rowsPerPage } = this.state;
     const { dispatch } = this.props;
+    const page = 0;
     dispatch(buildFinder()).then((action) => {
       if (this.isUnmounted) return;
       // If the buildFinder action is successful
       // then load instances for the first item
       // type in the items list.
       if (action.type === BUILD_FINDER.SUCCESS) {
-        dispatch(getInstanceList(action.finder.items[0].modelLabel));
+        dispatch(getInstanceList({
+          modelLabel: action.finder.items[0].modelLabel,
+          page,
+          pageSize: rowsPerPage,
+        }));
       }
     });
   }
@@ -68,6 +77,7 @@ class InstanceFinder extends Component {
     ...props,
     actions: [
       {
+        key: id => id,
         name: 'edit',
         id: ({ name, id }) => `${name}-${id}`,
         'data-id': id => id,
@@ -79,6 +89,7 @@ class InstanceFinder extends Component {
         },
       },
       {
+        key: id => id,
         name: 'detail',
         id: ({ name, id }) => `${name}-${id}`,
         icon: 'fal fa-fw fa-eye mr-3 text-info',
@@ -92,16 +103,73 @@ class InstanceFinder extends Component {
   });
 
   changeInstanceType = (selected) => {
+    const { rowsPerPage } = this.state;
     const { dispatch } = this.props;
-    dispatch(getInstanceList(selected.value)).then((action) => {
-      if (action.type === GET_INSTANCE_LIST.SUCCESS) {
-        this.setState({ selected: [] });
-      }
-    });
+    const page = 0;
+
+    dispatch(getInstanceList({
+      modelLabel: selected.value,
+      page,
+      pageSize: rowsPerPage,
+    }))
+      .then((action) => {
+        if (action.type === GET_INSTANCE_LIST.SUCCESS) {
+          this.setState({ selected: [], page: 0 });
+        }
+      });
   };
 
   handleOnSelect = (newSelected) => {
     this.setState({ selected: newSelected });
+  };
+
+  handleOnChangePage = (event, page) => {
+    const { rowsPerPage } = this.state;
+    const { dispatch, finderForm } = this.props;
+
+    dispatch(getInstanceList({
+      modelLabel: finderForm.values.type.value,
+      page,
+      pageSize: rowsPerPage,
+    }))
+      .then((action) => {
+        if (action.type === GET_INSTANCE_LIST.SUCCESS) {
+          this.setState({ page, selected: [] });
+        }
+      });
+  };
+
+  handleSearchInstances = (e) => {
+    e.persist();
+    const { timeout } = this.state;
+
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
+    this.setState({
+      timeout: setTimeout(() => {
+        this.searchInstances(e.target.value);
+      }, 600),
+    });
+  };
+
+  searchInstances = (searchTerm) => {
+    const { rowsPerPage } = this.state;
+    const { dispatch, finderForm } = this.props;
+    const page = 0;
+
+    dispatch(getInstanceList({
+      modelLabel: finderForm.values.type.value,
+      page,
+      pageSize: rowsPerPage,
+      searchTerm,
+    }))
+      .then((action) => {
+        if (action.type === GET_INSTANCE_LIST.SUCCESS) {
+          this.setState({ page, selected: [] });
+        }
+      });
   };
 
   openEditor = (id) => {
@@ -125,7 +193,7 @@ class InstanceFinder extends Component {
   render() {
     // State
     const {
-      selected,
+      selected, page, rowsPerPage,
     } = this.state;
 
     // Props
@@ -147,7 +215,7 @@ class InstanceFinder extends Component {
                   <Field
                     name="search"
                     type="text"
-                    // onKeyUp={this.searchInstances}
+                    onKeyUp={this.handleSearchInstances}
                     component="input"
                     placeholder="Search for content..."
                     className="workshop__itemfinder__input"
@@ -194,8 +262,12 @@ class InstanceFinder extends Component {
                 <MatTable
                   {...this.getTableProps(workshop.openList)}
                   instances={workshop.openList.instances}
+                  instanceCount={workshop.openList.count}
                   tableHeads={workshop.openList.tableHeads}
                   onSelect={this.handleOnSelect}
+                  onChangePage={this.handleOnChangePage}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
                 />
               )}
             </div>

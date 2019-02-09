@@ -92,7 +92,6 @@ class LoginForm extends PureComponent {
                 <KeyVariantIcon />
               </div>
               <Field
-                style={{ height: 40 }}
                 name="password"
                 component={this.renderField}
                 type="password"

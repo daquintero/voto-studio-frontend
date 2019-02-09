@@ -531,7 +531,7 @@ export default (state = initialState, action) => {
     case GET_INSTANCE_LIST.SUCCESS:
       return {
         ...state,
-        openList: action.list,
+        openList: { ...action.response.list, count: action.response.count },
         actions: {
           ...state.actions,
           ...actionResult('GET_INSTANCE_LIST.SUCCESS'),

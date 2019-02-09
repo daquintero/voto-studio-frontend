@@ -53,8 +53,14 @@ const relatedFields = ({
 
 const buildFinder = () => axios.get(urls.get.buildFinder, getHeaders());
 
-const instanceList = relatedModelLabel =>
-  axios.get(buildUrl(urls.get.instanceList, { rml: relatedModelLabel }), getHeaders());
+const instanceList = ({
+  modelLabel, page, pageSize, searchTerm,
+}) => axios.get(buildUrl(urls.get.instanceList, {
+  ml: modelLabel,
+  page,
+  size: pageSize,
+  search: searchTerm,
+}), getHeaders());
 
 const relatedInstanceList = (relatedModelLabel, modelLabel, fieldName, id) =>
   axios.get(buildUrl(urls.get.instanceList, {

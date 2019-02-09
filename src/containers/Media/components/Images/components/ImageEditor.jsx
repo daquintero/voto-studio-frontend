@@ -13,9 +13,6 @@ import {
 import { updateImage } from '../../../../../redux/actions/mediaActions';
 import { TOGGLE_IMAGE_EDITOR, UPDATE_IMAGE } from '../../../../../redux/actionCreators/mediaActionCreators';
 
-// Functions
-import imageUrl from '../../../../../shared/utils/imageUrl';
-
 
 class ImageEditor extends Component {
   static propTypes = {
@@ -73,7 +70,7 @@ class ImageEditor extends Component {
         <div className="modal__body">
           <div className="image-editor__wrapper">
             {image && (
-              <img className="image-editor__preview" src={imageUrl(image.url)} alt={image.title} />
+              <img className="image-editor__preview" src={image.url} alt={image.title} />
             )}
             <form className="image-editor__form mt-3">
               <Field

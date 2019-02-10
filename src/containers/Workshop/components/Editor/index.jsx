@@ -43,7 +43,7 @@ import { SELECT_IMAGE } from '../../../../redux/actionCreators/mediaActionCreato
 import Collapse from '../../../../shared/components/Collapse';
 import EditorField from '../../../../shared/components/form/TextEditor/EditorField';
 import Loader from '../../../../shared/components/Loader/Loader';
-import Error from '../../../../shared/components/Error';
+import ErrorPage from '../../../../shared/components/ErrorPage';
 import EditorTableWrapper from './components/EditorTableWrapper';
 import LocationPicker from './components/LocationPicker';
 import MediaCenter from './components/MediaCenter';
@@ -54,6 +54,7 @@ import RelatedContentFinder from './components/RelatedContentFinder/';
 import renderSelectField from '../../../../shared/components/form/Select';
 import renderCheckboxField from '../../../../shared/components/form/CheckBox';
 import renderDatePicker from '../../../../shared/components/form/DatePicker';
+import renderStatisticsEditor from './components/StatisticsEditor';
 import buildUrl from '../../../../shared/utils/buildUrl';
 
 
@@ -215,12 +216,79 @@ class Editor extends Component {
     return (`${field.select ? 'Choose' : 'Enter'} ${field.verboseName}...`);
   };
 
-  renderField = (field) => {
+  renderFieldComponent = (field) => {
     if (field.type === 'select') return renderSelectField;
     if (field.type === 'checkbox') return renderCheckboxField;
     if (field.type === 'date' || field.type === 'datetime-local') return renderDatePicker;
 
     return 'input';
+  };
+
+  renderField = (field) => {
+    // Props
+    const {
+      workshop,
+    } = this.props;
+
+    // Workshop
+    const {
+      locationPicker,
+    } = workshop;
+
+    if (field.name === 'locationId') {
+      return (
+        <div className="form__form-group" key={field.name}>
+          <span className="form__form-group-label text-capitalize">{locationPicker.locationIdName}</span>
+          <div className="form__form-group-field">
+            <Button className="mb-0" onClick={this.handleToggleLocationPicker}>
+              {locationPicker.hasSelectedObject ? 'Change position' : 'Select position'}
+            </Button>
+            <h3>{locationPicker.selectedObject.properties[locationPicker.locationIdName]}</h3>
+          </div>
+        </div>
+      );
+    }
+
+    if (field.type === 'textarea') {
+      return (
+        <div className="form__form-group" key={field.name}>
+          <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+          <div className="form__form-group-field-editor">
+            <EditorField
+              name={field.name}
+              placeholder={this.buildPlaceholder(field)}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    if (field.name === 'locationIdName' || field.name === 'statistics') {
+      return null;
+    }
+
+    return (
+      <div className="form__form-group" key={field.name}>
+        <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+        <div className="form__form-group-field">
+          <Field
+            name={field.name}
+            component={this.renderFieldComponent(field)}
+            field={field}
+            type={field.type}
+            options={field.options}
+            placeholder={this.buildPlaceholder(field)}
+            defaultChecked={field.type === 'checkbox' && field.defaultChecked}
+            readOnly={field.readOnly}
+          />
+        </div>
+        {field.readOnly && (
+          <span className="form__form-group-description">
+              This is a &quot;read-only&quot; field
+          </span>
+        )}
+      </div>
+    );
   };
 
   render() {
@@ -231,68 +299,11 @@ class Editor extends Component {
 
     // Workshop
     const {
-      form, locationPicker,
+      form,
     } = workshop;
     const {
       loading, loaded, error,
     } = workshop.actions.BUILD_FORM;
-
-    const renderField = (field) => {
-      if (field.name === 'locationId') {
-        return (
-          <div className="form__form-group" key={field.name}>
-            <span className="form__form-group-label text-capitalize">{locationPicker.locationIdName}</span>
-            <div className="form__form-group-field">
-              <Button className="mb-0" onClick={this.handleToggleLocationPicker}>
-                {locationPicker.hasSelectedObject ? 'Change position' : 'Select position'}
-              </Button>
-              <h3>{locationPicker.selectedObject.properties[locationPicker.locationIdName]}</h3>
-            </div>
-          </div>
-        );
-      }
-
-      if (field.type === 'textarea') {
-        return (
-          <div className="form__form-group" key={field.name}>
-            <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
-            <div className="form__form-group-field-editor">
-              <EditorField
-                name={field.name}
-                placeholder={this.buildPlaceholder(field)}
-              />
-            </div>
-          </div>
-        );
-      }
-
-      if (field.name === 'locationIdName') {
-        return null;
-      }
-
-      return (
-        <div className="form__form-group" key={field.name}>
-          <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
-          <div className="form__form-group-field">
-            <Field
-              name={field.name}
-              component={this.renderField(field)}
-              field={field}
-              type={field.type}
-              options={field.options}
-              placeholder={this.buildPlaceholder(field)}
-              defaultChecked={field.type === 'checkbox' && field.defaultChecked}
-              readOnly={field.readOnly}
-            />
-          </div>
-          {field.readOnly && (
-            <span className="form__form-group-description">
-              This is a &quot;read-only&quot; field
-            </span>
-          )}
-        </div>
-      );
-    };
 
     return (
       <>
@@ -335,7 +346,13 @@ class Editor extends Component {
 
                           {/* Basic fields form */}
                           <form className="form form--horizontal" onSubmit={this.handleUpdateBasicFields}>
-                            {form.basicFields.map(field => renderField(field))}
+                            {form.basicFields.map(this.renderField)}
+
+                            {/* Statistics field section */}
+                            <Field
+                              name="statistics"
+                              component={renderStatisticsEditor}
+                            />
 
                             {/* Basic fields form buttons */}
                             <ButtonToolbar className="form__button-toolbar">
@@ -457,11 +474,9 @@ class Editor extends Component {
                   </Row>
                 </>
               ) : (
-                <>
-                  {error && (
-                    <Error error={error} />
-                  )}
-                </>
+                error && (
+                  <ErrorPage error={error} />
+                )
               )}
             </>
           )}

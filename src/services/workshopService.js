@@ -81,7 +81,8 @@ const locationPickerDataSet = () => axios.get(urls.get.locationPicketDataSet, ge
 const updateBasicFields = updateData => axios.post(urls.post.updateBasicFields, updateData, getHeaders());
 const updateMediaField = updateData => axios.post(urls.post.updateMediaField, updateData, getHeaders());
 const updateMediaOrder = orderData => axios.post(urls.post.updateMediaOrder, orderData, getHeaders());
-const updateRelatedField = updateData => axios.post(urls.post.updateRelatedField, updateData, getHeaders());
+const updateRelatedField = updateData =>
+  axios.post(urls.post.updateRelatedField, updateData, getHeaders());
 const publish = () => axios.post(urls.post.publish, {}, getHeaders());
 
 // DELETE requests

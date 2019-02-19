@@ -17,7 +17,7 @@ import {
 
 // Components
 import Map from './components/Map';
-import Loader from '../../../../../../shared/components/Loader/Loader';
+import Loader from '../../../../../../shared/components/Loader';
 
 
 class LocationPicker extends Component {

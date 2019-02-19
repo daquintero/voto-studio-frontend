@@ -6,6 +6,8 @@ import {
   ButtonToolbar,
   Button,
 } from 'reactstrap';
+import TableCell from '@material-ui/core/TableCell';
+import { toast } from 'react-toastify';
 
 // Actions
 import { updateRelatedField } from '../../../../../redux/actions/workshopActions';
@@ -82,8 +84,22 @@ class EditorTableWrapper extends Component {
 
     dispatch(updateRelatedField(updateData))
       .then((action) => {
+        const relatedModelName = field.modelName;
         if (action.type === UPDATE_RELATED_FIELD.SUCCESS) {
-          this.setState(prevState => ({ selected: { ...prevState.selected, [field.name]: [] } }));
+          this.setState(prevState => ({
+            selected: {
+              ...prevState.selected,
+              [field.name]: [],
+            },
+          }));
+          toast(`Successfully removed ${relatedModelName} instance(s) with ID(s): ${selected[field.name]}`, {
+            toastId: workshop.form.parentModel.id,
+          });
+        }
+        if (action.type === UPDATE_RELATED_FIELD.ERROR) {
+          toast(`Failed to remove ${relatedModelName} instance(s) with ID(s): ${selected[field.name]}`, {
+            toastId: workshop.form.parentModel.id,
+          });
         }
       });
   };
@@ -97,6 +113,12 @@ class EditorTableWrapper extends Component {
     }));
   };
 
+  renderRelLevelColumn = (instance, field) => (
+    <TableCell className="material-table__cell">
+      {field.relsDict.rels.includes(instance.id) ? 'Rel' : 'Ref'}
+    </TableCell>
+  );
+
   render() {
     // State
     const {
@@ -108,15 +130,23 @@ class EditorTableWrapper extends Component {
       fields, action,
     } = this.props;
 
+    const getTableHeads = field => ([
+      ...field.relatedInstances.tableHeads,
+      {
+        id: 'relLevel', numeric: false, disablePadding: false, label: 'Ref/Rel',
+      },
+    ]);
+
     return fields.map(field => field.relatedInstances.instances.length !== 0 && (
       <Collapse key={field.fieldName} title={this.getCollapseTitle(field)} className="with-shadow">
         <MatTable
           {...this.getTableProps({ field })}
           instances={field.relatedInstances.instances}
           instanceCount={field.relatedInstances.instances.length}
-          tableHeads={field.relatedInstances.tableHeads}
+          tableHeads={getTableHeads(field)}
           selected={selected[field.fieldName]}
           onSelect={this.handleOnSelect}
+          renderRelLevelColumn={instance => this.renderRelLevelColumn(instance, field)}
         />
         <ButtonToolbar>
           <Button

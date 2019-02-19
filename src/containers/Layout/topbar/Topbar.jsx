@@ -6,6 +6,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import TopbarSidebarButton from './TopbarSidebarButton';
 import TopbarProfile from './TopbarProfile';
 
+
 class Topbar extends PureComponent {
   static propTypes = {
     // Redux

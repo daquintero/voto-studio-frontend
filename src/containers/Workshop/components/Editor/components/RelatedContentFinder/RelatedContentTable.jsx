@@ -12,6 +12,7 @@ import {
   Row,
   Col,
 } from 'reactstrap';
+import { toast } from 'react-toastify';
 
 // Actions
 import {
@@ -26,7 +27,7 @@ import {
 
 // Components
 import MatTable from '../../../../../../shared/components/table/MatTable/index';
-import Loader from '../../../../../../shared/components/Loader/Loader';
+import Loader from '../../../../../../shared/components/Loader';
 import renderSelectField from '../../../../../../shared/components/form/Select';
 
 
@@ -197,7 +198,7 @@ class InstanceFinder extends Component {
     this.setState({ selected: newSelected });
   };
 
-  handleAddItem = () => {
+  handleAddItem = (relLevel) => {
     const { selected } = this.state;
     const { workshop, finderForm, dispatch } = this.props;
 
@@ -211,11 +212,23 @@ class InstanceFinder extends Component {
       relatedIds: selected,
       updateType: 'add',
       fieldName,
+      relLevel,
     };
 
     dispatch(updateRelatedField(updateData)).then((action) => {
+      const relLevelVerbose = relLevel === 'rel' ? 'relate' : 'reference';
       if (action.type === UPDATE_RELATED_FIELD.SUCCESS) {
         this.setState({ selected: [] });
+
+        toast(`Successfully ${relLevelVerbose}d instance(s) with ID(s): ${selected}`, {
+          toastId: workshop.form.parentModel.id,
+        });
+      }
+      if (action.type === UPDATE_RELATED_FIELD.ERROR) {
+        toast(`Failed to ${relLevelVerbose} instance(s) with ID(s): ${selected}. \n
+        ${action.error.response.data.message}`, {
+          toastId: workshop.form.parentModel.id,
+        });
       }
       return null;
     });
@@ -299,11 +312,20 @@ class InstanceFinder extends Component {
 
         {/* Item toolbar */}
         <ButtonToolbar>
-          <Button color="primary" size="sm" onClick={this.handleAddItem} disabled={selected.length === 0}>
-            {!workshop.actions.UPDATE_RELATED_FIELD.loading ? (
-              <span><i className="fal fa-plus" /> Add {Boolean(selected.length) && selected.length}</span>
+          <Button color="primary" size="sm" onClick={() => this.handleAddItem('ref')} disabled={selected.length === 0}>
+            {!(workshop.actions.UPDATE_RELATED_FIELD.loading &&
+               workshop.actions.UPDATE_RELATED_FIELD.relLevel === 'ref') ? (
+                 <span><i className="fal fa-plus" /> Reference {Boolean(selected.length) && selected.length}</span>
             ) : (
-              <span><i className="fal fa-spin fa-spinner" /> Adding...</span>
+              <span><i className="fal fa-spin fa-spinner" /> Referencing...</span>
+            )}
+          </Button>
+          <Button color="primary" size="sm" onClick={() => this.handleAddItem('rel')} disabled={selected.length === 0}>
+            {!(workshop.actions.UPDATE_RELATED_FIELD.loading &&
+               workshop.actions.UPDATE_RELATED_FIELD.relLevel === 'rel') ? (
+                 <span><i className="fal fa-plus" /> Relate {Boolean(selected.length) && selected.length}</span>
+            ) : (
+              <span><i className="fal fa-spin fa-spinner" /> Relating...</span>
             )}
           </Button>
           <Button size="sm" onClick={this.handleToggleRelatedContentFinder}>

@@ -1,0 +1,22 @@
+.permissions-modal {
+  &__table {
+    tr {
+      img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      button:hover {
+        cursor: pointer;
+      }
+    }
+    tr:hover {
+      background-color: rgba(240, 240, 240, 0.8);
+    }
+    td {
+      line-height: 32px;
+    }
+  }
+}

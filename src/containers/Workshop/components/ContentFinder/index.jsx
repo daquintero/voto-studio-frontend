@@ -20,7 +20,7 @@ import { BUILD_FINDER, GET_INSTANCE_LIST } from '../../../../redux/actionCreator
 
 // Components
 import MatTable from '../../../../shared/components/table/MatTable/index';
-import Loader from '../../../../shared/components/Loader/Loader';
+import Loader from '../../../../shared/components/Loader';
 import renderSelectField from '../../../../shared/components/form/Select';
 
 // Functions

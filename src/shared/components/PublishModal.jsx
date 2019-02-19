@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar, Modal } from 'reactstrap';
-import Loader from './Loader/Loader';
+import Loader from './Loader';
 
 class ModalComponent extends PureComponent {
   static propTypes = {

@@ -42,6 +42,7 @@ class MatTable extends Component {
     onSelect: PropTypes.func.isRequired,
     onChangePage: PropTypes.func.isRequired,
     onChangeRowsPerPage: PropTypes.func.isRequired,
+    renderRelLevelColumn: PropTypes.func,
   };
 
   static defaultProps = {
@@ -60,6 +61,7 @@ class MatTable extends Component {
     ],
     page: 0,
     rowsPerPage: 10,
+    renderRelLevelColumn: () => {},
   };
 
   constructor(props) {
@@ -120,7 +122,7 @@ class MatTable extends Component {
 
     // Props
     const {
-      tableHeads, actions, instances, instanceCount, onChangePage, page, rowsPerPage, selected,
+      tableHeads, actions, instances, instanceCount, onChangePage, page, rowsPerPage, selected, renderRelLevelColumn,
     } = this.props;
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, instanceCount - (page * rowsPerPage));
@@ -174,6 +176,9 @@ class MatTable extends Component {
                           {squashString(descriptor.value, 20)}
                         </TableCell>
                       ))}
+
+                      {/* Rel. Level column */}
+                      {renderRelLevelColumn(instance)}
 
                       {/* User column */}
                       <TableCell className="material-table__cell">

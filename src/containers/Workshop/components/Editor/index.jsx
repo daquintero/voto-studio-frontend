@@ -29,6 +29,7 @@ import {
   updateBasicFields,
   updateMediaField,
 } from '../../../../redux/actions/workshopActions';
+import { getUserPermissions } from '../../../../redux/actions/userActions';
 import {
   BUILD_FORM,
   TOGGLE_LOCATION_PICKER,
@@ -42,13 +43,14 @@ import { SELECT_IMAGE } from '../../../../redux/actionCreators/mediaActionCreato
 // Components
 import Collapse from '../../../../shared/components/Collapse';
 import EditorField from '../../../../shared/components/form/TextEditor/EditorField';
-import Loader from '../../../../shared/components/Loader/Loader';
+import Loader from '../../../../shared/components/Loader';
 import ErrorPage from '../../../../shared/components/ErrorPage';
 import EditorTableWrapper from './components/EditorTableWrapper';
 import LocationPicker from './components/LocationPicker';
 import MediaCenter from './components/MediaCenter';
 import Gallery from '../../../Media/components/Images/components/Gallery';
 import RelatedContentFinder from './components/RelatedContentFinder/';
+import PermissionsWidget from './components/PermissionsWidget';
 
 // Functions
 import renderSelectField from '../../../../shared/components/form/Select';
@@ -87,7 +89,17 @@ class Editor extends Component {
   componentDidMount() {
     const { dispatch, location } = this.props;
     const queryStringValues = queryString.parse(location.search);
-    dispatch(buildForm(queryStringValues));
+
+    dispatch(buildForm(queryStringValues))
+      .then((action) => {
+        if (this.isUnmounted) return;
+        if (action.type === BUILD_FORM.SUCCESS && !action.form.new) {
+          dispatch(getUserPermissions({
+            ml: action.form.parentModel.modelLabel,
+            id: action.form.parentModel.id,
+          }));
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -140,13 +152,14 @@ class Editor extends Component {
       .then((action) => {
         if (action.type === UPDATE_BASIC_FIELDS.SUCCESS) {
           const {
-            created, modelNameVerbose, appLabel, modelName,
-          } = action.result;
+            created, verboseName, appLabel, modelName,
+          } = action.response;
+          const instanceId = action.response.id;
 
-          this.setState({ id: action.result.id });
+          this.setState({ id: instanceId });
 
-          toast(`${created ? 'Created' : 'Updated'} ${modelNameVerbose} (${action.result.id})`, {
-            toastId: action.result.id,
+          toast(`${created ? 'Created' : 'Updated'} ${verboseName} (${instanceId})`, {
+            toastId: instanceId,
           });
 
           // If we are creating a new instance then redirect
@@ -155,9 +168,22 @@ class Editor extends Component {
             history.push(buildUrl('/workshop/editor/', {
               al: appLabel,
               mn: modelName,
-              id: action.result.id,
+              id: instanceId,
+            }));
+            dispatch(getUserPermissions({
+              ml: workshop.form.parentModel.modelLabel,
+              id: instanceId,
             }));
           }
+        }
+        if (action.type === UPDATE_BASIC_FIELDS.ERROR) {
+          const {
+            modelName,
+          } = workshop.form.parentModel;
+
+          toast(`Error creating ${modelName}`, {
+            toastId: modelName,
+          });
         }
       });
   };
@@ -319,13 +345,19 @@ class Editor extends Component {
               {loaded ? (
                 <>
                   <Row>
-                    <Col xs={12} lg={8}>
+                    <Col md={10} lg={6}>
                       <h3 className="page-title text-capitalize">
                         {form.new ? 'Create' : 'Edit'} {form.parentModel.name}
                       </h3>
                       <h3 className="page-subhead subhead">
                         Edit the basic info of this piece of content and add or remove related pieces of content
                       </h3>
+                    </Col>
+
+                    <Col xs={2} lg={2}>
+                      {!workshop.form.new && (
+                        <PermissionsWidget />
+                      )}
                     </Col>
 
                     <Col xs={4} className="d-none d-xl-block">

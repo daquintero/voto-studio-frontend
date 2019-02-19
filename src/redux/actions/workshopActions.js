@@ -43,11 +43,19 @@ export const getItemDetail = (appLabel, modelName, id) => (dispatch) => {
         type: GET_ITEM_DETAIL.SUCCESS,
         item: response.data.item,
       }),
-    error =>
-      dispatch({
-        type: GET_ITEM_DETAIL.ERROR,
-        error,
-      }),
+    (error) => {
+      if (error.response.status === 403) {
+        dispatch({
+          type: GET_ITEM_DETAIL.DENIED,
+          response: error.response.data,
+        });
+      } else {
+        dispatch({
+          type: GET_ITEM_DETAIL.ERROR,
+          error,
+        });
+      }
+    },
   );
 };
 
@@ -80,7 +88,7 @@ export const buildForm = queryStringValues => (dispatch) => {
     response =>
       dispatch({
         type: BUILD_FORM.SUCCESS,
-        form: response.data.form,
+        form: response.data,
       }),
     error =>
       dispatch({
@@ -98,7 +106,7 @@ export const updateBasicFields = updateData => (dispatch) => {
     response =>
       dispatch({
         type: UPDATE_BASIC_FIELDS.SUCCESS,
-        result: response.data.result,
+        response: response.data,
       }),
     error =>
       dispatch({
@@ -149,13 +157,14 @@ export const updateRelatedField = updateData => (dispatch) => {
   dispatch({
     type: UPDATE_RELATED_FIELD.REQUEST,
     id: updateData.fieldName,
+    relLevel: updateData.relLevel,
   });
   return workshopService.post.updateRelatedField(updateData).then(
     response =>
       dispatch({
         type: UPDATE_RELATED_FIELD.SUCCESS,
-        result: response.data.result,
-        id: response.data.result.fieldName,
+        response: response.data,
+        id: response.data.fieldName,
       }),
     error =>
       dispatch({

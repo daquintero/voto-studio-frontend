@@ -1,0 +1,33 @@
+.permissions-widget {
+  &__wrapper {
+    height: 32px;
+    img {
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      background-color: white;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    }
+    img:hover {
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  &__user {
+  //  width: 32px;
+    margin-right: 16px;
+    text-align: center;
+    p {
+      margin-top: 5px;
+    }
+  }
+
+  &__add {
+    width: 32px;
+    text-align: center;
+    p {
+      margin-top: 5px;
+    }
+  }
+}

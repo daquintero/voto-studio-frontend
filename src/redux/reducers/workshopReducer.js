@@ -233,7 +233,7 @@ export default (state = initialState, action) => {
           new: false,
           parentModel: {
             ...state.form.parentModel,
-            id: action.result.id,
+            id: action.response.id,
           },
         },
         actions: {
@@ -367,16 +367,16 @@ export default (state = initialState, action) => {
         actions: {
           ...state.actions,
           UPDATE_RELATED_FIELD: {
-            ...actionResultUnnamed('UPDATE_RELATED_FIELD.REQUEST'),
+            ...actionResultUnnamed('UPDATE_RELATED_FIELD.REQUEST', { relLevel: action.relLevel }),
             ...actionResult('UPDATE_RELATED_FIELD.REQUEST', { id: action.id }),
           },
         },
       };
     case UPDATE_RELATED_FIELD.SUCCESS: {
-      const { result } = action;
-      const index = state.form.relatedFields.map(f => f.modelLabel).indexOf(result.relatedField.modelLabel);
+      const { response } = action;
+      const index = state.form.relatedFields.map(f => f.modelLabel).indexOf(response.relatedField.modelLabel);
 
-      if (action.result.type === 'add') {
+      if (action.response.type === 'add') {
         return {
           ...state,
           form: {
@@ -389,7 +389,7 @@ export default (state = initialState, action) => {
                   ...state.form.relatedFields[index].relatedInstances,
                   instances: [
                     ...state.form.relatedFields[index].relatedInstances.instances,
-                    ...result.relatedField.instances,
+                    ...response.relatedField.instances,
                   ],
                 },
               },
@@ -398,7 +398,7 @@ export default (state = initialState, action) => {
           },
           openList: {
             ...state.openList,
-            instances: state.openList.instances.filter(f => !result.relatedField.relatedIds.includes(f.id)),
+            instances: state.openList.instances.filter(f => !response.relatedField.relatedIds.includes(f.id)),
           },
           actions: {
             ...state.actions,
@@ -410,7 +410,7 @@ export default (state = initialState, action) => {
         };
       }
 
-      if (action.result.type === 'remove') {
+      if (action.response.type === 'remove') {
         return {
           ...state,
           form: {
@@ -422,7 +422,7 @@ export default (state = initialState, action) => {
                 relatedInstances: {
                   ...state.form.relatedFields[index].relatedInstances,
                   instances: state.form.relatedFields[index].relatedInstances.instances
-                    .filter(f => !result.relatedField.relatedIds.includes(f.id)),
+                    .filter(f => !response.relatedField.relatedIds.includes(f.id)),
                 },
               },
               ...state.form.relatedFields.slice(index + 1),

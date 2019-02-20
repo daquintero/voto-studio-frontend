@@ -57,6 +57,7 @@ import renderSelectField from '../../../../shared/components/form/Select';
 import renderCheckboxField from '../../../../shared/components/form/CheckBox';
 import renderDatePicker from '../../../../shared/components/form/DatePicker';
 import renderStatisticsEditor from './components/StatisticsEditor';
+import renderJSONFieldEditor from './components/JSONFieldEditor';
 import buildUrl from '../../../../shared/utils/buildUrl';
 
 
@@ -291,6 +292,21 @@ class Editor extends Component {
 
     if (field.name === 'locationIdName' || field.name === 'statistics') {
       return null;
+    }
+
+    if (field.type === 'json') {
+      return (
+        <div className="form__form-group" key={field.name}>
+          <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+          <div className="form__form-group-field-json-editor">
+            <Field
+              name={field.name}
+              component={renderJSONFieldEditor}
+              field={workshop.form.defaultValues[field.name]}
+            />
+          </div>
+        </div>
+      );
     }
 
     return (

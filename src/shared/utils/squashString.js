@@ -1,6 +1,6 @@
 import numeral from 'numeral';
 
-export default (val, len, noNumeral) => {
+export default (val, { len = 20, noNumeral = false } = {}) => {
   if (val) {
     if (typeof val === 'string') {
       return `${val.toString().substring(0, len)}${val.toString().length > len ? '...' : ''}`;

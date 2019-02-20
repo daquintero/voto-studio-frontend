@@ -8,17 +8,8 @@ script:
 - npm test
 - npm run build
 deploy:
-  # Master
-
-  - provider: surge
-    domain: studio.votoinformado2019.com
-    project: ./build/
-    on:
-      branch: master
-  # Staging
-  - provider: surge
-    skip_cleanup: true
-    domain: staging.studio.votoinformado2019.com
-    project: ./build/
-      on:
-        branch: staging
+  provider: surge
+  domain: studio.votoinformado2019.com
+  project: ./build/
+  on:
+    branch: master

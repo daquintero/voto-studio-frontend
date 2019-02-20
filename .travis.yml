@@ -9,7 +9,8 @@ script:
 - npm run build
 deploy:
   provider: surge
+  skip_cleanup: true
   domain: studio.votoinformado2019.com
   project: ./build/
-  on:
-    branch: master
+on:
+  branch: master

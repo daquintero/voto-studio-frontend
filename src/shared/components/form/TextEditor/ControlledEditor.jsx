@@ -21,6 +21,7 @@ export default class ControlledEditor extends Component {
 
   constructor(props) {
     super(props);
+    console.log(props.initial);
     const blocksFromHtml = htmlToDraft(props.initial);
     const contentState = ContentState.createFromBlockArray(
       blocksFromHtml.contentBlocks,

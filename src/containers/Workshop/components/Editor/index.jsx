@@ -56,7 +56,6 @@ import PermissionsWidget from './components/PermissionsWidget';
 import renderSelectField from '../../../../shared/components/form/Select';
 import renderCheckboxField from '../../../../shared/components/form/CheckBox';
 import renderDatePicker from '../../../../shared/components/form/DatePicker';
-import renderStatisticsEditor from './components/StatisticsEditor';
 import renderJSONFieldEditor from './components/JSONFieldEditor';
 import buildUrl from '../../../../shared/utils/buildUrl';
 
@@ -290,7 +289,7 @@ class Editor extends Component {
       );
     }
 
-    if (field.name === 'locationIdName' || field.name === 'statistics') {
+    if (field.name === 'locationIdName') {
       return null;
     }
 
@@ -395,12 +394,6 @@ class Editor extends Component {
                           {/* Basic fields form */}
                           <form className="form form--horizontal" onSubmit={this.handleUpdateBasicFields}>
                             {form.basicFields.map(this.renderField)}
-
-                            {/* Statistics field section */}
-                            <Field
-                              name="statistics"
-                              component={renderStatisticsEditor}
-                            />
 
                             {/* Basic fields form buttons */}
                             <ButtonToolbar className="form__button-toolbar">

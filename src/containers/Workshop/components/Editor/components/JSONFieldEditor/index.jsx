@@ -21,6 +21,7 @@ class JSONFieldEditor extends Component {
     value: {
       schema: {
         fields: [],
+        validation: [],
       },
       subInstances: [],
     },
@@ -30,8 +31,13 @@ class JSONFieldEditor extends Component {
     super(props);
     this.state = {
       modalOpen: false,
+      id: -1,
+      index: -1,
     };
   }
+
+  getSubInstance = (field, id) =>
+    field.subInstances.filter(f => parseInt(f.id, 10) === parseInt(id, 10))[0];
 
   handleToggleModal = () => {
     this.setState(prevState => ({
@@ -39,42 +45,73 @@ class JSONFieldEditor extends Component {
     }));
   };
 
-  handleOnSave = (newSubInstanceValues) => {
-    const { value, onChange } = this.props;
+  handleOnSave = (newSubInstance) => {
+    const { id, index } = this.state;
+    const { onChange, value } = this.props;
     const field = value;
-    const { fields } = field.schema;
-    const numReadOnlyFields = fields.reduce((acc, obj) => (obj.readOnly ? acc + 1 : acc), 0);
-    if (newSubInstanceValues.length !== fields.length - numReadOnlyFields) {
-      return;
-    }
-    const id = field.subInstances.length ? field.subInstances.sort((a, b) => b.id - a.id)[0].id + 1 : 1;
-    this.setState((prevState) => {
+    const indexInt = parseInt(index, 10);
+    if (id !== -1) {
+      onChange({
+        ...field,
+        subInstances: [
+          ...field.subInstances.slice(0, indexInt),
+          {
+            id: id.toString(),
+            fields: newSubInstance.fields,
+          },
+          ...field.subInstances.slice(indexInt + 1),
+        ],
+      });
+    } else {
+      const newId = field.subInstances.length ? parseInt(field.subInstances.sort((a, b) =>
+        parseInt(b.id, 10) - parseInt(a.id, 10))[0].id, 10) + 1 : 1;
       onChange({
         ...field,
         subInstances: [
           ...field.subInstances,
           {
+            id: newId.toString(),
             fields: [
-              { name: 'id', value: id },
-              ...newSubInstanceValues,
+              { name: 'id', value: newId.toString() },
+              ...newSubInstance.fields,
             ],
           },
         ],
       });
-      return prevState;
-    });
+    }
     this.handleToggleModal();
+  };
+
+  handleOnAdd = () => {
+    this.setState({ id: -1 }, this.handleToggleModal());
+  };
+
+  handleOnEdit = (e) => {
+    e.preventDefault();
+    const { id, index } = e.target.dataset;
+    this.setState({ id: parseInt(id, 10), index }, this.handleToggleModal());
+  };
+
+  handleOnDelete = (e) => {
+    e.preventDefault();
+    const id = parseInt(e.target.dataset.id, 10);
+    const { onChange, value } = this.props;
+    const field = value;
+    onChange({
+      ...field,
+      subInstances: field.subInstances.filter(f => parseInt(f.id, 10) !== id),
+    });
   };
 
   render() {
     // State
     const {
-      modalOpen,
+      modalOpen, id,
     } = this.state;
 
     // Props
     const {
-      value, onChange,
+      value,
     } = this.props;
 
     const field = value;
@@ -84,40 +121,54 @@ class JSONFieldEditor extends Component {
         <JSONFieldEditorModel
           toggle={this.handleToggleModal}
           isOpen={modalOpen}
-          field={field}
-          onChange={onChange}
+          fields={field.schema.fields}
+          subInstance={this.getSubInstance(field, id)}
           onSave={this.handleOnSave}
+          newInstance={id === -1}
         />
         {field && (
           <Table>
             <thead>
-              {field.schema.fields.map(subField => (
-                <th className="text-capitalize">
-                  {subField.name}
+              <tr>
+                {field.schema.fields.map(subField => (
+                  <th key={subField.name} className="text-capitalize">
+                    {subField.name}
+                  </th>
+                ))}
+                <th>
+                  Actions
                 </th>
-              ))}
-              <th>
-                Actions
-              </th>
+              </tr>
             </thead>
             <tbody>
-              {field.subInstances.map(subInstance => (
-                <tr>
-                  {subInstance.fields.map(subField => (
-                    <td>
-                      {squashString(subField.value, { noNumeral: true })}
+              {field.subInstances.map((subInstance, index) => (
+                <tr key={subInstance.id}>
+                  {field.schema.fields.map(subField => (
+                    <td key={subField.name}>
+                      {subField.type !== 'textarea' ? (squashString(subInstance.fields
+                        .filter(f => f.name === subField.name)[0].value, { noNumeral: true })
+                      ) : (
+                        <p>HTML content</p>
+                      )}
                     </td>
                   ))}
                   <td>
-                    <button style={{ backgroundColor: 'transparent', border: 'none' }} className="fal fa-edit" />
-                  </td>
-                  <td>
-                    <button style={{ backgroundColor: 'transparent', border: 'none' }} className="fal fa-times" />
+                    <button
+                      className="workshop__json-editor__button fa-fw fal fa-edit mr-4"
+                      onClick={this.handleOnEdit}
+                      data-id={subInstance.id}
+                      data-index={index}
+                    />
+                    <button
+                      className="workshop__json-editor__button fa-fw fal fa-times"
+                      onClick={this.handleOnDelete}
+                      data-id={subInstance.id}
+                    />
                   </td>
                 </tr>
               ))}
               <tr>
-                <Button size="sm" onClick={this.handleToggleModal}>Add</Button>
+                <Button size="sm" onClick={this.handleOnAdd}>Add</Button>
               </tr>
             </tbody>
           </Table>

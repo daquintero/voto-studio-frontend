@@ -36,6 +36,15 @@
     flex-wrap: wrap;
     margin-left: 140px;
   }
+
+  &__json-editor__button {
+    background-color: transparent;
+    border: none;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  }
 }
 
 .workshop__content-finder {
@@ -84,4 +93,8 @@
       padding: 10px;
     }
   }
+}
+
+.DraftEditor-root {
+  border: solid 1px #dce1e9;
 }

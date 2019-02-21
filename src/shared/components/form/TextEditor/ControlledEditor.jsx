@@ -1,11 +1,9 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-// import { unemojify } from 'node-emoji';
 
 
 export default class ControlledEditor extends Component {
@@ -19,9 +17,22 @@ export default class ControlledEditor extends Component {
     initial: '<p></p> ',
   };
 
+  static getDerivedStateFromProps(props, state) {
+    if (props.initial !== state.initial) {
+      const blocksFromHtml = htmlToDraft(props.initial);
+      const contentState = ContentState.createFromBlockArray(
+        blocksFromHtml.contentBlocks,
+        blocksFromHtml.entityMap,
+      );
+      return {
+        editorState: EditorState.createWithContent(contentState),
+      };
+    }
+    return null;
+  }
+
   constructor(props) {
     super(props);
-    console.log(props.initial);
     const blocksFromHtml = htmlToDraft(props.initial);
     const contentState = ContentState.createFromBlockArray(
       blocksFromHtml.contentBlocks,
@@ -29,6 +40,7 @@ export default class ControlledEditor extends Component {
     );
     this.state = {
       editorState: EditorState.createWithContent(contentState),
+      initial: props.initial, // eslint-disable-line
     };
     this.props.onChange(draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())));
   }

@@ -39,6 +39,11 @@ class JSONFieldEditor extends Component {
   getSubInstance = (field, id) =>
     field.subInstances.filter(f => parseInt(f.id, 10) === parseInt(id, 10))[0];
 
+  sortSubInstances = (subInstances, { dir = 'asc' } = {}) => {
+    const coef = dir === 'asc' ? 1 : -1;
+    return subInstances.sort((a, b) => coef * (parseInt(b.id, 10) - parseInt(a.id, 10)));
+  };
+
   handleToggleModal = () => {
     this.setState(prevState => ({
       modalOpen: !prevState.modalOpen,
@@ -50,6 +55,7 @@ class JSONFieldEditor extends Component {
     const { onChange, value } = this.props;
     const field = value;
     const indexInt = parseInt(index, 10);
+    const numReadOnlyFields = field.schema.fields.reduce((acc, obj) => (obj.readOnly ? acc + 1 : acc), 0);
     if (id !== -1) {
       onChange({
         ...field,
@@ -63,12 +69,12 @@ class JSONFieldEditor extends Component {
         ],
       });
     } else {
-      const newId = field.subInstances.length ? parseInt(field.subInstances.sort((a, b) =>
-        parseInt(b.id, 10) - parseInt(a.id, 10))[0].id, 10) + 1 : 1;
+      if (newSubInstance.fields.length !== field.schema.fields.length - numReadOnlyFields) return;
+      const newId = field.subInstances.length ? parseInt(this.sortSubInstances(field.subInstances)[0].id, 10) + 1 : 1;
       onChange({
         ...field,
         subInstances: [
-          ...field.subInstances,
+          ...this.sortSubInstances(field.subInstances, { dir: 'desc' }),
           {
             id: newId.toString(),
             fields: [

@@ -362,7 +362,7 @@ class Editor extends Component {
                   <Row>
                     <Col md={10} lg={6}>
                       <h3 className="page-title text-capitalize">
-                        {form.new ? 'Create' : 'Edit'} {form.parentModel.name}
+                        {form.new ? 'Create' : 'Edit'} {form.parentModel.modelName}
                       </h3>
                       <h3 className="page-subhead subhead">
                         Edit the basic info of this piece of content and add or remove related pieces of content
@@ -440,7 +440,7 @@ class Editor extends Component {
                                 <Gallery
                                   images={form.mediaFields.images}
                                   imageDims={{
-                                   xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
+                                    xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
                                   }}
                                   controls
                                   draggable

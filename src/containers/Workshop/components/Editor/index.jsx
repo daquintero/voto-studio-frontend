@@ -25,7 +25,7 @@ import iPhone from './img/iPhone.svg';
 
 // Actions
 import {
-  buildForm,
+  buildForm, publishWorkshopContent,
   updateBasicFields,
   updateMediaField,
 } from '../../../../redux/actions/workshopActions';
@@ -36,7 +36,7 @@ import {
   TOGGLE_RELATED_CONTENT_FINDER,
   UPDATE_BASIC_FIELDS,
   TOGGLE_MEDIA_CENTER,
-  UPDATE_MEDIA_FIELD,
+  UPDATE_MEDIA_FIELD, SELECT_POSITION, PUBLISH_WORKSHOP_CONTENT,
 } from '../../../../redux/actionCreators/workshopActionCreators';
 import { SELECT_IMAGE } from '../../../../redux/actionCreators/mediaActionCreators';
 
@@ -72,6 +72,7 @@ class Editor extends Component {
 
     // Form
     workshopForm: PropTypes.instanceOf(Object),
+    onChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -188,6 +189,19 @@ class Editor extends Component {
       });
   };
 
+  handleLocationOnChange = (e) => {
+    const { dispatch, workshop } = this.props;
+    const { locationIdName } = workshop.locationPicker;
+    const selectedObject = workshop.locationPicker.dataSet.geojson.features
+      .filter(f => f.properties[locationIdName] === e.target.value)[0];
+    if (selectedObject !== undefined) {
+      dispatch({
+        type: SELECT_POSITION,
+        selectedObject,
+      });
+    }
+  };
+
   handleToggleMediaCenter = () => {
     this.props.dispatch({
       type: TOGGLE_MEDIA_CENTER,
@@ -236,6 +250,27 @@ class Editor extends Component {
     });
   };
 
+  handlePublishInstances = () => {
+    const { dispatch, workshop } = this.props;
+    const { modelLabel, id, verboseName } = workshop.form.parentModel;
+    dispatch(publishWorkshopContent({
+      modelLabel,
+      instanceIds: [id],
+    }))
+      .then((action) => {
+        if (action.type === PUBLISH_WORKSHOP_CONTENT.SUCCESS) {
+          toast(`Published ${verboseName} instance (${id})`, {
+            toastId: id,
+          });
+        }
+        if (action.type === PUBLISH_WORKSHOP_CONTENT.ERROR) {
+          toast(`Error publishing ${verboseName} instance (${id})`, {
+            toastId: id,
+          });
+        }
+      });
+  };
+
   buildPlaceholder = (field) => {
     if (field.readOnly) return '';
 
@@ -266,10 +301,13 @@ class Editor extends Component {
         <div className="form__form-group" key={field.name}>
           <span className="form__form-group-label text-capitalize">{locationPicker.locationIdName}</span>
           <div className="form__form-group-field">
-            <Button className="mb-0" onClick={this.handleToggleLocationPicker}>
+            <input
+              value={locationPicker.selectedObject.properties[locationPicker.locationIdName]}
+              onChange={this.handleLocationOnChange}
+            />
+            <Button size="sm" className="mb-0 ml-2 pr-5" onClick={this.handleToggleLocationPicker}>
               {locationPicker.hasSelectedObject ? 'Change position' : 'Select position'}
             </Button>
-            <h3>{locationPicker.selectedObject.properties[locationPicker.locationIdName]}</h3>
           </div>
         </div>
       );
@@ -335,7 +373,7 @@ class Editor extends Component {
   render() {
     // Props
     const {
-      workshop, dispatch,
+      workshop, dispatch, onChange,
     } = this.props;
 
     // Workshop
@@ -349,7 +387,7 @@ class Editor extends Component {
     return (
       <>
         <ToastContainer pauseOnFocusLoss={false} />
-        <LocationPicker />
+        <LocationPicker onChange={onChange} />
         <MediaCenter toggle={this.handleToggleMediaCenter} onAdd={this.handleMediaOnAdd} />
         <RelatedContentFinder />
         <Container className="mt-4">
@@ -360,7 +398,7 @@ class Editor extends Component {
               {loaded ? (
                 <>
                   <Row>
-                    <Col md={10} lg={6}>
+                    <Col lg={12} xl={4}>
                       <h3 className="page-title text-capitalize">
                         {form.new ? 'Create' : 'Edit'} {form.parentModel.modelName}
                       </h3>
@@ -369,10 +407,20 @@ class Editor extends Component {
                       </h3>
                     </Col>
 
-                    <Col xs={2} lg={2}>
+                    <Col xs lg={2}>
                       {!workshop.form.new && (
                         <PermissionsWidget />
                       )}
+                    </Col>
+
+                    <Col xs lg={2}>
+                      <Button color="primary" onClick={this.handlePublishInstances}>
+                        {!workshop.actions.PUBLISH_WORKSHOP_CONTENT.loading ? (
+                          <span>Publish</span>
+                        ) : (
+                          <span><i className="fal fa-spin fa-spinner" /> Publishing...</span>
+                        )}
+                      </Button>
                     </Col>
 
                     <Col xs={4} className="d-none d-xl-block">

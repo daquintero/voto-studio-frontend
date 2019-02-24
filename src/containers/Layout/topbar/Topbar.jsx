@@ -27,29 +27,17 @@ class Topbar extends PureComponent {
     history.push(`/${path.slice(0, index + 1).join('/')}`);
   };
 
-  render() {
-    // This
-    const {
-      handleOnClick,
-    } = this;
-
-    // Props
-    const {
-      changeMobileSidebarVisibility,
-      changeSidebarVisibility,
-      auth,
-      location,
-    } = this.props;
-
+  renderBreadcrumb = () => {
+    const { location } = this.props;
     const path = location.pathname.split('/').filter(t => t);
 
-    const renderBreadcrumb = () => (
+    return (
       <>
         {path.map((param, index) => (
           <div key={param} className="ml-2">
             <button
               className="text-capitalize topbar__breadcrumb__link"
-              onClick={handleOnClick}
+              onClick={this.handleOnClick}
               data-obj={JSON.stringify({ path, index })}
             >
               {param}
@@ -59,6 +47,15 @@ class Topbar extends PureComponent {
         ))}
       </>
     );
+  };
+
+  render() {
+    // Props
+    const {
+      changeMobileSidebarVisibility,
+      changeSidebarVisibility,
+      auth,
+    } = this.props;
 
     return (
       <div className="topbar">
@@ -71,7 +68,7 @@ class Topbar extends PureComponent {
             <Link className="topbar__logo" to="/" />
           </div>
           <div className="topbar__nav">
-            {renderBreadcrumb()}
+            {this.renderBreadcrumb()}
           </div>
           <div className="topbar__right">
             {auth.user && (<TopbarProfile />)}

@@ -54,7 +54,7 @@ class PermissionsWidget extends Component {
     return (
       <>
         <div className="permissions-widget__wrapper">
-          <div className="d-flex">
+          <div className="d-flex justify-content-lg-end">
             {auth.permittedUsers.map(user => (
               <div className="permissions-widget__user">
                 <img src={user.profilePictureUrl} alt="" />

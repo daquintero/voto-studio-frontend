@@ -44,7 +44,8 @@ class LocationPicker extends Component {
   };
 
   handleOnClick = (e) => {
-    this.props.dispatch({
+    const { dispatch } = this.props;
+    dispatch({
       type: SELECT_POSITION,
       selectedObject: e.object,
     });

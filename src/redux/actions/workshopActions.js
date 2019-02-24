@@ -7,7 +7,6 @@ import {
   UPDATE_MEDIA_FIELD,
   UPDATE_MEDIA_ORDER,
   UPDATE_RELATED_FIELD,
-  SEARCH_RELATED_FIELDS,
   PUBLISH_WORKSHOP_CONTENT,
   BUILD_FINDER,
   GET_INSTANCE_LIST,
@@ -174,29 +173,11 @@ export const updateRelatedField = updateData => (dispatch) => {
   );
 };
 
-export const searchRelatedFields = searchParameters => (dispatch) => {
-  dispatch({
-    type: SEARCH_RELATED_FIELDS.REQUEST,
-  });
-  return workshopService.search.relatedFields(searchParameters).then(
-    response =>
-      dispatch({
-        type: SEARCH_RELATED_FIELDS.SUCCESS,
-        results: response.data.results,
-      }),
-    error =>
-      dispatch({
-        type: SEARCH_RELATED_FIELDS.ERROR,
-        error,
-      }),
-  );
-};
-
-export const publishWorkshopContent = () => (dispatch) => {
+export const publishWorkshopContent = publishData => (dispatch) => {
   dispatch({
     type: PUBLISH_WORKSHOP_CONTENT.REQUEST,
   });
-  return workshopService.post.publish().then(
+  return workshopService.post.publishInstances(publishData).then(
     response =>
       dispatch({
         type: PUBLISH_WORKSHOP_CONTENT.SUCCESS,

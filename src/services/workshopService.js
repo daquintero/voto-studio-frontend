@@ -22,7 +22,7 @@ const urls = {
     updateMediaField: `${workshopApiUrl}/update_media_field/`,
     updateMediaOrder: `${workshopApiUrl}/update_media_order/`,
     updateRelatedField: `${workshopApiUrl}/update_related_field/`,
-    publish: `${workshopApiUrl}/publish/`,
+    publish: `${workshopApiUrl}/publish_instances/`,
   },
   delete: {
     item: `${workshopApiUrl}/delete_item/`,
@@ -83,7 +83,7 @@ const updateMediaField = updateData => axios.post(urls.post.updateMediaField, up
 const updateMediaOrder = orderData => axios.post(urls.post.updateMediaOrder, orderData, getHeaders());
 const updateRelatedField = updateData =>
   axios.post(urls.post.updateRelatedField, updateData, getHeaders());
-const publish = () => axios.post(urls.post.publish, {}, getHeaders());
+const publishInstances = publishData => axios.post(urls.post.publish, publishData, getHeaders());
 
 // DELETE requests
 const item = (appLabel, modelName, id) =>
@@ -109,7 +109,7 @@ const workshopService = {
     updateMediaField,
     updateMediaOrder,
     updateRelatedField,
-    publish,
+    publishInstances,
   },
   delete: {
     item,

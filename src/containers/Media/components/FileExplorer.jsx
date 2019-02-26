@@ -115,6 +115,7 @@ class FileExplorer extends Component {
 
     dispatch(deleteFiles({
       ids: selected,
+      modelLabel: media.files.activeTab,
     }))
       .then((action) => {
         if (action.type === DELETE_FILES.SUCCESS) {

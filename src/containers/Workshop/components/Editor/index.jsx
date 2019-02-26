@@ -221,6 +221,7 @@ class Editor extends Component {
 
     dispatch(updateMediaField({
       modelLabel: workshop.form.parentModel.modelLabel,
+      mediaModelLabel: media.files.activeTab,
       id: workshop.form.parentModel.id,
       mediaType: modelMediaTypeMap[media.files.activeTab],
       mediaIds: selected,
@@ -246,8 +247,8 @@ class Editor extends Component {
     dispatch(updateMediaField({
       modelLabel: workshop.form.parentModel.modelLabel,
       id: workshop.form.parentModel.id,
-      mediaType: obj.type,
-      mediaIds: [obj.id],
+      mediaIds: [obj.fileId],
+      mediaModelLabel: obj.modelLabel,
       updateType: 'remove',
     }));
   };
@@ -499,6 +500,7 @@ class Editor extends Component {
                                     xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
                                   }}
                                   controls
+                                  standalone
                                   draggable
                                   onRemove={this.handleMediaOnRemove}
                                   onClick={() => {}}
@@ -508,17 +510,31 @@ class Editor extends Component {
                                 title="Videos"
                                 className="with-shadow"
                               >
-                                <div>
-                                  Not yet implemented
-                                </div>
+                                <FileGallery
+                                  files={form.mediaFields.videos}
+                                  fileDims={{
+                                    xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
+                                  }}
+                                  controls
+                                  standalone
+                                  onRemove={this.handleMediaOnRemove}
+                                  onClick={() => {}}
+                                />
                               </Collapse>
                               <Collapse
                                 title="Resources"
                                 className="with-shadow"
                               >
-                                <div>
-                                  Not yet implemented
-                                </div>
+                                <FileGallery
+                                  files={form.mediaFields.resources}
+                                  fileDims={{
+                                    xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
+                                  }}
+                                  controls
+                                  standalone
+                                  onRemove={this.handleMediaOnRemove}
+                                  onClick={() => {}}
+                                />
                               </Collapse>
                             </CardBody>
                           </Card>

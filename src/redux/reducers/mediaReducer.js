@@ -80,7 +80,10 @@ export default (state = initialState, action) => {
     case SELECT_TAB:
       return {
         ...state,
-        activeTab: action.activeTab,
+        files: {
+          ...state.files,
+          activeTab: action.activeTab,
+        },
       };
       // -----------------------------------------------
 

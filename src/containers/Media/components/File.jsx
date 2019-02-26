@@ -34,8 +34,8 @@ class File extends Component {
 
   onMouseLeave = () => this.setState({ controlsVisible: false });
 
-  renderFileIcon = (file, modelLabel) => {
-    switch (modelLabel) {
+  renderFileIcon = (file) => {
+    switch (file.modelLabel) {
       case 'media.Image':
         return (
           <>
@@ -53,7 +53,12 @@ class File extends Component {
         return null;
       case 'media.Resource':
         return (
-          <i className="fal fa-3x fa-file" />
+          <div className="text-center">
+            <i className="fal fa-7x fa-file" />
+            <div className="gallery__file__info">
+              <p className="gallery__file__title">{file.title}</p>
+            </div>
+          </div>
         );
       default:
         return null;
@@ -99,7 +104,7 @@ class File extends Component {
                 <p><i className="fal fa-2x fa-check-square" /></p>
               </div>
             )}
-            {(controls && index === 0) && (
+            {(draggable && controls && index === 0) && (
               <div className="gallery__file__primary">
                 <p><i className="fal fa-check-square" /> Primary</p>
               </div>
@@ -112,7 +117,11 @@ class File extends Component {
                     className="fal fa-2x fa-times-circle remove"
                     role="presentation"
                     onClick={onRemove}
-                    data-obj={JSON.stringify({ id: file.id, type: file.type })}
+                    data-obj={JSON.stringify({
+                      id: file.id,
+                      modelLabel: file.modelLabel,
+                      fileId: file.id,
+                    })}
                   />
                 </div>
                 <UncontrolledTooltip

@@ -24,6 +24,7 @@ class FileGallery extends PureComponent {
     files: PropTypes.instanceOf(Array),
     fileDims: PropTypes.instanceOf(Object),
     controls: PropTypes.bool,
+    standalone: PropTypes.bool,
     draggable: PropTypes.bool,
     modelLabel: PropTypes.string.isRequired,
 
@@ -44,6 +45,7 @@ class FileGallery extends PureComponent {
       xs: 12, sm: 6, md: 4, lg: 3, xl: 2,
     },
     controls: false,
+    standalone: false,
     draggable: false,
     onRemove: () => {},
   };
@@ -63,10 +65,10 @@ class FileGallery extends PureComponent {
   render() {
     // Props
     const {
-      onClick, selected, media, files, fileDims, controls, draggable, onRemove, modelLabel,
+      onClick, selected, media, files, fileDims, controls, draggable, onRemove, modelLabel, standalone,
     } = this.props;
 
-    const instances = draggable ? files : media.files.instances;
+    const instances = standalone ? files : media.files.instances;
 
     return instances || media.actions.GET_FILE_LIST.loaded ? (
       <DragDropContext onDragEnd={this.onDragEnd}>

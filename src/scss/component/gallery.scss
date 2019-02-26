@@ -1,5 +1,5 @@
 .gallery {
-  &__img {
+  &__file {
     max-height: 160px;
     object-fit: cover;
     transition: all 0.1s;
@@ -8,7 +8,7 @@
     }
   }
 
-  &__img__wrapper {
+  &__file__wrapper {
     position: relative;
     height: 200px;
     overflow: hidden;
@@ -18,7 +18,7 @@
     }
   }
 
-  &__img__selected {
+  &__file__selected {
     position: absolute;
     z-index: 1;
     top: 0;
@@ -28,7 +28,7 @@
     transition: all 0.5s;
   }
 
-  &__img__primary {
+  &__file__primary {
     color: green;
     position: absolute;
     z-index: 1;
@@ -43,7 +43,7 @@
     }
   }
 
-  &__img__info {
+  &__file__info {
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -52,7 +52,7 @@
     padding: 5px;
   }
 
-  &__img__title {
+  &__file__title {
 
   }
 

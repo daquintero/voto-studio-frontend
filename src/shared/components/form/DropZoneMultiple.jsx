@@ -14,6 +14,7 @@ class DropZoneMultipleField extends PureComponent {
     onChange: PropTypes.func.isRequired,
     onSubmit: PropTypes.func,
     name: PropTypes.string.isRequired,
+    modelLabel: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.shape({
@@ -43,13 +44,13 @@ class DropZoneMultipleField extends PureComponent {
 
   render() {
     const files = this.props.value;
-    const { name } = this.props;
+    const { name, modelLabel } = this.props;
 
     return (
       <div className="dropzone dropzone--multiple">
         <Dropzone
           className="dropzone__input"
-          accept="image/jpeg, image/png"
+          accept={modelLabel === 'media.Image' ? 'image/jpeg, image/png' : null}
           name={name}
           onDrop={this.onDrop}
         >
@@ -81,6 +82,7 @@ class DropZoneMultipleField extends PureComponent {
 
 const renderDropZoneMultipleField = props => (
   <DropZoneMultipleField
+    {...props}
     {...props.input}
   />
 );

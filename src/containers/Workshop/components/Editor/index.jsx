@@ -38,7 +38,7 @@ import {
   TOGGLE_MEDIA_CENTER,
   UPDATE_MEDIA_FIELD, SELECT_POSITION, PUBLISH_WORKSHOP_CONTENT,
 } from '../../../../redux/actionCreators/workshopActionCreators';
-import { SELECT_IMAGE } from '../../../../redux/actionCreators/mediaActionCreators';
+import { SELECT_FILE } from '../../../../redux/actionCreators/mediaActionCreators';
 
 // Components
 import Collapse from '../../../../shared/components/Collapse';
@@ -48,7 +48,7 @@ import ErrorPage from '../../../../shared/components/ErrorPage';
 import EditorTableWrapper from './components/EditorTableWrapper';
 import LocationPicker from './components/LocationPicker';
 import MediaCenter from './components/MediaCenter';
-import Gallery from '../../../Media/components/Images/components/Gallery';
+import FileGallery from '../../../Media/components/FileGallery';
 import RelatedContentFinder from './components/RelatedContentFinder/';
 import PermissionsWidget from './components/PermissionsWidget';
 
@@ -60,11 +60,19 @@ import renderJSONFieldEditor from './components/JSONFieldEditor';
 import buildUrl from '../../../../shared/utils/buildUrl';
 
 
+const modelMediaTypeMap = {
+  'media.Image': 'images',
+  'media.Video': 'videos',
+  'media.Resource': 'resources',
+};
+
+
 class Editor extends Component {
   static propTypes = {
     // Redux
-    workshop: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
+    workshop: PropTypes.instanceOf(Object).isRequired,
+    media: PropTypes.instanceOf(Object).isRequired,
 
     // Router
     location: ReactRouterPropTypes.location.isRequired,
@@ -208,13 +216,13 @@ class Editor extends Component {
     });
   };
 
-  handleMediaOnAdd = (selected, mediaType) => {
-    const { dispatch, workshop } = this.props;
+  handleMediaOnAdd = (selected) => {
+    const { dispatch, workshop, media } = this.props;
 
     dispatch(updateMediaField({
       modelLabel: workshop.form.parentModel.modelLabel,
       id: workshop.form.parentModel.id,
-      mediaType,
+      mediaType: modelMediaTypeMap[media.files.activeTab],
       mediaIds: selected,
       updateType: 'add',
     }))
@@ -224,7 +232,7 @@ class Editor extends Component {
             type: TOGGLE_MEDIA_CENTER,
           });
           dispatch({
-            type: SELECT_IMAGE,
+            type: SELECT_FILE,
             selected: [],
           });
         }
@@ -485,9 +493,9 @@ class Editor extends Component {
                                 title="Images"
                                 className="with-shadow"
                               >
-                                <Gallery
-                                  images={form.mediaFields.images}
-                                  imageDims={{
+                                <FileGallery
+                                  files={form.mediaFields.images}
+                                  fileDims={{
                                     xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
                                   }}
                                   controls
@@ -581,6 +589,7 @@ const EditorWithForm = reduxForm({
 
 export default withRouter(connect(state => ({
   workshop: state.studio.workshop,
+  media: state.studio.media,
   workshopForm: state.form.workshopForm,
   initialValues: state.studio.workshop.form.defaultValues,
 }))(EditorWithForm));

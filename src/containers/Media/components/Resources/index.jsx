@@ -1,4 +1,3 @@
-/* eslint-disable */
 // Absolute Imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -11,18 +10,15 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { deleteFiles, getFileList } from '../../../../redux/actions/mediaActions';
+import { deleteImages, getImageList } from '../../../../redux/actions/mediaActions';
 import {
-  GET_FILE_LIST,
-  TOGGLE_FILE_EDITOR,
-  TOGGLE_FILE_UPLOADER,
-  DELETE_FILES,
-  SELECT_FILE,
+  GET_IMAGE_LIST,
+  TOGGLE_IMAGE_EDITOR,
+  TOGGLE_IMAGE_UPLOADER,
+  DELETE_IMAGES, SELECT_IMAGE,
 } from '../../../../redux/actionCreators/mediaActionCreators';
 
 // Components
-import Gallery from './components/Gallery';
-import ImageEditor from './components/ImageEditor';
 import ImageUploader from './components/ImageUploader';
 
 
@@ -48,13 +44,9 @@ class Images extends Component {
   componentDidMount() {
     const { dispatch, location, workshop } = this.props;
     const excludeIds = location.pathname.includes('workshop') ? workshop.form.mediaFields.images.map(o => o.id) : [];
-    dispatch(getFileList({
-      ml: 'images.Image',
-      page: 0,
-      exclude: excludeIds,
-    }))
+    dispatch(getImageList(0, excludeIds))
       .then((action) => {
-        if (action.type === GET_FILE_LIST.SUCCESS) {
+        if (action.type === GET_IMAGE_LIST.SUCCESS) {
           this.setState({ pageSize: action.response.pageSize });
         }
       });
@@ -81,22 +73,22 @@ class Images extends Component {
     }
 
     dispatch({
-      type: SELECT_FILE,
+      type: SELECT_IMAGE,
       selected: newSelected,
     });
   };
 
-  handleToggleFileEditor = () => {
+  handleToggleImageEditor = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: TOGGLE_FILE_EDITOR,
+      type: TOGGLE_IMAGE_EDITOR,
     });
   };
 
-  handleToggleFileUploader = () => {
+  handleToggleImageUploader = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: TOGGLE_FILE_UPLOADER,
+      type: TOGGLE_IMAGE_UPLOADER,
     });
   };
 
@@ -105,9 +97,9 @@ class Images extends Component {
     const { currentPage } = this.state;
     const { direction } = e.target.dataset;
 
-    dispatch(getFileList(currentPage + parseInt(direction, 10)))
+    dispatch(getImageList(currentPage + parseInt(direction, 10)))
       .then((action) => {
-        if (action.type === GET_FILE_LIST.SUCCESS) {
+        if (action.type === GET_IMAGE_LIST.SUCCESS) {
           this.setState(prevState => ({ currentPage: prevState.currentPage + parseInt(direction, 10) }));
         }
       });
@@ -117,11 +109,11 @@ class Images extends Component {
     const { dispatch, media } = this.props;
     const { selected } = media.images;
 
-    dispatch(deleteFiles({ ids: selected }))
+    dispatch(deleteImages({ ids: selected }))
       .then((action) => {
-        if (action.type === DELETE_FILES.SUCCESS) {
+        if (action.type === DELETE_IMAGES.SUCCESS) {
           dispatch({
-            type: SELECT_FILE,
+            type: SELECT_IMAGE,
             selected: [],
           });
         }
@@ -131,7 +123,7 @@ class Images extends Component {
   render() {
     // State
     const {
-      fileEditor, fileUploader, currentPage, pageSize,
+      imageEditor, imageUploader, currentPage, pageSize,
     } = this.state;
 
     // Props

@@ -1,6 +1,7 @@
 // Absolute Imports
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import {
   Container,
@@ -14,26 +15,44 @@ import {
 } from 'reactstrap';
 
 // Components
-import Images from './components/Images';
+import FileExplorer from './components/FileExplorer';
+
+// Actions
+import { SELECT_TAB } from '../../redux/actionCreators/mediaActionCreators';
 
 
 class Media extends Component {
+  static propTypes = {
+    // Redux
+    dispatch: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: '1',
+      activeTab: 'media.Image',
     };
   }
 
   toggle = (tab) => {
+    const { dispatch } = this.props;
     if (this.state.activeTab !== tab) {
       this.setState({
+        activeTab: tab,
+      });
+      dispatch({
+        type: SELECT_TAB,
         activeTab: tab,
       });
     }
   };
 
   render() {
+    // State
+    const {
+      activeTab,
+    } = this.state;
+
     return (
       <Container className="mt-3" style={{ overflow: 'hidden' }}>
         <Card>
@@ -43,9 +62,9 @@ class Media extends Component {
                 <Nav tabs>
                   <NavItem>
                     <NavLink
-                      className={classNames({ active: this.state.activeTab === '1' })}
+                      className={classNames({ active: activeTab === 'media.Image' })}
                       onClick={() => {
-                        this.toggle('1');
+                        this.toggle('media.Image');
                       }}
                     >
                       Images
@@ -53,9 +72,9 @@ class Media extends Component {
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className={classNames({ active: this.state.activeTab === '2' })}
+                      className={classNames({ active: activeTab === 'media.Video' })}
                       onClick={() => {
-                        this.toggle('2');
+                        this.toggle('media.Video');
                       }}
                     >
                       Videos
@@ -63,24 +82,24 @@ class Media extends Component {
                   </NavItem>
                   <NavItem>
                     <NavLink
-                      className={classNames({ active: this.state.activeTab === '3' })}
+                      className={classNames({ active: activeTab === 'media.Resource' })}
                       onClick={() => {
-                        this.toggle('3');
+                        this.toggle('media.Resource');
                       }}
                     >
                       Resources
                     </NavLink>
                   </NavItem>
                 </Nav>
-                <TabContent activeTab={this.state.activeTab}>
-                  <TabPane tabId="1">
-                    <Images />
+                <TabContent activeTab={activeTab}>
+                  <TabPane tabId="media.Image">
+                    {activeTab === 'media.Image' && <FileExplorer modelLabel={activeTab} />}
                   </TabPane>
-                  <TabPane tabId="2">
-                    <p>Videos</p>
+                  <TabPane tabId="media.Video">
+                    {activeTab === 'media.Video' && <FileExplorer modelLabel={activeTab} />}
                   </TabPane>
-                  <TabPane tabId="3">
-                    <p>Resources</p>
+                  <TabPane tabId="media.Resource">
+                    {activeTab === 'media.Resource' && <FileExplorer modelLabel={activeTab} />}
                   </TabPane>
                 </TabContent>
               </div>
@@ -92,4 +111,4 @@ class Media extends Component {
   }
 }
 
-export default Media;
+export default connect()(Media);

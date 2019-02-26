@@ -1,6 +1,5 @@
-/* eslint-disable */
 // Absolute Imports
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
@@ -11,51 +10,51 @@ import {
 } from 'reactstrap';
 
 // Actions
+import { uploadFiles } from '../../../redux/actions/mediaActions';
 
 // Functions
-import renderDropZoneMultipleField from '../../../../../shared/components/form/DropZoneMultiple';
+import renderDropZoneMultipleField from '../../../shared/components/form/DropZoneMultiple';
+import { TOGGLE_FILE_UPLOADER, UPLOAD_FILES } from '../../../redux/actionCreators/mediaActionCreators';
 
 
-class ImageUploader extends Component {
+class ImageUploader extends PureComponent {
   static propTypes = {
     toggle: PropTypes.func.isRequired,
+    modelLabel: PropTypes.string.isRequired,
 
     // Redux
     dispatch: PropTypes.func.isRequired,
     media: PropTypes.instanceOf(Object).isRequired,
 
     // Forms
-    imageUploaderForm: PropTypes.instanceOf(Object),
+    fileUploaderForm: PropTypes.instanceOf(Object),
     reset: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     // Form
-    imageUploaderForm: {},
+    fileUploaderForm: {},
   };
 
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
   handleOnSubmit = () => {
-    const { dispatch, imageUploaderForm, reset } = this.props;
-    const files = imageUploaderForm.values.images;
-    const formData = new FormData();
+    const {
+      dispatch, fileUploaderForm, reset, modelLabel,
+    } = this.props;
+    const { files } = fileUploaderForm.values;
 
+    const formData = new FormData();
     for (let i = 0; i < files.length; i += 1) {
       formData.append(`file${i}`, files[i]);
     }
+    formData.append('model_label', modelLabel);
 
-    dispatch(uploadImages(formData))
+    dispatch(uploadFiles(formData))
       .then((action) => {
-        if (action.type === UPLOAD_IMAGES.SUCCESS) {
+        if (action.type === UPLOAD_FILES.SUCCESS) {
           dispatch({
-            type: TOGGLE_IMAGE_UPLOADER,
+            type: TOGGLE_FILE_UPLOADER,
           });
-          dispatch(reset('imageUploaderForm'));
+          dispatch(reset('fileUploaderForm'));
         }
       });
   };
@@ -63,28 +62,29 @@ class ImageUploader extends Component {
   render() {
     // Props
     const {
-      toggle, media, imageUploaderForm,
+      toggle, media, fileUploaderForm, modelLabel,
     } = this.props;
 
-    const uploadDisabled = () => imageUploaderForm && !imageUploaderForm.values;
+    const uploadDisabled = () => fileUploaderForm && !fileUploaderForm.values;
 
     return (
       <Modal
-        isOpen={media.images.imageUploaderOpen}
+        isOpen={media.files.fileUploaderOpen}
         toggle={toggle}
         size="xl"
       >
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
-          <h4 className="bold-text  modal__title">Upload Images</h4>
+          <h4 className="bold-text  modal__title">Upload Files</h4>
         </div>
         <div className="modal__body">
-          <div className="image-uploader__wrapper">
-            <form className="image-uploader__form mt-3" content="multipart/form-data">
+          <div className="file-uploader__wrapper">
+            <form className="file-uploader__form mt-3" content="multipart/form-data">
               <Field
-                name="images"
+                name="files"
                 component={renderDropZoneMultipleField}
-                className="image-uploader__form__field"
+                modelLabel={modelLabel}
+                className="file-uploader__form__field"
               />
             </form>
           </div>
@@ -105,10 +105,10 @@ class ImageUploader extends Component {
 }
 
 const ImageEditorWithForm = reduxForm({
-  form: 'imageUploaderForm',
+  form: 'fileUploaderForm',
 })(ImageUploader);
 
 export default connect(state => ({
   media: state.studio.media,
-  imageUploaderForm: state.form.imageUploaderForm,
+  fileUploaderForm: state.form.fileUploaderForm,
 }))(ImageEditorWithForm);

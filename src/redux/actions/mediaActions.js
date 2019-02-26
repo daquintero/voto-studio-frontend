@@ -1,79 +1,79 @@
 import mediaService from '../../services/mediaService';
 import {
-  GET_IMAGE_LIST,
-  UPLOAD_IMAGES,
-  UPDATE_IMAGE,
-  DELETE_IMAGES,
+  GET_FILE_LIST,
+  UPLOAD_FILES,
+  UPDATE_FILE,
+  DELETE_FILES,
 } from '../actionCreators/mediaActionCreators';
 
 
-export const getImageList = (pageNumber, excludeIds) => (dispatch) => {
+export const getFileList = requestData => (dispatch) => {
   dispatch({
-    type: GET_IMAGE_LIST.REQUEST,
+    type: GET_FILE_LIST.REQUEST,
   });
-  return mediaService.get.images(pageNumber, excludeIds).then(
+  return mediaService.get.files(requestData).then(
     response =>
       dispatch({
-        type: GET_IMAGE_LIST.SUCCESS,
+        type: GET_FILE_LIST.SUCCESS,
         response: response.data,
       }),
     error =>
       dispatch({
-        type: GET_IMAGE_LIST.ERROR,
+        type: GET_FILE_LIST.ERROR,
         error,
       }),
   );
 };
 
-export const uploadImages = uploadData => (dispatch) => {
+export const uploadFiles = uploadData => (dispatch) => {
   dispatch({
-    type: UPLOAD_IMAGES.REQUEST,
+    type: UPLOAD_FILES.REQUEST,
   });
-  return mediaService.post.images(uploadData).then(
+  return mediaService.post.files(uploadData).then(
     response =>
       dispatch({
-        type: UPLOAD_IMAGES.SUCCESS,
+        type: UPLOAD_FILES.SUCCESS,
         response: response.data,
       }),
     error =>
       dispatch({
-        type: UPLOAD_IMAGES.ERROR,
+        type: UPLOAD_FILES.ERROR,
         error,
       }),
   );
 };
 
-export const updateImage = updateData => (dispatch) => {
+export const updateFile = updateData => (dispatch) => {
   dispatch({
-    type: UPDATE_IMAGE.REQUEST,
+    type: UPDATE_FILE.REQUEST,
   });
-  return mediaService.post.updateImage(updateData).then(
+  return mediaService.post.updateFile(updateData).then(
     response =>
       dispatch({
-        type: UPDATE_IMAGE.SUCCESS,
+        type: UPDATE_FILE.SUCCESS,
         response: response.data,
       }),
     error =>
       dispatch({
-        type: UPDATE_IMAGE.ERROR,
+        type: UPDATE_FILE.ERROR,
         error,
       }),
   );
 };
 
-export const deleteImages = deleteData => (dispatch) => {
+export const deleteFiles = deleteData => (dispatch) => {
   dispatch({
-    type: DELETE_IMAGES.REQUEST,
+    type: DELETE_FILES.REQUEST,
   });
-  return mediaService.delete.images(deleteData).then(
+  return mediaService.delete.files(deleteData).then(
     response =>
       dispatch({
-        type: DELETE_IMAGES.SUCCESS,
+        type: DELETE_FILES.SUCCESS,
         response: response.data,
       }),
     error =>
       dispatch({
-        type: DELETE_IMAGES.ERROR,
+        type: DELETE_FILES.ERROR,
         error,
       }),
   );

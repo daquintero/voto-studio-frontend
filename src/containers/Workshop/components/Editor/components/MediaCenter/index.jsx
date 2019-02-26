@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 
 // Components
-import Media from '../../../../../Media/';
+import Media from '../../../../../Media';
 
 
 class MediaCenter extends PureComponent {
@@ -32,7 +32,7 @@ class MediaCenter extends PureComponent {
     // Media
     const {
       selected,
-    } = media.images;
+    } = media.files;
 
     return (
       <Modal

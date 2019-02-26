@@ -35,7 +35,7 @@ class SidebarContent extends Component {
         </ul>
         {!this.props.sidebar.collapse && (
           <ul className="sidebar__block">
-            <p className="ml-3">Version 1.1.0-beta</p>
+            <p className="ml-3">Version 1.1.2-beta</p>
           </ul>
         )}
       </div>

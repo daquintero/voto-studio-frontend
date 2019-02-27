@@ -8,9 +8,15 @@ script:
   - npm test
   - npm run build
 deploy:
-  provider: surge
-  skip_cleanup: true
-  domain: https://studio.votoinformado2019.com
-  project: ./build/
-on:
-  branch: master
+  - provider: surge
+    skip_cleanup: true
+    domain: https://studio.votoinformado2019.com
+    project: ./build/
+    on:
+      branch: master
+  - provider: surge
+    skip_cleanup: true
+    domain: vstudio-staging.surge.sh
+    project: ./build/
+    on:
+      branch: staging

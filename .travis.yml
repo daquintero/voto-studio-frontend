@@ -6,8 +6,8 @@ cache:
     - node_modules
 script:
   - npm test
-  - if ["$TRAVIS_BRANCH" = "master"] npm run build
-  - if ["$TRAVIS_BRANCH" = "staging"] env-cmd .env.staging npm run build
+  - if ["$TRAVIS_BRANCH" = "master"]; then npm run build
+  - if ["$TRAVIS_BRANCH" = "staging"]; then env-cmd .env.staging npm run build
 deploy:
   - provider: surge
     skip_cleanup: true

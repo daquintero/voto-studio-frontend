@@ -38,7 +38,7 @@ import {
   TOGGLE_MEDIA_CENTER,
   UPDATE_MEDIA_FIELD, SELECT_POSITION, PUBLISH_WORKSHOP_CONTENT,
 } from '../../../../redux/actionCreators/workshopActionCreators';
-import { SELECT_FILE } from '../../../../redux/actionCreators/mediaActionCreators';
+import { SELECT_FILE, SELECT_TAB } from '../../../../redux/actionCreators/mediaActionCreators';
 
 // Components
 import Collapse from '../../../../shared/components/Collapse';
@@ -107,6 +107,10 @@ class Editor extends Component {
             ml: action.form.parentModel.modelLabel,
             id: action.form.parentModel.id,
           }));
+          dispatch({
+            type: SELECT_TAB,
+            activeTab: 'media.Image',
+          });
         }
       });
   }

@@ -17,7 +17,7 @@ import FileEditor from './FileEditor';
 // Actions
 import {
   DELETE_FILES,
-  SELECT_FILE, SELECT_TAB,
+  SELECT_FILE,
   TOGGLE_FILE_EDITOR,
   TOGGLE_FILE_UPLOADER,
 } from '../../../redux/actionCreators/mediaActionCreators';
@@ -67,14 +67,6 @@ class FileExplorer extends Component {
           type: SELECT_FILE,
           selected: [],
         }));
-  }
-
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: SELECT_TAB,
-      activeTab: 'media.Image',
-    });
   }
 
   handleToggleFileUploader = () => {

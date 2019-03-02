@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { deleteItem, getItemDetail, listItems, publishWorkshopContent } from '../../redux/actions/workshopActions';
+import { deleteItem, getItemDetail, publishWorkshopContent } from '../../redux/actions/workshopActions';
 import {
   DELETE_ITEM,
   GET_ITEM_DETAIL,
@@ -37,10 +37,6 @@ class Workshop extends Component {
       itemDetailModal: false,
       itemToDelete: {},
     };
-  }
-
-  componentDidMount() {
-    this.props.dispatch(listItems());
   }
 
   buildUrl = (appLabel, modelName, id) => `/workshop/editor/${appLabel}/${modelName.toLowerCase()}/${id}/`;

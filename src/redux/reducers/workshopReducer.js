@@ -1,14 +1,15 @@
 import {
   LIST_ITEMS,
   GET_ITEM_DETAIL,
-  DELETE_ITEM,
+  DELETE_INSTANCES,
   BUILD_FORM,
   UPDATE_BASIC_FIELDS,
   UPDATE_MEDIA_FIELD,
   UPDATE_MEDIA_ORDER,
   UPDATE_RELATED_FIELD,
-  PUBLISH_WORKSHOP_CONTENT,
+  PUBLISH_INSTANCES,
   BUILD_FINDER,
+  SELECT_INSTANCE_TYPE,
   GET_INSTANCE_LIST,
   GET_LOCATION_PICKER_DATA_SET,
   TOGGLE_LOCATION_PICKER,
@@ -39,15 +40,24 @@ const initialState = {
     'UPDATE_BASIC_FIELDS',
     'UPDATE_MEDIA_FIELD',
     'UPDATE_RELATED_FIELD',
-    'PUBLISH_WORKSHOP_CONTENT',
+    'PUBLISH_INSTANCES',
     'BUILD_FINDER',
     'GET_INSTANCE_LIST',
     'GET_LOCATION_PICKER_DATA_SET',
+    'SUBMIT_FOR_REVIEW',
   ]),
-  openList: {},
+  openList: {
+    instances: [],
+  },
   finder: {
     items: [],
-    options: [],
+    filter: {
+      itemOptions: [],
+      currentItemOption: undefined,
+      userOptions: [],
+      currentUserOption: undefined,
+    },
+    built: false,
   },
   locationPicker: locationPickerDefault,
   mediaCenter: {
@@ -125,44 +135,40 @@ export default (state = initialState, action) => {
       // -----------------------------------------------
 
     // Delete Item reducers ----------------------------
-    case DELETE_ITEM.INIT:
+    case DELETE_INSTANCES.INIT:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...initializeActions(['DELETE_ITEM']),
+          ...initializeActions(['DELETE_INSTANCES']),
         },
       };
-    case DELETE_ITEM.REQUEST:
+    case DELETE_INSTANCES.REQUEST:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_ITEM.REQUEST'),
+          ...actionResult('DELETE_INSTANCES.REQUEST'),
         },
       };
-    case DELETE_ITEM.SUCCESS:
+    case DELETE_INSTANCES.SUCCESS:
       return {
         ...state,
-        items: [
-          ...state.items.slice(0, action.index),
-          {
-            ...state.items[action.index],
-            values: state.items[action.index].values.filter(o => o.tableValues.id !== action.item.id),
-          },
-          ...state.items.slice(action.index + 1),
-        ],
+        openList: {
+          ...state.openList,
+          instances: state.openList.instances.filter(f => !action.response.ids.includes(f.id)),
+        },
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_ITEM.SUCCESS'),
+          ...actionResult('DELETE_INSTANCES.SUCCESS'),
         },
       };
-    case DELETE_ITEM.ERROR:
+    case DELETE_INSTANCES.ERROR:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_ITEM.ERROR', { error: action.error }),
+          ...actionResult('DELETE_INSTANCES.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
@@ -235,6 +241,13 @@ export default (state = initialState, action) => {
             ...state.form.parentModel,
             id: action.response.id,
           },
+        },
+        openList: {
+          ...state.openList,
+          instances: [
+            action.response.instance,
+            ...state.openList.instances,
+          ],
         },
         actions: {
           ...state.actions,
@@ -453,36 +466,48 @@ export default (state = initialState, action) => {
       // -----------------------------------------------
 
     // Publish content reducers ------------------------
-    case PUBLISH_WORKSHOP_CONTENT.INIT:
+    case PUBLISH_INSTANCES.INIT:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...initializeActions(['PUBLISH_WORKSHOP_CONTENT']),
+          ...initializeActions(['PUBLISH_INSTANCES']),
         },
       };
-    case PUBLISH_WORKSHOP_CONTENT.REQUEST:
+    case PUBLISH_INSTANCES.REQUEST:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('PUBLISH_WORKSHOP_CONTENT.REQUEST'),
+          ...actionResult('PUBLISH_INSTANCES.REQUEST'),
         },
       };
-    case PUBLISH_WORKSHOP_CONTENT.SUCCESS:
+    case PUBLISH_INSTANCES.SUCCESS:
       return {
         ...state,
+        openList: {
+          ...state.openList,
+          instances: state.openList.instances.map((f) => {
+            if (action.response.ids.includes(f.id)) {
+              return {
+                ...f,
+                published: true,
+              };
+            }
+            return f;
+          }),
+        },
         actions: {
           ...state.actions,
-          ...actionResult('PUBLISH_WORKSHOP_CONTENT.SUCCESS'),
+          ...actionResult('PUBLISH_INSTANCES.SUCCESS'),
         },
       };
-    case PUBLISH_WORKSHOP_CONTENT.ERROR:
+    case PUBLISH_INSTANCES.ERROR:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('PUBLISH_WORKSHOP_CONTENT.ERROR', { error: action.error }),
+          ...actionResult('PUBLISH_INSTANCES.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
@@ -507,7 +532,10 @@ export default (state = initialState, action) => {
     case BUILD_FINDER.SUCCESS:
       return {
         ...state,
-        finder: action.finder,
+        finder: {
+          ...action.finder,
+          built: true,
+        },
         actions: {
           ...state.actions,
           ...actionResult('BUILD_FINDER.SUCCESS'),
@@ -519,6 +547,20 @@ export default (state = initialState, action) => {
         actions: {
           ...state.actions,
           ...actionResult('BUILD_FINDER.ERROR', { error: action.error }),
+        },
+      };
+      // -----------------------------------------------
+
+    // Instance list reducers --------------------------
+    case SELECT_INSTANCE_TYPE:
+      return {
+        ...state,
+        finder: {
+          ...state.finder,
+          filter: {
+            ...state.finder.filter,
+            ...action.filter,
+          },
         },
       };
       // -----------------------------------------------

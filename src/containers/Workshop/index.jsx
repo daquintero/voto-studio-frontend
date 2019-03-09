@@ -8,7 +8,6 @@ import {
   Row,
 } from 'reactstrap';
 
-
 // Components
 import ContentFinder from './components/ContentFinder';
 

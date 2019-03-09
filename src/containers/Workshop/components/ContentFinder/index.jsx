@@ -66,6 +66,7 @@ class ContentFinder extends Component {
       timeout: null,
       deleteInstancesModalOpen: false,
       publishInstancesModalOpen: false,
+      searchTerm: '',
     };
   }
 
@@ -180,13 +181,15 @@ class ContentFinder extends Component {
   };
 
   handleOnChangePage = (event, page) => {
-    const { rowsPerPage } = this.state;
+    const { rowsPerPage, searchTerm } = this.state;
     const { dispatch, finderForm } = this.props;
 
     dispatch(getInstanceList({
       modelLabel: finderForm.values.type.value,
+      filter: finderForm.values.user.value,
       page,
       pageSize: rowsPerPage,
+      searchTerm,
     }))
       .then((action) => {
         if (action.type === GET_INSTANCE_LIST.SUCCESS) {
@@ -212,6 +215,7 @@ class ContentFinder extends Component {
       timeout: setTimeout(() => {
         this.searchInstances(e.target.value);
       }, 600),
+      searchTerm: e.target.value,
     });
   };
 

@@ -8,10 +8,10 @@ import { Button } from 'reactstrap';
 import PermissionsModal from './PermissionsModal';
 
 // Actions
-import { GET_USER_PERMISSIONS } from '../../../../../redux/actionCreators/userActionCreators';
+import { GET_USER_PERMISSIONS } from '../../../../../../redux/actionCreators/userActionCreators';
 
 // Functions
-import getInitials from '../../../../../shared/utils/getInitials';
+import getInitials from '../../../../../../shared/utils/getInitials';
 
 
 class PermissionsWidget extends Component {

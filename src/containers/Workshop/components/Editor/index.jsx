@@ -25,42 +25,51 @@ import iPhone from './img/iPhone.svg';
 
 // Actions
 import {
-  buildForm, publishWorkshopContent,
+  buildForm,
   updateBasicFields,
   updateMediaField,
+  publishInstances,
 } from '../../../../redux/actions/workshopActions';
-import { getUserPermissions } from '../../../../redux/actions/userActions';
+import {
+  getUserPermissions,
+} from '../../../../redux/actions/userActions';
 import {
   BUILD_FORM,
   TOGGLE_LOCATION_PICKER,
   TOGGLE_RELATED_CONTENT_FINDER,
   UPDATE_BASIC_FIELDS,
   TOGGLE_MEDIA_CENTER,
-  UPDATE_MEDIA_FIELD, SELECT_POSITION, PUBLISH_WORKSHOP_CONTENT,
+  UPDATE_MEDIA_FIELD,
+  SELECT_POSITION,
+  PUBLISH_INSTANCES,
 } from '../../../../redux/actionCreators/workshopActionCreators';
-import { SELECT_FILE, SELECT_TAB } from '../../../../redux/actionCreators/mediaActionCreators';
+import {
+  SELECT_FILE,
+  SELECT_TAB,
+} from '../../../../redux/actionCreators/mediaActionCreators';
 
 // Components
 import Collapse from '../../../../shared/components/Collapse';
 import EditorField from '../../../../shared/components/form/TextEditor/EditorField';
-import Loader from '../../../../shared/components/Loader';
 import ErrorPage from '../../../../shared/components/ErrorPage';
 import EditorTableWrapper from './components/EditorTableWrapper';
+import FileGallery from '../../../Media/components/FileGallery';
+import Loader from '../../../../shared/components/Loader';
 import LocationPicker from './components/LocationPicker';
 import MediaCenter from './components/MediaCenter';
-import FileGallery from '../../../Media/components/FileGallery';
-import RelatedContentFinder from './components/RelatedContentFinder/';
 import PermissionsWidget from './components/PermissionsWidget';
+import PublishInstancesModal from '../../../../shared/components/PublishInstancesModal';
+import RelatedContentFinder from './components/RelatedContentFinder/';
 
 // Functions
-import renderSelectField from '../../../../shared/components/form/Select';
+import buildUrl from '../../../../shared/utils/buildUrl';
 import renderCheckboxField from '../../../../shared/components/form/CheckBox';
 import renderDatePicker from '../../../../shared/components/form/DatePicker';
 import renderJSONFieldEditor from './components/JSONFieldEditor';
-import buildUrl from '../../../../shared/utils/buildUrl';
+import renderSelectField from '../../../../shared/components/form/Select';
 
 
-const modelMediaTypeMap = {
+const mediaModelLabelFieldNameMap = {
   'media.Image': 'images',
   'media.Video': 'videos',
   'media.Resource': 'resources',
@@ -70,20 +79,22 @@ const modelMediaTypeMap = {
 class Editor extends Component {
   static propTypes = {
     // Redux
+    auth: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
-    workshop: PropTypes.instanceOf(Object).isRequired,
     media: PropTypes.instanceOf(Object).isRequired,
+    workshop: PropTypes.instanceOf(Object).isRequired,
 
     // Router
-    location: ReactRouterPropTypes.location.isRequired,
     history: ReactRouterPropTypes.history.isRequired,
+    location: ReactRouterPropTypes.location.isRequired,
 
     // Form
-    workshopForm: PropTypes.instanceOf(Object),
     onChange: PropTypes.func.isRequired,
+    workshopForm: PropTypes.instanceOf(Object),
   };
 
   static defaultProps = {
+    // Form
     workshopForm: {},
   };
 
@@ -92,6 +103,7 @@ class Editor extends Component {
     const { id } = queryString.parse(this.props.location.search);
     this.state = {
       id,
+      publishInstancesModalOpen: false,
     };
   }
 
@@ -178,7 +190,7 @@ class Editor extends Component {
           // If we are creating a new instance then redirect
           // to a new form page with the id of the new instance.
           if (id === 'new') {
-            history.push(buildUrl('/workshop/editor/', {
+            history.replace(buildUrl('/workshop/editor/', {
               al: appLabel,
               mn: modelName,
               id: instanceId,
@@ -227,7 +239,7 @@ class Editor extends Component {
       modelLabel: workshop.form.parentModel.modelLabel,
       mediaModelLabel: media.files.activeTab,
       id: workshop.form.parentModel.id,
-      mediaType: modelMediaTypeMap[media.files.activeTab],
+      mediaType: mediaModelLabelFieldNameMap[media.files.activeTab],
       mediaIds: selected,
       updateType: 'add',
     }))
@@ -263,25 +275,26 @@ class Editor extends Component {
     });
   };
 
-  handlePublishInstances = () => {
+  handleTogglePublishInstancesModal = () => {
+    this.setState(prevState => ({
+      publishInstancesModalOpen: !prevState.publishInstancesModalOpen,
+    }));
+  };
+
+  handlePublishInstancesModalOnClose = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: PUBLISH_INSTANCES.INIT,
+    });
+  };
+
+  handleOnPublish = () => {
     const { dispatch, workshop } = this.props;
-    const { modelLabel, id, verboseName } = workshop.form.parentModel;
-    dispatch(publishWorkshopContent({
+    const { modelLabel, id } = workshop.form.parentModel;
+    dispatch(publishInstances({
       modelLabel,
-      instanceIds: [id],
-    }))
-      .then((action) => {
-        if (action.type === PUBLISH_WORKSHOP_CONTENT.SUCCESS) {
-          toast(`Published ${verboseName} instance (${id})`, {
-            toastId: id,
-          });
-        }
-        if (action.type === PUBLISH_WORKSHOP_CONTENT.ERROR) {
-          toast(`Error publishing ${verboseName} instance (${id})`, {
-            toastId: id,
-          });
-        }
-      });
+      ids: [id],
+    }));
   };
 
   buildPlaceholder = (field) => {
@@ -384,9 +397,14 @@ class Editor extends Component {
   };
 
   render() {
+    // State
+    const {
+      publishInstancesModalOpen, id,
+    } = this.state;
+
     // Props
     const {
-      workshop, dispatch, onChange,
+      workshop, auth, dispatch, onChange,
     } = this.props;
 
     // Workshop
@@ -398,218 +416,250 @@ class Editor extends Component {
     } = workshop.actions.BUILD_FORM;
 
     return (
-      <>
-        <ToastContainer pauseOnFocusLoss={false} />
-        <LocationPicker onChange={onChange} />
-        <MediaCenter toggle={this.handleToggleMediaCenter} onAdd={this.handleMediaOnAdd} />
-        <RelatedContentFinder />
-        <Container className="mt-4">
-          {loading ? (
-            <Loader elemClass="load__card mb-3" />
-          ) : (
-            <>
-              {loaded ? (
-                <>
-                  <Row>
-                    <Col lg={12} xl={4}>
-                      <h3 className="page-title text-capitalize">
-                        {form.new ? 'Create' : 'Edit'} {form.parentModel.modelName}
-                      </h3>
-                      <h3 className="page-subhead subhead">
-                        Edit the basic info of this piece of content and add or remove related pieces of content
-                      </h3>
-                    </Col>
+      <Container className="mt-4">
+        {loading ? (
+          <Loader elemClass="load__page" />
+        ) : (
+          <>
+            {loaded ? (
+              <>
+                <ToastContainer pauseOnFocusLoss={false} />
+                <LocationPicker onChange={onChange} />
+                <MediaCenter toggle={this.handleToggleMediaCenter} onAdd={this.handleMediaOnAdd} />
+                <Row>
+                  <Col lg={12} xl={4}>
+                    <h3 className="page-title text-capitalize">
+                      {form.new ? 'Create' : 'Edit'} {form.parentModel.modelName}
+                    </h3>
+                    <h3 className="page-subhead subhead">
+                      Edit the basic info of this piece of content and add or remove related pieces of content
+                    </h3>
+                  </Col>
 
-                    <Col xs lg={2}>
-                      {!workshop.form.new && (
+                  <Col xs lg={4}>
+                    {!workshop.form.new && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-end',
+                          marginTop: 10,
+                        }}
+                      >
                         <PermissionsWidget />
-                      )}
-                    </Col>
+                        {auth.user.isResearcher ? (
+                          <>
+                            <PublishInstancesModal
+                              isOpen={publishInstancesModalOpen}
+                              action={workshop.actions.PUBLISH_INSTANCES}
+                              selected={[id]}
 
-                    <Col xs lg={2}>
-                      <Button color="primary" onClick={this.handlePublishInstances}>
-                        {!workshop.actions.PUBLISH_WORKSHOP_CONTENT.loading ? (
-                          <span>Publish</span>
+                              // Callbacks
+                              toggle={this.handleTogglePublishInstancesModal}
+                              onPublish={this.handleOnPublish}
+                              onClose={this.handlePublishInstancesModalOnClose}
+                            />
+                            <Button
+                              className="ml-3"
+                              color="primary"
+                              onClick={this.handleTogglePublishInstancesModal}
+                            >
+                              Publish
+                            </Button>
+                          </>
                         ) : (
-                          <span><i className="fal fa-spin fa-spinner" /> Publishing...</span>
+                          <Button className="ml-3" color="primary" onClick={this.handlePublishInstances}>
+                            {!workshop.actions.SUBMIT_FOR_REVIEW.loading ? (
+                              <span>Submit for Review</span>
+                            ) : (
+                              <span><i className="fal fa-spin fa-spinner" /> Submitting...</span>
+                            )}
+                          </Button>
                         )}
-                      </Button>
-                    </Col>
+                      </div>
+                    )}
+                  </Col>
 
-                    <Col xs={4} className="d-none d-xl-block">
-                      <h3 className="page-title text-capitalize">
-                        Live Preview
-                      </h3>
-                      <h3 className="page-subhead subhead">
-                        This will update as you edit the piece of content
-                      </h3>
-                    </Col>
+                  <Col xs={4} className="d-none d-xl-block">
+                    <h3 className="page-title text-capitalize">
+                      Live Preview
+                    </h3>
+                    <h3 className="page-subhead subhead">
+                      This will update as you edit the piece of content
+                    </h3>
+                  </Col>
 
-                    <Col xl={8}>
-                      <Card>
-                        <CardBody>
-                          <h3 className="page-title text-capitalize">
-                            Basic Fields
-                          </h3>
+                  <Col xl={8}>
+                    <Card>
+                      <CardBody>
+                        <h3 className="page-title text-capitalize">
+                          Basic Fields
+                        </h3>
 
-                          {/* Basic fields form */}
-                          <form className="form form--horizontal" onSubmit={this.handleUpdateBasicFields}>
-                            {form.basicFields.map(this.renderField)}
+                        {/* Basic fields form */}
+                        <form className="form form--horizontal" onSubmit={this.handleUpdateBasicFields}>
+                          {form.basicFields.map(this.renderField)}
 
-                            {/* Basic fields form buttons */}
-                            <ButtonToolbar className="form__button-toolbar">
-                              <Button color="success" size="sm" type="submit">
-                                {!workshop.actions.UPDATE_BASIC_FIELDS.loading ? (
-                                  <span>Submit</span>
-                                ) : (
-                                  <span><i className="fal fa-spin fa-spinner" /> Submitting...</span>
-                                )}
-                              </Button>
-                              <Button color="secondary" size="sm" onClick={() => dispatch(reset('workshopForm'))}>
-                                Undo changes
-                              </Button>
-                            </ButtonToolbar>
-                          </form>
-                        </CardBody>
-                      </Card>
+                          {/* Basic fields form buttons */}
+                          <ButtonToolbar className="form__button-toolbar">
+                            <Button color="success" size="sm" type="submit">
+                              {!workshop.actions.UPDATE_BASIC_FIELDS.loading ? (
+                                <span>Submit</span>
+                              ) : (
+                                <span><i className="fal fa-spin fa-spinner" /> Submitting...</span>
+                              )}
+                            </Button>
+                            <Button color="secondary" size="sm" onClick={() => dispatch(reset('workshopForm'))}>
+                              Undo changes
+                            </Button>
+                          </ButtonToolbar>
+                        </form>
+                      </CardBody>
+                    </Card>
 
-                      {!workshop.form.new && (
-                        <>
-                          {/* Related fields section */}
-                          <Card>
-                            <CardBody>
-                              <Row>
-                                <Col>
-                                  <h3 className="page-title text-capitalize">
-                                    Media
-                                  </h3>
-                                </Col>
-                                <Col>
-                                  <Button
-                                    color="primary"
-                                    className="float-right"
-                                    onClick={this.handleToggleMediaCenter}
-                                  >
-                                    Add media
-                                  </Button>
-                                </Col>
-                              </Row>
-                              <Collapse
-                                title="Images"
-                                className="with-shadow"
-                              >
-                                <FileGallery
-                                  files={form.mediaFields.images}
-                                  fileDims={{
-                                    xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
-                                  }}
-                                  controls
-                                  standalone
-                                  draggable
-                                  onRemove={this.handleMediaOnRemove}
-                                  onClick={() => {}}
-                                />
-                              </Collapse>
-                              <Collapse
-                                title="Videos"
-                                className="with-shadow"
-                              >
-                                <FileGallery
-                                  files={form.mediaFields.videos}
-                                  fileDims={{
-                                    xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
-                                  }}
-                                  controls
-                                  standalone
-                                  onRemove={this.handleMediaOnRemove}
-                                  onClick={() => {}}
-                                />
-                              </Collapse>
-                              <Collapse
-                                title="Resources"
-                                className="with-shadow"
-                              >
-                                <FileGallery
-                                  files={form.mediaFields.resources}
-                                  fileDims={{
-                                    xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
-                                  }}
-                                  controls
-                                  standalone
-                                  onRemove={this.handleMediaOnRemove}
-                                  onClick={() => {}}
-                                />
-                              </Collapse>
-                            </CardBody>
-                          </Card>
-
-                          {/* Related fields section */}
-                          <Card>
-                            <CardBody>
-                              <Row>
-                                <Col>
-                                  <h3 className="page-title text-capitalize">
-                                    Related Content
-                                  </h3>
-                                </Col>
-                                <Col>
-                                  <Button
-                                    color="primary"
-                                    className="float-right"
-                                    onClick={this.handleToggleRelatedContentFinder}
-                                  >
-                                    Add related content
-                                  </Button>
-                                </Col>
-                              </Row>
-                              <EditorTableWrapper
-                                fields={workshop.form.relatedFields}
-                                action={workshop.actions.UPDATE_RELATED_FIELD}
+                    {!workshop.form.new && (
+                      <>
+                        {/* Media fields section */}
+                        <Card>
+                          <CardBody>
+                            <Row>
+                              <Col>
+                                <h3 className="page-title text-capitalize">
+                                  Media
+                                </h3>
+                              </Col>
+                              <Col>
+                                <Button
+                                  color="primary"
+                                  className="float-right"
+                                  onClick={this.handleToggleMediaCenter}
+                                >
+                                  Add media
+                                </Button>
+                              </Col>
+                            </Row>
+                            <Collapse
+                              title="Images"
+                              className="with-shadow"
+                            >
+                              <FileGallery
+                                files={form.mediaFields.images}
+                                fileDims={{
+                                  xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
+                                }}
+                                controls
+                                standalone
+                                draggable
+                                onRemove={this.handleMediaOnRemove}
+                                onClick={() => {}}
                               />
-                            </CardBody>
-                          </Card>
-                        </>
-                      )}
-                    </Col>
+                            </Collapse>
+                            <Collapse
+                              title="Videos"
+                              className="with-shadow"
+                            >
+                              <FileGallery
+                                files={form.mediaFields.videos}
+                                fileDims={{
+                                  xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
+                                }}
+                                controls
+                                standalone
+                                onRemove={this.handleMediaOnRemove}
+                                onClick={() => {}}
+                              />
+                            </Collapse>
+                            <Collapse
+                              title="Resources"
+                              className="with-shadow"
+                            >
+                              <FileGallery
+                                files={form.mediaFields.resources}
+                                fileDims={{
+                                  xs: 12, sm: 6, md: 6, lg: 4, xl: 3,
+                                }}
+                                controls
+                                standalone
+                                onRemove={this.handleMediaOnRemove}
+                                onClick={() => {}}
+                              />
+                            </Collapse>
+                          </CardBody>
+                        </Card>
 
-                    {/* Live preview panel */}
-                    <Col xs={12} className="d-block d-xl-none">
-                      <h3 className="page-title text-capitalize">
-                        Live Preview
-                      </h3>
-                      <h3 className="page-subhead subhead">
-                        This will update as you edit the piece of content
-                      </h3>
-                    </Col>
-                    <Col xl={4}>
-                      <Card>
-                        <CardBody className="p-5">
-                          <img src={iPhone} className="img-fluid" alt="iPhone preview" style={{ opacity: 0.3 }} />
-                        </CardBody>
-                      </Card>
-                    </Col>
-                  </Row>
-                </>
-              ) : (
-                error && (
-                  <ErrorPage error={error} />
-                )
-              )}
-            </>
-          )}
-        </Container>
-      </>
+                        {/* Related fields section */}
+                        {form.relatedFields.length !== 0 && (
+                          <>
+                            <Card>
+                              <CardBody>
+                                <Row>
+                                  <Col>
+                                    <h3 className="page-title text-capitalize">
+                                      Related Content
+                                    </h3>
+                                  </Col>
+                                  <Col>
+                                    <Button
+                                      color="primary"
+                                      className="float-right"
+                                      onClick={this.handleToggleRelatedContentFinder}
+                                    >
+                                      Add related content
+                                    </Button>
+                                  </Col>
+                                </Row>
+                                <EditorTableWrapper
+                                  fields={workshop.form.relatedFields}
+                                  action={workshop.actions.UPDATE_RELATED_FIELD}
+                                />
+                              </CardBody>
+                            </Card>
+                            <RelatedContentFinder />
+                          </>
+                        )}
+                      </>
+                    )}
+                  </Col>
+
+                  {/* Live preview panel */}
+                  <Col xs={12} className="d-block d-xl-none">
+                    <h3 className="page-title text-capitalize">
+                      Live Preview
+                    </h3>
+                    <h3 className="page-subhead subhead">
+                      This will update as you edit the piece of content
+                    </h3>
+                  </Col>
+                  <Col xl={4}>
+                    <Card>
+                      <CardBody className="p-5">
+                        <img src={iPhone} className="img-fluid" alt="iPhone preview" style={{ opacity: 0.3 }} />
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+              </>
+            ) : (
+              error && (
+                <ErrorPage error={error} />
+              )
+            )}
+          </>
+        )}
+      </Container>
     );
   }
 }
+
 
 const EditorWithForm = reduxForm({
   form: 'workshopForm',
 })(Editor);
 
 export default withRouter(connect(state => ({
-  workshop: state.studio.workshop,
-  media: state.studio.media,
-  workshopForm: state.form.workshopForm,
+  auth: state.auth,
   initialValues: state.studio.workshop.form.defaultValues,
+  media: state.studio.media,
+  workshop: state.studio.workshop,
+  workshopForm: state.form.workshopForm,
 }))(EditorWithForm));

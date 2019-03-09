@@ -12,7 +12,7 @@ export default class MatTableHead extends PureComponent {
     rows: PropTypes.instanceOf(Array).isRequired,
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
+    onSelectAll: PropTypes.func.isRequired,
     order: PropTypes.string.isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
@@ -24,19 +24,22 @@ export default class MatTableHead extends PureComponent {
 
   render() {
     const {
-      rows, onSelectAllClick, order, orderBy, numSelected, rowCount,
+      rows, onSelectAll, order, orderBy, numSelected, rowCount,
     } = this.props;
 
     const rowsWithExtra = [
       {
         id: 'id', numeric: false, disablePadding: false, label: 'ID',
       },
-      ...rows,
-      {
-        id: 'user', numeric: false, disablePadding: false, label: 'User',
-      },
       {
         id: 'actions', numeric: false, disablePadding: false, label: 'Actions',
+      },
+      ...rows,
+      {
+        id: 'published', numeric: false, disablePadding: false, label: 'Published',
+      },
+      {
+        id: 'user', numeric: false, disablePadding: false, label: 'User',
       },
     ];
 
@@ -48,7 +51,7 @@ export default class MatTableHead extends PureComponent {
               className={`material-table__checkbox ${numSelected === rowCount && 'material-table__checkbox--checked'}`}
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
+              onChange={onSelectAll}
             />
           </TableCell>
           {rowsWithExtra.map(row => (

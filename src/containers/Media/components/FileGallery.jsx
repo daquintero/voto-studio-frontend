@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import {
   Col,
 } from 'reactstrap';
@@ -42,7 +43,7 @@ class FileGallery extends PureComponent {
     selected: [],
     files: [],
     fileDims: {
-      xs: 12, sm: 6, md: 4, lg: 3, xl: 2,
+      xs: 12, sm: 4, md: 4, lg: 3, xl: 2,
     },
     controls: false,
     standalone: false,
@@ -72,10 +73,10 @@ class FileGallery extends PureComponent {
 
     return instances || media.actions.GET_FILE_LIST.loaded ? (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId="gallery" direction="horizontal">
+        <Droppable droppableId="gallery" direction="grid">
           {provided => (
             <div
-              className="row"
+              className={classNames({ row: !standalone, gallery__row: standalone })}
               ref={provided.innerRef}
               {...provided.droppableProps}
             >

@@ -5,7 +5,7 @@ import {
 
 const initialState = {
   show: false,
-  collapse: false,
+  collapse: true,
 };
 
 export default function (state = initialState, action) {

@@ -15,13 +15,26 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { buildFinder, getInstanceList } from '../../../../redux/actions/workshopActions';
-import { BUILD_FINDER, GET_INSTANCE_LIST } from '../../../../redux/actionCreators/workshopActionCreators';
+import {
+  buildFinder,
+  getInstanceList,
+  deleteInstances,
+  publishInstances,
+} from '../../../../redux/actions/workshopActions';
+import {
+  BUILD_FINDER,
+  GET_INSTANCE_LIST,
+  SELECT_INSTANCE_TYPE,
+  DELETE_INSTANCES,
+  PUBLISH_INSTANCES,
+} from '../../../../redux/actionCreators/workshopActionCreators';
 
 // Components
 import MatTable from '../../../../shared/components/table/MatTable/index';
 import Loader from '../../../../shared/components/Loader';
 import renderSelectField from '../../../../shared/components/form/Select';
+import DeleteInstancesModal from '../../../../shared/components/DeleteInstancesModal';
+import PublishInstanceModel from '../../../../shared/components/PublishInstancesModal';
 
 // Functions
 import buildUrl from '../../../../shared/utils/buildUrl';
@@ -51,26 +64,34 @@ class ContentFinder extends Component {
       page: 0,
       rowsPerPage: 10,
       timeout: null,
+      deleteInstancesModalOpen: false,
+      publishInstancesModalOpen: false,
     };
   }
 
   componentDidMount() {
     const { rowsPerPage } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, workshop } = this.props;
     const page = 0;
-    dispatch(buildFinder()).then((action) => {
-      if (this.isUnmounted) return;
-      // If the buildFinder action is successful
-      // then load instances for the first item
-      // type in the items list.
-      if (action.type === BUILD_FINDER.SUCCESS) {
-        dispatch(getInstanceList({
-          modelLabel: action.finder.items[0].modelLabel,
-          page,
-          pageSize: rowsPerPage,
-        }));
-      }
-    });
+    if (workshop.finder.built) return;
+    dispatch(buildFinder())
+      .then((action) => {
+        if (this.isUnmounted) return;
+        // If the buildFinder action is successful
+        // then load instances for the first item
+        // type in the items list.
+        if (action.type === BUILD_FINDER.SUCCESS) {
+          const {
+            currentItemOption, currentUserOption,
+          } = action.finder.filter;
+          dispatch(getInstanceList({
+            modelLabel: currentItemOption.value,
+            filter: currentUserOption.value,
+            page,
+            pageSize: rowsPerPage,
+          }));
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -85,8 +106,8 @@ class ContentFinder extends Component {
         name: 'edit',
         id: ({ name, id }) => `${name}-${id}`,
         'data-id': id => id,
-        icon: 'fal fa-fw fa-edit mr-3 text-primary',
-        tooltipContent: `Edit ${props.verboseName}`,
+        icon: () => 'fal fa-fw fa-edit mr-3 text-primary',
+        tooltipContent: () => `Edit ${props.verboseName}`,
         props: {
           className: 'workshop__form-action',
           onClick: this.handleEditItem,
@@ -96,8 +117,8 @@ class ContentFinder extends Component {
         key: id => `detail-${id}`,
         name: 'detail',
         id: ({ name, id }) => `${name}-${id}`,
-        icon: 'fal fa-fw fa-eye mr-3 text-info',
-        tooltipContent: `View ${props.verboseName}`,
+        icon: ({ published }) => `fal fa-fw fa-eye mr-3 text-${published ? 'info' : 'secondary'}`,
+        tooltipContent: ({ published }) => (published ? `View ${props.verboseName}` : 'Yet to be published'),
         props: {
           className: 'workshop__form-action',
           onClick: () => {},
@@ -106,19 +127,50 @@ class ContentFinder extends Component {
     ],
   });
 
-  changeInstanceType = (selected) => {
+  changeInstanceFilter = (selected, ...rest) => {
     const { rowsPerPage } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, finderForm, workshop } = this.props;
     const page = 0;
 
+    let listData;
+    if (rest[2] === 'type') {
+      listData = {
+        modelLabel: selected.value,
+        filter: finderForm.values.user.value,
+      };
+    } else if (rest[2] === 'user') {
+      listData = {
+        modelLabel: finderForm.values.type.value,
+        filter: selected.value,
+      };
+    }
+
     dispatch(getInstanceList({
-      modelLabel: selected.value,
+      ...listData,
       page,
       pageSize: rowsPerPage,
     }))
       .then((action) => {
         if (action.type === GET_INSTANCE_LIST.SUCCESS) {
-          this.setState({ selected: [], page: 0 });
+          // Reset the selector state. As a new instance
+          // type has been loaded it is impossible that
+          // any new instances are selected.
+          this.setState({
+            selected: [],
+            page: 0,
+          });
+          // Update state with the instance type loaded
+          // so on the next componentDidMount this type
+          // is loaded instead of the first in the list.
+          dispatch({
+            type: SELECT_INSTANCE_TYPE,
+            filter: {
+              currentItemOption: workshop.finder.filter.itemOptions
+                .filter(f => f.value === listData.modelLabel)[0],
+              currentUserOption: workshop.finder.filter.userOptions
+                .filter(f => f.value === listData.filter)[0],
+            },
+          });
         }
       });
   };
@@ -138,7 +190,10 @@ class ContentFinder extends Component {
     }))
       .then((action) => {
         if (action.type === GET_INSTANCE_LIST.SUCCESS) {
-          this.setState({ page, selected: [] });
+          this.setState({
+            page,
+            selected: [],
+          });
         }
       });
   };
@@ -167,13 +222,17 @@ class ContentFinder extends Component {
 
     dispatch(getInstanceList({
       modelLabel: finderForm.values.type.value,
+      filter: finderForm.values.user.value,
       page,
       pageSize: rowsPerPage,
       searchTerm,
     }))
       .then((action) => {
         if (action.type === GET_INSTANCE_LIST.SUCCESS) {
-          this.setState({ page, selected: [] });
+          this.setState({
+            page,
+            selected: [],
+          });
         }
       });
   };
@@ -196,10 +255,68 @@ class ContentFinder extends Component {
     this.openEditor(id);
   };
 
+  handleToggleDeleteInstancesModal = () => {
+    this.setState(prevState => ({
+      deleteInstancesModalOpen: !prevState.deleteInstancesModalOpen,
+    }));
+  };
+
+  handleDeleteInstancesModelOnClose = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: DELETE_INSTANCES.INIT,
+    });
+  };
+
+  handleOnDelete = () => {
+    const { selected } = this.state;
+    const { dispatch, workshop } = this.props;
+    dispatch(deleteInstances({
+      ids: selected,
+      modelLabel: workshop.finder.filter.currentItemOption.value,
+    }))
+      .then((action) => {
+        if (action.type === DELETE_INSTANCES.SUCCESS) {
+          this.setState({
+            selected: [],
+          });
+        }
+      });
+  };
+
+  handleTogglePublishInstancesModal = () => {
+    this.setState(prevState => ({
+      publishInstancesModalOpen: !prevState.publishInstancesModalOpen,
+    }));
+  };
+
+  handlePublishInstancesModalOnClose = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: PUBLISH_INSTANCES.INIT,
+    });
+  };
+
+  handleOnPublish = () => {
+    const { selected } = this.state;
+    const { dispatch, workshop } = this.props;
+    dispatch(publishInstances({
+      ids: selected,
+      modelLabel: workshop.finder.filter.currentItemOption.value,
+    }))
+      .then((action) => {
+        if (action.type === PUBLISH_INSTANCES.SUCCESS) {
+          this.setState({
+            selected: [],
+          });
+        }
+      });
+  };
+
   render() {
     // State
     const {
-      selected, page, rowsPerPage,
+      selected, page, rowsPerPage, deleteInstancesModalOpen, publishInstancesModalOpen,
     } = this.state;
 
     // Props
@@ -209,6 +326,27 @@ class ContentFinder extends Component {
 
     return (
       <>
+        {/* Modals */}
+        <DeleteInstancesModal
+          isOpen={deleteInstancesModalOpen}
+          action={workshop.actions.DELETE_INSTANCES}
+          selected={selected}
+
+          // Callbacks
+          toggle={this.handleToggleDeleteInstancesModal}
+          onDelete={this.handleOnDelete}
+          onClose={this.handleDeleteInstancesModelOnClose}
+        />
+        <PublishInstanceModel
+          isOpen={publishInstancesModalOpen}
+          action={workshop.actions.PUBLISH_INSTANCES}
+          selected={selected}
+
+          // Callbacks
+          toggle={this.handleTogglePublishInstancesModal}
+          onPublish={this.handleOnPublish}
+          onClose={this.handlePublishInstancesModalOnClose}
+        />
 
         {/* Item search form card */}
         <Card className="pb-3">
@@ -217,7 +355,7 @@ class ContentFinder extends Component {
               <Row>
 
                 {/* Search bar */}
-                <Col sm={12} md={6} lg={6} xl={8} className="mb-sm-3 mb-xs-3">
+                <Col sm={12} md={12} lg={4} xl={6} className="mb-3 mb-lg-0">
                   <Field
                     name="search"
                     type="text"
@@ -229,13 +367,25 @@ class ContentFinder extends Component {
                 </Col>
 
                 {/* Item type selector */}
-                <Col sm={12} md={6} lg={6} xl={4}>
+                <Col sm={12} md={6} lg={4} xl={3} className="mb-3 mb-md-0">
                   <Field
                     name="type"
                     type="select"
-                    onChange={this.changeInstanceType}
+                    onChange={this.changeInstanceFilter}
                     component={renderSelectField}
-                    options={workshop.finder.options}
+                    options={workshop.finder.filter.itemOptions}
+                    className="text-capitalize"
+                  />
+                </Col>
+
+                {/* User filter selector */}
+                <Col sm={12} md={6} lg={4} xl={3}>
+                  <Field
+                    name="user"
+                    type="select"
+                    onChange={this.changeInstanceFilter}
+                    component={renderSelectField}
+                    options={workshop.finder.filter.userOptions}
                     className="text-capitalize"
                   />
                 </Col>
@@ -244,17 +394,38 @@ class ContentFinder extends Component {
 
             {/* Item toolbar */}
             <ButtonToolbar>
-              <Button color="primary" size="sm" onClick={this.handleCreateItem}>
+              <Button
+                color="primary"
+                size="sm"
+                onClick={this.handleCreateItem}
+                disabled={selected.length !== 0}
+              >
                 <i className="fal fa-plus" /> Create
               </Button>
-              <Button color="success" size="sm" disabled={selected.length === 0}>
-                Commit {selected.length !== 0 && <>{selected.length} item{selected.length === 1 ? '' : 's'}</>}
+              <Button
+                color="success"
+                size="sm"
+                onClick={this.handleTogglePublishInstanceModal}
+                disabled={selected.length === 0}
+              >
+                Publish
               </Button>
-              <Button color="danger" size="sm" disabled={selected.length === 0}>
-                Delete {selected.length !== 0 && <>{selected.length} item{selected.length === 1 ? '' : 's'}</>}
+              <Button
+                color="warning"
+                size="sm"
+                disabled={selected.length === 0}
+              >
+                Un-publish
+              </Button>
+              <Button
+                color="danger"
+                size="sm"
+                onClick={this.handleToggleDeleteInstancesModal}
+                disabled={selected.length === 0}
+              >
+                Delete
               </Button>
             </ButtonToolbar>
-
           </CardBody>
         </Card>
 
@@ -265,18 +436,25 @@ class ContentFinder extends Component {
               {!workshop.actions.GET_INSTANCE_LIST.loaded ? (
                 <Loader elemClass="load__card" />
               ) : (
-                <MatTable
-                  {...this.getTableProps(workshop.openList)}
-                  instances={workshop.openList.instances}
-                  instanceCount={workshop.openList.count}
-                  tableHeads={workshop.openList.tableHeads}
-                  selected={selected}
-                  onSelect={this.handleOnSelect}
-                  onChangePage={this.handleOnChangePage}
-                  onChangeRowsPerPage={this.handleOnChangeRowsPerPage}
-                  page={page}
-                  rowsPerPage={rowsPerPage}
-                />
+                <>
+                  <MatTable
+                    {...this.getTableProps(workshop.openList)}
+                    instances={workshop.openList.instances}
+                    instanceCount={workshop.openList.count}
+                    tableHeads={workshop.openList.tableHeads}
+                    selected={selected}
+                    onSelect={this.handleOnSelect}
+                    onChangePage={this.handleOnChangePage}
+                    onChangeRowsPerPage={this.handleOnChangeRowsPerPage}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                  />
+                  {selected.length !== 0 && (
+                    <span className="text-black-50">
+                      {selected.length} item{selected.length === 1 ? '' : 's'} selected
+                    </span>
+                  )}
+                </>
               )}
             </div>
           </CardBody>

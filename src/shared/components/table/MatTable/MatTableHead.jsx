@@ -32,14 +32,14 @@ export default class MatTableHead extends PureComponent {
         id: 'id', numeric: false, disablePadding: false, label: 'ID',
       },
       {
-        id: 'actions', numeric: false, disablePadding: false, label: 'Actions',
+        id: 'actions', numeric: false, disablePadding: false, label: 'Acciones',
       },
       ...rows,
       {
-        id: 'published', numeric: false, disablePadding: false, label: 'Published',
+        id: 'published', numeric: false, disablePadding: false, label: 'Publicado',
       },
       {
-        id: 'user', numeric: false, disablePadding: false, label: 'User',
+        id: 'user', numeric: false, disablePadding: false, label: 'Usuario',
       },
     ];
 

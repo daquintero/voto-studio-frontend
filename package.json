@@ -80,6 +80,7 @@
   },
   "scripts": {
     "start": "env-cmd development node scripts/start.js",
+    "start:staging": "env-cmd staging node scripts/start.js",
     "build": "node scripts/build.js && cp build/index.html build/200.html",
     "build:staging": "env-cmd staging npm run build",
     "build:production": "env-cmd production npm run build",

@@ -42,6 +42,7 @@ class MatTable extends Component {
     onSelect: PropTypes.func.isRequired,
     onChangePage: PropTypes.func.isRequired,
     onChangeRowsPerPage: PropTypes.func.isRequired,
+    renderRelLevelColumn: PropTypes.func,
   };
 
   static defaultProps = {
@@ -60,6 +61,7 @@ class MatTable extends Component {
     ],
     page: 0,
     rowsPerPage: 10,
+    renderRelLevelColumn: () => {},
   };
 
   constructor(props) {
@@ -79,9 +81,8 @@ class MatTable extends Component {
     this.setState({ order, orderBy });
   };
 
-  handleSelectAllClick = (event, checked) => {
-    const { field, onSelect } = this.props;
-    const { instances } = field.relatedInstances;
+  handleSelectAll = (event, checked) => {
+    const { instances, onSelect } = this.props;
     if (checked) {
       onSelect(instances.map(n => n.id));
       return;
@@ -120,7 +121,7 @@ class MatTable extends Component {
 
     // Props
     const {
-      tableHeads, actions, instances, instanceCount, onChangePage, page, rowsPerPage, selected,
+      tableHeads, actions, instances, instanceCount, onChangePage, page, rowsPerPage, selected, renderRelLevelColumn,
     } = this.props;
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, instanceCount - (page * rowsPerPage));
@@ -134,7 +135,7 @@ class MatTable extends Component {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
+              onSelectAll={this.handleSelectAll}
               onRequestSort={this.handleRequestSort}
               rowCount={instances.length}
             />
@@ -162,6 +163,28 @@ class MatTable extends Component {
                       {/* ID column */}
                       <TableCell className="material-table__cell">{instance.id}</TableCell>
 
+                      {/* Actions column */}
+                      <TableCell className="material-table__cell">
+                        {actions.map(action => (
+                          <span
+                            {...action.props}
+                            data-obj={JSON.stringify(instance)}
+                            key={action.key(instance.id)}
+                          >
+                            <i
+                              className={action.icon(instance)}
+                              id={action.id({ name: action.name, id: instance.id })}
+                            />
+                            <UncontrolledTooltip
+                              placement="top"
+                              target={action.id({ name: action.name, id: instance.id })}
+                            >
+                              {action.tooltipContent(instance)}
+                            </UncontrolledTooltip>
+                          </span>
+                        ))}
+                      </TableCell>
+
                       {/* Descriptor columns */}
                       {instance.tableValues.descriptors.map(descriptor => (
                         <TableCell
@@ -175,31 +198,17 @@ class MatTable extends Component {
                         </TableCell>
                       ))}
 
+                      {/* Rel. Level column */}
+                      {renderRelLevelColumn(instance)}
+
+                      {/* Published column */}
+                      <TableCell className="material-table__cell">
+                        {instance.published ? 'True' : 'False'}
+                      </TableCell>
+
                       {/* User column */}
                       <TableCell className="material-table__cell">
                         {userTableCell(instance.tableValues.userEmail, instance.tableValues.userId)}
-                      </TableCell>
-
-                      {/* Actions column */}
-                      <TableCell className="material-table__cell">
-                        {actions.map(action => (
-                          <span
-                            {...action.props}
-                            data-obj={JSON.stringify(instance)}
-                            key={action.key(instance.id)}
-                          >
-                            <i
-                              className={action.icon}
-                              id={action.id({ name: action.name, id: instance.id })}
-                            />
-                            <UncontrolledTooltip
-                              placement="top"
-                              target={action.id({ name: action.name, id: instance.id })}
-                            >
-                              {action.tooltipContent}
-                            </UncontrolledTooltip>
-                          </span>
-                        ))}
                       </TableCell>
                     </TableRow>
                   );

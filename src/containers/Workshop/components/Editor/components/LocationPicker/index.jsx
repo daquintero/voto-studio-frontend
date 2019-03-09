@@ -17,7 +17,7 @@ import {
 
 // Components
 import Map from './components/Map';
-import Loader from '../../../../../../shared/components/Loader/Loader';
+import Loader from '../../../../../../shared/components/Loader';
 
 
 class LocationPicker extends Component {
@@ -44,7 +44,8 @@ class LocationPicker extends Component {
   };
 
   handleOnClick = (e) => {
-    this.props.dispatch({
+    const { dispatch } = this.props;
+    dispatch({
       type: SELECT_POSITION,
       selectedObject: e.object,
     });

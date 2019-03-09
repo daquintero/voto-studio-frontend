@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, ButtonToolbar, Modal } from 'reactstrap'; // eslint-disable-line
-import Loader from './Loader/Loader';
+import Loader from './Loader';
 import squashString from '../utils/squashString';
 
 class ModalComponent extends PureComponent {

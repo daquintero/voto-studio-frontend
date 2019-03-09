@@ -10,12 +10,17 @@ class DatePickerField extends PureComponent {
   };
 
   render() {
+    // Props
+    const {
+      value,
+    } = this.props;
+
     return (
       <div className="date-picker">
         <DatePicker
           dropdownMode="select"
           className="form__form-group-datepicker"
-          selected={moment(this.props.value) || null}
+          selected={value ? moment(value) : moment()}
           onChange={this.props.onChange}
           dateFormat="DD/MM/YYYY"
         />

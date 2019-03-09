@@ -1,77 +1,41 @@
 import {
-  LIST_ITEMS,
-  GET_ITEM_DETAIL,
-  DELETE_ITEM,
+  BUILD_FINDER,
+  GET_INSTANCE_LIST,
   BUILD_FORM,
+  GET_LOCATION_PICKER_DATA_SET,
   UPDATE_BASIC_FIELDS,
   UPDATE_MEDIA_FIELD,
   UPDATE_MEDIA_ORDER,
   UPDATE_RELATED_FIELD,
-  SEARCH_RELATED_FIELDS,
-  PUBLISH_WORKSHOP_CONTENT,
-  BUILD_FINDER,
-  GET_INSTANCE_LIST,
-  GET_LOCATION_PICKER_DATA_SET,
+  DELETE_INSTANCES,
+  PUBLISH_INSTANCES,
 } from '../actionCreators/workshopActionCreators';
 import workshopService from '../../services/workshopService';
 
-export const listItems = () => (dispatch) => {
+
+// Delete instances of a given model label. Can delete
+// either a single instance or many instances.
+export const deleteInstances = deleteData => (dispatch) => {
   dispatch({
-    type: LIST_ITEMS.REQUEST,
+    type: DELETE_INSTANCES.REQUEST,
   });
-  return workshopService.get.list().then(
+  return workshopService.delete.instances(deleteData).then(
     response =>
       dispatch({
-        type: LIST_ITEMS.SUCCESS,
-        items: response.data.items,
+        type: DELETE_INSTANCES.SUCCESS,
+        response: response.data,
       }),
     error =>
       dispatch({
-        type: LIST_ITEMS.ERROR,
+        type: DELETE_INSTANCES.ERROR,
         error,
       }),
   );
 };
 
-export const getItemDetail = (appLabel, modelName, id) => (dispatch) => {
-  dispatch({
-    type: GET_ITEM_DETAIL.REQUEST,
-  });
-  return workshopService.get.detail(appLabel, modelName, id).then(
-    response =>
-      dispatch({
-        type: GET_ITEM_DETAIL.SUCCESS,
-        item: response.data.item,
-      }),
-    error =>
-      dispatch({
-        type: GET_ITEM_DETAIL.ERROR,
-        error,
-      }),
-  );
-};
 
-export const deleteItem = ({
-  appLabel, modelName, id, index,
-}) => (dispatch) => {
-  dispatch({
-    type: DELETE_ITEM.REQUEST,
-  });
-  return workshopService.delete.item(appLabel, modelName, id).then(
-    response =>
-      dispatch({
-        type: DELETE_ITEM.SUCCESS,
-        item: response.data.item,
-        index: parseInt(index, 10),
-      }),
-    error =>
-      dispatch({
-        type: DELETE_ITEM.ERROR,
-        error,
-      }),
-  );
-};
-
+// Retrieve all data necessarily data to build the form
+// for a given model label.
 export const buildForm = queryStringValues => (dispatch) => {
   dispatch({
     type: BUILD_FORM.REQUEST,
@@ -80,7 +44,7 @@ export const buildForm = queryStringValues => (dispatch) => {
     response =>
       dispatch({
         type: BUILD_FORM.SUCCESS,
-        form: response.data.form,
+        form: response.data,
       }),
     error =>
       dispatch({
@@ -98,7 +62,7 @@ export const updateBasicFields = updateData => (dispatch) => {
     response =>
       dispatch({
         type: UPDATE_BASIC_FIELDS.SUCCESS,
-        result: response.data.result,
+        response: response.data,
       }),
     error =>
       dispatch({
@@ -149,13 +113,14 @@ export const updateRelatedField = updateData => (dispatch) => {
   dispatch({
     type: UPDATE_RELATED_FIELD.REQUEST,
     id: updateData.fieldName,
+    relLevel: updateData.relLevel,
   });
   return workshopService.post.updateRelatedField(updateData).then(
     response =>
       dispatch({
         type: UPDATE_RELATED_FIELD.SUCCESS,
-        result: response.data.result,
-        id: response.data.result.fieldName,
+        response: response.data,
+        id: response.data.fieldName,
       }),
     error =>
       dispatch({
@@ -165,37 +130,19 @@ export const updateRelatedField = updateData => (dispatch) => {
   );
 };
 
-export const searchRelatedFields = searchParameters => (dispatch) => {
+export const publishInstances = publishData => (dispatch) => {
   dispatch({
-    type: SEARCH_RELATED_FIELDS.REQUEST,
+    type: PUBLISH_INSTANCES.REQUEST,
   });
-  return workshopService.search.relatedFields(searchParameters).then(
+  return workshopService.post.publishInstances(publishData).then(
     response =>
       dispatch({
-        type: SEARCH_RELATED_FIELDS.SUCCESS,
-        results: response.data.results,
+        type: PUBLISH_INSTANCES.SUCCESS,
+        response: response.data,
       }),
     error =>
       dispatch({
-        type: SEARCH_RELATED_FIELDS.ERROR,
-        error,
-      }),
-  );
-};
-
-export const publishWorkshopContent = () => (dispatch) => {
-  dispatch({
-    type: PUBLISH_WORKSHOP_CONTENT.REQUEST,
-  });
-  return workshopService.post.publish().then(
-    response =>
-      dispatch({
-        type: PUBLISH_WORKSHOP_CONTENT.SUCCESS,
-        result: response.data.result,
-      }),
-    error =>
-      dispatch({
-        type: PUBLISH_WORKSHOP_CONTENT.ERROR,
+        type: PUBLISH_INSTANCES.ERROR,
         error,
       }),
   );

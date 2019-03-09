@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Absolute Imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -10,11 +11,9 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { uploadImages } from '../../../../../redux/actions/mediaActions';
 
 // Functions
 import renderDropZoneMultipleField from '../../../../../shared/components/form/DropZoneMultiple';
-import { TOGGLE_IMAGE_UPLOADER, UPLOAD_IMAGES } from '../../../../../redux/actionCreators/mediaActionCreators';
 
 
 class ImageUploader extends Component {

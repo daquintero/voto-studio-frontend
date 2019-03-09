@@ -1,20 +1,22 @@
 import { initializeActions, actionResult } from '../helpers/asyncHelpers';
 import {
-  GET_IMAGE_LIST,
-  TOGGLE_IMAGE_UPLOADER,
-  UPLOAD_IMAGES,
-  TOGGLE_IMAGE_EDITOR,
-  UPDATE_IMAGE,
-  DELETE_IMAGES,
-  SELECT_IMAGE,
+  GET_FILE_LIST,
+  TOGGLE_FILE_UPLOADER,
+  UPLOAD_FILES,
+  TOGGLE_FILE_EDITOR,
+  UPDATE_FILE,
+  DELETE_FILES,
+  SELECT_FILE,
+  SELECT_TAB,
 } from '../actionCreators/mediaActionCreators';
 
 const initialState = {
-  images: {
-    imageUploaderOpen: false,
-    imageEditorOpen: false,
+  files: {
+    fileUploaderOpen: false,
+    fileEditorOpen: false,
     instances: [],
     selected: [],
+    activeTab: 'media.Image',
   },
   videos: {
     instances: [],
@@ -23,9 +25,9 @@ const initialState = {
     instances: [],
   },
   actions: initializeActions([
-    'GET_IMAGE_LIST',
-    'UPLOAD_IMAGES',
-    'UPDATE_IMAGE',
+    'GET_FILE_LIST',
+    'UPLOAD_FILES',
+    'UPDATE_FILE',
   ]),
 };
 
@@ -33,177 +35,188 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     // List Images reducers ----------------------------
-    case GET_IMAGE_LIST.REQUEST:
+    case GET_FILE_LIST.REQUEST:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('GET_IMAGE_LIST.REQUEST'),
+          ...actionResult('GET_FILE_LIST.REQUEST'),
         },
       };
-    case GET_IMAGE_LIST.SUCCESS:
+    case GET_FILE_LIST.SUCCESS:
       return {
         ...state,
-        images: {
-          ...state.images,
+        files: {
+          ...state.files,
           ...action.response,
         },
         actions: {
           ...state.actions,
-          ...actionResult('GET_IMAGE_LIST.SUCCESS'),
+          ...actionResult('GET_FILE_LIST.SUCCESS'),
         },
       };
-    case GET_IMAGE_LIST.ERROR:
+    case GET_FILE_LIST.ERROR:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('GET_IMAGE_LIST.ERROR', { error: action.error }),
+          ...actionResult('GET_FILE_LIST.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
 
     // Toggle Image Uploader reducer -------------------
-    case SELECT_IMAGE:
+    case SELECT_FILE:
       return {
         ...state,
-        images: {
-          ...state.images,
+        files: {
+          ...state.files,
           selected: action.selected,
         },
       };
       // -----------------------------------------------
 
     // Toggle Image Uploader reducer -------------------
-    case TOGGLE_IMAGE_UPLOADER:
+    case SELECT_TAB:
       return {
         ...state,
-        images: {
-          ...state.images,
-          imageUploaderOpen: !state.images.imageUploaderOpen,
+        files: {
+          ...state.files,
+          activeTab: action.activeTab,
+        },
+      };
+      // -----------------------------------------------
+
+    // Toggle Image Uploader reducer -------------------
+    case TOGGLE_FILE_UPLOADER:
+      return {
+        ...state,
+        files: {
+          ...state.files,
+          fileUploaderOpen: !state.files.fileUploaderOpen,
         },
       };
       // -----------------------------------------------
 
     // Upload Images reducers --------------------------
-    case UPLOAD_IMAGES.REQUEST:
+    case UPLOAD_FILES.REQUEST:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPLOAD_IMAGES.REQUEST'),
+          ...actionResult('UPLOAD_FILES.REQUEST'),
         },
       };
-    case UPLOAD_IMAGES.SUCCESS: {
-      const { instances, imageCount } = action.response;
+    case UPLOAD_FILES.SUCCESS: {
+      const { instances, instanceCount } = action.response;
       let newInstances;
 
-      if (imageCount < state.images.pageSize) {
+      if (instanceCount < state.files.pageSize) {
         newInstances = [
           ...instances,
-          ...state.images.instances,
+          ...state.files.instances,
         ];
       } else {
         newInstances = [
           ...instances,
-          ...state.images.instances.slice(0, state.images.instances.length - instances.length),
+          ...state.files.instances.slice(0, state.files.instances.length - instances.length),
         ];
       }
 
       return {
         ...state,
-        images: {
-          ...state.images,
+        files: {
+          ...state.files,
           instances: newInstances,
-          imageCount: action.response.imageCount,
+          fileCount: action.response.fileCount,
         },
         actions: {
           ...state.actions,
-          ...actionResult('UPLOAD_IMAGES.SUCCESS'),
+          ...actionResult('UPLOAD_FILES.SUCCESS'),
         },
       };
     }
-    case UPLOAD_IMAGES.ERROR:
+    case UPLOAD_FILES.ERROR:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPLOAD_IMAGES.ERROR', { error: action.error }),
+          ...actionResult('UPLOAD_FILES.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
 
     // Toggle Image Editor reducer ---------------------
-    case TOGGLE_IMAGE_EDITOR:
+    case TOGGLE_FILE_EDITOR:
       return {
         ...state,
-        images: {
-          ...state.images,
-          imageEditorOpen: !state.images.imageEditorOpen,
+        files: {
+          ...state.files,
+          fileEditorOpen: !state.files.fileEditorOpen,
         },
       };
       // -----------------------------------------------
 
     // Update Images reducers --------------------------
-    case UPDATE_IMAGE.REQUEST:
+    case UPDATE_FILE.REQUEST:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_IMAGE.REQUEST'),
+          ...actionResult('UPDATE_FILE.REQUEST'),
         },
       };
-    case UPDATE_IMAGE.SUCCESS:
+    case UPDATE_FILE.SUCCESS:
       return {
         ...state,
-        images: {
-          ...state.images,
-          instances: state.images.instances
+        files: {
+          ...state.files,
+          instances: state.files.instances
             .map(f => (f.id === action.response.instance.id ? action.response.instance : f)),
         },
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_IMAGE.SUCCESS'),
+          ...actionResult('UPDATE_FILE.SUCCESS'),
         },
       };
-    case UPDATE_IMAGE.ERROR:
+    case UPDATE_FILE.ERROR:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('UPDATE_IMAGE.ERROR', { error: action.error }),
+          ...actionResult('UPDATE_FILE.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------
 
     // Update Images reducers --------------------------
-    case DELETE_IMAGES.REQUEST:
+    case DELETE_FILES.REQUEST:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_IMAGES.REQUEST'),
+          ...actionResult('DELETE_FILES.REQUEST'),
         },
       };
-    case DELETE_IMAGES.SUCCESS:
+    case DELETE_FILES.SUCCESS:
       return {
         ...state,
-        images: {
-          ...state.images,
-          instances: state.images.instances.filter(f => !action.response.ids.includes(f.id)),
-          imageCount: action.response.imageCount,
+        files: {
+          ...state.files,
+          instances: state.files.instances.filter(f => !action.response.ids.includes(f.id)),
+          fileCount: action.response.fileCount,
         },
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_IMAGES.SUCCESS'),
+          ...actionResult('DELETE_FILES.SUCCESS'),
         },
       };
-    case DELETE_IMAGES.ERROR:
+    case DELETE_FILES.ERROR:
       return {
         ...state,
         actions: {
           ...state.actions,
-          ...actionResult('DELETE_IMAGES.ERROR', { error: action.error }),
+          ...actionResult('DELETE_FILES.ERROR', { error: action.error }),
         },
       };
       // -----------------------------------------------

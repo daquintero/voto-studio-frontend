@@ -63,7 +63,10 @@ class LocationPicker extends PureComponent {
         <div className="modal__body">
           <RelatedContentTable
             defaults={{ rowsPerPage: 5 }}
-            initialValues={workshop.form.relatedFields && { type: workshop.form.relatedFields.map(f => f.option)[0] }}
+            initialValues={workshop.form.relatedFields && {
+              type: workshop.form.relatedFields.map(f => f.option)[0],
+              user: workshop.form.userOptions[0],
+            }}
             enableReinitialize
           />
         </div>

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Absolute Imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -10,8 +11,6 @@ import {
 } from 'reactstrap';
 
 // Actions
-import { updateImage } from '../../../../../redux/actions/mediaActions';
-import { TOGGLE_IMAGE_EDITOR, UPDATE_IMAGE } from '../../../../../redux/actionCreators/mediaActionCreators';
 
 
 class ImageEditor extends Component {

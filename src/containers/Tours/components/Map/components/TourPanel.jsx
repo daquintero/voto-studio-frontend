@@ -15,7 +15,7 @@ import {
   togglePreviewTourMode,
 } from '../../../../../redux/actions/tourActions';
 // import addTransitionClasses from '../../../../../shared/utils/addTransitionClasses';
-import Loader from '../../../../../shared/components/Loader/Loader';
+import Loader from '../../../../../shared/components/Loader';
 import { changeMapWidth } from '../../../../../redux/actions/mapActions';
 
 class TourPanel extends Component {

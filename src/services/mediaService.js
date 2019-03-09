@@ -7,43 +7,46 @@ const mediaApiUrl = `${baseUrl}/media/api/v1`;
 
 const urls = {
   get: {
-    images: `${mediaApiUrl}/list_images/`,
+    files: `${mediaApiUrl}/list_files/`,
   },
   post: {
-    images: `${mediaApiUrl}/upload_images/`,
-    updateImage: `${mediaApiUrl}/update_image/`,
+    files: `${mediaApiUrl}/upload_files/`,
+    updateFile: `${mediaApiUrl}/update_file/`,
   },
   delete: {
-    images: `${mediaApiUrl}/delete_images/`,
+    files: `${mediaApiUrl}/delete_files/`,
   },
 };
 
 // GET requests
-const getImages = (pageNumber, excludeIds) => axios.get(buildUrl(urls.get.images, {
+const getFiles = ({
+  pageNumber, excludeIds, modelLabel,
+}) => axios.get(buildUrl(urls.get.files, {
   page: pageNumber,
   exclude: excludeIds.join('-'),
+  ml: modelLabel,
 }), getHeaders());
 
 // POST requests
-const uploadImages = uploadData => axios.post(urls.post.images, uploadData, getHeaders({
+const uploadFiles = uploadData => axios.post(urls.post.files, uploadData, getHeaders({
   'Content-Type': 'multipart/form-data',
 }));
-const updateImage = updateData => axios.post(urls.post.updateImage, updateData, getHeaders());
+const updateFile = updateData => axios.post(urls.post.updateFile, updateData, getHeaders());
 
 // DELETE requests
-const deleteImages = deleteData => axios.delete(urls.delete.images, { data: deleteData, ...getHeaders() });
+const deleteFiles = deleteData => axios.delete(urls.delete.files, { data: deleteData, ...getHeaders() });
 
 
 const mediaService = {
   get: {
-    images: getImages,
+    files: getFiles,
   },
   post: {
-    images: uploadImages,
-    updateImage,
+    files: uploadFiles,
+    updateFile,
   },
   delete: {
-    images: deleteImages,
+    files: deleteFiles,
   },
 };
 

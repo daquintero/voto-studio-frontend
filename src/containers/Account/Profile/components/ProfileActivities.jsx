@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ProfileActivity from './ProfileActivity';
 import { getUserStatistics } from '../../../../redux/actions/userActions';
-import Loader from '../../../../shared/components/Loader/Loader';
+import Loader from '../../../../shared/components/Loader';
 
 class ProfileActivities extends Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
     auth: PropTypes.instanceOf(Object).isRequired,
   };
 

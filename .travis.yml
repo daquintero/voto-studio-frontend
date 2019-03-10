@@ -5,12 +5,19 @@ cache:
   directories:
     - node_modules
 script:
-  - npm test
-  - npm run build
+#  - npm test
+  - if [ $TRAVIS_BRANCH == "master" ]; then npm run build:production; fi
+  - if [ $TRAVIS_BRANCH == "staging" ]; then npm run build:staging; fi
 deploy:
-  provider: surge
-  skip_cleanup: true
-  domain: https://studio.votoinformado2019.com
-  project: ./build/
-on:
-  branch: master
+  - provider: surge
+    skip_cleanup: true
+    domain: https://studio.votoinformado2019.com
+    project: ./build/
+    on:
+      branch: master
+  - provider: surge
+    skip_cleanup: true
+    domain: vstudio-staging.surge.sh
+    project: ./build/
+    on:
+      branch: staging

@@ -41,8 +41,8 @@ class EditorTableWrapper extends Component {
         key: id => `edit-${id}`,
         name: 'edit',
         id: ({ name, id }) => `${name}-${props.field.modelName}-${id}`,
-        icon: 'fal fa-fw fa-edit mr-3 text-primary',
-        tooltipContent: `Edit ${props.field.verboseName}`,
+        icon: () => 'fal fa-fw fa-edit mr-3 text-primary',
+        tooltipContent: () => `Edit ${props.field.verboseName}`,
         props: {
           className: 'workshop__form-action',
           onClick: () => {},
@@ -52,8 +52,8 @@ class EditorTableWrapper extends Component {
         key: id => `detail-${id}`,
         name: 'detail',
         id: ({ name, id }) => `${name}-${props.field.modelName}-${id}`,
-        icon: 'fal fa-fw fa-eye mr-3 text-info',
-        tooltipContent: `View ${props.field.verboseName}`,
+        icon: () => 'fal fa-fw fa-eye mr-3 text-info',
+        tooltipContent: () => `View ${props.field.verboseName}`,
         props: {
           className: 'workshop__form-action',
           onClick: () => {},

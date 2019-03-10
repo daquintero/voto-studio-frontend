@@ -22,10 +22,10 @@ const urls = {
     updateMediaField: `${workshopApiUrl}/update_media_field/`,
     updateMediaOrder: `${workshopApiUrl}/update_media_order/`,
     updateRelatedField: `${workshopApiUrl}/update_related_field/`,
-    publish: `${workshopApiUrl}/publish_instances/`,
+    publishInstances: `${workshopApiUrl}/publish_instances/`,
   },
   delete: {
-    item: `${workshopApiUrl}/delete_item/`,
+    instances: `${workshopApiUrl}/delete_instances/`,
   },
   search: {
     relatedFields: `${searchApiUrl}/related_fields/`,
@@ -55,20 +55,22 @@ const relatedFields = ({
 const buildFinder = () => axios.get(urls.get.buildFinder, getHeaders());
 
 const instanceList = ({
-  modelLabel, page, pageSize, searchTerm,
+  modelLabel, filter, page, pageSize, searchTerm,
 }) => axios.get(buildUrl(urls.get.instanceList, {
   ml: modelLabel,
+  filter,
   page,
   size: pageSize,
   search: searchTerm,
 }), getHeaders());
 
 const relatedInstanceList = ({
-  relatedModelLabel, modelLabel, fieldName, id, page, pageSize, searchTerm,
+  relatedModelLabel, modelLabel, fieldName, filter, id, page, pageSize, searchTerm,
 }) => axios.get(buildUrl(urls.get.relatedInstanceList, {
   rml: relatedModelLabel,
   ml: modelLabel,
   fn: fieldName,
+  filter,
   id,
   page,
   size: pageSize,
@@ -83,11 +85,11 @@ const updateMediaField = updateData => axios.post(urls.post.updateMediaField, up
 const updateMediaOrder = orderData => axios.post(urls.post.updateMediaOrder, orderData, getHeaders());
 const updateRelatedField = updateData =>
   axios.post(urls.post.updateRelatedField, updateData, getHeaders());
-const publishInstances = publishData => axios.post(urls.post.publish, publishData, getHeaders());
+const publishInstances = publishData => axios.post(urls.post.publishInstances, publishData, getHeaders());
 
 // DELETE requests
-const item = (appLabel, modelName, id) =>
-  axios.delete(urls.delete.item, { data: { appLabel, modelName, id }, ...getHeaders() });
+const instances = ({ ids, modelLabel }) =>
+  axios.delete(urls.delete.instances, { data: { modelLabel, ids }, ...getHeaders() });
 
 // Search GET request
 const searchRelatedFields = searchParameters =>
@@ -112,7 +114,7 @@ const workshopService = {
     publishInstances,
   },
   delete: {
-    item,
+    instances,
   },
   search: {
     relatedFields: searchRelatedFields,

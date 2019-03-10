@@ -109,7 +109,7 @@ export const registerUser = (values, history) => (dispatch) => {
 
 export const getUserPermissions = permissionData => (dispatch) => {
   dispatch({
-    type: GET_USER_PERMISSIONS,
+    type: GET_USER_PERMISSIONS.REQUEST,
   });
   return userService.get.userPermissions(permissionData).then(
     response =>

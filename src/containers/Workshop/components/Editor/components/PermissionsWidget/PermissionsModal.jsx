@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 import { Modal, Table } from 'reactstrap';
 
 // Actions
-import { LIST_USERS } from '../../../../../redux/actionCreators/userActionCreators';
-import { getUserList, updateUserPermission } from '../../../../../redux/actions/userActions';
+import { LIST_USERS } from '../../../../../../redux/actionCreators/userActionCreators';
+import { getUserList, updateUserPermission } from '../../../../../../redux/actions/userActions';
 
 // Components
-import Loader from '../../../../../shared/components/Loader';
+import Loader from '../../../../../../shared/components/Loader';
 
 
 class PermissionsModal extends PureComponent {

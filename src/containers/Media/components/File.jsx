@@ -5,6 +5,9 @@ import classNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
 import { UncontrolledTooltip } from 'reactstrap';
 
+// Functions
+import imageUrl from '../../../shared/utils/imageUrl';
+
 
 class File extends Component {
   static propTypes = {
@@ -41,7 +44,7 @@ class File extends Component {
           <>
             <img
               className="gallery__file"
-              src={file.url}
+              src={imageUrl(file.url)}
               alt={file.title}
             />
             <div className="gallery__file__info">

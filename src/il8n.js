@@ -1,14 +1,18 @@
+/* eslint-disable */
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
+import English from './translations/English';
+import Spanish from './translations/Spanish';
 
 // the translations
 // (tip move them in a JSON file and import them)
 const resources = {
   en: {
     translation: {
-      'Welcome to React': 'Welcome to React and react-i18next',
-    },
-  },
+      "Welcome to React": "Welcome to React and react-i18next"
+    }
+  }
 };
 
 i18n

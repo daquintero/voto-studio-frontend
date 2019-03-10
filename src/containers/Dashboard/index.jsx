@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Col, Row, Card, CardBody } from 'reactstrap';
 
+import { withTranslation } from 'react-i18next';
+
+
 class Dashboard extends PureComponent {
   getColDims = () => ({
     xs: 12, sm: 12, md: 3, lg: 3, xl: 3,
@@ -55,4 +58,4 @@ class Dashboard extends PureComponent {
   }
 }
 
-export default Dashboard;
+export default withTranslation()(Dashboard);

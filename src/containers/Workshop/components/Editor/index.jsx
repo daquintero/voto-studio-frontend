@@ -55,7 +55,6 @@ import ErrorPage from '../../../../shared/components/ErrorPage';
 import EditorTableWrapper from './components/EditorTableWrapper';
 import FileGallery from '../../../Media/components/FileGallery';
 import Loader from '../../../../shared/components/Loader';
-import LocationPicker from './components/LocationPicker';
 import MediaCenter from './components/MediaCenter';
 import PermissionsWidget from './components/PermissionsWidget';
 import PublishInstancesModal from '../../../../shared/components/PublishInstancesModal';
@@ -67,6 +66,7 @@ import renderCheckboxField from '../../../../shared/components/form/CheckBox';
 import renderDatePicker from '../../../../shared/components/form/DatePicker';
 import renderJSONFieldEditor from './components/JSONFieldEditor';
 import renderSelectField from '../../../../shared/components/form/Select';
+import renderLocationPickerField from '../../../../shared/components/form/LocationPicker';
 
 
 const mediaModelLabelFieldNameMap = {
@@ -89,7 +89,6 @@ class Editor extends Component {
     location: ReactRouterPropTypes.location.isRequired,
 
     // Form
-    onChange: PropTypes.func.isRequired,
     workshopForm: PropTypes.instanceOf(Object),
   };
 
@@ -317,25 +316,12 @@ class Editor extends Component {
       workshop,
     } = this.props;
 
-    // Workshop
-    const {
-      locationPicker,
-    } = workshop;
-
     if (field.name === 'locationId') {
       return (
-        <div className="form__form-group" key={field.name}>
-          <span className="form__form-group-label text-capitalize">{locationPicker.locationIdName}</span>
-          <div className="form__form-group-field">
-            <input
-              value={locationPicker.selectedObject.properties[locationPicker.locationIdName]}
-              onChange={this.handleLocationOnChange}
-            />
-            <Button size="sm" className="mb-0 ml-2 pr-5" onClick={this.handleToggleLocationPicker}>
-              {locationPicker.hasSelectedObject ? 'Change position' : 'Select position'}
-            </Button>
-          </div>
-        </div>
+        <Field
+          name="locationId"
+          component={renderLocationPickerField}
+        />
       );
     }
 
@@ -404,7 +390,7 @@ class Editor extends Component {
 
     // Props
     const {
-      workshop, auth, dispatch, onChange,
+      workshop, auth, dispatch,
     } = this.props;
 
     // Workshop
@@ -424,7 +410,6 @@ class Editor extends Component {
             {loaded ? (
               <>
                 <ToastContainer pauseOnFocusLoss={false} />
-                <LocationPicker onChange={onChange} />
                 <MediaCenter toggle={this.handleToggleMediaCenter} onAdd={this.handleMediaOnAdd} />
                 <Row>
                   <Col lg={12} xl={4}>

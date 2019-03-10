@@ -14,7 +14,7 @@ class Dashboard extends PureComponent {
           <Col>
             <h3 className="page-title">Dashboard</h3>
             <h3 className="page-subhead subhead">
-             Investiga, contribuye y propón informacion para ser revisada contra los fake news.
+              This is where you can control the data that is viewable by the users of VotoInformado
             </h3>
           </Col>
         </Row>
@@ -25,7 +25,6 @@ class Dashboard extends PureComponent {
                 <CardBody className="text-center">
                   <i className="fal fa-6x fa-wrench mb-3" />
                   <h3>Workshop</h3>
-                  <p>Propón información aquí</p>
                 </CardBody>
               </Card>
             </Link>
@@ -45,8 +44,7 @@ class Dashboard extends PureComponent {
               <Card>
                 <CardBody className="text-center">
                   <i className="fal fa-6x fa-map mb-3" />
-                  <h3>Toures</h3>
-                  <p>En construcción. <i className="fal fa-toolbox p-2" /></p>
+                  <h3>Tours</h3>
                 </CardBody>
               </Card>
             </Link>

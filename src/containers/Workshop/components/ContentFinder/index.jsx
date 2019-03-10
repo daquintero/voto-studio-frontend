@@ -196,6 +196,8 @@ class ContentFinder extends Component {
     this.openEditor(id);
   };
 
+  handleDeleteItems = () => {};
+
   render() {
     // State
     const {

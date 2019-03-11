@@ -151,10 +151,6 @@ class Editor extends Component {
       workshop, workshopForm, dispatch, history,
     } = this.props;
 
-    const {
-      selectedObject, locationIdName,
-    } = workshop.locationPicker;
-
     // Check if values object is empty, if so then return.
     if (
       Object.keys(workshopForm.values).length === 0 &&
@@ -168,10 +164,7 @@ class Editor extends Component {
     dispatch(updateBasicFields({
       modelLabel: workshop.form.parentModel.modelLabel,
       id,
-      values: Object.assign(workshopForm.values, {
-        locationId: selectedObject.properties[locationIdName],
-        locationIdName,
-      }),
+      values: Object.assign(workshopForm.values),
     }))
       .then((action) => {
         if (action.type === UPDATE_BASIC_FIELDS.SUCCESS) {
@@ -316,10 +309,10 @@ class Editor extends Component {
       workshop,
     } = this.props;
 
-    if (field.name === 'locationId') {
+    if (field.name === 'location') {
       return (
         <Field
-          name="locationId"
+          name="location"
           component={renderLocationPickerField}
         />
       );

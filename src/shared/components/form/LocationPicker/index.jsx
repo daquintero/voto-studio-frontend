@@ -1,8 +1,8 @@
-/* eslint-disable */
 // Absolute Imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
+import Select from 'react-select';
 
 // Components
 import LocationPickerModal from './components/LocationPickerModal';
@@ -12,6 +12,7 @@ class LocationPicker extends Component {
   static propTypes = {
     // Form
     value: PropTypes.instanceOf(Object),
+    // initial: PropTypes.instanceOf(Object),
 
     // Callbacks
     onChange: PropTypes.func.isRequired,
@@ -20,6 +21,7 @@ class LocationPicker extends Component {
   static defaultProps = {
     // Form
     value: {},
+    // initial: {},
   };
 
   constructor(props) {
@@ -39,22 +41,20 @@ class LocationPicker extends Component {
     }));
   };
 
-  handleOnChange = (e) => {
-    const { value: { locationIdName, locationId } }  = this.state;
+  handleOnChange = ({ value }, name) => {
+    const { value: { locationIdName, locationId } } = this.state;
     const { onChange } = this.props;
 
-    e.persist();
-
     let changeData;
-    if (e.target.name === 'locationIdName') {
+    if (name === 'locationIdName') {
       changeData = {
         locationId,
-        locationIdName: e.target.value,
+        locationIdName: value,
       };
-    } else if (e.target.name === 'locationId') {
+    } else if (name === 'locationId') {
       changeData = {
         locationIdName,
-        locationId: e.target.value,
+        locationId: value,
       };
     }
 
@@ -77,6 +77,35 @@ class LocationPicker extends Component {
     this.handleToggle();
   };
 
+  customStyles = {
+    control: base => ({
+      ...base,
+      height: 40,
+      minHeight: 40,
+      borderColor: '#dce1e9',
+      borderRadius: 0,
+      width: 130,
+    }),
+    placeholder: provided => ({
+      ...provided,
+      color: 'rgba(140, 140, 140, 1)',
+    }),
+    option: provided => ({
+      ...provided,
+      borderRadius: 0,
+
+    }),
+    menu: provided => ({
+      ...provided,
+      borderRadius: 0,
+      marginTop: 0,
+    }),
+    menuList: provided => ({
+      ...provided,
+      padding: 0,
+    }),
+  };
+
   render() {
     // State
     const {
@@ -85,7 +114,7 @@ class LocationPicker extends Component {
 
     // Props
     const {
-      value: { locationIdName, locationId },
+      value: { locationIdNameOption, locationIdName, locationId },
     } = this.props;
 
     return (
@@ -106,22 +135,27 @@ class LocationPicker extends Component {
             <input
               name="locationId"
               value={locationId}
-              onChange={this.handleOnChange}
+              onChange={e => this.handleOnChange(e.target, 'locationId')}
               disabled={locationIdName === 'national'}
               placeholder={locationIdName === 'national' ? 'National' : ''}
             />
-            <select
+            <Select
+              styles={this.customStyles}
               name="locationIdName"
-              value={locationIdName}
-              onChange={this.handleOnChange}
-            >
-              <option value="national">National</option>
-              <option value="circuito">Circuito</option>
-              <option value="district">District</option>
-            </select>
+              onChange={selected => this.handleOnChange(selected, 'locationIdName')}
+              className="ml-3"
+              defaultValue={locationIdNameOption}
+              options={[
+                { label: 'National', value: 'national' },
+                { label: 'Circuito', value: 'circuito' },
+                { label: 'District', value: 'district' },
+              ]}
+            />
             <Button
               className="ml-3 mb-0"
+              style={{ width: '50%' }}
               onClick={this.handleToggle}
+              disabled={locationIdName === 'national'}
             >
               Select location
             </Button>

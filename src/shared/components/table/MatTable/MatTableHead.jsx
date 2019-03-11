@@ -5,9 +5,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import { withTranslation } from 'react-i18next';
 
-
-export default class MatTableHead extends PureComponent {
+class MatTableHead extends PureComponent {
   static propTypes = {
     rows: PropTypes.instanceOf(Array).isRequired,
     numSelected: PropTypes.number.isRequired,
@@ -16,6 +16,7 @@ export default class MatTableHead extends PureComponent {
     order: PropTypes.string.isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   createSortHandler = property => (event) => {
@@ -24,7 +25,7 @@ export default class MatTableHead extends PureComponent {
 
   render() {
     const {
-      rows, onSelectAll, order, orderBy, numSelected, rowCount,
+      rows, onSelectAll, order, orderBy, numSelected, rowCount, t,
     } = this.props;
 
     const rowsWithExtra = [
@@ -32,14 +33,14 @@ export default class MatTableHead extends PureComponent {
         id: 'id', numeric: false, disablePadding: false, label: 'ID',
       },
       {
-        id: 'actions', numeric: false, disablePadding: false, label: 'Actions',
+        id: 'actions', numeric: false, disablePadding: false, label: t('Actions'),
       },
       ...rows,
       {
-        id: 'published', numeric: false, disablePadding: false, label: 'Published',
+        id: 'published', numeric: false, disablePadding: false, label: t('Published'),
       },
       {
-        id: 'user', numeric: false, disablePadding: false, label: 'User',
+        id: 'user', numeric: false, disablePadding: false, label: t('User'),
       },
     ];
 
@@ -68,7 +69,7 @@ export default class MatTableHead extends PureComponent {
                 onClick={this.createSortHandler(row.id)}
                 className="material-table__sort-label"
               >
-                {row.label}
+                {t(row.label)}
               </TableSortLabel>
             </TableCell>
           ), this)}
@@ -77,3 +78,5 @@ export default class MatTableHead extends PureComponent {
     );
   }
 }
+
+export default withTranslation()(MatTableHead);

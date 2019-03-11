@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Col, Row, Card, CardBody } from 'reactstrap';
@@ -11,6 +12,7 @@ class Dashboard extends PureComponent {
   });
 
   render() {
+    const { t } = this.props;
     return (
       <Container className="mt-4">
         <Row>
@@ -28,6 +30,7 @@ class Dashboard extends PureComponent {
                 <CardBody className="text-center">
                   <i className="fal fa-6x fa-wrench mb-3" />
                   <h3>Workshop</h3>
+                  <p>{t('Propose information here')}</p>
                 </CardBody>
               </Card>
             </Link>
@@ -47,7 +50,8 @@ class Dashboard extends PureComponent {
               <Card>
                 <CardBody className="text-center">
                   <i className="fal fa-6x fa-map mb-3" />
-                  <h3>Tours</h3>
+                  <h3 className="m-0">{t('Tours')}</h3>
+                  <p><i className="fal fa-toolbox p-2" />{t('In Construction')}</p>
                 </CardBody>
               </Card>
             </Link>

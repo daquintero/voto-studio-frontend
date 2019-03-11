@@ -13,6 +13,7 @@ import {
   Row,
   Col,
 } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Actions
 import {
@@ -325,7 +326,7 @@ class ContentFinder extends Component {
 
     // Props
     const {
-      workshop,
+      workshop, t,
     } = this.props;
 
     return (
@@ -365,7 +366,7 @@ class ContentFinder extends Component {
                     type="text"
                     onKeyUp={this.handleSearchInstances}
                     component="input"
-                    placeholder="Search for content..."
+                    placeholder={t('Search for content...')}
                     className="workshop__content-finder__input"
                   />
                 </Col>
@@ -404,7 +405,7 @@ class ContentFinder extends Component {
                 onClick={this.handleCreateItem}
                 disabled={selected.length !== 0}
               >
-                <i className="fal fa-plus" /> Create
+                <i className="fal fa-plus" /> {t('Create')}
               </Button>
               <Button
                 color="success"
@@ -412,14 +413,14 @@ class ContentFinder extends Component {
                 onClick={this.handleTogglePublishInstanceModal}
                 disabled={selected.length === 0}
               >
-                Publish
+                {t('Publish')}
               </Button>
               <Button
                 color="warning"
                 size="sm"
                 disabled={selected.length === 0}
               >
-                Un-publish
+                {t('Un-publish')}
               </Button>
               <Button
                 color="danger"
@@ -427,7 +428,7 @@ class ContentFinder extends Component {
                 onClick={this.handleToggleDeleteInstancesModal}
                 disabled={selected.length === 0}
               >
-                Delete
+                <i className="fal fa-trash p-1" /> {t('Delete')}
               </Button>
             </ButtonToolbar>
           </CardBody>
@@ -455,7 +456,7 @@ class ContentFinder extends Component {
                   />
                   {selected.length !== 0 && (
                     <span className="text-black-50">
-                      {selected.length} item{selected.length === 1 ? '' : 's'} selected
+                      {selected.length} item{selected.length === 1 ? '' : 's'} {t('selected')}
                     </span>
                   )}
                 </>
@@ -475,4 +476,4 @@ const ContentFinderWithForm = reduxForm({
 export default withRouter(connect(state => ({
   workshop: state.studio.workshop,
   finderForm: state.form.finderForm,
-}))(ContentFinderWithForm));
+}))(withTranslation()(ContentFinderWithForm)));

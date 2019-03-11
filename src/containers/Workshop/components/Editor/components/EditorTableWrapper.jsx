@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 import TableCell from '@material-ui/core/TableCell';
 import { toast } from 'react-toastify';
+import { withTranslation } from 'react-i18next';
 
 // Actions
 import { updateRelatedField } from '../../../../../redux/actions/workshopActions';
@@ -92,10 +93,12 @@ class EditorTableWrapper extends Component {
               [field.name]: [],
             },
           }));
+          // TODO Translation interpolation
           toast(`Successfully removed ${relatedModelName} instance(s) with ID(s): ${selected[field.name]}`, {
             toastId: workshop.form.parentModel.id,
           });
         }
+        // TODO Translation interpolation
         if (action.type === UPDATE_RELATED_FIELD.ERROR) {
           toast(`Failed to remove ${relatedModelName} instance(s) with ID(s): ${selected[field.name]}`, {
             toastId: workshop.form.parentModel.id,
@@ -127,7 +130,7 @@ class EditorTableWrapper extends Component {
 
     // Props
     const {
-      fields, action,
+      fields, action, t,
     } = this.props;
 
     const getTableHeads = field => ([
@@ -157,13 +160,13 @@ class EditorTableWrapper extends Component {
             {!action[field.fieldName] || !action[field.fieldName].loading ? (
               <span>
                 <i className="fal fa-minus" />
-                {' Remove '}
+                {t(' Remove ')}
                 {selected[field.fieldName].length !== 0 && selected[field.fieldName].length}
               </span>
             ) : (
               <span>
                 <i className="fal fa-spin fa-spinner" />
-                {' Removing...'}
+                {t(' Removing...')}
               </span>
             )}
           </Button>
@@ -175,4 +178,4 @@ class EditorTableWrapper extends Component {
 
 export default connect(state => ({
   workshop: state.studio.workshop,
-}))(EditorTableWrapper);
+}))(withTranslation()(EditorTableWrapper));

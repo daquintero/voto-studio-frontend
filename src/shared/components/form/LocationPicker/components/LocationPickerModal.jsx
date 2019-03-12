@@ -25,9 +25,7 @@ class LocationPickerModal extends Component {
 
     // Callbacks
     toggle: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
 
     // Redux
     action: PropTypes.instanceOf(Object).isRequired,
@@ -62,6 +60,16 @@ class LocationPickerModal extends Component {
     this.unmounted = true;
   }
 
+  getProperty = (obj, property) => {
+    let ret;
+    ret = obj[property];
+    if (ret === undefined) {
+      ret = obj[property.toUpperCase()];
+    }
+
+    return ret;
+  };
+
   handleOnOpened = () => {
     const { currentLocationIdName } = this.state;
     const { locationIdName, dispatch } = this.props;
@@ -82,6 +90,12 @@ class LocationPickerModal extends Component {
     }
   };
 
+  handleMapOnClick = ({ object: { properties } }) => {
+    const { onChange, locationIdName } = this.props;
+
+    onChange({ value: this.getProperty(properties, locationIdName) }, 'locationId');
+  };
+
   render() {
     // State
     const {
@@ -90,7 +104,7 @@ class LocationPickerModal extends Component {
 
     // Props
     const {
-      isOpen, action, toggle, onClick, onChange, onCancel, locationIdName, locationId,
+      isOpen, action, toggle, locationIdName, locationId,
     } = this.props;
 
     return (
@@ -111,9 +125,11 @@ class LocationPickerModal extends Component {
           {action.loaded ? (
             <LocationPickerMap
               dataSet={dataSet}
-              onClick={onClick}
               locationIdName={locationIdName}
               locationId={locationId}
+
+              // Callbacks
+              onClick={this.handleMapOnClick}
             />
           ) : (
             <Loader elemClass="load__card" />
@@ -121,13 +137,7 @@ class LocationPickerModal extends Component {
           <h3 className="page-title my-2">Selected: {locationId}</h3>
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button
-            color="success"
-            onClick={onChange}
-          >
-            Save position
-          </Button>
-          <Button onClick={onCancel}>Cancel</Button>{' '}
+          <Button onClick={toggle}>Done</Button>
         </ButtonToolbar>
       </Modal>
     );

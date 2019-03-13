@@ -11,16 +11,19 @@ import { changeMapHeight, changeMapViewport, changeMapWidth } from '../../../../
 
 class LocationPickerMap extends Component {
   static propTypes = {
-    // Redux
-    dataSet: PropTypes.instanceOf(Object).isRequired,
-    map: PropTypes.instanceOf(Object).isRequired,
-    workshop: PropTypes.instanceOf(Object).isRequired,
+    locationIdName: PropTypes.string,
+    locationId: PropTypes.string,
 
-    // Props
-    selectedObject: PropTypes.instanceOf(Object).isRequired,
+    // Redux
+    map: PropTypes.instanceOf(Object).isRequired,
 
     // Callbacks
     onClick: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    locationIdName: '',
+    locationId: '',
   };
 
   constructor(props) {
@@ -38,42 +41,74 @@ class LocationPickerMap extends Component {
     window.removeEventListener('resize', this.resizeViewport);
   }
 
-  handleChangeMapHeight = newMapHeight => this.props.dispatch(changeMapHeight(newMapHeight));
+  getProperty = (obj, property) => {
+    let ret;
+    ret = obj[property];
+    if (ret === undefined) {
+      ret = obj[property.toUpperCase()];
+    }
 
-  handleChangeMapWidth = newMapWidth => this.props.dispatch(changeMapWidth(newMapWidth));
+    return ret;
+  };
 
-  handleChangeMapViewport = newMapViewport => this.props.dispatch(changeMapViewport(newMapViewport));
+  handleChangeMapHeight = (newMapHeight) => {
+    const { dispatch } = this.props;
+    dispatch(changeMapHeight(newMapHeight));
+  };
 
-  parseJSON = string => JSON.parse(string.replace(/'/g, '"'));
+  handleChangeMapWidth = (newMapWidth) => {
+    const { dispatch } = this.props;
+    dispatch(changeMapWidth(newMapWidth));
+  };
 
-  handleOnHover = (e) => {
-    const { locationIdName } = this.props.workshop.locationPicker;
-    if (e.object && e.index !== -1) {
+  handleChangeMapViewport = (newMapViewport) => {
+    const { dispatch } = this.props;
+    dispatch(changeMapViewport(newMapViewport));
+  };
+
+  handleOnHover = ({
+    object, x, y, lngLat, index,
+  }) => {
+    if (object && index !== -1) {
       this.setState({
-        locationId: e.object.properties[locationIdName],
+        hoveredObject: object,
         hover: true,
-        object: e.object,
-        x: e.x,
-        y: e.y,
-        lngLat: e.lngLat,
+        x,
+        y,
+        lngLat,
       });
     } else {
-      this.setState({ hover: false });
+      this.setState({
+        hover: false,
+      });
     }
   };
 
-  handleGetFillColor = (f) => {
-    const { locationId, hover } = this.state;
-    const { workshop } = this.props;
-    const { locationIdName, selectedObject } = workshop.locationPicker;
-    if (selectedObject && f) {
-      return (locationId === f.properties[locationIdName] && hover) ||
-      (selectedObject.properties[locationIdName] === f.properties[locationIdName]) ? [255, 255, 255] : [0, 0, 0];
+  handleGetFillColor = (polygonObject, colorRange) => {
+    const { hover, hoveredObject } = this.state;
+    const { locationIdName, locationId } = this.props;
+
+    const selectedLocationId = locationId;
+    const polygonLocationId = this.getProperty(polygonObject.properties, locationIdName);
+
+    if (polygonLocationId === selectedLocationId) {
+      return [255, 255, 255];
     }
-    return [0, 0, 0];
+
+    if (polygonObject && hoveredObject) {
+      const hoveredLocationId = this.getProperty(hoveredObject.properties, locationIdName);
+
+      return ((polygonLocationId === hoveredLocationId) && hover) ? [215, 215, 215] : colorRange[0];
+    }
+
+    return colorRange[0];
   };
 
-  handleGetCursor = () => (this.state.hover ? 'pointer' : 'move');
+  handleGetCursor = () => {
+    const { hover } = this.state;
+
+    return hover ? 'pointer' : 'move';
+  };
 
   resizeViewport = () => {
     this.handleChangeMapWidth('100%');
@@ -89,18 +124,38 @@ class LocationPickerMap extends Component {
       onClick,
     } = this.props;
 
+    const lightSettings = {
+      lightsPosition: [-0.144528, 49.739968, 8000, -3.807751, 54.104682, 8000],
+      ambientRatio: 0.4,
+      diffuseRatio: 0.6,
+      specularRatio: 0.2,
+      lightsStrength: [0.8, 0.0, 0.8, 0.0],
+      numberOfLights: 2,
+    };
+
+    const colorRange = [
+      [1, 152, 189],
+      [73, 227, 206],
+      [216, 254, 181],
+      [254, 237, 177],
+      [254, 173, 84],
+      [209, 55, 78],
+    ];
+
     return new GeoJsonLayer({
       id: 'regions',
       data: this.props.dataSet.geojson,
+      lightSettings,
+      colorRange,
       opacity: 2,
       stroked: false,
       filled: true,
       extruded: true,
       wireframe: true,
-      getLineColor: [100, 100, 100],
-      getFillColor: f => handleGetFillColor(f),
+      getLineColor: [0, 0, 0],
+      getFillColor: f => handleGetFillColor(f, colorRange),
       updateTriggers: {
-        getFillColor: f => handleGetFillColor(f),
+        getFillColor: f => handleGetFillColor(f, colorRange),
       },
       pickable: true,
       onHover: e => handleOnHover(e),
@@ -118,34 +173,37 @@ class LocationPickerMap extends Component {
 
   renderTooltip = () => {
     const {
-      object, x, y, lngLat, hover,
+      hoveredObject, x, y, lngLat, hover,
     } = this.state;
     const {
-      workshop,
-    } = this.props;
-    const {
       locationIdName,
-    } = workshop.locationPicker;
-    return (object && hover) && (
+    } = this.props;
+
+    return (hoveredObject && hover) && (
       <div
         className="workshop__location-picker__tooltip__wrapper shadow"
         style={{
           position: 'absolute', zIndex: 1, pointerEvents: 'none', left: x, top: y - 80,
         }}
       >
-        <p>{locationIdName}: {object.properties[locationIdName]}</p>
+        <p>{locationIdName}: {this.getProperty(hoveredObject.properties, locationIdName)}</p>
         <p>{lngLat[0]} {lngLat[1]}</p>
       </div>
     );
   };
 
   render() {
-    const { map } = this.props;
+    // Props
+    const {
+      map,
+    } = this.props;
+
     return (
       <ReactMapGL
         {...map.viewport}
         onViewportChange={this.handleChangeMapViewport}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN}
+        mapStyle={process.env.REACT_APP_MAPBOX_STYLE}
       >
         <DeckGL
           {...map.viewport}
@@ -161,5 +219,4 @@ class LocationPickerMap extends Component {
 
 export default connect(state => ({
   map: state.map,
-  workshop: state.studio.workshop,
 }))(LocationPickerMap);

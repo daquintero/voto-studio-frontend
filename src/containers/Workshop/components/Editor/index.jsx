@@ -311,10 +311,15 @@ class Editor extends Component {
 
     if (field.name === 'location') {
       return (
-        <Field
-          name="location"
-          component={renderLocationPickerField}
-        />
+        <div className="form__form-group">
+          <span className="form__form-group-label text-capitalize">Location</span>
+          <div className="form__form-group-field">
+            <Field
+              name="location"
+              component={renderLocationPickerField}
+            />
+          </div>
+        </div>
       );
     }
 

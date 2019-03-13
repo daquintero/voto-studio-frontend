@@ -177,7 +177,7 @@ class Editor extends Component {
 
           this.setState({ id: instanceId });
 
-          toast(`${created ? t('Created') : t('Updated')} ${verboseName} (${instanceId})`, {
+          toast(`${created ? t('Created') : t('Updated')} ${t(verboseName)} (${instanceId})`, {
             toastId: instanceId,
           });
 
@@ -200,7 +200,7 @@ class Editor extends Component {
             modelName,
           } = workshop.form.parentModel;
           // TODO Interpolation translation
-          toast(`Error creating ${modelName}`, {
+          toast(`${'Error creating'} ${modelName}`, {
             toastId: modelName,
           });
         }
@@ -295,7 +295,7 @@ class Editor extends Component {
     const { t } = this.props;
     if (field.readOnly) return '';
 
-    return (`${field.select ? t('Choose') : t('Enter')} ${field.verboseName}...`);
+    return (`${field.select ? t('Choose') : t('Enter')} ${t(field.verboseName)}...`);
   };
 
   renderFieldComponent = (field) => {
@@ -309,13 +309,13 @@ class Editor extends Component {
   renderField = (field) => {
     // Props
     const {
-      workshop,
+      workshop, t,
     } = this.props;
 
     if (field.name === 'location') {
       return (
         <div className="form__form-group">
-          <span className="form__form-group-label text-capitalize">Location</span>
+          <span className="form__form-group-label text-capitalize">{t('Location')}</span>
           <div className="form__form-group-field">
             <Field
               name="location"
@@ -329,7 +329,7 @@ class Editor extends Component {
     if (field.type === 'textarea') {
       return (
         <div className="form__form-group" key={field.name}>
-          <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+          <span className="form__form-group-label text-capitalize">{t(field.verboseName)}</span>
           <div className="form__form-group-field-editor">
             <EditorField
               name={field.name}
@@ -347,7 +347,7 @@ class Editor extends Component {
     if (field.type === 'json') {
       return (
         <div className="form__form-group" key={field.name}>
-          <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+          <span className="form__form-group-label text-capitalize">{t(field.verboseName)}</span>
           <div className="form__form-group-field-json-editor">
             <Field
               name={field.name}
@@ -361,7 +361,7 @@ class Editor extends Component {
 
     return (
       <div className="form__form-group" key={field.name}>
-        <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+        <span className="form__form-group-label text-capitalize">{t(field.verboseName)}</span>
         <div className="form__form-group-field">
           <Field
             name={field.name}
@@ -376,7 +376,7 @@ class Editor extends Component {
         </div>
         {field.readOnly && (
           <span className="form__form-group-description">
-              This is a &quot;read-only&quot; field
+            {t('This is a "read-only" field')}
           </span>
         )}
       </div>
@@ -415,10 +415,10 @@ class Editor extends Component {
                 <Row>
                   <Col lg={12} xl={4}>
                     <h3 className="page-title text-capitalize">
-                      {form.new ? t('Create') : t('Edit')} {form.parentModel.modelName}
+                      {form.new ? t('Create') : t('Edit')} {t(form.parentModel.modelName)}
                     </h3>
                     <h3 className="page-subhead subhead">
-                      Edit the basic info of this piece of content and add or remove related pieces of content
+                      {t('Edit the basic info of this piece of content and add or remove related pieces of content')}
                     </h3>
                   </Col>
 
@@ -468,10 +468,10 @@ class Editor extends Component {
 
                   <Col xs={4} className="d-none d-xl-block">
                     <h3 className="page-title text-capitalize">
-                      Live Preview
+                      {t('Live Preview')}
                     </h3>
                     <h3 className="page-subhead subhead">
-                      This will update as you edit the piece of content
+                      {t('In Construction')}.
                     </h3>
                   </Col>
 
@@ -479,7 +479,7 @@ class Editor extends Component {
                     <Card>
                       <CardBody>
                         <h3 className="page-title text-capitalize">
-                          Basic Fields
+                          {t('Basic Fields')}
                         </h3>
 
                         {/* Basic fields form */}
@@ -610,10 +610,10 @@ class Editor extends Component {
                   {/* Live preview panel */}
                   <Col xs={12} className="d-block d-xl-none">
                     <h3 className="page-title text-capitalize">
-                      Live Preview
+                      {t('Live Preview')}
                     </h3>
                     <h3 className="page-subhead subhead">
-                      This will update as you edit the piece of content
+                      {t('In Construction')}.
                     </h3>
                   </Col>
                   <Col xl={4}>

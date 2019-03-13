@@ -62,7 +62,7 @@ class StatisticsEditor extends PureComponent {
 
     return (
       <div className="form__form-group">
-        <span className="form__form-group-label text-capitalize">Statistics</span>
+        <span className="form__form-group-label text-capitalize">{t('Statistics')}</span>
         <div className="form__form-group-field">
           <input
             className="mr-3"

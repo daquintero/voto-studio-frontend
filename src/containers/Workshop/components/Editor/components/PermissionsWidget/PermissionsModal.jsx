@@ -105,6 +105,9 @@ class PermissionsModal extends PureComponent {
           <div className="modal__header">
             <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
             <h4 className="bold-text  modal__title">Share Access</h4>
+            <h4 className="subhead">
+              {'"'}Read{'"'} is the lowest permission level. {'"'}Write{'"'} is the highest permission level.
+            </h4>
           </div>
           <div className="modal__body">
             <Table className="permissions-modal__table">

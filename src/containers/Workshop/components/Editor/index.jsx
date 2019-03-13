@@ -56,7 +56,6 @@ import ErrorPage from '../../../../shared/components/ErrorPage';
 import EditorTableWrapper from './components/EditorTableWrapper';
 import FileGallery from '../../../Media/components/FileGallery';
 import Loader from '../../../../shared/components/Loader';
-import LocationPicker from './components/LocationPicker';
 import MediaCenter from './components/MediaCenter';
 import PermissionsWidget from './components/PermissionsWidget';
 import PublishInstancesModal from '../../../../shared/components/PublishInstancesModal';
@@ -68,6 +67,7 @@ import renderCheckboxField from '../../../../shared/components/form/CheckBox';
 import renderDatePicker from '../../../../shared/components/form/DatePicker';
 import renderJSONFieldEditor from './components/JSONFieldEditor';
 import renderSelectField from '../../../../shared/components/form/Select';
+import renderLocationPickerField from '../../../../shared/components/form/LocationPicker';
 
 
 const mediaModelLabelFieldNameMap = {
@@ -90,7 +90,6 @@ class Editor extends Component {
     location: ReactRouterPropTypes.location.isRequired,
 
     // Form
-    onChange: PropTypes.func.isRequired,
     workshopForm: PropTypes.instanceOf(Object),
     t: PropTypes.func.isRequired,
   };
@@ -154,10 +153,6 @@ class Editor extends Component {
       workshop, workshopForm, dispatch, history, t,
     } = this.props;
 
-    const {
-      selectedObject, locationIdName,
-    } = workshop.locationPicker;
-
     // Check if values object is empty, if so then return.
     if (
       Object.keys(workshopForm.values).length === 0 &&
@@ -171,10 +166,7 @@ class Editor extends Component {
     dispatch(updateBasicFields({
       modelLabel: workshop.form.parentModel.modelLabel,
       id,
-      values: Object.assign(workshopForm.values, {
-        locationId: selectedObject.properties[locationIdName],
-        locationIdName,
-      }),
+      values: Object.assign(workshopForm.values),
     }))
       .then((action) => {
         if (action.type === UPDATE_BASIC_FIELDS.SUCCESS) {
@@ -317,26 +309,18 @@ class Editor extends Component {
   renderField = (field) => {
     // Props
     const {
-      workshop, t,
+      workshop,
     } = this.props;
 
-    // Workshop
-    const {
-      locationPicker,
-    } = workshop;
-
-    if (field.name === 'locationId') {
+    if (field.name === 'location') {
       return (
-        <div className="form__form-group" key={field.name}>
-          <span className="form__form-group-label text-capitalize">{locationPicker.locationIdName}</span>
+        <div className="form__form-group">
+          <span className="form__form-group-label text-capitalize">Location</span>
           <div className="form__form-group-field">
-            <input
-              value={locationPicker.selectedObject.properties[locationPicker.locationIdName]}
-              onChange={this.handleLocationOnChange}
+            <Field
+              name="location"
+              component={renderLocationPickerField}
             />
-            <Button size="sm" className="mb-0 ml-2 pr-5" onClick={this.handleToggleLocationPicker}>
-              {locationPicker.hasSelectedObject ? t('Change position') : t('Select position')}
-            </Button>
           </div>
         </div>
       );
@@ -407,7 +391,7 @@ class Editor extends Component {
 
     // Props
     const {
-      workshop, auth, dispatch, onChange, t,
+      workshop, auth, dispatch, t,
     } = this.props;
 
     // Workshop
@@ -427,7 +411,6 @@ class Editor extends Component {
             {loaded ? (
               <>
                 <ToastContainer pauseOnFocusLoss={false} />
-                <LocationPicker onChange={onChange} />
                 <MediaCenter toggle={this.handleToggleMediaCenter} onAdd={this.handleMediaOnAdd} />
                 <Row>
                   <Col lg={12} xl={4}>

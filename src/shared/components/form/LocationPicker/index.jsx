@@ -134,7 +134,7 @@ class LocationPicker extends Component {
           <div className="form__form-group-field">
             <input
               name="locationId"
-              value={locationId}
+              value={locationIdName === 'national' ? 'National' : locationId}
               onChange={e => this.handleOnChange(e.target, 'locationId')}
               disabled={locationIdName === 'national'}
               placeholder={locationIdName === 'national' ? 'National' : ''}

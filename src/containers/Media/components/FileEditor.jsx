@@ -8,6 +8,7 @@ import {
   ButtonToolbar,
   Button,
 } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Actions
 import { updateFile } from '../../../redux/actions/mediaActions';
@@ -25,6 +26,8 @@ class FileEditor extends Component {
 
     // Form
     fileEditorForm: PropTypes.instanceOf(Object),
+
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -59,7 +62,7 @@ class FileEditor extends Component {
   render() {
     // Props
     const {
-      toggle, file, media,
+      toggle, file, media, t,
     } = this.props;
 
     return (
@@ -70,7 +73,7 @@ class FileEditor extends Component {
       >
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
-          <h4 className="bold-text  modal__title">Edit Image</h4>
+          <h4 className="bold-text  modal__title">{t('Edit Image')}</h4>
         </div>
         <div className="modal__body">
           <div className="file-editor__wrapper">
@@ -85,7 +88,7 @@ class FileEditor extends Component {
               />
               <ButtonToolbar className="modal__footer">
                 <Button type="submit" color="success">Save</Button>
-                <Button color="secondary" onClick={toggle}>Cancel</Button>
+                <Button color="secondary" onClick={toggle}>{t('Cancel')}</Button>
               </ButtonToolbar>
             </form>
           </div>
@@ -102,4 +105,4 @@ const ImageEditorWithForm = reduxForm({
 export default connect(state => ({
   media: state.studio.media,
   fileEditorForm: state.form.fileEditorForm,
-}))(ImageEditorWithForm);
+}))(withTranslation()(ImageEditorWithForm));

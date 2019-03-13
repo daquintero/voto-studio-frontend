@@ -13,6 +13,7 @@ import {
   TabContent,
   TabPane,
 } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Components
 import FileExplorer from './components/FileExplorer';
@@ -25,6 +26,7 @@ class Media extends Component {
   static propTypes = {
     // Redux
     dispatch: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -48,6 +50,8 @@ class Media extends Component {
   };
 
   render() {
+    const { t } = this.props;
+
     // State
     const {
       activeTab,
@@ -67,7 +71,7 @@ class Media extends Component {
                         this.toggle('media.Image');
                       }}
                     >
-                      Images
+                      {t('Images')}
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -77,7 +81,7 @@ class Media extends Component {
                         this.toggle('media.Video');
                       }}
                     >
-                      Videos
+                      {t('Videos')}
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -87,7 +91,7 @@ class Media extends Component {
                         this.toggle('media.Resource');
                       }}
                     >
-                      Resources
+                      {t('Resources')}
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -111,4 +115,4 @@ class Media extends Component {
   }
 }
 
-export default connect()(Media);
+export default connect()(withTranslation()(Media));

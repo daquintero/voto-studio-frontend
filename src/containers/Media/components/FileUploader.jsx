@@ -8,6 +8,7 @@ import {
   ButtonToolbar,
   Button,
 } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Actions
 import { uploadFiles } from '../../../redux/actions/mediaActions';
@@ -29,6 +30,7 @@ class ImageUploader extends PureComponent {
     // Forms
     fileUploaderForm: PropTypes.instanceOf(Object),
     reset: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -62,7 +64,7 @@ class ImageUploader extends PureComponent {
   render() {
     // Props
     const {
-      toggle, media, fileUploaderForm, modelLabel,
+      toggle, media, fileUploaderForm, modelLabel, t,
     } = this.props;
 
     const uploadDisabled = () => fileUploaderForm && !fileUploaderForm.values;
@@ -75,7 +77,7 @@ class ImageUploader extends PureComponent {
       >
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
-          <h4 className="bold-text  modal__title">Upload Files</h4>
+          <h4 className="bold-text  modal__title">{t('Upload Files')}</h4>
         </div>
         <div className="modal__body">
           <div className="file-uploader__wrapper">
@@ -95,9 +97,9 @@ class ImageUploader extends PureComponent {
             onClick={this.handleOnSubmit}
             disabled={uploadDisabled()}
           >
-            Upload
+            {t('Upload')}
           </Button>
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
+          <Button color="secondary" onClick={toggle}>{t('Cancel')}</Button>
         </ButtonToolbar>
       </Modal>
     );
@@ -111,4 +113,4 @@ const ImageEditorWithForm = reduxForm({
 export default connect(state => ({
   media: state.studio.media,
   fileUploaderForm: state.form.fileUploaderForm,
-}))(ImageEditorWithForm);
+}))(withTranslation()(ImageEditorWithForm));

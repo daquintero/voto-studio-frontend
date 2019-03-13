@@ -202,16 +202,15 @@ export const getRelatedInstanceList = listData => (dispatch) => {
   );
 };
 
-export const getLocationPickerDataSet = () => (dispatch) => {
+export const getLocationPickerDataSet = requestData => (dispatch) => {
   dispatch({
     type: GET_LOCATION_PICKER_DATA_SET.REQUEST,
   });
-  return workshopService.get.locationPickerDataSet().then(
+  return workshopService.get.locationPickerDataSet(requestData).then(
     response =>
       dispatch({
         type: GET_LOCATION_PICKER_DATA_SET.SUCCESS,
-        dataSet: response.data.dataSet,
-        locationIdName: response.data.locationIdName,
+        response: response.data,
       }),
     error =>
       dispatch({

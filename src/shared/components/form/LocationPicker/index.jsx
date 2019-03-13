@@ -114,7 +114,7 @@ class LocationPicker extends Component {
         />
         <input
           name="locationId"
-          value={locationId}
+          value={locationIdName === 'national' ? 'National' : locationId}
           onChange={e => this.handleOnChange(e.target, 'locationId')}
           disabled={locationIdName === 'national'}
           placeholder={locationIdName === 'national' ? 'National' : ''}

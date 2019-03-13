@@ -7,6 +7,7 @@ import {
   ButtonToolbar,
   Modal,
 } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Actions
 import { getLocationPickerDataSet } from '../../../../../../redux/actions/workshopActions';
@@ -25,6 +26,7 @@ class LocationPicker extends Component {
     // Redux
     workshop: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -62,7 +64,7 @@ class LocationPicker extends Component {
   render() {
     // Props
     const {
-      workshop,
+      workshop, t,
     } = this.props;
 
     // Workshop
@@ -81,9 +83,9 @@ class LocationPicker extends Component {
       >
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={this.toggle} />
-          <h3 className="page-title">Select Position</h3>
+          <h3 className="page-title">{t('Select position')}</h3>
           <h3 className="page-subhead subhead">
-            Scroll to zoom. Hold <code>CTRL</code> to pan. Click to select a region.
+            {t('Scroll to zoom. Hold')} <code>CTRL</code>{t(' to pan. Click to select a region.')}
           </h3>
         </div>
         <div className="modal__body">
@@ -96,7 +98,9 @@ class LocationPicker extends Component {
           ) : (
             <Loader elemClass="load__card" />
           )}
-          <h3 className="page-title my-2">Selected: {selectedObject.properties[locationPicker.locationIdName]}</h3>
+          <h3 className="page-title my-2">
+            {t('Selected')}: {selectedObject.properties[locationPicker.locationIdName]}
+          </h3>
         </div>
         <ButtonToolbar className="modal__footer">
           <Button
@@ -104,9 +108,9 @@ class LocationPicker extends Component {
             onClick={this.handleSavePosition}
             disabled={selectedObject.properties[locationPicker.locationIdName] === null}
           >
-            Save position
+            {t('Save position')}
           </Button>
-          <Button onClick={this.handleCancel}>Cancel</Button>{' '}
+          <Button onClick={this.handleCancel}>{t('Cancel')}</Button>{' '}
         </ButtonToolbar>
       </Modal>
     );
@@ -115,4 +119,4 @@ class LocationPicker extends Component {
 
 export default connect(state => ({
   workshop: state.studio.workshop,
-}))(LocationPicker);
+}))(withTranslation()(LocationPicker));

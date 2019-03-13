@@ -7,6 +7,7 @@ import {
   ButtonToolbar,
   Modal,
 } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Components
 import LocationPickerMap from './LocationPickerMap';
@@ -25,13 +26,13 @@ class LocationPickerModal extends Component {
 
     // Callbacks
     toggle: PropTypes.func.isRequired,
-    onClick: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired,
 
     // Redux
     action: PropTypes.instanceOf(Object).isRequired,
     dispatch: PropTypes.func.isRequired,
+
+    t: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -62,6 +63,16 @@ class LocationPickerModal extends Component {
     this.unmounted = true;
   }
 
+  getProperty = (obj, property) => {
+    let ret;
+    ret = obj[property];
+    if (ret === undefined) {
+      ret = obj[property.toUpperCase()];
+    }
+
+    return ret;
+  };
+
   handleOnOpened = () => {
     const { currentLocationIdName } = this.state;
     const { locationIdName, dispatch } = this.props;
@@ -82,6 +93,12 @@ class LocationPickerModal extends Component {
     }
   };
 
+  handleMapOnClick = ({ object: { properties } }) => {
+    const { onChange, locationIdName } = this.props;
+
+    onChange({ value: this.getProperty(properties, locationIdName) }, 'locationId');
+  };
+
   render() {
     // State
     const {
@@ -90,7 +107,7 @@ class LocationPickerModal extends Component {
 
     // Props
     const {
-      isOpen, action, toggle, onClick, onChange, onCancel, locationIdName, locationId,
+      isOpen, action, toggle, locationIdName, locationId, t,
     } = this.props;
 
     return (
@@ -102,32 +119,28 @@ class LocationPickerModal extends Component {
       >
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
-          <h3 className="page-title">Select Position</h3>
+          <h3 className="page-title">{t('Select position')}</h3>
           <h3 className="page-subhead subhead">
-            Scroll to zoom. Hold <code>CTRL</code> to pan. Click to select a region.
+            {t('Scroll to zoom. Hold')} <code>CTRL</code>{t(' to pan. Click to select a region.')}
           </h3>
         </div>
         <div className="modal__body">
           {action.loaded ? (
             <LocationPickerMap
               dataSet={dataSet}
-              onClick={onClick}
               locationIdName={locationIdName}
               locationId={locationId}
+
+              // Callbacks
+              onClick={this.handleMapOnClick}
             />
           ) : (
             <Loader elemClass="load__card" />
           )}
-          <h3 className="page-title my-2">Selected: {locationId}</h3>
+          <h3 className="page-title my-2">{t('Selected')}: {locationId}</h3>
         </div>
         <ButtonToolbar className="modal__footer">
-          <Button
-            color="success"
-            onClick={onChange}
-          >
-            Save position
-          </Button>
-          <Button onClick={onCancel}>Cancel</Button>{' '}
+          <Button onClick={toggle}>{t('Done')}</Button>
         </ButtonToolbar>
       </Modal>
     );
@@ -143,4 +156,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(LocationPickerModal);
+export default connect(mapStateToProps)(withTranslation()(LocationPickerModal));

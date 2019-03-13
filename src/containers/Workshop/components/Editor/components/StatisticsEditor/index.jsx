@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-
+import { withTranslation } from 'react-i18next';
 
 class StatisticsEditor extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func.isRequired,
     value: PropTypes.instanceOf(Array).isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -56,12 +57,12 @@ class StatisticsEditor extends PureComponent {
     } = this.state;
 
     const {
-      value,
+      value, t,
     } = this.props;
 
     return (
       <div className="form__form-group">
-        <span className="form__form-group-label text-capitalize">Statistics</span>
+        <span className="form__form-group-label text-capitalize">{t('Statistics')}</span>
         <div className="form__form-group-field">
           <input
             className="mr-3"
@@ -73,14 +74,14 @@ class StatisticsEditor extends PureComponent {
           <input
             className="mr-3"
             name="name"
-            placeholder="Name"
+            placeholder={t('Name')}
             onChange={this.handleOnChange}
             value={currentStatistic.name}
           />
           <input
             className="mr-3"
             name="value"
-            placeholder="Value"
+            placeholder={t('Value')}
             onChange={this.handleOnChange}
             value={currentStatistic.value}
           />
@@ -88,7 +89,7 @@ class StatisticsEditor extends PureComponent {
             style={{ height: 40, width: 200 }}
             onClick={this.handleOnAdd}
           >
-            Add
+            {t('Add')}
           </Button>
         </div>
 
@@ -120,6 +121,6 @@ class StatisticsEditor extends PureComponent {
   }
 }
 
-export default props => (
+export default withTranslation()(props => (
   <StatisticsEditor {...props.input} />
-);
+));

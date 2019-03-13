@@ -7,6 +7,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
+import { withTranslation } from 'react-i18next';
+
 import renderCheckBoxField from '../../../../shared/components/form/CheckBox';
 import { loginUser } from '../../../../redux/actions/userActions';
 import validate from './validate';
@@ -57,7 +59,7 @@ class LoginForm extends PureComponent {
   );
 
   render() {
-    const { handleSubmit, auth } = this.props;
+    const { handleSubmit, auth, t } = this.props;
     const loginUserAction = auth.actions.LOGIN_USER;
     return (
       <>
@@ -115,11 +117,11 @@ class LoginForm extends PureComponent {
             {!loginUserAction.loading ? (
               <span>Login</span>
             ) : (
-              <span><i className="fal fa-spinner fa-spin" /> Logging in...</span>
+              <span><i className="fal fa-spinner fa-spin" />{t('Logging in...')}</span>
             )}
           </Button>
           <Link className="btn btn-outline-primary account__btn account__btn--small" to="/account/signup">
-            Solicita una cuenta con permisos
+            Regístrate
           </Link>
         </form>
       </>
@@ -134,4 +136,4 @@ const reduxFormLogin = reduxForm({
 
 export default withRouter(connect(state => ({
   auth: state.auth,
-}))(reduxFormLogin));
+}))(withTranslation()(reduxFormLogin)));

@@ -1,24 +1,27 @@
 // Absolute Imports
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
+import Select from 'react-select';
+import { withTranslation } from 'react-i18next';
 
 // Components
-import LocationPickerModal from './components/LocationPickerModal';
+import LocationPickerModal from './LocationPickerModal';
 
 
 class LocationPicker extends Component {
   static propTypes = {
     // Form
     value: PropTypes.instanceOf(Object),
-    // initial: PropTypes.instanceOf(Object),
 
     // Callbacks
     onChange: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     // Form
     value: {},
-    // initial: {},
   };
 
   constructor(props) {
@@ -60,20 +63,6 @@ class LocationPicker extends Component {
     }, onChange(changeData));
   };
 
-  handleOnSave = () => {
-    const { value: { locationIdName, locationId } } = this.state;
-    const { onChange } = this.props;
-
-    onChange({
-      locationIdName,
-      locationId,
-    });
-  };
-
-  handleOnCancel = () => {
-    this.handleToggle();
-  };
-
   customStyles = {
     control: base => ({
       ...base,
@@ -81,7 +70,7 @@ class LocationPicker extends Component {
       minHeight: 40,
       borderColor: '#dce1e9',
       borderRadius: 0,
-      width: 130,
+      width: 200,
     }),
     placeholder: provided => ({
       ...provided,
@@ -111,7 +100,7 @@ class LocationPicker extends Component {
 
     // Props
     const {
-      value: { locationIdNameOption, locationIdName, locationId },
+      value: { locationIdNameOption, locationIdName, locationId }, t,
     } = this.props;
 
     return (
@@ -124,49 +113,36 @@ class LocationPicker extends Component {
           // Callbacks
           toggle={this.handleToggle}
           onChange={this.handleOnChange}
-          onCancel={this.handleOnCancel}
         />
-        <div className="form__form-group">
-          <span className="form__form-group-label text-capitalize">{locationIdName}</span>
-          <div className="form__form-group-field">
-            <input
-              name="locationId"
-              value={locationIdName === 'national' ? 'National' : locationId}
-              onChange={e => this.handleOnChange(e.target, 'locationId')}
-              disabled={locationIdName === 'national'}
-              placeholder={locationIdName === 'national' ? 'National' : ''}
-            />
-            <Select
-              styles={this.customStyles}
-              name="locationIdName"
-              onChange={selected => this.handleOnChange(selected, 'locationIdName')}
-              className="ml-3"
-              defaultValue={locationIdNameOption}
-              options={[
-                { label: 'National', value: 'national' },
-                { label: 'Circuito', value: 'circuito' },
-                { label: 'District', value: 'district' },
-              ]}
-            />
-            <Button
-              className="ml-3 mb-0"
-              style={{ width: '50%' }}
-              onClick={this.handleToggle}
-              disabled={locationIdName === 'national'}
-            >
-              Select location
-            </Button>
-          </div>
-        </div>
+        <input
+          name="locationId"
+          value={locationId}
+          onChange={e => this.handleOnChange(e.target, 'locationId')}
+          disabled={locationIdName === 'national'}
+          placeholder={locationIdName === 'national' ? t('National') : ''}
+        />
+        <Select
+          styles={this.customStyles}
+          name="locationIdName"
+          onChange={selected => this.handleOnChange(selected, 'locationIdName')}
+          className="ml-3"
+          defaultValue={locationIdNameOption}
+          options={[
+            { label: t('National'), value: 'national' },
+            { label: t('Circuito'), value: 'circuito' },
+          ]}
+        />
+        <Button
+          className="ml-3 mb-0"
+          style={{ width: '20%' }}
+          onClick={this.handleToggle}
+          disabled={locationIdName === 'national'}
+        >
+          {t('Use map')}
+        </Button>
       </>
     );
   }
 }
 
-const renderLocationPickerField = props => (
-  <LocationPicker
-    {...props.input}
-  />
-);
-
-export default renderLocationPickerField;
+export default withTranslation()(LocationPicker);

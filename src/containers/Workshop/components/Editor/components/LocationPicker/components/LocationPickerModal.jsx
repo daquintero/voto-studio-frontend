@@ -1,6 +1,9 @@
+/* eslint-disable */
 // Absolute Imports
 import React, { PureComponent } from 'react';
 import { Button, ButtonToolbar, Modal } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
 // Components
 import LocationPicker from '../../LocationPicker';
@@ -12,7 +15,9 @@ class LocationPickerModal extends PureComponent {
     colored: false,
     header: false,
   };
-
+  static propTypes = {
+    t: PropTypes.func.isRequired,
+  };
   constructor() {
     super();
     this.state = {
@@ -29,6 +34,7 @@ class LocationPickerModal extends PureComponent {
   }
 
   render() {
+    const { t } = this.props;
     return (
       <Modal
         isOpen={this.state.modal}
@@ -38,9 +44,9 @@ class LocationPickerModal extends PureComponent {
         <div id="tooltip" style={{ position: 'absolute', zIndex: 9999, 'pointer-events': 'none' }} />
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={this.toggle} />
-          <h3 className="page-title">Select Position</h3>
+          <h3 className="page-title"> {t('Select position')}</h3>
           <h3 className="page-subhead subhead">
-            Scroll to zoom. Hold <code>CTRL</code> to pan. Click to select a region.
+            {t('Scroll to zoom. Hold')} <code>CTRL</code>{t(' to pan. Click to select a region.')}
           </h3>
         </div>
         <div className="modal__body">
@@ -48,11 +54,11 @@ class LocationPickerModal extends PureComponent {
         </div>
         <ButtonToolbar className="modal__footer">
           <Button color="success" onClick={this.toggle}>Ok</Button>
-          <Button onClick={this.toggle}>Cancel</Button>{' '}
+          <Button onClick={this.toggle}>{t('Cancel')}</Button>{' '}
         </ButtonToolbar>
       </Modal>
     );
   }
 }
 
-export default LocationPickerModal;
+export default withTranslation()(LocationPickerModal);

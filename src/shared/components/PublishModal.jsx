@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar, Modal } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 import Loader from './Loader';
+
+// TODO Finish translations here
 
 class ModalComponent extends PureComponent {
   static propTypes = {
@@ -12,11 +15,12 @@ class ModalComponent extends PureComponent {
     isOpen: PropTypes.bool.isRequired,
     publish: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   render() {
     const {
-      name, action, toggle, isOpen, publish, onClose,
+      name, action, toggle, isOpen, publish, onClose, t,
     } = this.props;
     const { loading, loaded, error } = action;
 
@@ -43,7 +47,7 @@ class ModalComponent extends PureComponent {
                       Successfully published! To revert this action goto the <code>Changes</code> section.
                     </div>
                     <ButtonToolbar className="modal__footer">
-                      <><Button onClick={toggle}>Continue editing</Button>{' '}</>
+                      <><Button onClick={toggle}>{t('Continue editing')}</Button>{' '}</>
                     </ButtonToolbar>
                   </>
                 ) : (
@@ -80,7 +84,7 @@ class ModalComponent extends PureComponent {
                               onClick={!loaded ? publish : toggle}
                               disabled={loading}
                             >
-                            Confirm
+                              {t('Confirm')}
                             </Button>
                           </>
                         </ButtonToolbar>
@@ -96,4 +100,4 @@ class ModalComponent extends PureComponent {
   }
 }
 
-export default connect()(ModalComponent);
+export default connect()(withTranslation()(ModalComponent));

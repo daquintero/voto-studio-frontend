@@ -1,5 +1,8 @@
 // Absolute Imports
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
+import Select from 'react-select';
 
 // Components
 import LocationPickerModal from './components/LocationPickerModal';
@@ -126,38 +129,32 @@ class LocationPicker extends Component {
           onChange={this.handleOnChange}
           onCancel={this.handleOnCancel}
         />
-        <div className="form__form-group">
-          <span className="form__form-group-label text-capitalize">{locationIdName}</span>
-          <div className="form__form-group-field">
-            <input
-              name="locationId"
-              value={locationIdName === 'national' ? 'National' : locationId}
-              onChange={e => this.handleOnChange(e.target, 'locationId')}
-              disabled={locationIdName === 'national'}
-              placeholder={locationIdName === 'national' ? 'National' : ''}
-            />
-            <Select
-              styles={this.customStyles}
-              name="locationIdName"
-              onChange={selected => this.handleOnChange(selected, 'locationIdName')}
-              className="ml-3"
-              defaultValue={locationIdNameOption}
-              options={[
-                { label: 'National', value: 'national' },
-                { label: 'Circuito', value: 'circuito' },
-                { label: 'District', value: 'district' },
-              ]}
-            />
-            <Button
-              className="ml-3 mb-0"
-              style={{ width: '50%' }}
-              onClick={this.handleToggle}
-              disabled={locationIdName === 'national'}
-            >
-              Select location
-            </Button>
-          </div>
-        </div>
+        <input
+          name="locationId"
+          value={locationIdName === 'national' ? 'National' : locationId}
+          onChange={e => this.handleOnChange(e.target, 'locationId')}
+          disabled={locationIdName === 'national'}
+          placeholder={locationIdName === 'national' ? 'National' : ''}
+        />
+        <Select
+          styles={this.customStyles}
+          name="locationIdName"
+          onChange={selected => this.handleOnChange(selected, 'locationIdName')}
+          className="ml-3"
+          defaultValue={locationIdNameOption}
+          options={[
+            { label: 'National', value: 'national' },
+            { label: 'Circuito', value: 'circuito' },
+          ]}
+        />
+        <Button
+          className="ml-3 mb-0"
+          style={{ width: '20%' }}
+          onClick={this.handleToggle}
+          disabled={locationIdName === 'national'}
+        >
+          Use map
+        </Button>
       </>
     );
   }

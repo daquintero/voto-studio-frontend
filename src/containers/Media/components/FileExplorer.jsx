@@ -8,6 +8,7 @@ import {
   ButtonToolbar,
   Button,
 } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Components
 import FileGallery from './FileGallery';
@@ -42,6 +43,7 @@ class FileExplorer extends Component {
 
     // Router
     location: ReactRouterPropTypes.location.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -130,7 +132,7 @@ class FileExplorer extends Component {
   render() {
     // Props
     const {
-      media, modelLabel,
+      media, modelLabel, t,
     } = this.props;
     const {
       selected,
@@ -146,12 +148,12 @@ class FileExplorer extends Component {
     return (
       <>
         <ButtonToolbar>
-          <Button color="success" size="sm" onClick={this.handleToggleFileUploader}>Upload</Button>
+          <Button color="success" size="sm" onClick={this.handleToggleFileUploader}>{t('Upload')}</Button>
           <Button color="primary" size="sm" disabled={selected.length !== 1} onClick={this.handleToggleFileEditor}>
-            Edit
+            {t('Edit')}
           </Button>
           <Button color="danger" size="sm" disabled={selected.length === 0} onClick={this.handleDeleteFiles}>
-            Delete {selected.length !== 0 && selected.length}
+            {t('Delete')} {selected.length !== 0 && selected.length}
           </Button>
         </ButtonToolbar>
         <FileUploader
@@ -177,4 +179,4 @@ class FileExplorer extends Component {
 export default withRouter(connect(state => ({
   media: state.studio.media,
   workshop: state.studio.workshop,
-}))(FileExplorer));
+}))(withTranslation()(FileExplorer)));

@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Draggable } from 'react-beautiful-dnd';
 import { UncontrolledTooltip } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Functions
 import imageUrl from '../../../shared/utils/imageUrl';
-
 
 class File extends Component {
   static propTypes = {
@@ -20,6 +20,7 @@ class File extends Component {
     // Callbacks
     onClick: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -81,7 +82,7 @@ class File extends Component {
 
     // Props
     const {
-      file, modelLabel, onClick, onRemove, isSelected, controls, index, draggable,
+      file, modelLabel, onClick, onRemove, isSelected, controls, index, draggable, t,
     } = this.props;
 
     return (
@@ -109,7 +110,7 @@ class File extends Component {
             )}
             {(draggable && controls && index === 0) && (
               <div className="gallery__file__primary">
-                <p><i className="fal fa-check-square" /> Primary</p>
+                <p><i className="fal fa-check-square" />{t(' Primary')}</p>
               </div>
             )}
             {controls && (
@@ -131,7 +132,7 @@ class File extends Component {
                   placement="top"
                   target={`file-${file.id}`}
                 >
-                  Remove
+                  {t('Remove')}
                 </UncontrolledTooltip>
               </div>
             )}
@@ -143,4 +144,4 @@ class File extends Component {
   }
 }
 
-export default File;
+export default withTranslation()(File);

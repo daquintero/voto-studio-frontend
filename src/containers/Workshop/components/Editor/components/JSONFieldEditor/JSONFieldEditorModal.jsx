@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal, Button } from 'reactstrap';
-
+import { withTranslation } from 'react-i18next';
 
 // Components
 import ControlledEditor from '../../../../../../shared/components/form/TextEditor/ControlledEditor';
@@ -17,6 +17,7 @@ class PermissionsModal extends PureComponent {
     subInstance: PropTypes.instanceOf(Object),
     onSave: PropTypes.func.isRequired,
     newInstance: PropTypes.bool.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -72,7 +73,7 @@ class PermissionsModal extends PureComponent {
   render() {
     // Props
     const {
-      isOpen, toggle, fields, onSave, newInstance,
+      isOpen, toggle, fields, onSave, newInstance, t,
     } = this.props;
 
     return (
@@ -86,20 +87,20 @@ class PermissionsModal extends PureComponent {
         >
           <div className="modal__header">
             <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
-            <h4 className="bold-text  modal__title">Edit</h4>
+            <h4 className="bold-text  modal__title">{t('Edit')}</h4>
           </div>
           <div className="modal__body">
             <form className="form form--horizontal">
               {fields.map(input => !input.readOnly && (
                 <div key={input.name} className="form__form-group">
-                  <span className="form__form-group-label text-capitalize">{input.name}</span>
+                  <span className="form__form-group-label text-capitalize">{t(input.name)}</span>
                   {input.type !== 'textarea' ? (
                     <div className="form__form-group-field">
                       <input
                         name={input.name}
                         type={input.type}
                         onChange={this.handleOnChange}
-                        value={this.state[input.name] || ''}
+                        value={t(this.state[input.name]) || ''}
                       />
                     </div>
                   ) : ((this.state[input.name] || newInstance) && (
@@ -108,8 +109,8 @@ class PermissionsModal extends PureComponent {
                         <ControlledEditor
                           name={input.name}
                           onChange={obj => this.handleOnChange(obj, input.name)}
-                          value={this.state[input.name]}
-                          initial={newInstance ? undefined : this.state[input.name]}
+                          value={t(this.state[input.name])}
+                          initial={newInstance ? undefined : t(this.state[input.name])}
                         />
                       </div>
                     </div>
@@ -118,8 +119,8 @@ class PermissionsModal extends PureComponent {
                 </div>
               ))}
             </form>
-            <Button onClick={() => onSave(this.state)}>Save</Button>
-            <Button onClick={toggle}>Cancel</Button>
+            <Button onClick={() => onSave(this.state)}>{t('Save')}</Button>
+            <Button onClick={toggle}>{t('Cancel')}</Button>
           </div>
         </Modal>
       </div>
@@ -129,4 +130,4 @@ class PermissionsModal extends PureComponent {
 
 export default connect(state => ({
   workshop: state.studio.workshop,
-}))(PermissionsModal);
+}))(withTranslation()(PermissionsModal));

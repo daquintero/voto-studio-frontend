@@ -200,7 +200,7 @@ class Editor extends Component {
             modelName,
           } = workshop.form.parentModel;
           // TODO Interpolation translation
-          toast(`${'Error creating'} ${modelName}`, {
+          toast(`${t('Error creating')} ${modelName}`, {
             toastId: modelName,
           });
         }

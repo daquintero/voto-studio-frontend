@@ -242,6 +242,12 @@ class ContentFinder extends Component {
       });
   };
 
+  translateOptions = (options) => {
+    const { t } = this.props;
+    const translated = options.map(opt => ({ label: t(opt.label), value: opt.value }));
+    return translated;
+  };
+
   openEditor = (id) => {
     const { history, finderForm } = this.props;
     const [appLabel, modelName] = finderForm.values.type.value.split('.');
@@ -378,11 +384,11 @@ class ContentFinder extends Component {
                     type="select"
                     onChange={this.changeInstanceFilter}
                     component={renderSelectField}
-                    options={workshop.finder.filter.itemOptions}
+                    placeholder={t('Model Type')}
+                    options={this.translateOptions(workshop.finder.filter.itemOptions)}
                     className="text-capitalize"
                   />
                 </Col>
-
                 {/* User filter selector */}
                 <Col sm={12} md={6} lg={4} xl={3}>
                   <Field
@@ -390,7 +396,8 @@ class ContentFinder extends Component {
                     type="select"
                     onChange={this.changeInstanceFilter}
                     component={renderSelectField}
-                    options={workshop.finder.filter.userOptions}
+                    placeholder={t('User Options')}
+                    options={this.translateOptions(workshop.finder.filter.userOptions)}
                     className="text-capitalize"
                   />
                 </Col>

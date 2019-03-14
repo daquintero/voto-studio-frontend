@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, ButtonToolbar, Modal } from 'reactstrap';
 import classNames from 'classnames';
 
-export default class ModalComponent extends PureComponent {
+import { withTranslation } from 'react-i18next';
+
+class ModalComponent extends PureComponent {
   static propTypes = {
     title: PropTypes.string,
     message: PropTypes.string,
@@ -11,6 +13,7 @@ export default class ModalComponent extends PureComponent {
     colored: PropTypes.bool,
     header: PropTypes.bool,
     btn: PropTypes.string.isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -37,7 +40,7 @@ export default class ModalComponent extends PureComponent {
 
   render() {
     const {
-      color, btn, title, message, colored, header,
+      color, btn, title, message, colored, header, t,
     } = this.props;
     let Icon;
 
@@ -73,13 +76,13 @@ export default class ModalComponent extends PureComponent {
           <div className="modal__header">
             <button className="lnr lnr-cross modal__close-btn" onClick={this.toggle} />
             {header ? '' : Icon}
-            <h4 className="bold-text  modal__title">{title}</h4>
+            <h4 className="bold-text  modal__title">{t(title)}</h4>
           </div>
           <div className="modal__body">
-            {message}
+            {t(message)}
           </div>
           <ButtonToolbar className="modal__footer">
-            <Button onClick={this.toggle}>Cancel</Button>{' '}
+            <Button onClick={this.toggle}>{t('Cancel')}</Button>{' '}
             <Button outline={colored} color={color} onClick={this.toggle}>Ok</Button>
           </ButtonToolbar>
         </Modal>
@@ -87,3 +90,5 @@ export default class ModalComponent extends PureComponent {
     );
   }
 }
+
+export default withTranslation()(Modal);

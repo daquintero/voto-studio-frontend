@@ -1,6 +1,7 @@
 // Absolute Imports
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { withTranslation } from 'react-i18next';
 
 // Components
 import { Button, ButtonToolbar, Modal } from 'reactstrap';
@@ -17,6 +18,7 @@ class ModalComponent extends PureComponent {
     toggle: PropTypes.func.isRequired,
     onPublish: PropTypes.func.isRequired,
     onClose: PropTypes.func,
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -37,7 +39,7 @@ class ModalComponent extends PureComponent {
   render() {
     // Props
     const {
-      action, isOpen, selected, toggle, onPublish, onClose,
+      action, isOpen, selected, toggle, onPublish, onClose, t,
     } = this.props;
 
     const {
@@ -60,10 +62,10 @@ class ModalComponent extends PureComponent {
                   <div className="modal__header">
                     <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
                     <i className="fal fa-fw fa-6x fa-check-circle" />
-                    <h4 className="bold-text modal__title">Published</h4>
+                    <h4 className="bold-text modal__title">{t('Published')}</h4>
                   </div>
                   <ButtonToolbar className="modal__footer">
-                    <Button onClick={toggle}>Continue editing</Button>
+                    <Button onClick={toggle}>{t('Continue editing')}</Button>
                   </ButtonToolbar>
                 </div>
               ) : (
@@ -73,13 +75,13 @@ class ModalComponent extends PureComponent {
                       <div className="modal__header">
                         <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
                         <i className="fal fa-fw fa-6x fa-times-circle" />
-                        <h4 className="bold-text modal__title">Cannot publish</h4>
+                        <h4 className="bold-text modal__title">{t('Cannot publish')}</h4>
                       </div>
                       <div className="modal__body">
                         {error.message}
                       </div>
                       <ButtonToolbar className="modal__footer">
-                        <Button onClick={toggle}>Back to workshop</Button>
+                        <Button onClick={toggle}>{t('Back to workshop')}</Button>
                       </ButtonToolbar>
                     </div>
                   ) : (
@@ -89,23 +91,23 @@ class ModalComponent extends PureComponent {
                         <i className="fal fa-fw fa-6x fa-globe-americas" />
                       </div>
                       <div className="modal__body">
-                        <p>This will publish the instance{this.makePlural(selected)}
-                          {' '}with ID{this.makePlural(selected)}: {selected.join(', ')}.
+                        <p>{t('This will publish the instance ')}{t(this.makePlural(selected))}
+                          {' '}{t('with ID')}{this.makePlural(selected)}: {selected.join(', ')}.
                         </p>
                         <p>
-                          This will make this instance and any changes visible on the public site.
-                          {' '}Are you sure you want to continue?
+                          {t('This will make this instance and any changes visible on the public site.')}
+                          {t('  Do you want to continue?')}
                         </p>
                       </div>
                       <ButtonToolbar className="modal__footer">
                         <>
-                          <Button onClick={toggle}>Cancel</Button>{' '}
+                          <Button onClick={toggle}>{t('Cancel')}</Button>{' '}
                           <Button
                             color="success"
                             onClick={onPublish}
                             disabled={loading}
                           >
-                            Publish
+                            {t('Publish')}
                           </Button>
                         </>
                       </ButtonToolbar>
@@ -120,4 +122,4 @@ class ModalComponent extends PureComponent {
   }
 }
 
-export default ModalComponent;
+export default withTranslation()(ModalComponent);

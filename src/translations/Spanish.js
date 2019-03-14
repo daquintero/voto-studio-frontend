@@ -54,8 +54,10 @@ const es = {
     'Submit for Review': 'Envia a revisión',
     ' Submitting...': ' Guardando...',
     Publish: 'Publica',
+    'Continue editing': 'Continua editando',
     Published: 'Publicado',
     'Un-publish': 'Remueve de publicación',
+    'Cannot publish': 'Error publicando',
     Confirm: 'Confirma',
     Delete: 'Elimina',
     ' Removing...': ' Eliminando...',
@@ -97,6 +99,11 @@ const es = {
     reelection: 'busca reelección',
 
     // ---------- CONTENT AND MODELS -----
+    'This will make this instance and any changes visible on the public site.': 'Todos estos cambios serán publicados.',
+    '  Do you want to continue?': '  Continuar?',
+    'Back to workshop': 'Volver a Taller',
+    'This will publish the instance': 'Esto va a publicar ',
+    'with ID': 'con ID',
     Images: 'Imagenes',
     Resources: 'Archivos',
     Type: 'Categoría',

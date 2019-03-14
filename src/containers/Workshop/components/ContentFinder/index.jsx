@@ -410,7 +410,7 @@ class ContentFinder extends Component {
               <Button
                 color="success"
                 size="sm"
-                onClick={this.handleTogglePublishInstanceModal}
+                onClick={this.handleTogglePublishInstancesModal}
                 disabled={selected.length === 0}
               >
                 {t('Publish')}

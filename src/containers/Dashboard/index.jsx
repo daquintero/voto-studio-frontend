@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Col, Row, Card, CardBody } from 'reactstrap';
@@ -11,13 +12,17 @@ class Dashboard extends PureComponent {
   });
 
   render() {
+    const { t } = this.props;
     return (
       <Container className="mt-4">
         <Row>
           <Col>
             <h3 className="page-title">Dashboard</h3>
+            <h3 className="page-subhead subhead m-0">
+              {t('Contribuye a que todos tengan un Voto Informado aquí.')}
+            </h3>
             <h3 className="page-subhead subhead">
-              This is where you can control the data that is viewable by the users of VotoInformado
+              {t('Todo contenido publicado es revisado por Praxis contra los Fake News.')}
             </h3>
           </Col>
         </Row>
@@ -27,7 +32,8 @@ class Dashboard extends PureComponent {
               <Card>
                 <CardBody className="text-center">
                   <i className="fal fa-6x fa-wrench mb-3" />
-                  <h3>Workshop</h3>
+                  <h3>{t('Workshop')}</h3>
+                  <p>{t('Propose information here')}</p>
                 </CardBody>
               </Card>
             </Link>
@@ -47,7 +53,8 @@ class Dashboard extends PureComponent {
               <Card>
                 <CardBody className="text-center">
                   <i className="fal fa-6x fa-map mb-3" />
-                  <h3>Tours</h3>
+                  <h3 className="m-0">{t('Tours')}</h3>
+                  <p><i className="fal fa-toolbox p-2" />{t('In Construction')}</p>
                 </CardBody>
               </Card>
             </Link>

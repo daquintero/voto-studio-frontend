@@ -16,6 +16,7 @@ import {
   Button,
 } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
+import { withTranslation } from 'react-i18next';
 
 // CSS
 import 'react-toastify/dist/ReactToastify.css';
@@ -90,6 +91,7 @@ class Editor extends Component {
 
     // Form
     workshopForm: PropTypes.instanceOf(Object),
+    t: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -148,7 +150,7 @@ class Editor extends Component {
     } = this.state;
 
     const {
-      workshop, workshopForm, dispatch, history,
+      workshop, workshopForm, dispatch, history, t,
     } = this.props;
 
     // Check if values object is empty, if so then return.
@@ -175,7 +177,7 @@ class Editor extends Component {
 
           this.setState({ id: instanceId });
 
-          toast(`${created ? 'Created' : 'Updated'} ${verboseName} (${instanceId})`, {
+          toast(`${created ? t('Created') : t('Updated')} ${t(verboseName)} (${instanceId})`, {
             toastId: instanceId,
           });
 
@@ -197,8 +199,8 @@ class Editor extends Component {
           const {
             modelName,
           } = workshop.form.parentModel;
-
-          toast(`Error creating ${modelName}`, {
+          // TODO Interpolation translation
+          toast(`${t('Error creating')} ${modelName}`, {
             toastId: modelName,
           });
         }
@@ -290,9 +292,10 @@ class Editor extends Component {
   };
 
   buildPlaceholder = (field) => {
+    const { t } = this.props;
     if (field.readOnly) return '';
 
-    return (`${field.select ? 'Choose' : 'Enter'} ${field.verboseName}...`);
+    return (`${field.select ? t('Choose') : t('Enter')} ${t(field.verboseName)}...`);
   };
 
   renderFieldComponent = (field) => {
@@ -306,13 +309,13 @@ class Editor extends Component {
   renderField = (field) => {
     // Props
     const {
-      workshop,
+      workshop, t,
     } = this.props;
 
     if (field.name === 'location') {
       return (
         <div className="form__form-group">
-          <span className="form__form-group-label text-capitalize">Location</span>
+          <span className="form__form-group-label text-capitalize">{t('Location')}</span>
           <div className="form__form-group-field">
             <Field
               name="location"
@@ -326,7 +329,7 @@ class Editor extends Component {
     if (field.type === 'textarea') {
       return (
         <div className="form__form-group" key={field.name}>
-          <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+          <span className="form__form-group-label text-capitalize">{t(field.verboseName)}</span>
           <div className="form__form-group-field-editor">
             <EditorField
               name={field.name}
@@ -344,7 +347,7 @@ class Editor extends Component {
     if (field.type === 'json') {
       return (
         <div className="form__form-group" key={field.name}>
-          <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+          <span className="form__form-group-label text-capitalize">{t(field.verboseName)}</span>
           <div className="form__form-group-field-json-editor">
             <Field
               name={field.name}
@@ -358,7 +361,7 @@ class Editor extends Component {
 
     return (
       <div className="form__form-group" key={field.name}>
-        <span className="form__form-group-label text-capitalize">{field.verboseName}</span>
+        <span className="form__form-group-label text-capitalize">{t(field.verboseName)}</span>
         <div className="form__form-group-field">
           <Field
             name={field.name}
@@ -373,7 +376,7 @@ class Editor extends Component {
         </div>
         {field.readOnly && (
           <span className="form__form-group-description">
-              This is a &quot;read-only&quot; field
+            {t('This is a "read-only" field')}
           </span>
         )}
       </div>
@@ -388,7 +391,7 @@ class Editor extends Component {
 
     // Props
     const {
-      workshop, auth, dispatch,
+      workshop, auth, dispatch, t,
     } = this.props;
 
     // Workshop
@@ -412,10 +415,10 @@ class Editor extends Component {
                 <Row>
                   <Col lg={12} xl={4}>
                     <h3 className="page-title text-capitalize">
-                      {form.new ? 'Create' : 'Edit'} {form.parentModel.modelName}
+                      {form.new ? t('Create') : t('Edit')} {t(form.parentModel.modelName)}
                     </h3>
                     <h3 className="page-subhead subhead">
-                      Edit the basic info of this piece of content and add or remove related pieces of content
+                      {t('Edit the basic info of this piece of content and add or remove related pieces of content')}
                     </h3>
                   </Col>
 
@@ -447,15 +450,15 @@ class Editor extends Component {
                               color="primary"
                               onClick={this.handleTogglePublishInstancesModal}
                             >
-                              Publish
+                              {t('Publish')}
                             </Button>
                           </>
                         ) : (
                           <Button className="ml-3" color="primary" onClick={this.handlePublishInstances}>
                             {!workshop.actions.SUBMIT_FOR_REVIEW.loading ? (
-                              <span>Submit for Review</span>
+                              <span>{t('Submit for Review')}</span>
                             ) : (
-                              <span><i className="fal fa-spin fa-spinner" /> Submitting...</span>
+                              <span><i className="fal fa-spin fa-spinner" />{t(' Submitting...')}</span>
                             )}
                           </Button>
                         )}
@@ -465,10 +468,10 @@ class Editor extends Component {
 
                   <Col xs={4} className="d-none d-xl-block">
                     <h3 className="page-title text-capitalize">
-                      Live Preview
+                      {t('Live Preview')}
                     </h3>
                     <h3 className="page-subhead subhead">
-                      This will update as you edit the piece of content
+                      {t('In Construction')}.
                     </h3>
                   </Col>
 
@@ -476,7 +479,7 @@ class Editor extends Component {
                     <Card>
                       <CardBody>
                         <h3 className="page-title text-capitalize">
-                          Basic Fields
+                          {t('Basic Fields')}
                         </h3>
 
                         {/* Basic fields form */}
@@ -487,13 +490,13 @@ class Editor extends Component {
                           <ButtonToolbar className="form__button-toolbar">
                             <Button color="success" size="sm" type="submit">
                               {!workshop.actions.UPDATE_BASIC_FIELDS.loading ? (
-                                <span>Submit</span>
+                                <span>{t('Submit')}</span>
                               ) : (
-                                <span><i className="fal fa-spin fa-spinner" /> Submitting...</span>
+                                <span><i className="fal fa-spin fa-spinner" />{t(' Submitting...')}</span>
                               )}
                             </Button>
                             <Button color="secondary" size="sm" onClick={() => dispatch(reset('workshopForm'))}>
-                              Undo changes
+                              {t('Undo changes')}
                             </Button>
                           </ButtonToolbar>
                         </form>
@@ -517,12 +520,12 @@ class Editor extends Component {
                                   className="float-right"
                                   onClick={this.handleToggleMediaCenter}
                                 >
-                                  Add media
+                                  {t('Add media')}
                                 </Button>
                               </Col>
                             </Row>
                             <Collapse
-                              title="Images"
+                              title={t('Images')}
                               className="with-shadow"
                             >
                               <FileGallery
@@ -538,7 +541,7 @@ class Editor extends Component {
                               />
                             </Collapse>
                             <Collapse
-                              title="Videos"
+                              title={t('Videos')}
                               className="with-shadow"
                             >
                               <FileGallery
@@ -553,7 +556,7 @@ class Editor extends Component {
                               />
                             </Collapse>
                             <Collapse
-                              title="Resources"
+                              title={t('Resources')}
                               className="with-shadow"
                             >
                               <FileGallery
@@ -578,7 +581,7 @@ class Editor extends Component {
                                 <Row>
                                   <Col>
                                     <h3 className="page-title text-capitalize">
-                                      Related Content
+                                      {t('Contenido Relacionado')}
                                     </h3>
                                   </Col>
                                   <Col>
@@ -587,7 +590,7 @@ class Editor extends Component {
                                       className="float-right"
                                       onClick={this.handleToggleRelatedContentFinder}
                                     >
-                                      Add related content
+                                      {t('Add related content')}
                                     </Button>
                                   </Col>
                                 </Row>
@@ -607,10 +610,10 @@ class Editor extends Component {
                   {/* Live preview panel */}
                   <Col xs={12} className="d-block d-xl-none">
                     <h3 className="page-title text-capitalize">
-                      Live Preview
+                      {t('Live Preview')}
                     </h3>
                     <h3 className="page-subhead subhead">
-                      This will update as you edit the piece of content
+                      {t('In Construction')}.
                     </h3>
                   </Col>
                   <Col xl={4}>
@@ -645,4 +648,4 @@ export default withRouter(connect(state => ({
   media: state.studio.media,
   workshop: state.studio.workshop,
   workshopForm: state.form.workshopForm,
-}))(EditorWithForm));
+}))(withTranslation()(EditorWithForm)));

@@ -77,7 +77,8 @@ const relatedInstanceList = ({
   search: searchTerm,
 }), getHeaders());
 
-const locationPickerDataSet = () => axios.get(urls.get.locationPicketDataSet, getHeaders());
+const locationPickerDataSet = ({ locationIdName }) =>
+  axios.get(buildUrl(urls.get.locationPicketDataSet, { loc: locationIdName }), getHeaders());
 
 // POST requests
 const updateBasicFields = updateData => axios.post(urls.post.updateBasicFields, updateData, getHeaders());

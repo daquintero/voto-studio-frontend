@@ -174,7 +174,9 @@ class JSONFieldEditor extends Component {
                 </tr>
               ))}
               <tr>
-                <Button size="sm" onClick={this.handleOnAdd}>Add</Button>
+                <Button className="mt-2" size="sm" onClick={this.handleOnAdd}>
+                  Add
+                </Button>
               </tr>
             </tbody>
           </Table>

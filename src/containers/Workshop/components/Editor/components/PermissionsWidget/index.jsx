@@ -61,7 +61,7 @@ class PermissionsWidget extends Component {
               <div className="permissions-widget__user">
                 <img src={user.profilePictureUrl} alt="" />
                 <p>
-                  {user.email === JSON.parse(localStorage.getItem('user')).email ?  t('You') : getInitials(user.name)}
+                  {user.email === JSON.parse(localStorage.getItem('user')).email ? t('You') : getInitials(user.name)}
                 </p>
               </div>
             ))}

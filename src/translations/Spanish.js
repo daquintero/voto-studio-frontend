@@ -61,7 +61,7 @@ const es = {
     Confirm: 'Confirma',
     Delete: 'Elimina',
     Share: 'Comparte',
-    You: Tu,
+    You: 'Tu',
     ' Removing...': ' Eliminando...',
     ' Remove ': 'Eliminar',
     'Undo changes': 'Rehacer cambios',

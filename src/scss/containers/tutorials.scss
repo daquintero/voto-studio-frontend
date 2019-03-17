@@ -1,0 +1,22 @@
+.tutorials {
+  &__content {
+    &__card {
+      height: 400vh;
+    }
+  }
+
+  &__sidebar {
+    position: sticky;
+    top: 100px;
+    background-color: white;
+    padding: 20px;
+
+    ul {
+        list-style: none;
+    }
+
+    li {
+
+    }
+  }
+}

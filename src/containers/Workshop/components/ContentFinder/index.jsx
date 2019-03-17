@@ -75,7 +75,9 @@ class ContentFinder extends Component {
     const { rowsPerPage } = this.state;
     const { dispatch, workshop } = this.props;
     const page = 0;
+
     if (workshop.finder.built) return;
+
     dispatch(buildFinder())
       .then((action) => {
         if (this.isUnmounted) return;
@@ -86,6 +88,7 @@ class ContentFinder extends Component {
           const {
             currentItemOption, currentUserOption,
           } = action.finder.filter;
+
           dispatch(getInstanceList({
             modelLabel: currentItemOption.value,
             filter: currentUserOption.value,
@@ -244,8 +247,11 @@ class ContentFinder extends Component {
 
   translateOptions = (options) => {
     const { t } = this.props;
-    const translated = options.map(opt => ({ label: t(opt.label), value: opt.value }));
-    return translated;
+
+    return options.map(opt => ({
+      label: t(opt.label),
+      value: opt.value,
+    }));
   };
 
   openEditor = (id) => {
@@ -389,6 +395,7 @@ class ContentFinder extends Component {
                     className="text-capitalize"
                   />
                 </Col>
+
                 {/* User filter selector */}
                 <Col sm={12} md={6} lg={4} xl={3}>
                   <Field

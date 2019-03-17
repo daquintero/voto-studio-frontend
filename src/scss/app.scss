@@ -42,10 +42,11 @@
 @import './component/permissions-model';
 
 // pages...
-@import 'containers/account';
-@import 'containers/profile';
-@import 'containers/dashboard';
+@import './containers/account';
+@import './containers/profile';
+@import './containers/dashboard';
+@import './containers/tutorials';
 
 // objects...
-@import 'objects/layout.scss';
+@import './objects/layout.scss';
 

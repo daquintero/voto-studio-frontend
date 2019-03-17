@@ -7,6 +7,7 @@ import {
   Container,
   Row,
 } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Components
 import ContentFinder from './components/ContentFinder';
@@ -19,15 +20,25 @@ class Workshop extends PureComponent {
 
     // Router
     history: ReactRouterPropTypes.history.isRequired,
+
+    // Translations
+    t: PropTypes.func.isRequired,
   };
 
   getCurrentFilter = () => {
-    const { workshop } = this.props;
+    const { workshop, t } = this.props;
     const { filter } = workshop.finder;
+
     if (workshop !== undefined) {
       return {
-        type: filter.currentItemOption,
-        user: filter.currentUserOption,
+        type: {
+          ...filter.currentItemOption,
+          label: t(filter.currentItemOption.label),
+        },
+        user: {
+          ...filter.currentUserOption,
+          label: t(filter.currentUserOption.label),
+        },
       };
     }
     return null;
@@ -74,4 +85,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Workshop);
+export default connect(mapStateToProps)(withTranslation()(Workshop));

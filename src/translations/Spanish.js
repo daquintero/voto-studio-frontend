@@ -134,7 +134,7 @@ const es = {
     law: 'Ley',
     Campaign: 'Campaña',
     campaign: 'Campaña',
-    Organization: 'Orgnización',
+    Organization: 'Organización',
     organization: 'Organización',
     promise: 'Promesa',
     Promise: 'Promesa',

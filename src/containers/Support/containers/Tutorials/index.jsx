@@ -7,13 +7,15 @@ const Tutorials = () => (
     <Row>
       <Col className="tutorials__sidebar" xl={2}>
         <ul>
-          <li>Introduction</li>
+          <li><a href="#introduction">Introduction</a></li>
         </ul>
       </Col>
       <Col className="tutorials__content" xl={10}>
         <Card className="tutorials__content__card">
           <CardBody>
-            Hi2
+            <div id="introduction">
+              Hi
+            </div>
           </CardBody>
         </Card>
       </Col>

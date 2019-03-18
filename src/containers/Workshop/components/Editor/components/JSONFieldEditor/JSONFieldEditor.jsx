@@ -44,11 +44,10 @@ class JSONFieldEditor extends Component {
   getValue = (field, subField, subInstance) => {
     const fieldValue = subInstance.fields
       .filter(f => f.name === subField.name)[0].value;
-    console.log(fieldValue, subField.type);
     if (subField.type === 'select') {
       return field.schema.fields
         .filter(f => f.name === subField.name)[0].options
-        .filter(f => f.value === fieldValue)[0];
+        .filter(f => f.value === fieldValue)[0].label;
     }
     return fieldValue;
   };

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+import { withTranslation } from 'react-i18next';
 
 // Components
 import PermissionsModal from './PermissionsModal';
@@ -19,6 +20,7 @@ class PermissionsWidget extends Component {
     // Redux
     dispatch: PropTypes.func.isRequired,
     auth: PropTypes.instanceOf(Object).isRequired,
+    t: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -48,7 +50,7 @@ class PermissionsWidget extends Component {
 
     // Props
     const {
-      auth,
+      auth, t,
     } = this.props;
 
     return (
@@ -59,7 +61,7 @@ class PermissionsWidget extends Component {
               <div className="permissions-widget__user">
                 <img src={user.profilePictureUrl} alt="" />
                 <p>
-                  {user.email === JSON.parse(localStorage.getItem('user')).email ? 'You' : getInitials(user.name)}
+                  {user.email === JSON.parse(localStorage.getItem('user')).email ? t('You') : getInitials(user.name)}
                 </p>
               </div>
             ))}
@@ -67,7 +69,7 @@ class PermissionsWidget extends Component {
               <Button
                 onClick={this.togglePermissionsModal}
               >
-                Share
+                {t('Share')}
               </Button>
             </div>
           </div>
@@ -83,4 +85,4 @@ class PermissionsWidget extends Component {
 
 export default connect(state => ({
   auth: state.auth,
-}))(PermissionsWidget);
+}))(withTranslation()(PermissionsWidget));

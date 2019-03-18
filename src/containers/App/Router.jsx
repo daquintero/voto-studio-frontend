@@ -21,8 +21,15 @@ import Register from '../Account/Register';
 import Support from '../Support';
 import Tutorials from '../Support/containers/Tutorials';
 
+// Misc
+import ErrorBoundary from '../../shared/components/ErrorBoundary';
 
-const EditorWrapper = props => <Editor enableReinitialize {...props} />;
+
+const EditorWrapper = props => (
+  <ErrorBoundary>
+    <Editor enableReinitialize {...props} />
+  </ErrorBoundary>
+);
 
 
 // These routes are all the routes that include the top and side bar

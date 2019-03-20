@@ -70,6 +70,67 @@ class PermissionsModal extends PureComponent {
     }
   };
 
+  renderField = (field, newInstance = null) => {
+    const { t } = this.props;
+    const {
+      name, type, readOnly, options,
+    } = field;
+
+    if (readOnly) return null;
+    switch (type) {
+      case 'text':
+        return (
+          <div key={name} className="form__form-group">
+            <span className="form__form-group-label text-capitalize">{t(name)}</span>
+            <div className="form__form-group-field">
+              <input
+                name={name}
+                type={type}
+                onChange={this.handleOnChange}
+                value={t(this.state[name]) || ''}
+              />
+            </div>
+          </div>
+        );
+      case 'textarea':
+        return (
+          <div key={name} className="form__form-group">
+            <span className="form__form-group-label text-capitalize">{t(name)}</span>
+            <div className="form__form-group-field-editor">
+              <div className="text-editor w-100">
+                <ControlledEditor
+                  name={name}
+                  onChange={obj => this.handleOnChange(obj, name)}
+                  value={t(this.state[name])}
+                  initial={newInstance ? undefined : t(this.state[name])}
+                />
+              </div>
+            </div>
+          </div>
+        );
+      case 'select':
+        return (
+          <div key={name} className="form__form-group">
+            <span className="form__form-group-label text-capitalize">{t(name)}</span>
+            <div className="form__form-group-field">
+              <select
+                className="form__form-group-select"
+                name={name}
+                onChange={this.handleOnChange}
+                value={t(this.state[name]) || ''}
+              >
+                {options.map(({ label, value }) => (
+                  <option value={value}>{label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   render() {
     // Props
     const {
@@ -91,33 +152,7 @@ class PermissionsModal extends PureComponent {
           </div>
           <div className="modal__body">
             <form className="form form--horizontal">
-              {fields.map(input => !input.readOnly && (
-                <div key={input.name} className="form__form-group">
-                  <span className="form__form-group-label text-capitalize">{t(input.name)}</span>
-                  {input.type !== 'textarea' ? (
-                    <div className="form__form-group-field">
-                      <input
-                        name={input.name}
-                        type={input.type}
-                        onChange={this.handleOnChange}
-                        value={t(this.state[input.name]) || ''}
-                      />
-                    </div>
-                  ) : ((this.state[input.name] || newInstance) && (
-                    <div className="form__form-group-field-editor">
-                      <div className="text-editor w-100">
-                        <ControlledEditor
-                          name={input.name}
-                          onChange={obj => this.handleOnChange(obj, input.name)}
-                          value={t(this.state[input.name])}
-                          initial={newInstance ? undefined : t(this.state[input.name])}
-                        />
-                      </div>
-                    </div>
-                    )
-                  )}
-                </div>
-              ))}
+              {fields.map(field => this.renderField(field, newInstance))}
             </form>
             <Button onClick={() => onSave(this.state)}>{t('Save')}</Button>
             <Button onClick={toggle}>{t('Cancel')}</Button>

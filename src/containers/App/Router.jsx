@@ -18,9 +18,18 @@ import Tours from '../Tours';
 import Profile from '../Account/Profile';
 import Login from '../Account/Login';
 import Register from '../Account/Register';
+import Support from '../Support';
+import Tutorials from '../Support/containers/Tutorials';
+
+// Misc
+import ErrorBoundary from '../../shared/components/ErrorBoundary';
 
 
-const EditorWrapper = props => <Editor enableReinitialize {...props} />;
+const EditorWrapper = props => (
+  <ErrorBoundary>
+    <Editor enableReinitialize {...props} />
+  </ErrorBoundary>
+);
 
 
 // These routes are all the routes that include the top and side bar
@@ -36,6 +45,8 @@ const wrappedRoutes = () => (
       <Route exact path="/tours/map/:tourId/" component={MapWrapper} />
       <Route exact path="/tours/data/:dataSetId/" component={DataSuiteWrapper} />
       <Route exact path="/account/profile/" component={Profile} />
+      <Route exact path="/support/" component={Support} />
+      <Route exact path="/support/tutorials/" component={Tutorials} />
     </div>
   </div>
 );

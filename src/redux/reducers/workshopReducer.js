@@ -53,9 +53,9 @@ const initialState = {
     items: [],
     filter: {
       itemOptions: [],
-      currentItemOption: undefined,
+      currentItemOption: {},
       userOptions: [],
-      currentUserOption: undefined,
+      currentUserOption: {},
     },
     built: false,
   },

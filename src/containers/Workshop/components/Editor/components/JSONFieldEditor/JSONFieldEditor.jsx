@@ -41,6 +41,17 @@ class JSONFieldEditor extends Component {
   getSubInstance = (field, id) =>
     field.subInstances.filter(f => parseInt(f.id, 10) === parseInt(id, 10))[0];
 
+  getValue = (field, subField, subInstance) => {
+    const fieldValue = subInstance.fields
+      .filter(f => f.name === subField.name)[0].value;
+    if (subField.type === 'select') {
+      return field.schema.fields
+        .filter(f => f.name === subField.name)[0].options
+        .filter(f => f.value === fieldValue)[0].label;
+    }
+    return fieldValue;
+  };
+
   sortSubInstances = (subInstances, { dir = 'asc' } = {}) => {
     const coef = dir === 'asc' ? 1 : -1;
     return subInstances.sort((a, b) => coef * (parseInt(b.id, 10) - parseInt(a.id, 10)));
@@ -153,8 +164,8 @@ class JSONFieldEditor extends Component {
                 <tr key={subInstance.id}>
                   {field.schema.fields.map(subField => (
                     <td key={subField.name}>
-                      {subField.type !== 'textarea' ? (squashString(subInstance.fields
-                        .filter(f => f.name === subField.name)[0].value, { noNumeral: true })
+                      {subField.type !== 'textarea'
+                        ? (squashString(this.getValue(field, subField, subInstance), { noNumeral: true })
                     ) : (
                       <p> {t('HTML content')}</p>
                     )}

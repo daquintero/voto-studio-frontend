@@ -36,12 +36,10 @@ import {
 } from '../../../../redux/actions/userActions';
 import {
   BUILD_FORM,
-  TOGGLE_LOCATION_PICKER,
   TOGGLE_RELATED_CONTENT_FINDER,
   UPDATE_BASIC_FIELDS,
   TOGGLE_MEDIA_CENTER,
   UPDATE_MEDIA_FIELD,
-  SELECT_POSITION,
   PUBLISH_INSTANCES,
 } from '../../../../redux/actionCreators/workshopActionCreators';
 import {
@@ -91,6 +89,8 @@ class Editor extends Component {
 
     // Form
     workshopForm: PropTypes.instanceOf(Object),
+
+    // Translations
     t: PropTypes.func.isRequired,
   };
 
@@ -134,13 +134,6 @@ class Editor extends Component {
       type: BUILD_FORM.INIT,
     });
   }
-
-  handleToggleLocationPicker = (e) => {
-    e.preventDefault();
-    this.props.dispatch({
-      type: TOGGLE_LOCATION_PICKER,
-    });
-  };
 
   handleUpdateBasicFields = (e) => {
     e.preventDefault();
@@ -205,19 +198,6 @@ class Editor extends Component {
           });
         }
       });
-  };
-
-  handleLocationOnChange = (e) => {
-    const { dispatch, workshop } = this.props;
-    const { locationIdName } = workshop.locationPicker;
-    const selectedObject = workshop.locationPicker.dataSet.geojson.features
-      .filter(f => f.properties[locationIdName] === e.target.value)[0];
-    if (selectedObject !== undefined) {
-      dispatch({
-        type: SELECT_POSITION,
-        selectedObject,
-      });
-    }
   };
 
   handleToggleMediaCenter = () => {
@@ -290,6 +270,12 @@ class Editor extends Component {
       ids: [id],
     }));
   };
+
+  handleToggleSubmitForReviewModal = () => {};
+
+  handleSubmitForReviewModalOnClose = () => {};
+
+  handleOnSubmitForReview = () => {};
 
   buildPlaceholder = (field) => {
     const { t } = this.props;
@@ -454,7 +440,7 @@ class Editor extends Component {
                             </Button>
                           </>
                         ) : (
-                          <Button className="ml-3" color="primary" onClick={this.handlePublishInstances}>
+                          <Button className="ml-3" color="primary" onClick={this.handleToggleSubmitForReviewModal}>
                             {!workshop.actions.SUBMIT_FOR_REVIEW.loading ? (
                               <span>{t('Submit for Review')}</span>
                             ) : (

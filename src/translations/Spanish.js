@@ -24,8 +24,8 @@ const es = {
     'phone number': 'número de teléfono',
     website: 'página web',
     'instagram username': 'usuario de instagram',
-    'corruption related funds': 'total dinero registrado de dudosa fuente',
-    'non corruption related funds': 'dinero registrado',
+    'corruption related funds': 'total donaciones registradas de dudosa fuente',
+    'non corruption related funds': 'donaciones registrados',
     'Add media': 'Añadir media',
     'Add related content': 'Añadir contenido relacionado',
     'Error creating': 'Error creando',
@@ -34,7 +34,7 @@ const es = {
     'Edit the basic info of this piece of content and add or remove related pieces of content':
       'Edita los campos básicos de este modelo y añade relaciones a otras piezas de contenido abajo.',
     corruptioncase: 'Caso de Corrupción',
-    financialitem: 'Item Financiero',
+    financialitem: 'Donaciones',
 
 
     // -------- GENERIC ACTIONS ------
@@ -129,7 +129,7 @@ const es = {
     'Corruption Case': 'Caso de Corrupción',
     Individual: 'Individuo',
     individual: 'Individuo',
-    'Financial Item': 'Item Financiero',
+    'Financial Item': 'Donación',
     Law: 'Ley',
     law: 'Ley',
     Campaign: 'Campaña',

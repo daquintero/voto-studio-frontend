@@ -17,7 +17,7 @@ class Dashboard extends PureComponent {
       <Container className="mt-4">
         <Row>
           <Col>
-            <h3 className="page-title">Dashboard</h3>
+            <h3 className="page-title">{t('Dashboard')}</h3>
             <h3 className="page-subhead subhead m-0">
               {t('Contribuye a que todos tengan un Voto Informado aquí.')}
             </h3>
@@ -33,7 +33,7 @@ class Dashboard extends PureComponent {
                 <CardBody className="text-center">
                   <i className="fal fa-6x fa-wrench mb-3" />
                   <h3>{t('Workshop')}</h3>
-                  <p>{t('Propose information here')}</p>
+                  <p><i className="fal fa-info-circle p-2" />{t('Propose information here')}</p>
                 </CardBody>
               </Card>
             </Link>
@@ -44,6 +44,7 @@ class Dashboard extends PureComponent {
                 <CardBody className="text-center">
                   <i className="fal fa-6x fa-image mb-3" />
                   <h3>Media</h3>
+                  <p><i className="fal fa-video p-2" />{t('Media Repository')}</p>
                 </CardBody>
               </Card>
             </Link>
@@ -59,6 +60,13 @@ class Dashboard extends PureComponent {
               </Card>
             </Link>
           </Col>
+        </Row>
+
+        <Row noGutters style={{position: 'absolute', bottom:0}} className="bg-white m-0 p-2">
+          <Col>
+            <p className="m-0 text-center">Contáctanos a <a href="mailto:name@email.com">votoinformado2019@gmail.com</a></p>
+          </Col>
+
         </Row>
       </Container>
     );

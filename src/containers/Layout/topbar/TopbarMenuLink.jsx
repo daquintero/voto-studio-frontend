@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import T from '../../../shared/components/T';
 
 export default class TopbarMenuLinks extends PureComponent {
   static propTypes = {
@@ -15,7 +16,7 @@ export default class TopbarMenuLinks extends PureComponent {
     return (
       <Link className="topbar__link" to={path}>
         <span className={`topbar__link-icon lnr lnr-${icon}`} />
-        <p className="topbar__link-title">{title}</p>
+        <p className="topbar__link-title"><T>{title}</T></p>
       </Link>
     );
   }

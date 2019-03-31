@@ -6,6 +6,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import TopbarSidebarButton from './TopbarSidebarButton';
 import TopbarProfile from './TopbarProfile';
 
+import T from '../../../shared/components/T';
 
 class Topbar extends PureComponent {
   static propTypes = {
@@ -40,7 +41,7 @@ class Topbar extends PureComponent {
               onClick={this.handleOnClick}
               data-obj={JSON.stringify({ path, index })}
             >
-              {param}
+              <T>{param}</T>
             </button>
             {index < path.length - 1 && (<span className="topbar__breadcrumb__separator"> /</span>)}
           </div>

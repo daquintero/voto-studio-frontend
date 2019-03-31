@@ -103,34 +103,39 @@ class ContentFinder extends Component {
     this.isUnmounted = true;
   }
 
-  getTableProps = props => ({
-    ...props,
-    actions: [
-      {
-        key: id => `edit-${id}`,
-        name: 'edit',
-        id: ({ name, id }) => `${name}-${id}`,
-        'data-id': id => id,
-        icon: () => 'fal fa-fw fa-edit mr-3 text-primary',
-        tooltipContent: () => `Edit ${props.verboseName}`,
-        props: {
-          className: 'workshop__form-action',
-          onClick: this.handleEditItem,
+  getTableProps = ({ verboseName, ...rest }) => {
+    const { t } = this.props;
+
+    return ({
+      ...rest,
+      actions: [
+        {
+          key: id => `edit-${id}`,
+          name: 'edit',
+          id: ({ name, id }) => `${name}-${id}`,
+          'data-id': id => id,
+          icon: () => 'fal fa-fw fa-edit mr-3 text-primary',
+          tooltipContent: () => `${t('Edit')} ${t(verboseName)}`,
+          props: {
+            className: 'workshop__form-action',
+            onClick: this.handleEditItem,
+          },
         },
-      },
-      {
-        key: id => `detail-${id}`,
-        name: 'detail',
-        id: ({ name, id }) => `${name}-${id}`,
-        icon: ({ published }) => `fal fa-fw fa-eye mr-3 text-${published ? 'info' : 'secondary'}`,
-        tooltipContent: ({ published }) => (published ? `View ${props.verboseName}` : 'Yet to be published'),
-        props: {
-          className: 'workshop__form-action',
-          onClick: () => {},
+        {
+          key: id => `detail-${id}`,
+          name: 'detail',
+          id: ({ name, id }) => `${name}-${id}`,
+          icon: ({ published }) => `fal fa-fw fa-eye mr-3 text-${published ? 'info' : 'secondary'}`,
+          tooltipContent: ({ published }) => (published ? `${t('View')} ${t(verboseName)}` : t('Yet to be published')),
+          props: {
+            className: 'workshop__form-action',
+            onClick: () => {
+            },
+          },
         },
-      },
-    ],
-  });
+      ],
+    });
+  };
 
   changeInstanceFilter = (selected, ...rest) => {
     const { rowsPerPage } = this.state;

@@ -5,6 +5,14 @@ const es = {
     "Email field shouldn't be empty": 'Debes tener un email',
     "Password field shouldn't be empty": 'Debes tener una contraseña',
     'Invalid email address': 'Debes tener un email válido...',
+    Password: 'Contraseña',
+    'Error: Please provide both an email and a password': 'Por favor entra un email y contraeña',
+    Account: 'Tu Cuenta',
+
+    // ---------- DASHBOARD -------------
+    Dashboard: 'Taller',
+    'Media Repository': 'Repositorio de multimedia',
+    Support: 'Soporte Técnico',
 
     // ---------- WORKSHOP FIELDS ----------
     'Choose the file': 'Elige el archivo',
@@ -35,9 +43,18 @@ const es = {
       'Edita los campos básicos de este modelo y añade relaciones a otras piezas de contenido abajo.',
     corruptioncase: 'Caso de Corrupción',
     financialitem: 'Donaciones',
+    informativesnippet: 'Noticia',
 
+    // RELATED CONTENT FINDER
+    'Find Content': 'Encuentra contenido relacionado',
+    'Use the finder to find and add content': 'Usa este componente para encontrar y añadir relaciones',
+
+    // -------- MEDIA CENTER ---------
+    'Select Media': 'Busca Multimedia',
 
     // -------- GENERIC ACTIONS ------
+    View: 'Ver',
+    New: 'Nuevo',
     Add: 'Añadir',
     Actions: 'Acciones',
     Create: 'Crea',
@@ -99,6 +116,7 @@ const es = {
     Civilian: 'Ciudadano',
     'Business person': 'Emprendedor',
     reelection: 'busca reelección',
+    'Yet to be published': 'No ha sido publicado',
 
     // ---------- CONTENT AND MODELS -----
     'This will make this instance and any changes visible on the public site.': 'Todos estos cambios serán publicados.',
@@ -145,8 +163,11 @@ const es = {
     'Model Type': 'Tipo de Contenido',
     'User Options': 'Filtro de Usuario',
     'Your Content': 'Tu Contenido',
+    'All Content': 'Todo el Contenido',
+    'Migrated Content': 'Contenido Migrado',
     ' Primary': ' Primaria',
     Workshop: 'Taller',
+    Profile: 'Perfil',
   },
 };
 

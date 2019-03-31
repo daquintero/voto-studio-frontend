@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 
 
 const T = ({ t, children }) => (
-  <p>{t(children)}</p>
+  <span>{t(children)}</span>
 );
 
 

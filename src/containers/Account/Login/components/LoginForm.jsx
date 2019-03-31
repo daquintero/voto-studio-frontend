@@ -67,7 +67,7 @@ class LoginForm extends PureComponent {
           <div className="mb-3">
             {Object.keys(loginUserAction.error.response.data).map(k => (
               <p className="text-danger" key={k}>
-                <span className="text-capitalize">{k}</span>: {loginUserAction.error.response.data[k]}
+                <span className="text-capitalize">{k}</span>: {t(loginUserAction.error.response.data[k])}
               </p>
             ))}
           </div>
@@ -88,7 +88,7 @@ class LoginForm extends PureComponent {
             </div>
           </div>
           <div className="form__form-group">
-            <span className="form__form-group-label">Password</span>
+            <span className="form__form-group-label">{t('Password')}</span>
             <div className="form__form-group-field">
               <div className="form__form-group-icon">
                 <KeyVariantIcon />
@@ -97,7 +97,7 @@ class LoginForm extends PureComponent {
                 name="password"
                 component={this.renderField}
                 type="password"
-                placeholder="Password"
+                placeholder={t('Password')}
               />
             </div>
             <div className="account__forgot-password">

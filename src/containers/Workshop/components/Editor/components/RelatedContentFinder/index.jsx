@@ -11,7 +11,7 @@ import { TOGGLE_RELATED_CONTENT_FINDER } from '../../../../../../redux/actionCre
 
 // Components
 import RelatedContentTable from './RelatedContentTable';
-
+import T from '../../../../../../shared/components/T';
 
 class LocationPicker extends PureComponent {
   static propTypes = {
@@ -55,9 +55,9 @@ class LocationPicker extends PureComponent {
       >
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={this.toggle} />
-          <h3 className="page-title ml-3">Find Content</h3>
+          <h3 className="page-title ml-3"><T>Find Content</T></h3>
           <h3 className="page-subhead subhead ml-3">
-            Use the finder to find and add content
+            <T>Use the finder to find and add content</T>
           </h3>
         </div>
         <div className="modal__body">

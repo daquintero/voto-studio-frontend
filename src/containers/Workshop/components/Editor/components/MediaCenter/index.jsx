@@ -10,7 +10,7 @@ import {
 
 // Components
 import Media from '../../../../../Media';
-
+import T from '../../../../../../shared/components/T';
 
 class MediaCenter extends PureComponent {
   static propTypes = {
@@ -42,7 +42,7 @@ class MediaCenter extends PureComponent {
       >
         <div className="modal__header">
           <button className="lnr lnr-cross modal__close-btn" onClick={toggle} />
-          <h4 className="bold-text  modal__title">Select Media</h4>
+          <h4 className="bold-text  modal__title"><T>Select Media</T></h4>
         </div>
         <div className="modal__body">
           <Media />
